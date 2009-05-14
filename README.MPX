@@ -1,0 +1,18 @@
+
+This port to MPX [1] of the original gromit was done by me
+in context of a student research project [2] and enables
+annotation with several pointers at once.
+
+Depending on where the MPX-enabled Xorg is installed,
+it's buildable via:
+
+CPPFLAGS=-I/opt/mpx/include/ LDFLAGS=-L/opt/mpx/lib \
+LD_RUN_PATH=/opt/mpx/lib PKG_CONFIG_PATH=/opt/mpx/lib/pkgconfig make
+
+
+  Christian Beier <dontmind@freeshell.org>
+
+
+
+[1] http://wearables.unisa.edu.au/mpx
+[2] http://wiki.informatik.hu-berlin.de/nomads/index.php/CollabKit
