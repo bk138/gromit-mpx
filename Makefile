@@ -10,13 +10,11 @@
 .PHONY : clean
  
 CFLAGS = $(shell pkg-config --cflags gtk+-2.0) -Wall -O2 -g 
-CPPFLAGS=-I/opt/mpx/include -DXINPUT2
 LDFLAGS= $(shell pkg-config --libs gtk+-2.0)
 
 
-
 OBJS=gromit.o 
-OUTFILE=gromit
+OUTFILE=gromit-mpx
 PREFIX=/usr/local/
 
 
