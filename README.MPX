@@ -3,6 +3,13 @@ This port to MPX [1] of the original gromit was done by me
 in context of a student research project [2] and enables
 annotation with several pointers at once.
 
+This port needs a MPX-enabled version of GTK!
+I hacked up my own patch: [3] or it should probably
+also work with [4].
+
+
+
+
 Depending on where the MPX-enabled Xorg is installed,
 it's buildable via:
 
@@ -16,3 +23,5 @@ LD_RUN_PATH=/opt/mpx/lib PKG_CONFIG_PATH=/opt/mpx/lib/pkgconfig make
 
 [1] http://wearables.unisa.edu.au/mpx
 [2] http://wiki.informatik.hu-berlin.de/nomads/index.php/CollabKit
+[3] http://www2.informatik.hu-berlin.de/~beier/code/CollabKit/src/server/gtk_gdk_xi2_devicelist_patch.tar.gz
+[4] http://github.com/garnacho/gtk-mpx/tree/mpx
