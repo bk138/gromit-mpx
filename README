@@ -1,0 +1,155 @@
+Gromit
+----------
+
+Gromit (GRaphics Over MIscellaneous Things) is a small tool to make
+annotations on the screen.
+
+When making presentations of the Gimp I found myself often moving the
+mousepointer around the point of interest until hopefully everybody
+noticed it. This annoyed me, since it is a very vague way to highlight
+something. I dreamt of a small programm which allows me to simply draw
+on the screen, ignoring any window-borders.
+
+Gromit is a first implementation of this program.
+
+The main usage problem of Gromit is its activation. You need a special
+command to make Gromit grab the mouse, since you typically want to use
+the program you are demonstrating and highlighting something is a short
+interruption of your workflow.
+
+Gromit offers two ways to make this possible. It grabs the "Pause" key, so
+that no other application can use it and it is available to Gromit only.
+The available commands are:
+
+   Pause:       toggle painting
+   SHIFT-Pause: clear screen
+   CTRL-Pause:  toggle visibility
+   ALT-Pause:   Quit Gromit.
+
+You can specify the key to grab via "gromit --key <keysym>". Specifying
+an empty string or "none" for the keysym will prevent gromit from grabbing
+a key.
+
+Alternatively you can invoke Gromit with various arguments to control an
+already running Gromit (If you are curious: Communication between two
+gromit instances is done via a special X-Selection).
+
+Usage:
+  gromit --quit
+      will cause the main Gromit process to quit (or "-q")
+  gromit --toggle
+      will toggle the grabbing of the cursor (or "-t")
+  gromit --visibility
+      will toggle the visibility of the window (or "-v")
+  gromit --clear
+      will clear the screen (or "-c")
+
+If activated Gromit prevents you from using other programs with the
+mouse. You can press the button and paint on the screen. Key presses
+(except the "Pause"-Key, see above) will still reach the currently active
+window but it may be difficult to change the window-focus without mouse... 
+The next "gromit --toggle" will deactivate Gromit and you can use your
+programs as usual - only the painted regions will be obscured.
+
+Gromit is pressure sensitive, if you are using properly configured
+XInput-Devices you can draw lines with varying width. It is
+possible to erase something with the other end of the (Wacom) pen.
+
+
+
+Building:
+
+Gromit is small and lightwight. It needs GTK+ 2.X to build and the Makefile
+is straightforward. No need for autoconf/automake yet  :-)
+Simply type "make" and copy the resulting binary to a convenient place.
+Stripping the binary can reduce its size. I just tested it on
+Linux/XFree86, reports from other platforms are welcome.
+
+
+Configuration:
+
+Gromit is configurable via the file ".gromitrc" in your Homedirectory.
+Here you can specify which Device/Button/Modifier combination invokes
+which tool. See the file "gromitconf" distributed with this program for
+an example. An overview on the syntax:
+
+     # Comments can be either # Shell-Style or
+     /* C-Style. */
+
+This entry defines the tool "red Pen", a pen with size 7 and color red.
+You can specify the color in X-Style: e.g. "#FF0033" or
+colors from rgb.txt.
+
+     "red Pen" = PEN (size=7 color="red");
+
+The following Entries copy an existing configuration (in this case
+"red Pen") and modify the color.
+
+     "blue Pen" = "red Pen" (color="blue");
+     "yellow Pen" = "red Pen" (color="yellow");
+
+You can also draw lines that end in an arrow head. For this you
+have to specify "arrowsize". This is a factor relative to the width
+of the line. For reasonable arrowheads start with 1.
+
+     "blue Pen" = "blue Arrow" (arrowsize=2);
+
+An "ERASER" is a tool that erases the drawings on screen.
+The color parameter is not important.
+
+     "Eraser" = ERASER (size = 75);
+
+A "RECOLOR"-Tool changes the color of the drawing without changing
+the shape. Try it out to see the effect.
+
+     "green Marker" = RECOLOR (color = "Limegreen");
+     
+     
+If you define a tool with the same name as an input-device
+(see the output of "xsetpointer -l", if there is a "SWITCH"-Tool
+it is uninteresting...) this input-device uses this tool.
+Additionally you can limit the Scope to specific combinations of
+Mousebuttons (1,2,3,4,5 or Button1,...,Button5)
+and Modifiers (SHIFT, CONTROL, ALT, META, while ALT==META).
+     
+     "Core Pointer" = "red Pen";
+     "Core Pointer"[SHIFT] = "blue Pen";
+     "Core Pointer"[CONTROL] = "yellow Pen";
+     "Core Pointer"[2] = "green Marker";
+     "Core Pointer"[Button3] = "Eraser";
+
+The descision, which tool to use follows a simple policy:
+  a) Buttons are more important than Modifiers
+  b) Low number Buttons are more important than higher ones
+  c) Modifiers: SHIFT > CONTROL > ALT/META.
+  d) Gromit tries partial matches:
+      If you define "Core Pointer"[] and "Core Pointer"[SHIFT, CONTROL]
+      and only SHIFT actually is pressed, Gromit will use the second
+      definition if there is no "Core Pointer"[SHIFT] definition.
+      Same logic goes for the buttons.
+
+
+Problems:
+
+Gromit may drastically slow down your X-Server, especially when you draw
+very thin lines. It makes heavily use of the shape extension, which is
+quite expensive if you paint a complex pattern on screen. Especially
+terminal-programs tend to scroll incredibly slow if something is painted
+over their window. There is nothing I can do about this.
+
+Gromit partially disables DnD, since it lays a transparent window across
+the whole screen and everything gets "dropped" to this (invisible)
+window. Gromit tries to minimize this effect: When you clear the screen
+the shaped window will be hidden. It will be resurrected, when you want
+to paint something again. However: The window does not hide, if you
+erase everything with the eraser tool, you have to clear the screen
+explicitely with the "gromit --clear" command or hide Gromit with
+"gromit --visibility".
+
+This Program is distributed under the Gnu General Public License. See
+the file COPYING for details.
+
+
+Have fun,
+	Simon Budig <simon@budig.de>
+

@@ -1,0 +1,95 @@
+2008-12-29 Christian Beier  <dontmind@freeshell.org>
+
+	* gromit.c: 
+	- changed to use g_signal* instead of gtk_signal* stuff
+	
+2008-12-23 Christian Beier  <dontmind@freeshell.org>
+
+	* gromit.c: 
+	- changed cursor setup to use X functions
+	- changed cursor source to xpm
+	- all this to make cursor setting device specific
+
+2008-12-21  Christian Beier  <dontmind@freeshell.org>
+
+	* gromit.c: 
+	- added trapping of XErrors when we try to grab/ungrab a device that's 
+	  been removed
+	
+2008-12-21  Christian Beier  <dontmind@freeshell.org>
+
+	* gromit.c: 
+	- made remote control a 2 way communication to be able to specify which 
+	  device to toggle
+
+2008-12-20  Christian Beier  <dontmind@freeshell.org>
+
+	* gromit.c: 
+	- made grabbing device specific
+
+2008-12-19  Christian Beier  <dontmind@freeshell.org>
+
+	* gromit.c: 
+	- fixed -d switch to actually work
+	- added 'default' device  support for config file. this is a fallback
+	  if no device matches
+	- added -r switch to reload devices list via remote control
+
+2008-12-18  Christian Beier  <dontmind@freeshell.org>
+	
+	* gromit.c: 
+	- moved lastx, lasty, motion_time, coord_list, device, 
+	  state, cur_context variables into device specific GromitDeviceData 
+	  and adjusted rest of the code
+
+2004-12-13  Simon Budig  <simon@gimp.org>
+	
+	* gromit.c: - Make activation on startup possible (gromit -a)
+	- add configure option for the key to grab (gromit -k "Pause")
+
+	* README: Adjusted.
+
+2004-10-14  Simon Budig  <simon@gimp.org>
+
+	* gromit.c: - Fix pressure sensitivity
+	- massive indentation madness.
+
+	* README: Adjusted to the XGrabKey change.
+
+2004-10-14  Simon Budig  <simon@gimp.org>
+
+	* gromit.c: - Use XGrabKey to grab the "Pause" key of the keyboard.
+	Use it to control gromits functionality. The selection-hack is no
+	longer needed (but still available).
+
+2004-10-14  Simon Budig  <simon@gimp.org>
+
+	* gromit.c: - Applied a (slightly modified) patch from
+	Bastien Nocera (hadess@hadess.net) to port gromit to GTK+ 2. Still
+	needs some testing with a Tablet.
+	- removed deprecated stuff
+	- changed the activation of input devices, having mice as extended
+	input devices apparently confuses GDK.
+
+2003-03-04  Simon Budig  <simon@gimp.org>
+
+	* gromit.c: Make sure that the arrowhead is connected to the line.
+	Draw black outline around the arrowhead.
+	Have just one global last coordinate. Tackles some problems when
+	switching tools while drawing.
+
+2001-12-10  Simon Budig  <simon@gimp.org>
+
+	* README
+	* gromit.c:  Implemented Arrowheads,
+		     changed Name of resourcefile to "~/.gromitrc"
+
+2001-02-26  Simon Budig  <simon@gimp.org>
+	
+	* */* Sorry, no real changelog.
+
+2000-08-28  Simon Budig  <simon@gimp.org>
+
+        * */* First version
+
+
