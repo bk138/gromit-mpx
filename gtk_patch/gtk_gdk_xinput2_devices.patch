@@ -1,0 +1,232 @@
+diff -Naur ./gdk/x11/gdkinput.c ../../gtk+2.0-2.14.4/gdk/x11/gdkinput.c
+--- ./gdk/x11/gdkinput.c	2008-10-17 06:06:37.000000000 +0200
++++ ../../gtk+2.0-2.14.4/gdk/x11/gdkinput.c	2009-01-25 17:11:00.000000000 +0100
+@@ -120,7 +120,10 @@
+ gdk_display_list_devices (GdkDisplay *display)
+ {
+   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+-  
++
++  /* reload list */
++  g_list_free (GDK_DISPLAY_X11 (display)->input_devices);
++  _gdk_input_common_init (display, 0);      
+   return GDK_DISPLAY_X11 (display)->input_devices;
+ }
+ 
+diff -Naur ./gdk/x11/gdkinput-x11.c ../../gtk+2.0-2.14.4/gdk/x11/gdkinput-x11.c
+--- ./gdk/x11/gdkinput-x11.c	2008-10-17 06:06:37.000000000 +0200
++++ ../../gtk+2.0-2.14.4/gdk/x11/gdkinput-x11.c	2009-05-13 14:00:28.000000000 +0200
+@@ -132,7 +132,7 @@
+   else if (!strcmp (tmp_name, "cursor"))
+     gdkdev->info.source = GDK_SOURCE_CURSOR;
+   else
+-    gdkdev->info.source = GDK_SOURCE_PEN;
++    gdkdev->info.source = GDK_SOURCE_MOUSE;
+ 
+   g_free(tmp_name);
+ 
+@@ -158,6 +158,7 @@
+ 	break;
+       case KeyClass:
+ 	{
++	  fprintf(stderr, "GDK XINPUT new gdkdev: is KeyClass\n");
+ 	  XKeyInfo *xki = (XKeyInfo *)class;
+ 	  /* Hack to catch XFree86 3.3.1 bug. Other devices better
+ 	   * not have exactly 25 keys... 
+@@ -184,7 +185,9 @@
+ 	}
+       case ValuatorClass:
+ 	{
++	  fprintf(stderr, "GDK XINPUT new gdkdev: is ValuatorClass\n");
+ 	  XValuatorInfo *xvi = (XValuatorInfo *)class;
++	  //xvi->num_axes = 2; // maybe cheat here if MD w/o SD?
+ 	  gdkdev->info.num_axes = xvi->num_axes;
+ 	  gdkdev->axes = g_new (GdkAxisInfo, xvi->num_axes);
+ 	  gdkdev->info.axes = g_new0 (GdkDeviceAxis, xvi->num_axes);
+@@ -217,12 +220,29 @@
+       }
+       class = (XAnyClassPtr)(((char *)class) + class->length);
+     }
++    
++  fprintf(stderr, "GDK XINPUT new gdkdev: %s\n", gdkdev->info.name);
++  fprintf(stderr, "GDK XINPUT   info.num_axes: %i\n", gdkdev->info.num_axes);
++  int x;
++  for(x =0; x < gdkdev->info.num_axes; ++x)
++     {
++        fprintf(stderr, "GDK XINPUT   axes[%i] use: %i\n", x,  gdkdev->info.axes[x].use);
++        fprintf(stderr, "GDK XINPUT   axes[%i] reso: %i\n", x,  gdkdev->axes[x].resolution);
++        fprintf(stderr, "GDK XINPUT   axes[%i] minval: %i\n", x,  gdkdev->axes[x].min_value);
++        fprintf(stderr, "GDK XINPUT   axes[%i] maxval: %i\n", x,  gdkdev->axes[x].max_value);
++     }
++ 
++  fprintf(stderr, "GDK XINPUT    include core: %i\n", include_core);
++  fprintf(stderr, "GDK XINPUT    isXPointer %i\n", device->use == IsXPointer);
++  
+   /* return NULL if no axes */
+-  if (!gdkdev->info.num_axes || !gdkdev->axes ||
+-      (!include_core && device->use == IsXPointer))
+-    goto error;
++  if (!gdkdev->info.num_axes || !gdkdev->axes)
++//      (!include_core && device->use == IsXPointer))
++	goto error;
+ 
+-  if (device->use != IsXPointer)
++  fprintf(stderr, "GDK XINPUT new gdkdev: after axes check\n");
++  
++//  if (device->use != IsXPointer)
+     {
+       gdk_error_trap_push ();
+       gdkdev->xdevice = XOpenDevice (GDK_DISPLAY_XDISPLAY (display),
+@@ -230,7 +250,10 @@
+ 
+       /* return NULL if device is not ready */
+       if (gdk_error_trap_pop ())
++      {
++       	fprintf(stderr, "GDK XINPUT new gdkdev: device open failed!\n");
+ 	goto error;
++	}
+     }
+ 
+   gdkdev->buttonpress_type = 0;
+@@ -265,6 +288,8 @@
+   gint i;
+   XEventClass class;
+   
++
++  
+   i = 0;
+   if (mask & GDK_BUTTON_PRESS_MASK)
+     {
+@@ -386,28 +411,43 @@
+   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+ 
+   /* Init XInput extension */
+-
++ 
+   display_x11->input_devices = NULL;
+   if (XQueryExtension (display_x11->xdisplay, "XInputExtension",
+ 		       &ignore, &event_base, &ignore))
+     {
++      // announce support for XI2
++      XQueryInputVersion(display_x11->xdisplay, XI_2_Major, XI_2_Minor);
++      
+       gdk_x11_register_standard_event_type (display,
+ 					    event_base, 15 /* Number of events */);
+ 
+       devices = XListInputDevices(display_x11->xdisplay, &num_devices);
++
++      fprintf(stderr, "GDK XINPUT %i MD/SD devices found\n", num_devices);
+   
+       for(loop=0; loop<num_devices; loop++)
+ 	{
+-	  GdkDevicePrivate *gdkdev = gdk_input_device_new(display,
++	  XDeviceInfo* current = &devices[loop];
++          if(current->use == IsXPointer || current->use == IsXKeyboard)
++            { 
++               fprintf(stderr, "\nGDK XINPUT Found MD: %s (%d)\n", current->name, current->id);
++
++               GdkDevicePrivate *gdkdev = gdk_input_device_new(display,
+ 							  &devices[loop],
+ 							  include_core);
+-	  if (gdkdev)
+-	    display_x11->input_devices = g_list_append(display_x11->input_devices, gdkdev);
++                 
++	          if (gdkdev) 
++	          	{
++	          	    fprintf(stderr, "GDK XINPUT gdkdev created\n"); 							  
++	          	    display_x11->input_devices = g_list_append(display_x11->input_devices, gdkdev);
++	          	}
++            }
+ 	}
+       XFreeDeviceList(devices);
+     }
+ 
+-  display_x11->input_devices = g_list_append (display_x11->input_devices, display->core_pointer);
++  //display_x11->input_devices = g_list_append (display_x11->input_devices, display->core_pointer);
+ 
+   return TRUE;
+ }
+@@ -430,6 +470,31 @@
+ 
+   impl = GDK_WINDOW_IMPL_X11 (((GdkWindowObject *) input_window->window)->impl);
+ 
++  
++
++  // evil hack
++  for (i=0; i<gdkdev->info.num_axes; i++)
++    {
++      axis_out[i] = axis_data[i];
++      switch (i)
++	{
++	case 0:
++	  if(x_out)
++	    *x_out = axis_data[0];
++	  break;
++	case 1:
++	  if(y_out)
++	    *y_out = axis_data[1];
++	  break;
++	default:
++	  break;
++	}
++    }
++  return;
++  
++  
++  
++
+   for (i=0; i<gdkdev->info.num_axes; i++)
+     {
+       switch (gdkdev->info.axes[i].use)
+@@ -524,6 +589,7 @@
+ 	    (gdkdev->info.axes[i].max * (axis_data[i] - gdkdev->axes[i].min_value) +
+ 	     gdkdev->info.axes[i].min * (gdkdev->axes[i].max_value - axis_data[i])) /
+ 	    (gdkdev->axes[i].max_value - gdkdev->axes[i].min_value);
++	  
+ 	  break;
+ 	}
+     }
+@@ -568,9 +634,16 @@
+       event->button.time = xdbe->time;
+ 
+       event->button.axes = g_new (gdouble, gdkdev->info.num_axes);
++
++      //FIXUP: no axis data in event!!
++      //fprintf(stderr, "GDK XINPUT xdbe->x: %i.\n", xdbe->x);        
++      xdbe->axis_data[0] = xdbe->x; 
++      xdbe->axis_data[1] = xdbe->y; 
++      
+       gdk_input_translate_coordinates (gdkdev,input_window, xdbe->axis_data,
+ 				       event->button.axes, 
+ 				       &event->button.x,&event->button.y);
++      				       
+       event->button.x_root = event->button.x + input_window->root_x;
+       event->button.y_root = event->button.y + input_window->root_y;
+       event->button.state = gdk_input_translate_state(xdbe->state,xdbe->device_state);
+@@ -670,9 +743,16 @@
+       event->motion.device = &gdkdev->info;
+       
+       event->motion.axes = g_new (gdouble, gdkdev->info.num_axes);
++
++      //FIXUP
++      //fprintf(stderr, "GDK XINPUT xdme->x: %i.\n", xdme->x);        
++      xdme->axis_data[0] = xdme->x; 
++      xdme->axis_data[1] = xdme->y; 
++
+       gdk_input_translate_coordinates(gdkdev,input_window,xdme->axis_data,
+ 				      event->motion.axes,
+ 				      &event->motion.x,&event->motion.y);
++				      
+       event->motion.x_root = event->motion.x + input_window->root_x;
+       event->motion.y_root = event->motion.y + input_window->root_y;
+ 
+@@ -751,6 +831,9 @@
+ 					  n_events, &mode_return,
+ 					  &axis_count_return);
+ 
++  // more evil    
++  device_coords = NULL;
++    
+   if (device_coords)
+     {
+       coords = _gdk_device_allocate_history (device, *n_events);

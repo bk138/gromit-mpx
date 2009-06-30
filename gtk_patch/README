@@ -1,0 +1,3 @@
+this a _very_ crude and simple-minded patch to the gdk part of gtk
+to support XInput2. works for grmoit-mpx, but dont blame me if it 
+breaks anything....
