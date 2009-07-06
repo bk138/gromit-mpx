@@ -24,7 +24,7 @@
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 
-#include <X11/extensions/XInput.h>
+#include <X11/extensions/XInput2.h>
 #include <X11/Xcursor/Xcursor.h>
 
 #include <errno.h>
@@ -98,7 +98,7 @@ typedef struct
   guint32      motion_time;
   GList       *coordlist;
   GdkDevice   *device;
-  XDevice     *xdevice; /* as long as gdk does not expose the X device, we store this here */
+  int          device_id; /* as long as gdk does not expose the X device, we store this here */
   guint        state;
   GromitPaintContext *cur_context;
   gboolean     is_grabbed;
@@ -411,16 +411,15 @@ gromit_release_grab (GromitData *data, GdkDevice *dev)
 	  {
 	    gdk_error_trap_push ();
 	    
-	    XUngrabDevice(GDK_DISPLAY_XDISPLAY(data->display), devdata->xdevice, CurrentTime);
-	    /* unset cursor */
-
-	    XDefineDeviceCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->xdevice, GDK_WINDOW_XID(data->win->window), None);
+	    XIUngrabDevice(GDK_DISPLAY_XDISPLAY(data->display), devdata->device_id, CurrentTime);
 
 	    gdk_flush ();
 	    if (gdk_error_trap_pop ())
 	      {
-		/* this probably means the device table is outdated, e.g. this device doesn't exist anymore */
-		g_printerr("Error ungrabbing Device %d while ungrabbing all, ignoring.\n", (int)devdata->xdevice->device_id);
+		/* this probably means the device table is outdated, 
+		   e.g. this device doesn't exist anymore */
+		g_printerr("Error ungrabbing Device %d while ungrabbing all, ignoring.\n", 
+			   (int)devdata->device_id);
 		continue;
 	      }
 	  }
@@ -445,16 +444,16 @@ gromit_release_grab (GromitData *data, GdkDevice *dev)
       {
 	gdk_error_trap_push ();
 	
-	XUngrabDevice(GDK_DISPLAY_XDISPLAY(data->display), devdata->xdevice, CurrentTime);
-	
-	/* unset cursor */
-	XDefineDeviceCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->xdevice, GDK_WINDOW_XID(data->win->window), None);
+	XIUngrabDevice(GDK_DISPLAY_XDISPLAY(data->display), devdata->device_id, CurrentTime);
 	
 	gdk_flush ();
+
 	if (gdk_error_trap_pop ())
 	  {
-              /* this probably means the device table is outdated, e.g. this device doesn't exist anymore */
-              g_printerr("Error ungrabbing Device %d, rescanning device list.\n", (int)devdata->xdevice->device_id);
+              /* this probably means the device table is outdated, 
+		 e.g. this device doesn't exist anymore */
+              g_printerr("Error ungrabbing Device %d, rescanning device list.\n",
+			 (int)devdata->device_id);
               setup_input_devices(data);
               return;
             }
@@ -476,13 +475,25 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
 {
   gromit_show_window (data);
 
-  /* classes for events we want to grab */
-  int ignore;
-  int num_classes = 3;
-  XEventClass classes[num_classes];
+  /*
+    what do we want to grab? 
+    the device id is specified later on...
+  */
+  XIEventMask mask;
+  unsigned char bits[4] = {0};
+  mask.mask = bits;
+  mask.mask_len = sizeof(bits);
+
+  XISetMask(bits, XI_ButtonPress);
+  XISetMask(bits, XI_ButtonRelease);
+  XISetMask(bits, XI_Motion);
+  
+
 
   if(!dev) /* this means grab all */
     {
+      mask.deviceid = XIAllDevices;
+
       GHashTableIter it;
       gpointer value;
       GromitDeviceData* devdata; 
@@ -495,34 +506,27 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
 
 	  gdk_error_trap_push();
 
-              /* what do we want to grab? */
-              DeviceButtonMotion (devdata->xdevice, ignore, classes[0]);
-              DeviceButtonPress (devdata->xdevice, ignore, classes[1]);
-              DeviceButtonRelease (devdata->xdevice, ignore, classes[2]);
-              /*
-              // these somehwo cause BadClass Errors :-(
-              ProximityIn  (dev, ignore, classes[4]);
-              ProximityOut  (dev, ignore, classes[5]);
-              */
-           
-              XGrabDevice(GDK_DISPLAY_XDISPLAY(data->display), devdata->xdevice, 
-                        GDK_WINDOW_XID(data->area->window), False, 
-                        num_classes, classes, 
-                        GrabModeAsync,  GrabModeAsync, CurrentTime);
+	  XIGrabDevice(GDK_DISPLAY_XDISPLAY(data->display), devdata->device_id,
+		       GDK_WINDOW_XID(data->area->window), CurrentTime,
+		       None, 
+		       GrabModeAsync,  GrabModeAsync, False, &mask);
+	  
+	  if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
+	    XIDefineCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->device_id, 
+			   GDK_WINDOW_XID(data->win->window), data->erase_cursor); 
+	  else
+	    XIDefineCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->device_id, 
+			   GDK_WINDOW_XID(data->win->window), data->paint_cursor); 
 
-	      if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
-		XDefineDeviceCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->xdevice, GDK_WINDOW_XID(data->win->window), data->erase_cursor); 
-	      else
-		XDefineDeviceCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->xdevice, GDK_WINDOW_XID(data->win->window), data->paint_cursor); 
-	    	      
-              gdk_flush ();
-              if (gdk_error_trap_pop ())
-                {
-                  /* this probably means the device table is outdated, e.g. this device doesn't exist anymore */
-                  g_printerr("Error grabbing Device %d while grabbing all, ignoring.\n", (int)devdata->xdevice->device_id);
-                  continue;
-                }
-
+	  gdk_flush ();
+	  if (gdk_error_trap_pop ())
+	    {
+	      /* this probably means the device table is outdated, 
+		 e.g. this device doesn't exist anymore */
+	      g_printerr("Error grabbing Device %d while grabbing all, ignoring.\n", 
+			 (int)devdata->device_id);
+	      continue;
+	    }
             
 
           devdata->is_grabbed = 1;
@@ -542,35 +546,33 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
 
   if (!devdata->is_grabbed)
     {
-          gdk_error_trap_push ();
+      mask.deviceid = devdata->device_id;
+
+      gdk_error_trap_push ();
 	  
-          /* what do we want to grab? */
-          DeviceButtonMotion (devdata->xdevice, ignore, classes[0]);
-          DeviceButtonPress (devdata->xdevice, ignore, classes[1]);
-          DeviceButtonRelease (devdata->xdevice, ignore, classes[2]);
-          /*
-          // these somehow cause BadClass Errors :-(
-          ProximityIn  (dev, ignore, classes[4]);
-          ProximityOut  (dev, ignore, classes[5]);
-          */
-          XGrabDevice(GDK_DISPLAY_XDISPLAY(data->display), devdata->xdevice, 
-                      GDK_WINDOW_XID(data->area->window), False, 
-                      num_classes, classes, 
-                      GrabModeAsync,  GrabModeAsync, CurrentTime);
-
-	  if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
-	    XDefineDeviceCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->xdevice, GDK_WINDOW_XID(data->win->window), data->erase_cursor); 
-	  else
-	    XDefineDeviceCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->xdevice, GDK_WINDOW_XID(data->win->window), data->paint_cursor); 
-
-          gdk_flush ();
-          if (gdk_error_trap_pop ())
-            {
-              /* this probably means the device table is outdated, e.g. this device doesn't exist anymore */
-              g_printerr("Error grabbing Device %d, rescanning device list.\n", (int)devdata->xdevice->device_id);
-              setup_input_devices(data);
-              return;
-            }
+      XIGrabDevice(GDK_DISPLAY_XDISPLAY(data->display), devdata->device_id, 
+		   GDK_WINDOW_XID(data->area->window), CurrentTime,
+		   None, 
+		   GrabModeAsync,  GrabModeAsync, 
+		   False, &mask);
+      
+      if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
+	XIDefineCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->device_id, 
+		       GDK_WINDOW_XID(data->win->window), data->erase_cursor); 
+      else
+	XIDefineCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->device_id, 
+		       GDK_WINDOW_XID(data->win->window), data->paint_cursor); 
+      
+      gdk_flush ();
+      if (gdk_error_trap_pop ())
+	{
+	  /* this probably means the device table is outdated,
+	     e.g. this device doesn't exist anymore */
+	  g_printerr("Error grabbing Device %d, rescanning device list.\n", 
+		     (int)devdata->device_id);
+	  setup_input_devices(data);
+	  return;
+	}
         
       
       devdata->is_grabbed = 1;
@@ -602,7 +604,7 @@ gromit_toggle_grab (GromitData *data, int dev_id)
   while (g_hash_table_iter_next (&it, NULL, &value)) 
     {
       devdata = value;
-      if(devdata->xdevice->device_id == dev_id)
+      if(devdata->device_id == dev_id)
         break;
       else
         devdata = NULL;
@@ -740,14 +742,12 @@ gromit_select_tool (GromitData *data, GdkDevice *device, guint state)
     g_printerr ("ERROR: Attempt to select nonexistent device!\n");
 
   if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
-    XDefineDeviceCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->xdevice, 
-			GDK_WINDOW_XID(data->win->window), data->erase_cursor); 
-  
+    XIDefineCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->device_id, 
+		   GDK_WINDOW_XID(data->win->window), data->erase_cursor); 
   else
-      XDefineDeviceCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->xdevice, 
-			  GDK_WINDOW_XID(data->win->window), data->paint_cursor); 
+    XIDefineCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->device_id, 
+		   GDK_WINDOW_XID(data->win->window), data->paint_cursor); 
  
-
   devdata->state = state;
 }
 
@@ -966,7 +966,6 @@ paintto (GtkWidget *win,
   // get the data for this device
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, ev->device);
 
-
   if (!devdata->is_grabbed)
     return FALSE;
  
@@ -1016,7 +1015,7 @@ paintto (GtkWidget *win,
   if (pressure > 0)
     {
       if (ev->device->source == GDK_SOURCE_MOUSE)
-         data->maxwidth = devdata->cur_context->width;
+	data->maxwidth = devdata->cur_context->width;
       else
          data->maxwidth = (CLAMP (pressure * pressure,0,1) *
                            (double)devdata->cur_context->width);
@@ -1128,7 +1127,7 @@ key_press_event (GtkWidget   *grab_widget,
       else if (event->state & GDK_MOD1_MASK)
         gtk_main_quit ();
       else
-        gromit_toggle_grab (data, 0); 
+        gromit_toggle_grab (data, -1); 
 
       return TRUE;
     }
@@ -1599,12 +1598,13 @@ void
 setup_input_devices (GromitData *data)
 {
   GList *tmp_list;
-  XDeviceInfo	*devices;
+  XIDeviceInfo	*devices;
   int		num_devices, i;
-  devices = XListInputDevices(GDK_DISPLAY_XDISPLAY(data->display), &num_devices); 
+  devices = XIQueryDevice(GDK_DISPLAY_XDISPLAY(data->display), XIAllMasterDevices, &num_devices);
 
   /* 
-     this is for my patched libgdk which reads devices anew each call of gdk_display_list_devices(),
+     this is for my patched libgdk which reads devices anew each call of 
+     gdk_display_list_devices(),
      but shouldn't harm with vanilla gdk 
   */
   gromit_release_grab (data, NULL); /* ungrab all */
@@ -1623,20 +1623,21 @@ setup_input_devices (GromitData *data)
          gdk_device_set_source (device, GDK_SOURCE_ERASER);
 
       /* only enable devices with 2 ore more axes */
-     
       if (device->num_axes >= 2)
         {
           gdk_device_set_mode (device, GDK_MODE_SCREEN);
 
           GromitDeviceData *devdata;
           devdata  = g_malloc0(sizeof (GromitDeviceData));
+	  devdata->device_id = -1;
           devdata->device = device;
 
           /* 
-             we need to determine the XDevice for the GdkDevice
+             we need to determine the device ID for the GdkDevice
              the name->name mapping ain't nice, but what can i do...
           */
-          for(i = 0; i < num_devices; ++i) /* seems the InputDevices List is already chronologically reversed */
+          for(i = 0; i < num_devices; ++i) /* seems the InputDevices List is 
+					      already chronologically reversed */
             if(strcmp(devices[i].name, device->name) == 0)
               {
 		/* check if we have a device with this id already in case of name duplication */
@@ -1648,18 +1649,19 @@ setup_input_devices (GromitData *data)
 		while (g_hash_table_iter_next (&it, NULL, &value)) 
 		  {
 		    dd = value;
-		    if(dd->xdevice->device_id == devices[i].id)
+		    if(dd->device_id == devices[i].deviceid)
 		      dup = 1;
 		  }
 		
 		if(dup)
 		  continue; /* further search in devices[] */
 
-		devdata->xdevice = XOpenDevice(GDK_DISPLAY_XDISPLAY(data->display), devices[i].id);
+		devdata->device_id = devices[i].deviceid;
                 break;
               }
 
-	  if(!devdata->xdevice) /* very bad, gdk_display_list_devices() has a device that doesn't exist anymore */
+	  if(devdata->device_id < 0) 
+	    /* very bad, gdk_display_list_devices() has a device that doesn't exist anymore */
 	    {
 	      g_free(devdata);
 	      return;
@@ -1667,11 +1669,12 @@ setup_input_devices (GromitData *data)
 
          
 	  g_hash_table_insert(data->devdatatable, device, devdata);
-          g_printerr ("Enabled Device %d: \"%s\" (Type: %d)\n", (int)devdata->xdevice->device_id, device->name, device->source);
+          g_printerr ("Enabled Device %d: \"%s\" (Type: %d)\n", 
+		      (int)devdata->device_id, device->name, device->source);
         }
     }
 
-  XFreeDeviceList(devices);
+  XIFreeDeviceInfo(devices);
   g_printerr ("Now %d enabled devices.\n", g_hash_table_size(data->devdatatable));
 
 }

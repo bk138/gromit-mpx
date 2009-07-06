@@ -1,3 +1,9 @@
 this a _very_ crude and simple-minded patch to the gdk part of gtk
-to support XInput2. works for grmoit-mpx, but dont blame me if it 
+to support XInput2. works for gromit-mpx, but dont blame me if it 
 breaks anything....
+
+apply with
+
+ patch -p1 < gtk_xinput2.patch
+
+at the root of the gtk source dir.

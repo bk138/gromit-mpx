@@ -4,8 +4,8 @@ in context of a student research project [2] and enables
 annotation with several pointers at once.
 
 This port needs a MPX-enabled version of GTK!
-I hacked up my own patch: [3] or it should probably
-also work with [4].
+I hacked up my own patch: see the ./gtk_patch subdir.
+As long as [3] isn't updated, thats the only option.
 
 
 
@@ -23,5 +23,4 @@ LD_RUN_PATH=/opt/mpx/lib PKG_CONFIG_PATH=/opt/mpx/lib/pkgconfig make
 
 [1] http://wearables.unisa.edu.au/mpx
 [2] http://wiki.informatik.hu-berlin.de/nomads/index.php/CollabKit
-[3] http://www2.informatik.hu-berlin.de/~beier/code/CollabKit/src/server/gtk_gdk_xi2_devicelist_patch.tar.gz
-[4] http://github.com/garnacho/gtk-mpx/tree/mpx
+[3] http://github.com/garnacho/gtk-mpx/tree/mpx
