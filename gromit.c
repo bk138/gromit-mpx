@@ -1127,7 +1127,7 @@ key_press_event (GtkWidget   *grab_widget,
       else if (event->state & GDK_MOD1_MASK)
         gtk_main_quit ();
       else
-        gromit_toggle_grab (data, -1); 
+        gromit_toggle_grab (data, 2); /* the virtual core pointer */
 
       return TRUE;
     }
