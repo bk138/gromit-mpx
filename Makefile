@@ -13,7 +13,7 @@ CFLAGS = $(shell pkg-config --cflags gtk+-2.0) -Wall -O2 -g
 LDFLAGS= $(shell pkg-config --libs gtk+-2.0)
 
 
-OBJS=gromit.o 
+OBJS=gromit-mpx.o 
 OUTFILE=gromit-mpx
 PREFIX=/usr/local/
 
@@ -33,4 +33,4 @@ install: $(OUTFILE)
 	install -d $(PREFIX)/bin
 	install -m 755  $(OUTFILE) $(PREFIX)/bin
 
-gromit.o:  paint_cursor.xpm erase_cursor.xpm
+gromit-mpx.o:  paint_cursor.xpm erase_cursor.xpm
