@@ -34,3 +34,6 @@ install: $(OUTFILE)
 	install -m 755  $(OUTFILE) $(PREFIX)/bin
 
 gromit-mpx.o:  paint_cursor.xpm erase_cursor.xpm
+
+etags:
+	etags *.c *.h
