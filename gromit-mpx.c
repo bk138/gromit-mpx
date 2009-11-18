@@ -163,6 +163,19 @@ void gromit_release_grab (GromitData *data, GdkDevice *dev);
 void gromit_acquire_grab (GromitData *data, GdkDevice *dev);
 void parse_print_help (gpointer key, gpointer value, gpointer user_data);
 void setup_input_devices (GromitData *data);
+void mainapp_event_selection_get (GtkWidget          *widget,
+				  GtkSelectionData   *selection_data,
+				  guint               info,
+				  guint               time,
+				  gpointer            user_data);
+void mainapp_event_selection_received (GtkWidget *widget,
+				       GtkSelectionData *selection_data,
+				       guint time,
+				       gpointer user_data);
+
+
+
+
 
 GromitPaintContext *
 gromit_paint_context_new (GromitData *data, GromitPaintType type,
@@ -1107,6 +1120,112 @@ event_expose (GtkWidget *widget,
 }
 
 
+void event_monitors_changed ( GdkScreen *screen,
+			      gpointer   user_data) 
+{
+  GromitData *data = (GromitData *) user_data;
+
+  if(data->debug)
+    g_printerr("DEBUG: screen size changed!\n");
+
+    
+  data->screen = gdk_display_get_default_screen (data->display);
+  data->xinerama = gdk_screen_get_n_monitors (data->screen) > 1;
+  data->root = gdk_screen_get_root_window (data->screen);
+  data->width = gdk_screen_get_width (data->screen);
+  data->height = gdk_screen_get_height (data->screen);
+
+
+  data->win = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_widget_set_usize (GTK_WIDGET (data->win), data->width, data->height);
+  gtk_widget_set_uposition (GTK_WIDGET (data->win), 0, 0);
+  
+  gtk_widget_set_events (data->win, GROMIT_WINDOW_EVENTS);
+
+  g_signal_connect (data->win, "delete-event", gtk_main_quit, NULL);
+  g_signal_connect (data->win, "destroy", gtk_main_quit, NULL);
+
+  
+  gtk_widget_realize (data->win); 
+
+  gtk_selection_owner_set (data->win, GA_DATA, GDK_CURRENT_TIME);
+  gtk_selection_add_target (data->win, GA_DATA, GA_TOGGLEDATA, 1007);
+
+
+
+
+  /* COLORMAP */
+  data->cm = gdk_screen_get_default_colormap (data->screen);
+  data->white = g_malloc (sizeof (GdkColor));
+  data->black = g_malloc (sizeof (GdkColor));
+  data->red   = g_malloc (sizeof (GdkColor));
+  gdk_color_parse ("#FFFFFF", data->white);
+  gdk_colormap_alloc_color (data->cm, data->white, FALSE, TRUE);
+  gdk_color_parse ("#000000", data->black);
+  gdk_colormap_alloc_color (data->cm, data->black, FALSE, TRUE);
+  gdk_color_parse ("#FF0000", data->red);
+  gdk_colormap_alloc_color (data->cm, data->red,  FALSE, TRUE);
+
+     
+
+  
+  /* SHAPE PIXMAP */
+  data->shape = gdk_pixmap_new (NULL, data->width, data->height, 1);
+  data->shape_gc = gdk_gc_new (data->shape);
+  data->shape_gcv = g_malloc (sizeof (GdkGCValues));
+  gdk_gc_get_values (data->shape_gc, data->shape_gcv);
+  data->transparent = gdk_color_copy (&(data->shape_gcv->foreground));
+  data->opaque = gdk_color_copy (&(data->shape_gcv->background));
+  gdk_gc_set_foreground (data->shape_gc, data->transparent);
+  gdk_draw_rectangle (data->shape, data->shape_gc,
+                      1, 0, 0, data->width, data->height);
+
+  /* DRAWING AREA */
+  data->area = gtk_drawing_area_new ();
+  gtk_drawing_area_size (GTK_DRAWING_AREA (data->area),
+                         data->width, data->height);
+
+  /* EVENTS */
+  gtk_widget_set_events (data->area, GROMIT_PAINT_AREA_EVENTS);
+  g_signal_connect (data->area, "expose_event",
+		    G_CALLBACK (event_expose), data);
+  g_signal_connect (data->area,"configure_event",
+		    G_CALLBACK (event_configure), data);
+  g_signal_connect (data->screen,"monitors_changed",
+		    G_CALLBACK (event_monitors_changed), data);
+  g_signal_connect (data->win, "motion_notify_event",
+		    G_CALLBACK (paintto), data);
+  g_signal_connect (data->win, "button_press_event", 
+		    G_CALLBACK(paint), data);
+  g_signal_connect (data->win, "button_release_event",
+		    G_CALLBACK (paintend), data);
+  g_signal_connect (data->win, "proximity_in_event",
+		    G_CALLBACK (proximity_in), data);
+  g_signal_connect (data->win, "proximity_out_event",
+		    G_CALLBACK (proximity_out), data);
+ 
+  g_signal_connect (data->win, "selection_get",
+		    G_CALLBACK (mainapp_event_selection_get), data);
+  g_signal_connect (data->win, "selection_received",
+		    G_CALLBACK (mainapp_event_selection_received), data);
+
+  gtk_widget_set_extension_events (data->area, GDK_EXTENSION_EVENTS_ALL);
+ 
+
+
+  gtk_container_add (GTK_CONTAINER (data->win), data->area);
+
+  gtk_widget_shape_combine_mask (data->win, data->shape, 0,0);
+
+  gtk_widget_show_all (data->area);
+
+}
+
+
+
+
+
+
 /* Keyboard control */
 
 gint
@@ -1593,7 +1712,6 @@ parse_config (GromitData *data)
  */
 
 
-
 void
 setup_input_devices (GromitData *data)
 {
@@ -1824,6 +1942,8 @@ setup_main_app (GromitData *data, gboolean activate)
 		    G_CALLBACK (event_expose), data);
   g_signal_connect (data->area,"configure_event",
 		    G_CALLBACK (event_configure), data);
+  g_signal_connect (data->screen,"monitors_changed",
+		    G_CALLBACK (event_monitors_changed), data);
   g_signal_connect (data->win, "motion_notify_event",
 		    G_CALLBACK (paintto), data);
   g_signal_connect (data->win, "button_press_event", 
