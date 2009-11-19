@@ -151,10 +151,15 @@ typedef struct
 } GromitData;
 
 
+void gromit_toggle_visibility (GromitData *data);
+
 void gromit_release_grab (GromitData *data, GdkDevice *dev);
 void gromit_acquire_grab (GromitData *data, GdkDevice *dev);
+void gromit_toggle_grab (GromitData *data, int dev_id);
+  
 void parse_print_help (gpointer key, gpointer value, gpointer user_data);
 void setup_input_devices (GromitData *data);
+
 void mainapp_event_selection_get (GtkWidget          *widget,
 				  GtkSelectionData   *selection_data,
 				  guint               info,
@@ -167,10 +172,9 @@ void mainapp_event_selection_received (GtkWidget *widget,
 
 void gromit_select_tool (GromitData *data, GdkDevice *device, guint state);
 
-void gromit_draw_line (GromitData *data, GdkDevice *dev, gint x1, gint y1,
-		       gint x2, gint y2);
-void gromit_draw_arrow (GromitData *data, GdkDevice *dev, gint x1, gint y1,
-			gint width, gfloat direction);
+void gromit_draw_line (GromitData *data, GdkDevice *dev, gint x1, gint y1, gint x2, gint y2);
+void gromit_draw_arrow (GromitData *data, GdkDevice *dev, gint x1, gint y1, gint width, gfloat direction);
+void gromit_clear_screen (GromitData *data);
 
 gboolean gromit_coord_list_get_arrow_param (GromitData *data,
 					    GdkDevice  *dev,
@@ -180,5 +184,7 @@ gboolean gromit_coord_list_get_arrow_param (GromitData *data,
 
 void gromit_coord_list_prepend (GromitData *data, GdkDevice* dev, gint x, gint y, gint width);
 void gromit_coord_list_free (GromitData *data, GdkDevice* dev);
+
+
 
 #endif

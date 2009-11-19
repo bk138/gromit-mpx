@@ -64,4 +64,20 @@ gboolean proximity_in (GtkWidget *win, GdkEventProximity *ev, gpointer user_data
 
 gboolean proximity_out (GtkWidget *win, GdkEventProximity *ev, gpointer user_data);
 
+
+void mainapp_event_selection_get (GtkWidget          *widget,
+				  GtkSelectionData   *selection_data,
+				  guint               info,
+				  guint               time,
+				  gpointer            user_data);
+
+
+void mainapp_event_selection_received (GtkWidget *widget,
+				       GtkSelectionData *selection_data,
+				       guint time,
+				       gpointer user_data);
+
+
+
+
 #endif

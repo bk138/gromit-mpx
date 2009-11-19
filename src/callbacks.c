@@ -21,6 +21,7 @@
  */
 
 #include <string.h>
+#include <stdlib.h>
 #include "gromit-mpx.h"
 #include "callbacks.h"
 
@@ -395,5 +396,67 @@ gboolean proximity_out (GtkWidget *win, GdkEventProximity *ev, gpointer user_dat
   if(data->debug)
     g_printerr("DEBUG: prox out device  %s: \n", ev->device->name);
   return FALSE;
+}
+
+
+/* Remote control */
+void mainapp_event_selection_get (GtkWidget          *widget,
+				  GtkSelectionData   *selection_data,
+				  guint               info,
+				  guint               time,
+				  gpointer            user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+  
+  gchar *uri = "OK";
+
+  if (selection_data->target == GA_TOGGLE)
+    {
+      /* ask back client for device id */
+      gtk_selection_convert (data->win, GA_DATA,
+                             GA_TOGGLEDATA, time);
+      gtk_main(); /* Wait for the response */
+    }
+  else if (selection_data->target == GA_VISIBILITY)
+    gromit_toggle_visibility (data);
+  else if (selection_data->target == GA_CLEAR)
+    gromit_clear_screen (data);
+  else if (selection_data->target == GA_RELOAD)
+    setup_input_devices(data);
+  else if (selection_data->target == GA_QUIT)
+    gtk_main_quit ();
+  else
+    uri = "NOK";
+
+   
+  gtk_selection_data_set (selection_data,
+                          selection_data->target,
+                          8, (guchar*)uri, strlen (uri));
+}
+
+
+void mainapp_event_selection_received (GtkWidget *widget,
+				       GtkSelectionData *selection_data,
+				       guint time,
+				       gpointer user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+
+  if(selection_data->length < 0)
+    {
+      if(data->debug)
+        g_printerr("DEBUG: mainapp got no answer back from client.\n");
+    }
+  else
+    {
+      if (selection_data->target == GA_TOGGLEDATA )
+        {
+          if(data->debug)
+            g_printerr("DEBUG: mainapp got toggle id '%s' back from client.\n", (gchar*)selection_data->data);
+          gromit_toggle_grab (data, strtoull((gchar*)selection_data->data, NULL, 10));
+        }
+    }
+ 
+  gtk_main_quit ();
 }
 

@@ -256,8 +256,7 @@ gromit_show_window (GromitData *data)
 
 
 
-void
-gromit_toggle_visibility (GromitData *data)
+void gromit_toggle_visibility (GromitData *data)
 {
   if (data->hidden)
     gromit_show_window (data);
@@ -456,8 +455,7 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
 }
 
 /* negative dev_id means  toggle all */
-void
-gromit_toggle_grab (GromitData *data, int dev_id)
+void gromit_toggle_grab (GromitData *data, int dev_id)
 {
   if(dev_id < 0)
     {
@@ -494,8 +492,7 @@ gromit_toggle_grab (GromitData *data, int dev_id)
 }
 
 
-void
-gromit_clear_screen (GromitData *data)
+void gromit_clear_screen (GromitData *data)
 {
   gdk_gc_set_foreground (data->shape_gc, data->transparent);
   gdk_draw_rectangle (data->shape, data->shape_gc, 1,
@@ -787,68 +784,6 @@ gromit_main_do_event (GdkEventAny *event,
   gtk_main_do_event ((GdkEvent *) event);
 }
 
-/* Remote control */
-void
-mainapp_event_selection_get (GtkWidget          *widget,
-                             GtkSelectionData   *selection_data,
-                             guint               info,
-                             guint               time,
-                             gpointer            user_data)
-{
-  GromitData *data = (GromitData *) user_data;
-  
-  gchar *uri = "OK";
-
-  if (selection_data->target == GA_TOGGLE)
-    {
-      /* ask back client for device id */
-      gtk_selection_convert (data->win, GA_DATA,
-                             GA_TOGGLEDATA, time);
-      gtk_main(); /* Wait for the response */
-    }
-  else if (selection_data->target == GA_VISIBILITY)
-    gromit_toggle_visibility (data);
-  else if (selection_data->target == GA_CLEAR)
-    gromit_clear_screen (data);
-  else if (selection_data->target == GA_RELOAD)
-    setup_input_devices(data);
-  else if (selection_data->target == GA_QUIT)
-    gtk_main_quit ();
-  else
-    uri = "NOK";
-
-   
-  gtk_selection_data_set (selection_data,
-                          selection_data->target,
-                          8, (guchar*)uri, strlen (uri));
-}
-
-
-void
-mainapp_event_selection_received (GtkWidget *widget,
-                                  GtkSelectionData *selection_data,
-                                  guint time,
-                                  gpointer user_data)
-{
-  GromitData *data = (GromitData *) user_data;
-
-  if(selection_data->length < 0)
-    {
-      if(data->debug)
-        g_printerr("DEBUG: mainapp got no answer back from client.\n");
-    }
-  else
-    {
-      if (selection_data->target == GA_TOGGLEDATA )
-        {
-          if(data->debug)
-            g_printerr("DEBUG: mainapp got toggle id '%s' back from client.\n", (gchar*)selection_data->data);
-          gromit_toggle_grab (data, strtoull((gchar*)selection_data->data, NULL, 10));
-        }
-    }
- 
-  gtk_main_quit ();
-}
 
 
 
