@@ -1,4 +1,5 @@
-/* Gromit -- a program for painting on the screen
+/* 
+ * Gromit -- a program for painting on the screen
  * Copyright (C) 2000 Simon Budig <Simon.Budig@unix-ag.org>
  *
  * MPX modifications Copyright (C) 2009 Christian Beier <dontmind@freeshell.org>
@@ -16,13 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
  */
-
-#include <glib.h>
-#include <gdk/gdk.h>
-#include <gdk/gdkinput.h>
-#include <gdk/gdkx.h>
-#include <gtk/gtk.h>
 
 #include <X11/extensions/XInput2.h>
 #include <X11/Xcursor/Xcursor.h>
@@ -34,145 +30,11 @@
 #include <math.h>
 #include <stdlib.h>
 
+#include "gromit-mpx.h"
+#include "callbacks.h"
+
 #include "paint_cursor.xpm"
 #include "erase_cursor.xpm"
-
-
-#define GROMIT_MOUSE_EVENTS ( GDK_PROXIMITY_IN_MASK | \
-                              GDK_PROXIMITY_OUT_MASK | \
-                              GDK_BUTTON_MOTION_MASK | \
-                              GDK_BUTTON_PRESS_MASK | \
-                              GDK_BUTTON_RELEASE_MASK )
-
-#define GROMIT_PAINT_AREA_EVENTS  ( GROMIT_MOUSE_EVENTS | GDK_EXPOSURE_MASK )
-
-#define GROMIT_WINDOW_EVENTS ( GROMIT_PAINT_AREA_EVENTS )
-
-/* Atoms used to control Gromit */
-#define GA_CONTROL    gdk_atom_intern ("Gromit/control", FALSE)
-#define GA_STATUS     gdk_atom_intern ("Gromit/status", FALSE)
-#define GA_QUIT       gdk_atom_intern ("Gromit/quit", FALSE)
-#define GA_ACTIVATE   gdk_atom_intern ("Gromit/activate", FALSE)
-#define GA_DEACTIVATE gdk_atom_intern ("Gromit/deactivate", FALSE)
-#define GA_TOGGLE     gdk_atom_intern ("Gromit/toggle", FALSE)
-#define GA_VISIBILITY gdk_atom_intern ("Gromit/visibility", FALSE)
-#define GA_CLEAR      gdk_atom_intern ("Gromit/clear", FALSE)
-#define GA_RELOAD     gdk_atom_intern ("Gromit/reload", FALSE)
-
-#define GA_DATA       gdk_atom_intern ("Gromit/data", FALSE)
-#define GA_TOGGLEDATA gdk_atom_intern ("Gromit/toggledata", FALSE)
-
-/* fallback device name for config file */
-#define DEFAULT_DEVICE_NAME "default"
-
-
-typedef enum
-{
-  GROMIT_PEN,
-  GROMIT_ERASER,
-  GROMIT_RECOLOR
-} GromitPaintType;
-
-typedef struct
-{
-  GromitPaintType type;
-  guint           width;
-  gfloat          arrowsize;
-  GdkColor       *fg_color;
-  GdkGC          *paint_gc;
-  GdkGC          *shape_gc;
-  gdouble         pressure;
-} GromitPaintContext;
-
-typedef struct
-{
-  gint x;
-  gint y;
-  gint width;
-} GromitStrokeCoordinate;
-
-typedef struct
-{
-  gdouble      lastx;
-  gdouble      lasty;
-  guint32      motion_time;
-  GList       *coordlist;
-  GdkDevice   *device;
-  int          device_id; /* as long as gdk does not expose the X device, we store this here */
-  guint        state;
-  GromitPaintContext *cur_context;
-  gboolean     is_grabbed;
-  gboolean     was_grabbed;
-} GromitDeviceData;
-
-
-typedef struct
-{
-  GtkWidget   *win;
-  GtkWidget   *area;
-  GtkWidget   *panel;
-  GtkWidget   *button;
-
-  Cursor       paint_cursor;
-  Cursor       erase_cursor;
-
-  GdkPixmap   *pixmap;
-  GdkDisplay  *display;
-  GdkScreen   *screen;
-  gboolean     xinerama;
-  GdkWindow   *root;
-  gchar       *hot_keyval;
-  guint        hot_keycode;
-
-  GdkColormap *cm;
-  GdkColor    *white;
-  GdkColor    *black;
-  GdkColor    *red;
-
-  GromitPaintContext *default_pen;
-  GromitPaintContext *default_eraser;
- 
-  GHashTable  *tool_config;
-
-  GdkBitmap   *shape;
-  GdkGC       *shape_gc;
-  GdkGCValues *shape_gcv;
-  GdkColor    *transparent;
-  GdkColor    *opaque;
-
-  GHashTable  *devdatatable;
-  gboolean     all_grabbed;
-
-  guint        timeout_id;
-  guint        modified;
-  guint        delayed;
-  guint        maxwidth;
-  guint        width;
-  guint        height;
-  guint        client;
-  guint        painted;
-  gboolean     hidden;
-  gboolean     debug;
-
-  gchar       *clientdata;
-} GromitData;
-
-
-/* I need a prototype...  */
-void gromit_release_grab (GromitData *data, GdkDevice *dev);
-void gromit_acquire_grab (GromitData *data, GdkDevice *dev);
-void parse_print_help (gpointer key, gpointer value, gpointer user_data);
-void setup_input_devices (GromitData *data);
-void mainapp_event_selection_get (GtkWidget          *widget,
-				  GtkSelectionData   *selection_data,
-				  guint               info,
-				  guint               time,
-				  gpointer            user_data);
-void mainapp_event_selection_received (GtkWidget *widget,
-				       GtkSelectionData *selection_data,
-				       guint time,
-				       gpointer user_data);
-
 
 
 
@@ -259,8 +121,7 @@ gromit_paint_context_free (GromitPaintContext *context)
 }
 
 
-void
-gromit_coord_list_prepend (GromitData *data, GdkDevice* dev, gint x, gint y, gint width)
+void gromit_coord_list_prepend (GromitData *data, GdkDevice* dev, gint x, gint y, gint width)
 {
   /* get the data for this device */
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
@@ -276,8 +137,7 @@ gromit_coord_list_prepend (GromitData *data, GdkDevice* dev, gint x, gint y, gin
 }
 
 
-void
-gromit_coord_list_free (GromitData *data, GdkDevice* dev)
+void gromit_coord_list_free (GromitData *data, GdkDevice* dev)
 {
   // get the data for this device
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
@@ -297,8 +157,7 @@ gromit_coord_list_free (GromitData *data, GdkDevice* dev)
 }
 
 
-gboolean
-gromit_coord_list_get_arrow_param (GromitData *data,
+gboolean gromit_coord_list_get_arrow_param (GromitData *data,
                                    GdkDevice  *dev,
                                    gint        search_radius,
                                    gint       *ret_width,
@@ -670,8 +529,7 @@ reshape (gpointer user_data)
 }
 
 
-void
-gromit_select_tool (GromitData *data, GdkDevice *device, guint state)
+void gromit_select_tool (GromitData *data, GdkDevice *device, guint state)
 {
   guint buttons = 0, modifier = 0, len = 0, default_len = 0;
   guint req_buttons = 0, req_modifier = 0;
@@ -765,9 +623,8 @@ gromit_select_tool (GromitData *data, GdkDevice *device, guint state)
 }
 
 
-void
-gromit_draw_line (GromitData *data, GdkDevice *dev, gint x1, gint y1,
-                  gint x2, gint y2)
+void gromit_draw_line (GromitData *data, GdkDevice *dev, gint x1, gint y1,
+		       gint x2, gint y2)
 {
   GdkRectangle rect;
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
@@ -875,355 +732,11 @@ gromit_draw_arrow (GromitData *data, GdkDevice *dev, gint x1, gint y1,
 }
 
 
-/*
- * Event-Handlers to perform the drawing
- */
-
-gboolean
-proximity_in (GtkWidget *win, GdkEventProximity *ev, gpointer user_data)
-{
-  GromitData *data = (GromitData *) user_data;
-  gint x, y;
-  GdkModifierType state;
-
-  gdk_window_get_pointer (data->win->window, &x, &y, &state);
-  gromit_select_tool (data, ev->device, state);
-
-  if(data->debug)
-    g_printerr("DEBUG: prox in device  %s: \n", ev->device->name);
-  return TRUE;
-}
-
-
-gboolean
-proximity_out (GtkWidget *win, GdkEventProximity *ev, gpointer user_data)
-{
-  GromitData *data = (GromitData *) user_data;
-  
-  /* get the data for this device */
-  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, ev->device);
-
-  devdata->cur_context = data->default_pen;
-
-  devdata->state = 0;
-  devdata->device = NULL;
-
-  if(data->debug)
-    g_printerr("DEBUG: prox out device  %s: \n", ev->device->name);
-  return FALSE;
-}
-
-
-gboolean
-paint (GtkWidget *win, GdkEventButton *ev, gpointer user_data)
-{
-  GromitData *data = (GromitData *) user_data;
-  gdouble pressure = 0.5;
-  /* get the data for this device */
-  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, ev->device);
-
-  if(data->debug)
-    g_printerr("DEBUG: Device '%s': Button %i Down at (x,y)=(%.2f : %.2f)\n", ev->device->name, ev->button, ev->x, ev->y);
-
-  if (!devdata->is_grabbed)
-    return FALSE;
-
- 
-  /* See GdkModifierType. Am I fixing a Gtk misbehaviour???  */
-  ev->state |= 1 << (ev->button + 7);
-
-
-  if (ev->state != devdata->state)
-    gromit_select_tool (data, ev->device, ev->state);
-
-  gdk_window_set_background (data->area->window,
-                             devdata->cur_context->fg_color);
-
-  devdata->lastx = ev->x;
-  devdata->lasty = ev->y;
-  devdata->motion_time = ev->time;
-
-  if (ev->device->source == GDK_SOURCE_MOUSE)
-    {
-      data->maxwidth = devdata->cur_context->width;
-    }
-  else
-    {
-      gdk_event_get_axis ((GdkEvent *) ev, GDK_AXIS_PRESSURE, &pressure);
-      data->maxwidth = (CLAMP (pressure * pressure,0,1) *
-                        (double) devdata->cur_context->width);
-    }
-  if (ev->button <= 5)
-    gromit_draw_line (data, ev->device, ev->x, ev->y, ev->x, ev->y);
-
-  gromit_coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
-
-  /* if (data->cur_context->shape_gc && !gtk_events_pending ())
-     gtk_widget_shape_combine_mask (data->win, data->shape, 0,0); */
-
-  return TRUE;
-}
-
-
-gboolean
-paintto (GtkWidget *win,
-         GdkEventMotion *ev,
-         gpointer user_data)
-{
-  GromitData *data = (GromitData *) user_data;
-  GdkTimeCoord **coords = NULL;
-  int nevents;
-  int i;
-  gboolean ret;
-  gdouble pressure = 0.5;
-  // get the data for this device
-  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, ev->device);
-
-  if (!devdata->is_grabbed)
-    return FALSE;
- 
-
-  ret = gdk_device_get_history (ev->device, ev->window,
-                                devdata->motion_time, ev->time,
-                                &coords, &nevents);
-
-  // XXX gdk_device_get_history is corrupt atm
-  nevents = 0;
-  if (!data->xinerama && nevents > 0)
-    {
-      for (i=0; i < nevents; i++)
-        {
-          gdouble x, y;
-
-          gdk_device_get_axis (ev->device, coords[i]->axes,
-                               GDK_AXIS_PRESSURE, &pressure);
-          if (pressure > 0)
-            {
-              if (ev->device->source == GDK_SOURCE_MOUSE)
-                data->maxwidth = devdata->cur_context->width;
-              else
-                data->maxwidth = (CLAMP (pressure * pressure, 0, 1) *
-                                  (double) devdata->cur_context->width);
-
-              gdk_device_get_axis(ev->device, coords[i]->axes,
-                                  GDK_AXIS_X, &x);
-              gdk_device_get_axis(ev->device, coords[i]->axes,
-                                  GDK_AXIS_Y, &y);
-
-              gromit_draw_line (data, ev->device, devdata->lastx, devdata->lasty, x, y);
-
-              gromit_coord_list_prepend (data, ev->device, x, y, data->maxwidth);
-              devdata->lastx = x;
-              devdata->lasty = y;
-            }
-        }
-
-      devdata->motion_time = coords[nevents-1]->time;
-      g_free (coords);
-    }
-
-  /* always paint to the current event coordinate. */
-  gdk_event_get_axis ((GdkEvent *) ev, GDK_AXIS_PRESSURE, &pressure);
-
-  if (pressure > 0)
-    {
-      if (ev->device->source == GDK_SOURCE_MOUSE)
-	data->maxwidth = devdata->cur_context->width;
-      else
-         data->maxwidth = (CLAMP (pressure * pressure,0,1) *
-                           (double)devdata->cur_context->width);
-      gromit_draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
-
-      gromit_coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
-    }
-
-  devdata->lastx = ev->x;
-  devdata->lasty = ev->y;
-
-  return TRUE;
-}
-
-
-gboolean
-paintend (GtkWidget *win, GdkEventButton *ev, gpointer user_data)
-{
-  GromitData *data = (GromitData *) user_data;
-  /* get the device data for this event */
-  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, ev->device);
-
-  gfloat direction = 0;
-  gint width = 0;
-  if(devdata->cur_context)
-    width = devdata->cur_context->arrowsize * devdata->cur_context->width / 2;
-   
-
-  if ((ev->x != devdata->lastx) ||
-      (ev->y != devdata->lasty))
-     paintto (win, (GdkEventMotion *) ev, user_data);
-
-  if (!devdata->is_grabbed)
-    return FALSE;
-
-  if (devdata->cur_context->arrowsize != 0 &&
-      gromit_coord_list_get_arrow_param (data, ev->device, width * 3,
-                                         &width, &direction))
-    gromit_draw_arrow (data, ev->device, ev->x, ev->y, width, direction);
-
-  gromit_coord_list_free (data, ev->device);
-
-  return TRUE;
-}
 
 
 /*
  * Functions for handling various (GTK+)-Events
  */
-
-void
-quiet_print_handler (const gchar *string)
-{
-  return;
-}
-
-
-gboolean
-event_configure (GtkWidget *widget,
-                 GdkEventExpose *event,
-                 gpointer user_data)
-{
-  GromitData *data = (GromitData *) user_data;
-
-  data->pixmap = gdk_pixmap_new (data->area->window, data->width,
-                                 data->height, -1);
-  gdk_draw_rectangle (data->pixmap, data->area->style->black_gc,
-                      1, 0, 0, data->width, data->height);
-  gdk_window_set_transient_for (data->area->window, data->win->window);
-
-  return TRUE;
-}
-
-
-gboolean
-event_expose (GtkWidget *widget,
-              GdkEventExpose *event,
-              gpointer user_data)
-{
-  GromitData *data = (GromitData *) user_data;
-
-  gdk_draw_drawable (data->area->window,
-                     data->area->style->fg_gc[GTK_WIDGET_STATE (data->area)],
-                     data->pixmap,
-                     event->area.x, event->area.y,
-                     event->area.x, event->area.y,
-                     event->area.width, event->area.height);
-  return TRUE;
-}
-
-
-void event_monitors_changed ( GdkScreen *screen,
-			      gpointer   user_data) 
-{
-  GromitData *data = (GromitData *) user_data;
-
-  if(data->debug)
-    g_printerr("DEBUG: screen size changed!\n");
-
-    
-  data->screen = gdk_display_get_default_screen (data->display);
-  data->xinerama = gdk_screen_get_n_monitors (data->screen) > 1;
-  data->root = gdk_screen_get_root_window (data->screen);
-  data->width = gdk_screen_get_width (data->screen);
-  data->height = gdk_screen_get_height (data->screen);
-
-
-  data->win = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_widget_set_usize (GTK_WIDGET (data->win), data->width, data->height);
-  gtk_widget_set_uposition (GTK_WIDGET (data->win), 0, 0);
-  
-  gtk_widget_set_events (data->win, GROMIT_WINDOW_EVENTS);
-
-  g_signal_connect (data->win, "delete-event", gtk_main_quit, NULL);
-  g_signal_connect (data->win, "destroy", gtk_main_quit, NULL);
-
-  
-  gtk_widget_realize (data->win); 
-
-  gtk_selection_owner_set (data->win, GA_DATA, GDK_CURRENT_TIME);
-  gtk_selection_add_target (data->win, GA_DATA, GA_TOGGLEDATA, 1007);
-
-
-
-
-  /* COLORMAP */
-  data->cm = gdk_screen_get_default_colormap (data->screen);
-  data->white = g_malloc (sizeof (GdkColor));
-  data->black = g_malloc (sizeof (GdkColor));
-  data->red   = g_malloc (sizeof (GdkColor));
-  gdk_color_parse ("#FFFFFF", data->white);
-  gdk_colormap_alloc_color (data->cm, data->white, FALSE, TRUE);
-  gdk_color_parse ("#000000", data->black);
-  gdk_colormap_alloc_color (data->cm, data->black, FALSE, TRUE);
-  gdk_color_parse ("#FF0000", data->red);
-  gdk_colormap_alloc_color (data->cm, data->red,  FALSE, TRUE);
-
-     
-
-  
-  /* SHAPE PIXMAP */
-  data->shape = gdk_pixmap_new (NULL, data->width, data->height, 1);
-  data->shape_gc = gdk_gc_new (data->shape);
-  data->shape_gcv = g_malloc (sizeof (GdkGCValues));
-  gdk_gc_get_values (data->shape_gc, data->shape_gcv);
-  data->transparent = gdk_color_copy (&(data->shape_gcv->foreground));
-  data->opaque = gdk_color_copy (&(data->shape_gcv->background));
-  gdk_gc_set_foreground (data->shape_gc, data->transparent);
-  gdk_draw_rectangle (data->shape, data->shape_gc,
-                      1, 0, 0, data->width, data->height);
-
-  /* DRAWING AREA */
-  data->area = gtk_drawing_area_new ();
-  gtk_drawing_area_size (GTK_DRAWING_AREA (data->area),
-                         data->width, data->height);
-
-  /* EVENTS */
-  gtk_widget_set_events (data->area, GROMIT_PAINT_AREA_EVENTS);
-  g_signal_connect (data->area, "expose_event",
-		    G_CALLBACK (event_expose), data);
-  g_signal_connect (data->area,"configure_event",
-		    G_CALLBACK (event_configure), data);
-  g_signal_connect (data->screen,"monitors_changed",
-		    G_CALLBACK (event_monitors_changed), data);
-  g_signal_connect (data->win, "motion_notify_event",
-		    G_CALLBACK (paintto), data);
-  g_signal_connect (data->win, "button_press_event", 
-		    G_CALLBACK(paint), data);
-  g_signal_connect (data->win, "button_release_event",
-		    G_CALLBACK (paintend), data);
-  g_signal_connect (data->win, "proximity_in_event",
-		    G_CALLBACK (proximity_in), data);
-  g_signal_connect (data->win, "proximity_out_event",
-		    G_CALLBACK (proximity_out), data);
- 
-  g_signal_connect (data->win, "selection_get",
-		    G_CALLBACK (mainapp_event_selection_get), data);
-  g_signal_connect (data->win, "selection_received",
-		    G_CALLBACK (mainapp_event_selection_received), data);
-
-  gtk_widget_set_extension_events (data->area, GDK_EXTENSION_EVENTS_ALL);
- 
-
-
-  gtk_container_add (GTK_CONTAINER (data->win), data->area);
-
-  gtk_widget_shape_combine_mask (data->win, data->shape, 0,0);
-
-  gtk_widget_show_all (data->area);
-
-}
-
-
-
-
 
 
 /* Keyboard control */
@@ -1337,49 +850,6 @@ mainapp_event_selection_received (GtkWidget *widget,
   gtk_main_quit ();
 }
 
-
-void
-clientapp_event_selection_get (GtkWidget          *widget,
-                               GtkSelectionData   *selection_data,
-                               guint               info,
-                               guint               time,
-                               gpointer            user_data)
-{
-  GromitData *data = (GromitData *) user_data;
-  
-  gchar *ans = "";
-
-  if(data->debug)
-    g_printerr("DEBUG: clientapp received request.\n");  
-
-  if (selection_data->target == GA_TOGGLEDATA)
-    {
-      ans = data->clientdata;
-    }
-    
-  gtk_selection_data_set (selection_data,
-                          selection_data->target,
-                          8, (guchar*)ans, strlen (ans));
-}
-
-
-void
-clientapp_event_selection_received (GtkWidget *widget,
-                          GtkSelectionData *selection_data,
-                          guint time,
-                          gpointer user_data)
-{
-  GromitData *data = (GromitData *) user_data;
-
-  /* If someone has a selection for us, Gromit is already running. */
-
-  if (selection_data->type == GDK_NONE)
-    data->client = 0;
-  else
-    data->client = 1;
-
-  gtk_main_quit ();
-}
 
 
 /*

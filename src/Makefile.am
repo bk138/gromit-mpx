@@ -11,6 +11,9 @@ bin_PROGRAMS = gromit-mpx
 
 gromit_mpx_SOURCES = \
 	gromit-mpx.c \
+	gromit-mpx.h \
+	callbacks.c \
+	callbacks.h \
 	erase_cursor.xpm \
 	paint_cursor.xpm
 
