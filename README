@@ -1,5 +1,17 @@
-Gromit
+Gromit-MPX
 ----------
+
+Gromit-MPX is an XInput2 port of the original Gromit and enables
+annotation with several pointers at once.
+
+This port needs an Xinput2-enabled version of GTK! For the time being,
+this is available at http://live.gnome.org/GTK%2B/MPX.
+
+  Christian Beier <dontmind@freeshell.org>
+
+
+Gromit
+------
 
 Gromit (GRaphics Over MIscellaneous Things) is a small tool to make
 annotations on the screen.
