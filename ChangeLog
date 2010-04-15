@@ -1,3 +1,117 @@
+commit 5b1849c033f60e942cc708e6476a33cad00f5299
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Apr 15 22:46:57 2010 +0200
+
+    Update README.
+
+commit d94add6dfeb8de6f176c4b423cc26f84db807305
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Nov 19 01:34:29 2009 +0100
+
+    some more callback refactoring.
+
+commit 27056d1ee8ce1d8b6215de685427e5ffb9ba8911
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Nov 19 01:26:23 2009 +0100
+
+    move callbacks into seperate files.
+
+commit 4ec7362f6e84c6845211cb19703e2a4ee0766c0e
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Nov 19 00:51:10 2009 +0100
+
+    autotoolize!
+
+commit 0158463b8a718d88e7c897d6e429e31c3e26cbda
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Nov 18 23:57:26 2009 +0100
+
+    remove gtk patch.
+
+commit ae96f1a94aad3b1e66717e25d0eb8b033ef68987
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Nov 18 23:57:01 2009 +0100
+
+    support changing screen dimension.
+
+commit 45c0bbc6b6f05c2ba7e9de584f7640197922a0b5
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Nov 18 23:38:40 2009 +0100
+
+    Makefile: add etags target.
+
+commit 6426d49246c8d86d2e76520f146fbf00045710bd
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Aug 21 00:50:07 2009 +0200
+
+    rename gromit.c to gromit-mpx.c
+
+commit f455a1d0eee7760f47ff703b3b0fa0d482b73bdb
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jul 8 15:47:11 2009 +0200
+
+    only toggle virtual core pointer if hotkey pressed.
+
+commit bc2adc0875d704ba2565971aefc2171d5dfeee96
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Jul 6 17:11:00 2009 +0200
+
+    port over to XI2.
+
+commit 47aaec03698268601e33388e9fd9fbdbf51a819e
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue Jun 30 19:14:29 2009 +0200
+
+    add gdk patch to repo.
+
+commit 26c3ca9e307901c24fa46cb6ea81e0591c5a07ef
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri May 15 00:00:11 2009 +0200
+
+    remove select_tool() call in paintto().
+    
+    gtk doesn't seem to set the button masks in event state,
+    so we would always revert to standard tool again if the
+    pointer moves. makes it now inpossible to draw multi-
+    coloured lines, but so what....
+
+commit ea07f5d4aebbc2aeb176f6d80a63632442688b61
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu May 14 23:31:59 2009 +0200
+
+    add myself to copyright (c).
+
+commit de60cd8a7f78b285860e9fbda49a3b95f3f14dda
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu May 14 23:31:34 2009 +0200
+
+    add notes about gtk patch.
+
+commit db3f29f613770c4ddfc14e6578a425ce3f52d604
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu May 14 23:26:51 2009 +0200
+
+    add README.MPX
+
+commit 61b14d252566dc4b91d53a6681392bc0e5f1750d
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu May 14 23:13:00 2009 +0200
+
+    remove all XINPUT2 ifdefs. we're gromit-mpx anyway!
+    
+    for pre-XI2, people can use the original gromit...
+
+commit 11dd8860942c986d1aa2d5b2f0e3beb277c72d08
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu May 14 21:14:15 2009 +0200
+
+    initial import.
+
+
+
+Here are the pre-git change logs:
+
+
 2008-12-29 Christian Beier  <dontmind@freeshell.org>
 
 	* gromit.c: 
