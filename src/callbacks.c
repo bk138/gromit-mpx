@@ -32,7 +32,7 @@ gboolean event_expose (GtkWidget *widget,
   GromitData *data = (GromitData *) user_data;
 
   gdk_draw_drawable (data->area->window,
-                     data->area->style->fg_gc[GTK_WIDGET_STATE (data->area)],
+                     data->area->style->fg_gc[gtk_widget_get_state(data->area)],
                      data->pixmap,
                      event->area.x, event->area.y,
                      event->area.x, event->area.y,
@@ -77,8 +77,8 @@ void event_monitors_changed ( GdkScreen *screen,
 
 
   data->win = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_widget_set_usize (GTK_WIDGET (data->win), data->width, data->height);
-  gtk_widget_set_uposition (GTK_WIDGET (data->win), 0, 0);
+  gtk_widget_set_size_request(GTK_WIDGET (data->win), data->width, data->height);
+  //gtk_widget_set_uposition (GTK_WIDGET (data->win), 0, 0);
   
   gtk_widget_set_events (data->win, GROMIT_WINDOW_EVENTS);
 
@@ -122,8 +122,8 @@ void event_monitors_changed ( GdkScreen *screen,
 
   /* DRAWING AREA */
   data->area = gtk_drawing_area_new ();
-  gtk_drawing_area_size (GTK_DRAWING_AREA (data->area),
-                         data->width, data->height);
+  gtk_widget_set_size_request(GTK_WIDGET(data->area),
+			      data->width, data->height);
 
   /* EVENTS */
   gtk_widget_set_events (data->area, GROMIT_PAINT_AREA_EVENTS);
@@ -263,7 +263,7 @@ gboolean paintto (GtkWidget *win,
 {
   GromitData *data = (GromitData *) user_data;
   GdkTimeCoord **coords = NULL;
-  int nevents;
+  guint nevents;
   int i;
   gboolean ret;
   gdouble pressure = 0.5;

@@ -25,7 +25,6 @@
 
 #include <glib.h>
 #include <gdk/gdk.h>
-#include <gdk/gdkinput.h>
 #include <gtk/gtk.h>
 
 

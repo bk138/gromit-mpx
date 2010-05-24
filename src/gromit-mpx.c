@@ -1268,8 +1268,8 @@ setup_client_app (GromitData *data)
 
 
   data->win = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_widget_set_usize (GTK_WIDGET (data->win), data->width, data->height);
-  gtk_widget_set_uposition (GTK_WIDGET (data->win), 0, 0);
+  gtk_widget_set_size_request (GTK_WIDGET (data->win), data->width, data->height);
+  //  gtk_widget_set_uposition (GTK_WIDGET (data->win), 0, 0);
   
   gtk_widget_set_events (data->win, GROMIT_WINDOW_EVENTS);
 
@@ -1338,8 +1338,8 @@ setup_main_app (GromitData *data, gboolean activate)
 
   /* DRAWING AREA */
   data->area = gtk_drawing_area_new ();
-  gtk_drawing_area_size (GTK_DRAWING_AREA (data->area),
-                         data->width, data->height);
+  gtk_widget_set_size_request(GTK_WIDGET(data->area),
+			      data->width, data->height);
 
   /* EVENTS */
   gtk_widget_set_events (data->area, GROMIT_PAINT_AREA_EVENTS);
@@ -1385,7 +1385,7 @@ setup_main_app (GromitData *data, gboolean activate)
   data->painted = 0;
   gromit_hide_window (data);
 
-  data->timeout_id = gtk_timeout_add (20, reshape, data);
+  data->timeout_id = g_timeout_add (20, reshape, data);
  
   data->modified = 0;
 
