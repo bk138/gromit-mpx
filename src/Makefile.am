@@ -14,8 +14,12 @@ gromit_mpx_SOURCES = \
 	gromit-mpx.h \
 	callbacks.c \
 	callbacks.h \
-	erase_cursor.xpm \
-	paint_cursor.xpm
+	config.c \
+	config.h \
+	erase_cursor.xbm \
+	erase_cursor_mask.xbm \
+	paint_cursor.xbm \
+	paint_cursor_mask.xbm
 
 gromit_mpx_LDFLAGS = 
 

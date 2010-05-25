@@ -182,6 +182,9 @@ gboolean gromit_coord_list_get_arrow_param (GromitData *data,
 void gromit_coord_list_prepend (GromitData *data, GdkDevice* dev, gint x, gint y, gint width);
 void gromit_coord_list_free (GromitData *data, GdkDevice* dev);
 
+GromitPaintContext *gromit_paint_context_new (GromitData *data, GromitPaintType type,
+					      GdkColor *fg_color, guint width, guint arrowsize);
+
 
 
 #endif

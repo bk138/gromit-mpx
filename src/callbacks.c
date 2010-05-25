@@ -1,8 +1,9 @@
 /* 
- *  Gromit -- a program for painting on the screen
- * Copyright (C) 2000 Simon Budig <Simon.Budig@unix-ag.org>
+ * Gromit-MPX -- a program for painting on the screen
  *
- * MPX modifications Copyright (C) 2009 Christian Beier <dontmind@freeshell.org>
+ * Gromit Copyright (C) 2000 Simon Budig <Simon.Budig@unix-ag.org>
+ *
+ * Gromit-MPX Copyright (C) 2009,2010 Christian Beier <dontmind@freeshell.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
