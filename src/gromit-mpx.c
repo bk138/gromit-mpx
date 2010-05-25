@@ -683,7 +683,10 @@ key_press_event (GtkWidget   *grab_widget,
                  gpointer     func_data)
 {
   GromitData *data = (GromitData *) func_data;
+  GdkDevice *dev = gdk_event_get_device((GdkEvent*)event);
 
+  if(data->debug)
+    g_printerr("DEBUG: Received hotkey press from devive '%s'\n", dev->name);
 
   if (event->type == GDK_KEY_PRESS &&
       event->hardware_keycode == data->hot_keycode)
