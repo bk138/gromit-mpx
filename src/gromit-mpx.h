@@ -90,7 +90,6 @@ typedef struct
   guint32      motion_time;
   GList       *coordlist;
   GdkDevice   *device;
-  int          device_id; /* as long as gdk does not expose the X device, we store this here */
   guint        state;
   GromitPaintContext *cur_context;
   gboolean     is_grabbed;
