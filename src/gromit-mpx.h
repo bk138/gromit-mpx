@@ -101,11 +101,9 @@ typedef struct
 {
   GtkWidget   *win;
   GtkWidget   *area;
-  GtkWidget   *panel;
-  GtkWidget   *button;
 
-  Cursor       paint_cursor;
-  Cursor       erase_cursor;
+  GdkCursor   *paint_cursor;
+  GdkCursor   *erase_cursor;
 
   GdkPixmap   *pixmap;
   GdkDisplay  *display;

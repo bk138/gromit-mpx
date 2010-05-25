@@ -21,7 +21,6 @@
  */
 
 #include <X11/extensions/XInput2.h>
-#include <X11/Xcursor/Xcursor.h>
 
 #include <errno.h>
 #include <fcntl.h>
@@ -33,9 +32,10 @@
 #include "gromit-mpx.h"
 #include "callbacks.h"
 
-#include "paint_cursor.xpm"
-#include "erase_cursor.xpm"
-
+#include "paint_cursor.xbm"
+#include "paint_cursor_mask.xbm"
+#include "erase_cursor.xbm"
+#include "erase_cursor_mask.xbm"
 
 
 
@@ -277,25 +277,11 @@ gromit_release_grab (GromitData *data, GdkDevice *dev)
       while (g_hash_table_iter_next (&it, NULL, &value)) 
         {
           devdata = value;
-          if(!devdata->is_grabbed)
-            continue;
+          if(devdata->is_grabbed)
 	  {
-	    gdk_error_trap_push ();
-	    
 	    gdk_device_ungrab(devdata->device, GDK_CURRENT_TIME);
-
-	    gdk_flush ();
-	    if (gdk_error_trap_pop ())
-	      {
-		/* this probably means the device table is outdated, 
-		   e.g. this device doesn't exist anymore */
-		g_printerr("Error ungrabbing Device '%s' while ungrabbing all, ignoring.\n", 
-			   devdata->device->name);
-		continue;
-	      }
+	    devdata->is_grabbed = 0;
 	  }
-	  
-          devdata->is_grabbed = 0;
         }
       
       data->all_grabbed = 0;
@@ -312,24 +298,7 @@ gromit_release_grab (GromitData *data, GdkDevice *dev)
 
   if (devdata->is_grabbed)
     {
-      {
-	gdk_error_trap_push ();
-
-	gdk_device_ungrab(devdata->device, GDK_CURRENT_TIME);
-	
-	gdk_flush ();
-
-	if (gdk_error_trap_pop ())
-	  {
-              /* this probably means the device table is outdated, 
-		 e.g. this device doesn't exist anymore */
-              g_printerr("Error ungrabbing Device '%s', rescanning device list.\n",
-			 devdata->device->name);
-              setup_input_devices(data);
-              return;
-            }
-        }
-
+      gdk_device_ungrab(devdata->device, GDK_CURRENT_TIME);
       devdata->is_grabbed = 0;
 
       if(data->debug)
@@ -390,16 +359,14 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
 	      continue;
 
 	    }
-			  
-
-	  /*if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
-	    XIDefineCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->device_id, 
-			   GDK_WINDOW_XID(data->win->window), data->erase_cursor); 
-			   else
-	    XIDefineCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->device_id, 
-	    GDK_WINDOW_XID(data->win->window), data->paint_cursor); */
-           
-
+	
+	  GdkCursor *cursor;
+	  if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
+	    cursor = data->erase_cursor; 
+	  else
+	    cursor = data->paint_cursor; 
+	  gdk_window_set_device_cursor(data->win->window, devdata->device, cursor);
+   
           devdata->is_grabbed = 1;
         }
 
@@ -435,15 +402,13 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
 	  return;
 	}
       
-     
-      /* if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
-	XIDefineCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->device_id, 
-		       GDK_WINDOW_XID(data->win->window), data->erase_cursor); 
+      GdkCursor *cursor;
+      if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
+	cursor = data->erase_cursor; 
       else
-	XIDefineCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->device_id, 
-		       GDK_WINDOW_XID(data->win->window), data->paint_cursor); 
-      */
-      
+	cursor = data->paint_cursor; 
+      gdk_window_set_device_cursor(data->win->window, devdata->device, cursor);
+
       devdata->is_grabbed = 1;
       
       if(data->debug)
@@ -611,13 +576,13 @@ void gromit_select_tool (GromitData *data, GdkDevice *device, guint state)
   else
     g_printerr ("ERROR: Attempt to select nonexistent device!\n");
 
-  /* if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
-    XIDefineCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->device_id, 
-		   GDK_WINDOW_XID(data->win->window), data->erase_cursor); 
+  GdkCursor *cursor;
+  if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
+    cursor = data->erase_cursor; 
   else
-    XIDefineCursor(GDK_DISPLAY_XDISPLAY(data->display), devdata->device_id, 
-		   GDK_WINDOW_XID(data->win->window), data->paint_cursor); 
-  */
+    cursor = data->paint_cursor; 
+  gdk_window_set_device_cursor(data->win->window, devdata->device, cursor);
+   
   devdata->state = state;
 }
 
@@ -1155,60 +1120,7 @@ setup_input_devices (GromitData *data)
         }
     }
 
-
   g_printerr ("Now %d enabled devices.\n", g_hash_table_size(data->devdatatable));
-
-}
-
-
-/* 
-   converts a rgb pixbuf to a XCursorImage 
-*/
-XcursorImage* rgb_pixbuf_2_cursor_image (GdkPixbuf *pixbuf,
-					  gint       xhot,
-					  gint       yhot)
-{
-  guint width, height, rowstride, n_channels, bpp;
-  guchar *pixels, *src;
-  XcursorImage *xcimage;
-  XcursorPixel *dest;
-
-  width = gdk_pixbuf_get_width (pixbuf);
-  height = gdk_pixbuf_get_height (pixbuf);
-  n_channels = gdk_pixbuf_get_n_channels (pixbuf);
-  rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-  pixels = gdk_pixbuf_get_pixels (pixbuf);
-  bpp = gdk_pixbuf_get_bits_per_sample(pixbuf); 
-
-  xcimage = XcursorImageCreate (width, height);
-
-  xcimage->xhot = xhot;
-  xcimage->yhot = yhot;
-
-  dest = xcimage->pixels; /* ARGB */
-
-  if(bpp == 8)
-    {
-      gint i, row;
-      for (row = 0; row < height; row++)
-        {
-          src = pixels + row * rowstride;
-          for (i = 0; i < width; i++)
-            {
-	      if(n_channels == 3)
-		*dest = (0xff << 24) | (src[0] << 16) | (src[1] << 8) | src[2];
-	      else /* pixbuf is in RGBA */
-		*dest = (src[3] << 24) | (src[0] << 16) | (src[1] << 8) | src[2];
-	   
-	      src += n_channels;
-	      ++dest;
-	    }
-	}
-    }
-  else
-    return NULL;
-
-  return xcimage;
 }
 
 
@@ -1249,8 +1161,7 @@ setup_client_app (GromitData *data)
 void
 setup_main_app (GromitData *data, gboolean activate)
 {
-  GdkPixbuf *cursor_src;
-  XcursorImage *cursor_image = NULL;
+  GdkPixmap *cursor_src, *cursor_mask;
   gboolean   have_key = FALSE;
 
   data->devdatatable = g_hash_table_new(NULL, NULL);
@@ -1270,17 +1181,31 @@ setup_main_app (GromitData *data, gboolean activate)
   gdk_colormap_alloc_color (data->cm, data->red,  FALSE, TRUE);
 
   /* CURSORS */
-  cursor_src = gdk_pixbuf_new_from_xpm_data (paint_cursor_xpm);
-  cursor_image = rgb_pixbuf_2_cursor_image(cursor_src, paint_cursor_x_hot,  paint_cursor_y_hot);
-  data->paint_cursor = XcursorImageLoadCursor(GDK_DISPLAY_XDISPLAY (data->display), cursor_image);
+  cursor_src = gdk_bitmap_create_from_data (NULL, (const gchar*)paint_cursor_bits,
+                                            paint_cursor_width,
+                                            paint_cursor_height);
+  cursor_mask = gdk_bitmap_create_from_data (NULL, (const gchar*)paint_cursor_mask_bits,
+                                             paint_cursor_width,
+                                             paint_cursor_height);
+  data->paint_cursor = gdk_cursor_new_from_pixmap (cursor_src, cursor_mask,
+                                                   data->white, data->black,
+                                                   paint_cursor_x_hot,
+                                                   paint_cursor_y_hot);
   g_object_unref (cursor_src);
-  XcursorImageDestroy(cursor_image);
+  g_object_unref (cursor_mask);
 
-  cursor_src = gdk_pixbuf_new_from_xpm_data(erase_cursor_xpm);
-  cursor_image = rgb_pixbuf_2_cursor_image(cursor_src, erase_cursor_x_hot,  erase_cursor_y_hot);
-  data->erase_cursor = XcursorImageLoadCursor(GDK_DISPLAY_XDISPLAY (data->display), cursor_image);
+  cursor_src = gdk_bitmap_create_from_data (NULL, (const gchar*)erase_cursor_bits,
+                                            erase_cursor_width,
+                                            erase_cursor_height);
+  cursor_mask = gdk_bitmap_create_from_data (NULL, (const gchar*)erase_cursor_mask_bits,
+                                             erase_cursor_width,
+                                             erase_cursor_height);
+  data->erase_cursor = gdk_cursor_new_from_pixmap (cursor_src, cursor_mask,
+                                                   data->white, data->black,
+                                                   erase_cursor_x_hot,
+                                                   erase_cursor_y_hot);
   g_object_unref (cursor_src);
-  XcursorImageDestroy(cursor_image);     
+  g_object_unref (cursor_mask);
 
   
   /* SHAPE PIXMAP */
