@@ -278,9 +278,7 @@ gboolean paintto (GtkWidget *win,
                                 devdata->motion_time, ev->time,
                                 &coords, &nevents);
 
-  // XXX gdk_device_get_history is corrupt atm
-  nevents = 0;
-  if (!data->xinerama && nevents > 0)
+  if(!data->xinerama && nevents > 0)
     {
       for (i=0; i < nevents; i++)
         {
