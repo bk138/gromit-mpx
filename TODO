@@ -5,5 +5,7 @@
       events. and two event checkers running ain't nice: either we
       miss XI key events or internal gdk events (arrows arent drawn
       till the end...) so just leave it till gdk gets full XI2.
-  ->  see gromit.c_devhotkeytry3 for the third stab on this...	
+  ->  XGrabDeviceKey for every attached keyboard, have to get the
+      XDevice* somehow...
 
+- automatic setup_input_devices when hierachy changes
