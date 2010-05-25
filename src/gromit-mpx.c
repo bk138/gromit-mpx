@@ -434,16 +434,17 @@ void gromit_toggle_grab (GromitData *data, int dev_nr)
   GHashTableIter it;
   gpointer value;
   GromitDeviceData* devdata = NULL; 
+  
+  int pos = (g_hash_table_size(data->devdatatable) - 1) - dev_nr;
   int i = 0;
   g_hash_table_iter_init (&it, data->devdatatable);
   while (g_hash_table_iter_next (&it, NULL, &value)) 
     {
-      if(i == dev_nr)
+      if(i == pos)
 	{ 
 	  devdata = value;
 	  break;
 	}
-
       ++i;
     }
   
@@ -467,7 +468,6 @@ void gromit_clear_screen (GromitData *data)
   gtk_widget_shape_combine_mask (data->win, data->shape, 0,0);
 
   data->painted = 0;
-
 }
 
 
@@ -1556,5 +1556,3 @@ main (int argc, char **argv)
   return 0;
 }
 
-/*    vim: sw=3 ts=8 cindent noai bs=2 cinoptions=(0
- */
