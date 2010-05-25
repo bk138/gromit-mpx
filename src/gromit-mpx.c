@@ -321,15 +321,17 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
       while (g_hash_table_iter_next (&it, NULL, &value)) 
         {
           GdkCursor *cursor;
-	  if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
-	    cursor = data->erase_cursor; 
-	  else
-	    cursor = data->paint_cursor; 
 
 	  devdata = value;
           if(devdata->is_grabbed)
             continue;
 
+	  if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
+	    cursor = data->erase_cursor; 
+	  else
+	    cursor = data->paint_cursor; 
+
+	
 	  if(gdk_device_grab(devdata->device,
 			     GDK_WINDOW(data->area->window),
 			     GDK_OWNERSHIP_NONE,
@@ -394,10 +396,9 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
 }
 
 
-void gromit_toggle_grab (GromitData *data, int dev_nr)
+void gromit_toggle_grab (GromitData *data, GdkDevice* dev)
 {
-  /* negative dev_nr means  toggle all */
-  if(dev_nr < 0)
+  if(dev == NULL) /* toggle all */
     {
       if (data->all_grabbed)
 	gromit_release_grab (data, NULL);
@@ -405,30 +406,19 @@ void gromit_toggle_grab (GromitData *data, int dev_nr)
 	gromit_acquire_grab (data, NULL);
       return; 
     }
+
+  /* get the data for this device */
+  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
       
-  /* find devdata number dev_nr */
-  GHashTableIter it;
-  gpointer value;
-  GromitDeviceData* devdata = NULL; 
-  g_hash_table_iter_init (&it, data->devdatatable);
-  while (g_hash_table_iter_next (&it, NULL, &value)) 
-    {
-      devdata = value;
-      if(devdata->index == dev_nr)
-	break;
-      else
-	devdata = NULL;
-    }
-  
   if(devdata)
     {
-      if (devdata->is_grabbed)
+      if(devdata->is_grabbed)
         gromit_release_grab (data, devdata->device);
       else
         gromit_acquire_grab (data, devdata->device);
     }
   else
-    g_printerr("No device at index %d.\n", dev_nr);
+    g_printerr("ERROR: No such device '%s' in internal table.\n", dev->name);
 }
 
 
@@ -685,12 +675,12 @@ key_press_event (GtkWidget   *grab_widget,
   GromitData *data = (GromitData *) func_data;
   GdkDevice *dev = gdk_event_get_device((GdkEvent*)event);
 
-  if(data->debug)
-    g_printerr("DEBUG: Received hotkey press from devive '%s'\n", dev->name);
-
   if (event->type == GDK_KEY_PRESS &&
       event->hardware_keycode == data->hot_keycode)
     {
+      if(data->debug)
+	g_printerr("DEBUG: Received hotkey press from device '%s'\n", dev->name);
+
       if (event->state & GDK_SHIFT_MASK)
         gromit_clear_screen (data);
       else if (event->state & GDK_CONTROL_MASK)
@@ -698,7 +688,7 @@ key_press_event (GtkWidget   *grab_widget,
       else if (event->state & GDK_MOD1_MASK)
         gtk_main_quit ();
       else
-        gromit_toggle_grab (data, 2); /* the virtual core pointer */
+        gromit_toggle_grab (data, gdk_device_get_associated_device(dev));
 
       return TRUE;
     }

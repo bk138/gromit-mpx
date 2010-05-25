@@ -450,9 +450,34 @@ void mainapp_event_selection_received (GtkWidget *widget,
     {
       if (selection_data->target == GA_TOGGLEDATA )
         {
+	  int dev_nr = strtoull((gchar*)selection_data->data, NULL, 10);
+	  
           if(data->debug)
-            g_printerr("DEBUG: mainapp got toggle id '%s' back from client.\n", (gchar*)selection_data->data);
-          gromit_toggle_grab (data, strtoull((gchar*)selection_data->data, NULL, 10));
+            g_printerr("DEBUG: mainapp got toggle id '%d' back from client.\n", dev_nr);
+
+	  if(dev_nr < 0)
+	    gromit_toggle_grab(data, NULL); /* toggle all */
+	  else 
+	    {
+	      /* find dev numbered dev_nr */
+	      GHashTableIter it;
+	      gpointer value;
+	      GromitDeviceData* devdata = NULL; 
+	      g_hash_table_iter_init (&it, data->devdatatable);
+	      while (g_hash_table_iter_next (&it, NULL, &value)) 
+		{
+		  devdata = value;
+		  if(devdata->index == dev_nr)
+		    break;
+		  else
+		    devdata = NULL;
+		}
+	      
+	      if(devdata)
+		gromit_toggle_grab(data, devdata->device);
+	      else
+		g_printerr("ERROR: No device at index %d.\n", dev_nr);
+	    }
         }
     }
  

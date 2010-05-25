@@ -152,7 +152,7 @@ void gromit_toggle_visibility (GromitData *data);
 
 void gromit_release_grab (GromitData *data, GdkDevice *dev);
 void gromit_acquire_grab (GromitData *data, GdkDevice *dev);
-void gromit_toggle_grab (GromitData *data, int dev_id);
+void gromit_toggle_grab  (GromitData *data, GdkDevice *dev);
   
 void parse_print_help (gpointer key, gpointer value, gpointer user_data);
 void setup_input_devices (GromitData *data);
