@@ -321,7 +321,13 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
       g_hash_table_iter_init (&it, data->devdatatable);
       while (g_hash_table_iter_next (&it, NULL, &value)) 
         {
-          devdata = value;
+          GdkCursor *cursor;
+	  if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
+	    cursor = data->erase_cursor; 
+	  else
+	    cursor = data->paint_cursor; 
+
+	  devdata = value;
           if(devdata->is_grabbed)
             continue;
 
@@ -330,7 +336,7 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
 			     GDK_OWNERSHIP_NONE,
 			     FALSE,
 			     GROMIT_MOUSE_EVENTS,
-			     NULL,
+			     cursor,
 			     GDK_CURRENT_TIME) != GDK_GRAB_SUCCESS)
 	    {
 	      /* this probably means the device table is outdated, 
@@ -340,14 +346,7 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
 	      continue;
 
 	    }
-	
-	  GdkCursor *cursor;
-	  if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
-	    cursor = data->erase_cursor; 
-	  else
-	    cursor = data->paint_cursor; 
-	  gdk_window_set_device_cursor(data->win->window, devdata->device, cursor);
-   
+	   
           devdata->is_grabbed = 1;
         }
 
@@ -365,12 +364,18 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
 
   if (!devdata->is_grabbed)
     {
+      GdkCursor *cursor;
+      if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
+	cursor = data->erase_cursor; 
+      else
+	cursor = data->paint_cursor; 
+      
       if(gdk_device_grab(devdata->device,
 			 GDK_WINDOW(data->area->window),
 			 GDK_OWNERSHIP_NONE,
 			 FALSE,
 			 GROMIT_MOUSE_EVENTS,
-			 NULL,
+			 cursor,
 			 GDK_CURRENT_TIME) != GDK_GRAB_SUCCESS)
 	{
 	  /* this probably means the device table is outdated,
@@ -380,13 +385,6 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
 	  setup_input_devices(data);
 	  return;
 	}
-      
-      GdkCursor *cursor;
-      if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
-	cursor = data->erase_cursor; 
-      else
-	cursor = data->paint_cursor; 
-      gdk_window_set_device_cursor(data->win->window, devdata->device, cursor);
 
       devdata->is_grabbed = 1;
       
