@@ -20,8 +20,6 @@
  *
  */
 
-#include <X11/extensions/XInput2.h>
-
 #include <errno.h>
 #include <fcntl.h>
 #include <string.h>
@@ -315,25 +313,8 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
 {
   gromit_show_window (data);
 
-  /*
-    what do we want to grab? 
-    the device id is specified later on...
-  */
-  XIEventMask mask;
-  unsigned char bits[4] = {0};
-  mask.mask = bits;
-  mask.mask_len = sizeof(bits);
-
-  XISetMask(bits, XI_ButtonPress);
-  XISetMask(bits, XI_ButtonRelease);
-  XISetMask(bits, XI_Motion);
-  
-
-
   if(!dev) /* this means grab all */
     {
-      mask.deviceid = XIAllDevices;
-
       GHashTableIter it;
       gpointer value;
       GromitDeviceData* devdata; 
@@ -384,8 +365,6 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
 
   if (!devdata->is_grabbed)
     {
-      //mask.deviceid = devdata->device_id;
-
       if(gdk_device_grab(devdata->device,
 			 GDK_WINDOW(data->area->window),
 			 GDK_OWNERSHIP_NONE,
