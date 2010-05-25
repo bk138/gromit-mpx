@@ -2,8 +2,7 @@
 
 AM_CFLAGS =\
 	-Wall \
-	$(GTK_CFLAGS) \
-	$(XINPUT_CFLAGS)
+	$(GTK_CFLAGS) 
 
 
 
@@ -24,8 +23,8 @@ gromit_mpx_SOURCES = \
 gromit_mpx_LDFLAGS = 
 
 gromit_mpx_LDADD = \
-	$(GTK_LIBS) \
-	$(XINPUT_LIBS)
+	$(GTK_LIBS) 
+
 
 
 
