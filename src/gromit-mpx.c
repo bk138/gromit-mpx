@@ -413,18 +413,14 @@ void gromit_toggle_grab (GromitData *data, int dev_nr)
   GHashTableIter it;
   gpointer value;
   GromitDeviceData* devdata = NULL; 
-  
-  int pos = (g_hash_table_size(data->devdatatable) - 1) - dev_nr;
-  int i = 0;
   g_hash_table_iter_init (&it, data->devdatatable);
   while (g_hash_table_iter_next (&it, NULL, &value)) 
     {
-      if(i == pos)
-	{ 
-	  devdata = value;
-	  break;
-	}
-      ++i;
+      devdata = value;
+      if(devdata->index == dev_nr)
+	break;
+      else
+	devdata = NULL;
     }
   
   if(devdata)
@@ -1092,6 +1088,7 @@ setup_input_devices (GromitData *data)
           GromitDeviceData *devdata;
           devdata  = g_malloc0(sizeof (GromitDeviceData));
           devdata->device = device;
+          devdata->index = i;
          
 	  g_hash_table_insert(data->devdatatable, device, devdata);
           g_printerr ("Enabled Device %d: \"%s\" (Type: %d)\n", 
@@ -1234,9 +1231,7 @@ setup_main_app (GromitData *data, gboolean activate)
   g_signal_connect (data->win, "selection_received",
 		    G_CALLBACK (mainapp_event_selection_received), data);
 
-  gtk_widget_set_extension_events (data->area, GDK_EXTENSION_EVENTS_ALL);
- 
-
+  gtk_widget_set_support_multidevice(data->area, TRUE);
 
   gtk_container_add (GTK_CONTAINER (data->win), data->area);
 
