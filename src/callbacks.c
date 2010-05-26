@@ -79,7 +79,7 @@ void event_monitors_changed ( GdkScreen *screen,
 
   data->win = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_widget_set_size_request(GTK_WIDGET (data->win), data->width, data->height);
-  //gtk_widget_set_uposition (GTK_WIDGET (data->win), 0, 0);
+  /* gtk_widget_set_uposition (GTK_WIDGET (data->win), 0, 0); */
   
   gtk_widget_set_events (data->win, GROMIT_WINDOW_EVENTS);
 
@@ -268,7 +268,7 @@ gboolean paintto (GtkWidget *win,
   int i;
   gboolean ret;
   gdouble pressure = 0.5;
-  // get the data for this device
+  /* get the data for this device */
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, ev->device);
 
   if (!devdata->is_grabbed)
