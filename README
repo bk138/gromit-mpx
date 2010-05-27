@@ -1,11 +1,11 @@
 Gromit-MPX
 ----------
 
-Gromit-MPX is an XInput2 port of the original Gromit and enables
-annotation with several pointers at once.
+Gromit-MPX is a multi-pointer port of the original Gromit and enables
+graphical annotations with several pointers at once.
 
-This port needs an XInput2-enabled version of GTK! For the time being,
-this is available at http://live.gnome.org/GTK%2B/MPX.
+This port needs an XInput2-enabled version of GTK! This means GTK+
+version 2.90 or higher.
 
 Below's the original Gromit README from Simon. Everything said there
 also applies to Gromit-MPX.
