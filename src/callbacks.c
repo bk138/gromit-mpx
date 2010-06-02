@@ -274,6 +274,8 @@ gboolean paintto (GtkWidget *win,
   if (!devdata->is_grabbed)
     return FALSE;
  
+  if (ev->state != devdata->state)
+    gromit_select_tool (data, ev->device, ev->state);
 
   ret = gdk_device_get_history (ev->device, ev->window,
                                 devdata->motion_time, ev->time,
