@@ -88,8 +88,8 @@ typedef struct
   gdouble      lastx;
   gdouble      lasty;
   guint32      motion_time;
-  GList       *coordlist;
-  GdkDevice   *device;
+  GList*       coordlist;
+  GdkDevice*   device;
   guint        index;
   guint        state;
   GromitPaintContext *cur_context;

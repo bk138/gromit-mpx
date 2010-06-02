@@ -24,6 +24,7 @@
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
+#include <X11/extensions/XInput2.h>
 
 #include "gromit-mpx.h"
 #include "callbacks.h"
@@ -33,6 +34,7 @@
 #include "paint_cursor_mask.xbm"
 #include "erase_cursor.xbm"
 #include "erase_cursor_mask.xbm"
+
 
 
 
@@ -731,6 +733,8 @@ setup_input_devices (GromitData *data)
   /* and clear our own device data list */
   g_hash_table_remove_all(data->devdatatable);
 
+
+  /* get devices */
   GdkDeviceManager *device_manager = gdk_display_get_device_manager(data->display);
   GList *devices, *d;
   int i = 0;
@@ -750,12 +754,65 @@ setup_input_devices (GromitData *data)
           gdk_device_set_mode (device, GDK_MODE_SCREEN);
 
           GromitDeviceData *devdata;
+
           devdata  = g_malloc0(sizeof (GromitDeviceData));
           devdata->device = device;
           devdata->index = i;
+
+	  /* get attached keyboard and grab the hotkey */
+	  if (!data->hot_keycode)
+	      {
+		g_printerr("ERROR: Grabbing hotkey from attached keyboard of '%s' failed, no hotkey defined.\n",
+			   device->name);
+		g_free(devdata);
+		continue;
+	      }
+
+	  GdkDevice* attached_kbd = gdk_device_get_associated_device(device);
+	  if(attached_kbd)
+	    {
+	      gint kbd_dev_id = -1;
+	      g_object_get(attached_kbd, "device-id", &kbd_dev_id, NULL);
+	      if(kbd_dev_id != -1)
+		{
+		  XIEventMask mask;
+		  unsigned char bits[4] = {0,0,0,0};
+		  mask.mask = bits;
+		  mask.mask_len = sizeof(bits);
+		  
+		  XISetMask(bits, XI_KeyPress);
+		  XISetMask(bits, XI_KeyRelease);
+
+		  XIGrabModifiers modifiers[] = {{XIAnyModifier, 0}};
+		  int nmods = 1;
+
+		  gdk_error_trap_push ();
+
+		  XIGrabKeycode( GDK_DISPLAY_XDISPLAY(data->display),
+				 kbd_dev_id,
+				 data->hot_keycode,
+				 GDK_WINDOW_XWINDOW(data->root),
+				 GrabModeAsync,
+				 GrabModeAsync,
+				 True,
+				 &mask,
+				 nmods,
+				 modifiers);
+
+		  gdk_flush ();
+		  if(gdk_error_trap_pop())
+		    {
+		      g_printerr("ERROR: Grabbing hotkey from keyboard '%s' failed.\n",
+				 attached_kbd->name);
+		      g_free(devdata);
+		      continue;
+		    }
+		}
+	    }
+
          
 	  g_hash_table_insert(data->devdatatable, device, devdata);
-          g_printerr ("Enabled Device %d: \"%s\" (Type: %d)\n", 
+          g_printerr ("Enabled Device %d: \"%s\", (Type: %d)\n", 
 		      i++, device->name, device->source);
         }
     }
@@ -804,9 +861,7 @@ setup_main_app (GromitData *data, gboolean activate)
   GdkPixmap *cursor_src, *cursor_mask;
   gboolean   have_key = FALSE;
 
-  data->devdatatable = g_hash_table_new(NULL, NULL);
-  setup_input_devices (data);
-
+ 
 
   /* COLORMAP */
   data->cm = gdk_screen_get_default_colormap (data->screen);
@@ -864,6 +919,7 @@ setup_main_app (GromitData *data, gboolean activate)
   gtk_widget_set_size_request(GTK_WIDGET(data->area),
 			      data->width, data->height);
 
+  
   /* EVENTS */
   gtk_widget_set_events (data->area, GROMIT_PAINT_AREA_EVENTS);
   g_signal_connect (data->area, "expose_event",
@@ -895,53 +951,22 @@ setup_main_app (GromitData *data, gboolean activate)
   g_signal_connect (data->win, "selection_received",
 		    G_CALLBACK (mainapp_event_selection_received), data);
 
-  gtk_widget_set_support_multidevice(data->area, TRUE);
+
 
   gtk_container_add (GTK_CONTAINER (data->win), data->area);
-
   gtk_widget_shape_combine_mask (data->win, data->shape, 0,0);
 
-  gtk_widget_show_all (data->area);
 
-  data->painted = 0;
-  gromit_hide_window (data);
-
-  data->timeout_id = g_timeout_add (20, reshape, data);
- 
-  data->modified = 0;
-
-  data->default_pen = gromit_paint_context_new (data, GROMIT_PEN,
-                                                data->red, 7, 0);
-  data->default_eraser = gromit_paint_context_new (data, GROMIT_ERASER,
-                                                   data->red, 75, 0);
-
-  
   /*
    * Parse Config file
    */
-
   data->tool_config = g_hash_table_new (g_str_hash, g_str_equal);
   parse_config (data);
   if (data->debug)
     g_hash_table_foreach (data->tool_config, parse_print_help, NULL);
   
-  
-  /* reset settings from client setup */
-  gtk_selection_remove_all (data->win);
-  gtk_selection_owner_set (data->win, GA_CONTROL, GDK_CURRENT_TIME);
 
-  gtk_selection_add_target (data->win, GA_CONTROL, GA_STATUS, 0);
-  gtk_selection_add_target (data->win, GA_CONTROL, GA_QUIT, 1);
-  gtk_selection_add_target (data->win, GA_CONTROL, GA_ACTIVATE, 2);
-  gtk_selection_add_target (data->win, GA_CONTROL, GA_DEACTIVATE, 3);
-  gtk_selection_add_target (data->win, GA_CONTROL, GA_TOGGLE, 4);
-  gtk_selection_add_target (data->win, GA_CONTROL, GA_VISIBILITY, 5);
-  gtk_selection_add_target (data->win, GA_CONTROL, GA_CLEAR, 6);
-  gtk_selection_add_target (data->win, GA_CONTROL, GA_RELOAD, 7);
-
-
-
-  /* Find keycode for hotkey */
+  /* FIND HOTKEY KEYCODE */
   if (data->hot_keyval)
     {
       GdkKeymap    *keymap;
@@ -968,35 +993,44 @@ setup_main_app (GromitData *data, gboolean activate)
         }
     }
 
-  if (have_key)
-    {
-      if (data->hot_keycode)
-        {
-          gdk_error_trap_push ();
 
-          XGrabKey (GDK_DISPLAY_XDISPLAY (data->display),
-                    data->hot_keycode,
-                    AnyModifier,
-                    GDK_WINDOW_XWINDOW (data->root),
-                    TRUE,
-                    GrabModeAsync,
-                    GrabModeAsync);
+  /* INPUT DEVICES */
+  data->devdatatable = g_hash_table_new(NULL, NULL);
+  setup_input_devices (data);
 
-          gdk_flush ();
 
-          if (gdk_error_trap_pop ())
-            {
-              g_printerr ("could not grab Hotkey. Aborting...\n");
-              exit (1);
-            }
-        }
-      else
-        {
-          g_printerr ("cannot find the key #%d\n", data->hot_keycode);
-          exit (1);
-        }
-    }
 
+  gtk_widget_show_all (data->area);
+
+  data->painted = 0;
+  gromit_hide_window (data);
+
+  data->timeout_id = g_timeout_add (20, reshape, data);
+ 
+  data->modified = 0;
+
+  data->default_pen = gromit_paint_context_new (data, GROMIT_PEN,
+                                                data->red, 7, 0);
+  data->default_eraser = gromit_paint_context_new (data, GROMIT_ERASER,
+                                                   data->red, 75, 0);
+
+  
+ 
+  
+  /* reset settings from client setup */
+  gtk_selection_remove_all (data->win);
+  gtk_selection_owner_set (data->win, GA_CONTROL, GDK_CURRENT_TIME);
+
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_STATUS, 0);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_QUIT, 1);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_ACTIVATE, 2);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_DEACTIVATE, 3);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_TOGGLE, 4);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_VISIBILITY, 5);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_CLEAR, 6);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_RELOAD, 7);
+
+ 
   gdk_event_handler_set ((GdkEventFunc) gromit_main_do_event, data, NULL);
   gtk_key_snooper_install (key_press_event, data);
 
