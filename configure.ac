@@ -29,6 +29,11 @@ GTK_CFLAGS+=-DGTK_MULTIDEVICE_SAFE
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
+# check for XInput
+PKG_CHECK_MODULES([XINPUT], [xi >= 1.3])
+AC_SUBST(XINPUT_CFLAGS)
+AC_SUBST(XINPUT_LIBS)
+
 
 
 # ***************************************************************************
