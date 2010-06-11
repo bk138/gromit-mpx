@@ -486,3 +486,36 @@ void mainapp_event_selection_received (GtkWidget *widget,
   gtk_main_quit ();
 }
 
+
+void device_removed_cb (GdkDeviceManager *device_manager,
+			GdkDevice        *device,
+			gpointer          user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+    
+  if(!gdk_device_get_device_type(device) == GDK_DEVICE_TYPE_MASTER
+     || device->num_axes < 2)
+    return;
+  
+  if(data->debug)
+    g_printerr("DEBUG: device '%s' removed\n", device->name);
+
+  setup_input_devices(data);
+}
+
+void device_added_cb (GdkDeviceManager *device_manager,
+		      GdkDevice        *device,
+		      gpointer          user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+
+  if(!gdk_device_get_device_type(device) == GDK_DEVICE_TYPE_MASTER
+     || device->num_axes < 2)
+    return;
+
+  if(data->debug)
+    g_printerr("DEBUG: device '%s' added\n", device->name);
+
+  setup_input_devices(data);
+}
+

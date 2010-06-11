@@ -928,10 +928,14 @@ setup_main_app (GromitData *data, gboolean activate)
 		    G_CALLBACK (event_configure), data);
   g_signal_connect (data->screen,"monitors_changed",
 		    G_CALLBACK (event_monitors_changed), data);
+  g_signal_connect (gdk_display_get_device_manager (data->display), "device-added",
+                    G_CALLBACK (device_added_cb), data);
+  g_signal_connect (gdk_display_get_device_manager (data->display), "device-removed",
+                    G_CALLBACK (device_removed_cb), data);
   g_signal_connect (data->win, "motion_notify_event",
 		    G_CALLBACK (paintto), data);
   g_signal_connect (data->win, "button_press_event", 
-		    G_CALLBACK(paint), data);
+		    G_CALLBACK (paint), data);
   g_signal_connect (data->win, "button_release_event",
 		    G_CALLBACK (paintend), data);
   g_signal_connect (data->win, "proximity_in_event",

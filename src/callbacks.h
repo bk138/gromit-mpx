@@ -78,6 +78,14 @@ void mainapp_event_selection_received (GtkWidget *widget,
 				       gpointer user_data);
 
 
+void device_removed_cb (GdkDeviceManager *device_manager,
+			GdkDevice        *device,
+			gpointer          user_data);
+
+void device_added_cb (GdkDeviceManager *device_manager,
+		      GdkDevice        *device,
+		      gpointer          user_data);
+
 
 
 #endif
