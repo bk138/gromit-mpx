@@ -32,8 +32,8 @@ gboolean event_expose (GtkWidget *widget,
 {
   GromitData *data = (GromitData *) user_data;
 
-  gdk_draw_drawable (data->area->window,
-                     data->area->style->fg_gc[gtk_widget_get_state(data->area)],
+  gdk_draw_drawable (gtk_widget_get_window(data->area),
+                     gtk_widget_get_style(data->area)->fg_gc[gtk_widget_get_state(data->area)],
                      data->pixmap,
                      event->area.x, event->area.y,
                      event->area.x, event->area.y,
@@ -49,11 +49,11 @@ gboolean event_configure (GtkWidget *widget,
 {
   GromitData *data = (GromitData *) user_data;
 
-  data->pixmap = gdk_pixmap_new (data->area->window, data->width,
+  data->pixmap = gdk_pixmap_new (gtk_widget_get_window(data->area), data->width,
                                  data->height, -1);
-  gdk_draw_rectangle (data->pixmap, data->area->style->black_gc,
+  gdk_draw_rectangle (data->pixmap, gtk_widget_get_style(data->area)->black_gc,
                       1, 0, 0, data->width, data->height);
-  gdk_window_set_transient_for (data->area->window, data->win->window);
+  gdk_window_set_transient_for (gtk_widget_get_window(data->area), gtk_widget_get_window(data->win));
 
   return TRUE;
 }
@@ -178,13 +178,13 @@ void clientapp_event_selection_get (GtkWidget          *widget,
   if(data->debug)
     g_printerr("DEBUG: clientapp received request.\n");  
 
-  if (selection_data->target == GA_TOGGLEDATA)
+  if (gtk_selection_data_get_target(selection_data) == GA_TOGGLEDATA)
     {
       ans = data->clientdata;
     }
     
   gtk_selection_data_set (selection_data,
-                          selection_data->target,
+                          gtk_selection_data_get_target(selection_data),
                           8, (guchar*)ans, strlen (ans));
 }
 
@@ -198,7 +198,7 @@ void clientapp_event_selection_received (GtkWidget *widget,
 
   /* If someone has a selection for us, Gromit is already running. */
 
-  if (selection_data->type == GDK_NONE)
+  if(gtk_selection_data_get_data_type(selection_data) == GDK_NONE)
     data->client = 0;
   else
     data->client = 1;
@@ -216,7 +216,8 @@ gboolean paint (GtkWidget *win, GdkEventButton *ev, gpointer user_data)
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, ev->device);
 
   if(data->debug)
-    g_printerr("DEBUG: Device '%s': Button %i Down at (x,y)=(%.2f : %.2f)\n", ev->device->name, ev->button, ev->x, ev->y);
+    g_printerr("DEBUG: Device '%s': Button %i Down at (x,y)=(%.2f : %.2f)\n", 
+	       gdk_device_get_name(ev->device), ev->button, ev->x, ev->y);
 
   if (!devdata->is_grabbed)
     return FALSE;
@@ -229,14 +230,14 @@ gboolean paint (GtkWidget *win, GdkEventButton *ev, gpointer user_data)
   if (ev->state != devdata->state)
     gromit_select_tool (data, ev->device, ev->state);
 
-  gdk_window_set_background (data->area->window,
+  gdk_window_set_background (gtk_widget_get_window(data->area),
                              devdata->cur_context->fg_color);
 
   devdata->lastx = ev->x;
   devdata->lasty = ev->y;
   devdata->motion_time = ev->time;
 
-  if (ev->device->source == GDK_SOURCE_MOUSE)
+  if (gdk_device_get_source(ev->device) == GDK_SOURCE_MOUSE)
     {
       data->maxwidth = devdata->cur_context->width;
     }
@@ -291,7 +292,7 @@ gboolean paintto (GtkWidget *win,
                                GDK_AXIS_PRESSURE, &pressure);
           if (pressure > 0)
             {
-              if (ev->device->source == GDK_SOURCE_MOUSE)
+              if (gdk_device_get_source(ev->device) == GDK_SOURCE_MOUSE)
                 data->maxwidth = devdata->cur_context->width;
               else
                 data->maxwidth = (CLAMP (pressure * pressure, 0, 1) *
@@ -319,7 +320,7 @@ gboolean paintto (GtkWidget *win,
 
   if (pressure > 0)
     {
-      if (ev->device->source == GDK_SOURCE_MOUSE)
+      if (gdk_device_get_source(ev->device) == GDK_SOURCE_MOUSE)
 	data->maxwidth = devdata->cur_context->width;
       else
          data->maxwidth = (CLAMP (pressure * pressure,0,1) *
@@ -373,11 +374,11 @@ gboolean proximity_in (GtkWidget *win, GdkEventProximity *ev, gpointer user_data
   gint x, y;
   GdkModifierType state;
 
-  gdk_window_get_pointer (data->win->window, &x, &y, &state);
+  gdk_window_get_pointer (gtk_widget_get_window(data->win), &x, &y, &state);
   gromit_select_tool (data, ev->device, state);
 
   if(data->debug)
-    g_printerr("DEBUG: prox in device  %s: \n", ev->device->name);
+    g_printerr("DEBUG: prox in device  %s: \n", gdk_device_get_name(ev->device));
   return TRUE;
 }
 
@@ -395,7 +396,7 @@ gboolean proximity_out (GtkWidget *win, GdkEventProximity *ev, gpointer user_dat
   devdata->device = NULL;
 
   if(data->debug)
-    g_printerr("DEBUG: prox out device  %s: \n", ev->device->name);
+    g_printerr("DEBUG: prox out device  %s: \n", gdk_device_get_name(ev->device));
   return FALSE;
 }
 
@@ -411,27 +412,27 @@ void mainapp_event_selection_get (GtkWidget          *widget,
   
   gchar *uri = "OK";
 
-  if (selection_data->target == GA_TOGGLE)
+  if(gtk_selection_data_get_target(selection_data) == GA_TOGGLE)
     {
       /* ask back client for device id */
       gtk_selection_convert (data->win, GA_DATA,
                              GA_TOGGLEDATA, time);
       gtk_main(); /* Wait for the response */
     }
-  else if (selection_data->target == GA_VISIBILITY)
+  else if (gtk_selection_data_get_target(selection_data) == GA_VISIBILITY)
     gromit_toggle_visibility (data);
-  else if (selection_data->target == GA_CLEAR)
+  else if (gtk_selection_data_get_target(selection_data) == GA_CLEAR)
     gromit_clear_screen (data);
-  else if (selection_data->target == GA_RELOAD)
+  else if (gtk_selection_data_get_target(selection_data) == GA_RELOAD)
     setup_input_devices(data);
-  else if (selection_data->target == GA_QUIT)
+  else if (gtk_selection_data_get_target(selection_data) == GA_QUIT)
     gtk_main_quit ();
   else
     uri = "NOK";
 
    
   gtk_selection_data_set (selection_data,
-                          selection_data->target,
+                          gtk_selection_data_get_target(selection_data),
                           8, (guchar*)uri, strlen (uri));
 }
 
@@ -443,16 +444,16 @@ void mainapp_event_selection_received (GtkWidget *widget,
 {
   GromitData *data = (GromitData *) user_data;
 
-  if(selection_data->length < 0)
+  if(gtk_selection_data_get_length(selection_data) < 0)
     {
       if(data->debug)
         g_printerr("DEBUG: mainapp got no answer back from client.\n");
     }
   else
     {
-      if (selection_data->target == GA_TOGGLEDATA )
+      if(gtk_selection_data_get_target(selection_data) == GA_TOGGLEDATA )
         {
-	  int dev_nr = strtoull((gchar*)selection_data->data, NULL, 10);
+	  int dev_nr = strtoull((gchar*)gtk_selection_data_get_data(selection_data), NULL, 10);
 	  
           if(data->debug)
             g_printerr("DEBUG: mainapp got toggle id '%d' back from client.\n", dev_nr);
@@ -494,11 +495,11 @@ void device_removed_cb (GdkDeviceManager *device_manager,
   GromitData *data = (GromitData *) user_data;
     
   if(!gdk_device_get_device_type(device) == GDK_DEVICE_TYPE_MASTER
-     || device->num_axes < 2)
+     || gdk_device_get_n_axes(device) < 2)
     return;
   
   if(data->debug)
-    g_printerr("DEBUG: device '%s' removed\n", device->name);
+    g_printerr("DEBUG: device '%s' removed\n", gdk_device_get_name(device));
 
   setup_input_devices(data);
 }
@@ -510,11 +511,11 @@ void device_added_cb (GdkDeviceManager *device_manager,
   GromitData *data = (GromitData *) user_data;
 
   if(!gdk_device_get_device_type(device) == GDK_DEVICE_TYPE_MASTER
-     || device->num_axes < 2)
+     || gdk_device_get_n_axes(device) < 2)
     return;
 
   if(data->debug)
-    g_printerr("DEBUG: device '%s' added\n", device->name);
+    g_printerr("DEBUG: device '%s' added\n", gdk_device_get_name(device));
 
   setup_input_devices(data);
 }

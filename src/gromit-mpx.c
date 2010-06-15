@@ -250,7 +250,7 @@ gromit_show_window (GromitData *data)
             gromit_acquire_grab (data, devdata->device);
         }
     }
-  gdk_window_raise (data->win->window);
+  gdk_window_raise (gtk_widget_get_window(data->win));
 }
 
 
@@ -301,7 +301,7 @@ gromit_release_grab (GromitData *data, GdkDevice *dev)
       devdata->is_grabbed = 0;
 
       if(data->debug)
-        g_printerr ("DEBUG: Ungrabbed Device '%s'.\n", devdata->device->name);
+        g_printerr ("DEBUG: Ungrabbed Device '%s'.\n", gdk_device_get_name(devdata->device));
     }
 
   if (!data->painted)
@@ -335,7 +335,7 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
 
 	
 	  if(gdk_device_grab(devdata->device,
-			     GDK_WINDOW(data->area->window),
+			     gtk_widget_get_window(data->area),
 			     GDK_OWNERSHIP_NONE,
 			     FALSE,
 			     GROMIT_MOUSE_EVENTS,
@@ -345,7 +345,7 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
 	      /* this probably means the device table is outdated, 
 		 e.g. this device doesn't exist anymore */
 	      g_printerr("Error grabbing Device '%s' while grabbing all, ignoring.\n", 
-			 devdata->device->name);
+			 gdk_device_get_name(devdata->device));
 	      continue;
 
 	    }
@@ -374,7 +374,7 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
 	cursor = data->paint_cursor; 
       
       if(gdk_device_grab(devdata->device,
-			 GDK_WINDOW(data->area->window),
+			 gtk_widget_get_window(data->area),
 			 GDK_OWNERSHIP_NONE,
 			 FALSE,
 			 GROMIT_MOUSE_EVENTS,
@@ -384,7 +384,7 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
 	  /* this probably means the device table is outdated,
 	     e.g. this device doesn't exist anymore */
 	  g_printerr("Error grabbing device '%s', rescanning device list.\n", 
-		     devdata->device->name);
+		     gdk_device_get_name(devdata->device));
 	  setup_input_devices(data);
 	  return;
 	}
@@ -392,7 +392,7 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
       devdata->is_grabbed = 1;
       
       if(data->debug)
-        g_printerr("DEBUG: Grabbed Device '%s'.\n", devdata->device->name);
+        g_printerr("DEBUG: Grabbed Device '%s'.\n", gdk_device_get_name(devdata->device));
     }
 
 }
@@ -420,7 +420,7 @@ void gromit_toggle_grab (GromitData *data, GdkDevice* dev)
         gromit_acquire_grab (data, devdata->device);
     }
   else
-    g_printerr("ERROR: No such device '%s' in internal table.\n", dev->name);
+    g_printerr("ERROR: No such device '%s' in internal table.\n", gdk_device_get_name(dev));
 }
 
 
@@ -471,8 +471,8 @@ void gromit_select_tool (GromitData *data, GdkDevice *device, guint state)
  
   if (device)
     {
-      len = strlen (device->name);
-      name = (guchar*) g_strndup (device->name, len + 3);
+      len = strlen (gdk_device_get_name(device));
+      name = (guchar*) g_strndup (gdk_device_get_name(device), len + 3);
       default_len = strlen(DEFAULT_DEVICE_NAME);
       default_name = (guchar*) g_strndup (DEFAULT_DEVICE_NAME, default_len + 3);
       
@@ -531,7 +531,7 @@ void gromit_select_tool (GromitData *data, GdkDevice *device, guint state)
 
       if (!success)
         {
-          if (device->source == GDK_SOURCE_ERASER)
+          if (gdk_device_get_source(device) == GDK_SOURCE_ERASER)
             devdata->cur_context = data->default_eraser;
           else
             devdata->cur_context = data->default_pen;
@@ -545,7 +545,7 @@ void gromit_select_tool (GromitData *data, GdkDevice *device, guint state)
     cursor = data->erase_cursor; 
   else
     cursor = data->paint_cursor; 
-  gdk_window_set_device_cursor(data->win->window, devdata->device, cursor);
+  gdk_window_set_device_cursor(gtk_widget_get_window(data->win), devdata->device, cursor);
    
   devdata->state = state;
 }
@@ -583,7 +583,7 @@ void gromit_draw_line (GromitData *data, GdkDevice *dev, gint x1, gint y1,
     }
 
   if (devdata->cur_context->paint_gc)
-    gdk_window_invalidate_rect(data->area->window, &rect, 0); 
+    gdk_window_invalidate_rect(gtk_widget_get_window(data->area), &rect, 0); 
 
   data->painted = 1;
 }
@@ -654,7 +654,7 @@ gromit_draw_arrow (GromitData *data, GdkDevice *dev, gint x1, gint y1,
     }
 
   if (devdata->cur_context->paint_gc)
-    gdk_window_invalidate_rect(data->area->window, &rect, 0); 
+    gdk_window_invalidate_rect(gtk_widget_get_window(data->area), &rect, 0); 
 
   data->painted = 1;
 }
@@ -681,7 +681,7 @@ key_press_event (GtkWidget   *grab_widget,
       event->hardware_keycode == data->hot_keycode)
     {
       if(data->debug)
-	g_printerr("DEBUG: Received hotkey press from device '%s'\n", dev->name);
+	g_printerr("DEBUG: Received hotkey press from device '%s'\n", gdk_device_get_name(dev));
 
       if (event->state & GDK_SHIFT_MASK)
         gromit_clear_screen (data);
@@ -711,8 +711,8 @@ gromit_main_do_event (GdkEventAny *event,
       /* redirect the event to our main window, so that GTK+ doesn't
        * throw it away (there is no GtkWidget for the root window...)
        */
-      event->window = data->win->window;
-      g_object_ref (data->win->window);
+      event->window = gtk_widget_get_window(data->win);
+      g_object_ref (gtk_widget_get_window(data->win));
     }
 
   gtk_main_do_event ((GdkEvent *) event);
@@ -745,11 +745,11 @@ setup_input_devices (GromitData *data)
       GdkDevice *device = (GdkDevice *) d->data;
     
       /* Guess "Eraser"-Type devices */
-      if (strstr (device->name, "raser") || strstr (device->name, "RASER"))
+      if (strstr (gdk_device_get_name(device), "raser") || strstr (gdk_device_get_name(device), "RASER"))
 	gdk_device_set_source (device, GDK_SOURCE_ERASER);
 
       /* only enable devices with 2 ore more axes */
-      if (device->num_axes >= 2)
+      if (gdk_device_get_n_axes(device) >= 2)
         {
           gdk_device_set_mode (device, GDK_MODE_SCREEN);
 
@@ -763,7 +763,7 @@ setup_input_devices (GromitData *data)
 	  if (!data->hot_keycode)
 	      {
 		g_printerr("ERROR: Grabbing hotkey from attached keyboard of '%s' failed, no hotkey defined.\n",
-			   device->name);
+			   gdk_device_get_name(device));
 		g_free(devdata);
 		continue;
 	      }
@@ -803,7 +803,7 @@ setup_input_devices (GromitData *data)
 		  if(gdk_error_trap_pop())
 		    {
 		      g_printerr("ERROR: Grabbing hotkey from keyboard '%s' failed.\n",
-				 attached_kbd->name);
+				 gdk_device_get_name(attached_kbd));
 		      g_free(devdata);
 		      continue;
 		    }
@@ -813,7 +813,7 @@ setup_input_devices (GromitData *data)
          
 	  g_hash_table_insert(data->devdatatable, device, devdata);
           g_printerr ("Enabled Device %d: \"%s\", (Type: %d)\n", 
-		      i++, device->name, device->source);
+		      i++, gdk_device_get_name(device), gdk_device_get_source(device));
         }
     }
 
