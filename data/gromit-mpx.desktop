@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Exec=gromit-mpx
+Icon=gromit-mpx
+Name=Gromit-MPX
+Type=Application
+Comment=A multi pointer annotation tool
+Terminal=false
+StartupNotify=false
+Categories=Application;Graphics;
+

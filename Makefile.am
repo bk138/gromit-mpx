@@ -2,14 +2,25 @@
 
 SUBDIRS = src 
 
-gromit_mpxdocdir = ${prefix}/doc/gromit-mpx
+gromit_mpxdocdir = $(datadir)/doc/gromit-mpx
 gromit_mpxdoc_DATA = \
 	README\
 	COPYING\
 	AUTHORS\
 	ChangeLog\
-	INSTALL\
 	NEWS
 
-EXTRA_DIST = $(gromit_mpxdoc_DATA)
+Applicationsdir = $(datadir)/applications/
+Applications_DATA = data/gromit-mpx.desktop
+
+pixmapdir = $(datadir)/pixmaps
+pixmap_DATA = data/gromit-mpx.xpm
+
+configdir = $(sysconfdir)/gromit-mpx
+config_DATA = data/gromit-mpx.cfg
+
+EXTRA_DIST = $(gromit_mpxdoc_DATA) \
+             $(Applications_DATA) \
+             $(pixmap_DATA) \
+             $(config_DATA)
 

@@ -117,14 +117,14 @@ void parse_config (GromitData *data)
   guint width, arrowsize;
 
   filename = g_strjoin (G_DIR_SEPARATOR_S,
-                        g_get_home_dir(), ".gromitrc", NULL);
+                        g_get_home_dir(), ".gromit-mpx.cfg", NULL);
   file = open (filename, O_RDONLY);
 
   if (file < 0)
     {
       /* try global config file */
       g_free (filename);
-      filename = g_strdup ("/etc/gromit/gromitrc");
+      filename = g_strdup ("/etc/gromit-mpx/gromit-mpx.cfg");
       file = open (filename, O_RDONLY);
 
       if (file < 0)
