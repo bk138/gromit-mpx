@@ -1,0 +1,107 @@
+.\"                                      Hey, vim: ft=nroff
+.TH GROMIT 1 "January 16, 2005"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+Gromit \- Presentation helper to make annotations on screen
+.SH SYNOPSIS
+.B gromit
+.RI [ options ]
+.br
+.SH DESCRIPTION
+\fBGromit\fP enables you to make annotations on your screen. It can run in
+the background and be activated on demand to let you draw over all your
+currently running applications. The drawing will stay on screen as long as you
+want, you can continue to use your applications while the drawing is visible.
+.br
+\fBGromit\fP is XInput-Aware, so if you have a graphic tablet you can
+draw lines with different strength, color, erase things, etc.
+.br
+Since you typically want to use the program you are demonstrating and
+highlighting something is a short interruption of you workflow,
+Gromit is activated by either a hotkey or a repeated invokation of Gromit
+(the latter can e.g. used by other applications or your windowmanager).
+.br
+.SH KEYBOARD CONTROL
+By default, Gromit grabs the "Pause" key (this can be change using the
+"--key" option), making it unavailable to other application. The
+available shortcuts are:
+.TP
+.B Pause
+toggle painting
+.TP
+.B SHIFT-Pause
+clear screen
+.TP
+.B CTRL-Pause
+toggle visibility
+.TP
+.B ALT-Pause
+quit Gromit
+.PP
+.SH OPTIONS (STARTUP)
+A short summary of the available commandline arguments for invoking Gromit, see
+below for the options to control an already running Gromit process:
+.TP
+.B \-a, \-\-active
+start Gromit and immediately activate it.
+.TP
+.B \-k <keysym>, \-\-key <keysym>
+will change the key used to grab the mouse. <keysym> can e.g. be
+"Pause", "F12", "Control_R" or "Print". To determine the keysym for
+different keys you can use the \fBxev\fP(1) command. You can specify "none"
+to prevent Gromit from grabbing a key.
+.TP
+.B \-K <keycode>, \-\-keycode <keycode>
+will change the key used to grab the mouse. Under rare circumstances
+identifying the key with the keysym can fail. You can then use the keycode
+to specify the key uniquely. To determine the keycode for different keys you
+can use the \fBxev\fP(1) command.
+.TP
+.B \-d, \-\-debug
+gives some debug output.
+.SH OPTIONS (CONTROL)
+A sort summary of the available commandline arguments to control an already
+running Gromit process, see above for the options available to start Gromit.
+.TP
+.B \-q, \-\-quit
+will cause the main Gromit process to quit.
+.TP
+.B \-t, \-\-toggle
+will toggle the grabbing of the cursor.
+.TP
+.B \-v, \-\-visibility
+will toggle the visibility of the window.
+.TP
+.B \-c, \-\-clear
+will clear the screen.
+.SH BUGS
+Gromit may drastically slow down your X-Server, especially when you draw
+very thin lines. It makes heavily use of the shape extension, which is
+quite expensive if you paint a complex pattern on screen. Especially
+terminal-programs tend to scroll incredibly slow if something is painted
+over their window. There is nothing I can do about this.
+.br
+Gromit partially disables DnD, since it lays a transparent window across
+the whole screen and everything gets "dropped" to this (invisible)
+window. Gromit tries to minimize this effect: When you clear the screen
+the shaped window will be hidden. It will be resurrected, when you want
+to paint something again. However: The window does not hide, if you
+erase everything with the eraser tool, you have to clear the screen
+explicitely with the "gromit --clear" command or hide Gromit with
+"gromit --visibility".
+.SH AUTHOR
+Simon Budig <simon@gimp.org>
+.PP
+This manual page was written by Pierre Chifflier <chifflier@cpe.fr> and
+Simon Budig.
