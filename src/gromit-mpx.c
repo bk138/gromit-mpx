@@ -525,6 +525,10 @@ void gromit_select_tool (GromitData *data, GdkDevice *device, guint state)
               name [len+2] = modifier + 48;
               default_name [default_len+1] = buttons + 64;
               default_name [default_len+2] = modifier + 48;
+
+	      if(data->debug)
+		g_printerr("DEBUG: Looking up context %s\n", name);
+
               context = g_hash_table_lookup (data->tool_config, name);
               if(context)
                 {
@@ -537,7 +541,7 @@ void gromit_select_tool (GromitData *data, GdkDevice *device, guint state)
                 if((context = g_hash_table_lookup (data->tool_config, default_name)))
                   {
                     if(data->debug)
-                      g_printerr("DEBUG: Context %s set\n", default_name);
+                      g_printerr("DEBUG: Default context %s set\n", default_name);
                     devdata->cur_context = context;
                     success = 1;
                   }
