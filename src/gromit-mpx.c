@@ -30,12 +30,21 @@
 #include "callbacks.h"
 #include "config.h"
 
-#include "paint_cursor.xbm"
-#include "paint_cursor_mask.xbm"
-#include "erase_cursor.xbm"
-#include "erase_cursor_mask.xbm"
+#include "paint_cursor.xpm"
+#include "erase_cursor.xpm"
 
 
+/* Clear cairo context */
+void clear_cairo_context(cairo_t* cr)
+{
+  if (cr)
+    {
+      cairo_save(cr);
+      cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+      cairo_paint(cr);
+      cairo_restore(cr);
+    } 
+}
 
 
 GromitPaintContext *
@@ -43,7 +52,6 @@ gromit_paint_context_new (GromitData *data, GromitPaintType type,
                           GdkColor *fg_color, guint width, guint arrowsize)
 {
   GromitPaintContext *context;
-  GdkGCValues   shape_gcv;
 
   context = g_malloc (sizeof (GromitPaintContext));
 
@@ -59,10 +67,13 @@ gromit_paint_context_new (GromitData *data, GromitPaintType type,
   else
     {
       /* GROMIT_PEN || GROMIT_RECOLOR */
-      context->paint_gc = gdk_gc_new (data->pixmap);
-      gdk_gc_set_foreground (context->paint_gc, fg_color);
-      gdk_gc_set_line_attributes (context->paint_gc, width, GDK_LINE_SOLID,
-                                  GDK_CAP_ROUND, GDK_JOIN_ROUND);
+      context->paint_gc = gdk_cairo_create (data->pixmap);
+      gdk_cairo_set_source_color(context->paint_gc, fg_color);
+      cairo_set_line_width(context->paint_gc, width);
+      cairo_set_line_cap(context->paint_gc, CAIRO_LINE_CAP_ROUND);
+      cairo_set_line_join(context->paint_gc, CAIRO_LINE_JOIN_ROUND);
+      //      gdk_gc_set_line_attributes (context->paint_gc, width, GDK_LINE_SOLID,
+      //                            GDK_CAP_ROUND, GDK_JOIN_ROUND);
     }
 
   if (type == GROMIT_RECOLOR)
@@ -72,16 +83,23 @@ gromit_paint_context_new (GromitData *data, GromitPaintType type,
   else
     {
       /* GROMIT_PEN || GROMIT_ERASER */
-      context->shape_gc = gdk_gc_new (data->shape);
-      gdk_gc_get_values (context->shape_gc, &shape_gcv);
+      context->shape_gc = gdk_cairo_create (data->shape);
+      //      gdk_gc_get_values (context->shape_gc, &shape_gcv);
 
       if (type == GROMIT_ERASER)
-         gdk_gc_set_foreground (context->shape_gc, &(shape_gcv.foreground));
+	//FIXMEgdk_gc_set_foreground (context->shape_gc, &(shape_gcv.foreground));
+	gdk_cairo_set_source_color(context->shape_gc, fg_color);
       else
          /* GROMIT_PEN */
-         gdk_gc_set_foreground (context->shape_gc, &(shape_gcv.background));
-      gdk_gc_set_line_attributes (context->shape_gc, width, GDK_LINE_SOLID,
-                                  GDK_CAP_ROUND, GDK_JOIN_ROUND);
+	//FIXMEgdk_gc_set_foreground (context->shape_gc, &(shape_gcv.background));
+	gdk_cairo_set_source_color(context->shape_gc, fg_color);
+
+      //gdk_gc_set_line_attributes (context->shape_gc, width, GDK_LINE_SOLID,
+      //                           GDK_CAP_ROUND, GDK_JOIN_ROUND);
+      cairo_set_line_width(context->shape_gc, width);
+      cairo_set_line_cap(context->shape_gc, CAIRO_LINE_CAP_ROUND);
+      cairo_set_line_join(context->shape_gc, CAIRO_LINE_JOIN_ROUND);
+
     }
 
   return context;
@@ -426,9 +444,12 @@ void gromit_toggle_grab (GromitData *data, GdkDevice* dev)
 
 void gromit_clear_screen (GromitData *data)
 {
-  gdk_gc_set_foreground (data->shape_gc, data->transparent);
-  gdk_draw_rectangle (data->shape, data->shape_gc, 1,
-                      0, 0, data->width, data->height);
+  //gdk_gc_set_foreground (data->shape_gc, data->transparent);
+  //gdk_draw_rectangle (data->shape, data->shape_gc, 1,
+  //                    0, 0, data->width, data->height);
+
+  clear_cairo_context(data->shape_gc);
+
   gtk_widget_shape_combine_mask (data->win, data->shape, 0,0);
 
   data->painted = 0;
@@ -563,22 +584,44 @@ void gromit_draw_line (GromitData *data, GdkDevice *dev, gint x1, gint y1,
   rect.height = ABS (y1-y2) + data->maxwidth;
 
   if (devdata->cur_context->paint_gc)
-    gdk_gc_set_line_attributes (devdata->cur_context->paint_gc,
-                                data->maxwidth, GDK_LINE_SOLID,
-                                GDK_CAP_ROUND, GDK_JOIN_ROUND);
+    {
+      cairo_set_line_width(devdata->cur_context->paint_gc, data->maxwidth);
+      cairo_set_line_cap(devdata->cur_context->paint_gc, CAIRO_LINE_CAP_ROUND);
+      cairo_set_line_join(devdata->cur_context->paint_gc, CAIRO_LINE_JOIN_ROUND);
+
+      //      gdk_gc_set_line_attributes (devdata->cur_context->paint_gc,
+      //                          data->maxwidth, GDK_LINE_SOLID,
+      //                          GDK_CAP_ROUND, GDK_JOIN_ROUND);
+    }
   if (devdata->cur_context->shape_gc)
-    gdk_gc_set_line_attributes (devdata->cur_context->shape_gc,
-                                data->maxwidth, GDK_LINE_SOLID,
-                                GDK_CAP_ROUND, GDK_JOIN_ROUND);
+    {
+      cairo_set_line_width(devdata->cur_context->shape_gc, data->maxwidth);
+      cairo_set_line_cap(devdata->cur_context->shape_gc, CAIRO_LINE_CAP_ROUND);
+      cairo_set_line_join(devdata->cur_context->shape_gc, CAIRO_LINE_JOIN_ROUND);
+
+      //      gdk_gc_set_line_attributes (devdata->cur_context->shape_gc,
+      //                          data->maxwidth, GDK_LINE_SOLID,
+      //                          GDK_CAP_ROUND, GDK_JOIN_ROUND);
+    }
 
   if (devdata->cur_context->paint_gc)
-    gdk_draw_line (data->pixmap, devdata->cur_context->paint_gc,
-                   x1, y1, x2, y2);
+    {
+      cairo_move_to(devdata->cur_context->paint_gc, x1, y1);
+      cairo_line_to(devdata->cur_context->paint_gc, x2, y2);
+      cairo_stroke(devdata->cur_context->paint_gc);
+
+      //gdk_draw_line (data->pixmap, devdata->cur_context->paint_gc,
+      //               x1, y1, x2, y2);
+    }
 
   if (devdata->cur_context->shape_gc)
     {
-      gdk_draw_line (data->shape, devdata->cur_context->shape_gc,
-                     x1, y1, x2, y2);
+      cairo_move_to(devdata->cur_context->shape_gc, x1, y1);
+      cairo_line_to(devdata->cur_context->shape_gc, x2, y2);
+      cairo_stroke(devdata->cur_context->shape_gc);
+
+      //gdk_draw_line (data->shape, devdata->cur_context->shape_gc,
+      //               x1, y1, x2, y2);
       data->modified = 1;
     }
 
@@ -624,32 +667,73 @@ gromit_draw_arrow (GromitData *data, GdkDevice *dev, gint x1, gint y1,
                        - 3 * width * sin (direction);
 
   if (devdata->cur_context->paint_gc)
-    gdk_gc_set_line_attributes (devdata->cur_context->paint_gc,
-                                0, GDK_LINE_SOLID,
-                                GDK_CAP_ROUND, GDK_JOIN_ROUND);
+    {
+      cairo_set_line_width(devdata->cur_context->paint_gc, 0);
+      cairo_set_line_cap(devdata->cur_context->paint_gc, CAIRO_LINE_CAP_ROUND);
+      cairo_set_line_join(devdata->cur_context->paint_gc, CAIRO_LINE_JOIN_ROUND);
+
+      // gdk_gc_set_line_attributes (devdata->cur_context->paint_gc,
+      //                         0, GDK_LINE_SOLID,
+      //                          GDK_CAP_ROUND, GDK_JOIN_ROUND);
+    }
 
   if (devdata->cur_context->shape_gc)
-    gdk_gc_set_line_attributes (devdata->cur_context->shape_gc,
-                                0, GDK_LINE_SOLID,
-                                GDK_CAP_ROUND, GDK_JOIN_ROUND);
+    {
+      cairo_set_line_width(devdata->cur_context->shape_gc, 0);
+      cairo_set_line_cap(devdata->cur_context->shape_gc, CAIRO_LINE_CAP_ROUND);
+      cairo_set_line_join(devdata->cur_context->shape_gc, CAIRO_LINE_JOIN_ROUND);
+
+      //  gdk_gc_set_line_attributes (devdata->cur_context->shape_gc,
+      //                          0, GDK_LINE_SOLID,
+      //                         GDK_CAP_ROUND, GDK_JOIN_ROUND);
+    }
 
   if (devdata->cur_context->paint_gc)
     {
-      gdk_draw_polygon (data->pixmap, devdata->cur_context->paint_gc,
+      cairo_move_to(devdata->cur_context->paint_gc, arrowhead[0].x, arrowhead[0].y);
+      cairo_line_to(devdata->cur_context->paint_gc, arrowhead[1].x, arrowhead[1].y);
+      cairo_line_to(devdata->cur_context->paint_gc, arrowhead[2].x, arrowhead[2].y);
+      cairo_line_to(devdata->cur_context->paint_gc, arrowhead[3].x, arrowhead[3].y);
+      cairo_fill(devdata->cur_context->paint_gc);
+
+      gdk_cairo_set_source_color(devdata->cur_context->paint_gc, data->black);
+
+      cairo_move_to(devdata->cur_context->paint_gc, arrowhead[0].x, arrowhead[0].y);
+      cairo_line_to(devdata->cur_context->paint_gc, arrowhead[1].x, arrowhead[1].y);
+      cairo_line_to(devdata->cur_context->paint_gc, arrowhead[2].x, arrowhead[2].y);
+      cairo_line_to(devdata->cur_context->paint_gc, arrowhead[3].x, arrowhead[3].y);
+      cairo_stroke(devdata->cur_context->paint_gc);
+
+      gdk_cairo_set_source_color(devdata->cur_context->paint_gc, devdata->cur_context->fg_color);
+      
+
+      /*gdk_draw_polygon (data->pixmap, devdata->cur_context->paint_gc,
                         TRUE, arrowhead, 4);
       gdk_gc_set_foreground (devdata->cur_context->paint_gc, data->black);
       gdk_draw_polygon (data->pixmap, devdata->cur_context->paint_gc,
                         FALSE, arrowhead, 4);
       gdk_gc_set_foreground (devdata->cur_context->paint_gc,
-                             devdata->cur_context->fg_color);
+      devdata->cur_context->fg_color);*/
     }
 
   if (devdata->cur_context->shape_gc)
     {
-      gdk_draw_polygon (data->shape, devdata->cur_context->shape_gc,
+      cairo_move_to(devdata->cur_context->shape_gc, arrowhead[0].x, arrowhead[0].y);
+      cairo_line_to(devdata->cur_context->shape_gc, arrowhead[1].x, arrowhead[1].y);
+      cairo_line_to(devdata->cur_context->shape_gc, arrowhead[2].x, arrowhead[2].y);
+      cairo_line_to(devdata->cur_context->shape_gc, arrowhead[3].x, arrowhead[3].y);
+      cairo_fill(devdata->cur_context->shape_gc);
+
+      cairo_move_to(devdata->cur_context->shape_gc, arrowhead[0].x, arrowhead[0].y);
+      cairo_line_to(devdata->cur_context->shape_gc, arrowhead[1].x, arrowhead[1].y);
+      cairo_line_to(devdata->cur_context->shape_gc, arrowhead[2].x, arrowhead[2].y);
+      cairo_line_to(devdata->cur_context->shape_gc, arrowhead[3].x, arrowhead[3].y);
+      cairo_stroke(devdata->cur_context->shape_gc);
+
+      /*      gdk_draw_polygon (data->shape, devdata->cur_context->shape_gc,
                         TRUE, arrowhead, 4);
       gdk_draw_polygon (data->shape, devdata->cur_context->shape_gc,
-                        FALSE, arrowhead, 4);
+      FALSE, arrowhead, 4);*/
       data->modified = 1;
     }
 
@@ -835,6 +919,11 @@ setup_client_app (GromitData *data)
 
 
   data->win = gtk_window_new (GTK_WINDOW_POPUP);
+
+  gtk_window_fullscreen(GTK_WINDOW(data->win)); 
+  gtk_window_set_skip_taskbar_hint(GTK_WINDOW(data->win), TRUE);
+  gtk_window_set_opacity(GTK_WINDOW(data->win), 1); 
+
   gtk_widget_set_size_request (GTK_WIDGET (data->win), data->width, data->height);
   /* gtk_widget_set_uposition (GTK_WIDGET (data->win), 0, 0); */
   
@@ -858,10 +947,7 @@ setup_client_app (GromitData *data)
 void
 setup_main_app (GromitData *data, gboolean activate)
 {
-  GdkPixmap *cursor_src, *cursor_mask;
   gboolean   have_key = FALSE;
-
- 
 
   /* COLORMAP */
   data->cm = gdk_screen_get_default_colormap (data->screen);
@@ -875,44 +961,65 @@ setup_main_app (GromitData *data, gboolean activate)
   gdk_color_parse ("#FF0000", data->red);
   gdk_colormap_alloc_color (data->cm, data->red,  FALSE, TRUE);
 
-  /* CURSORS */
-  cursor_src = gdk_bitmap_create_from_data (NULL, (const gchar*)paint_cursor_bits,
-                                            paint_cursor_width,
-                                            paint_cursor_height);
-  cursor_mask = gdk_bitmap_create_from_data (NULL, (const gchar*)paint_cursor_mask_bits,
-                                             paint_cursor_width,
-                                             paint_cursor_height);
-  data->paint_cursor = gdk_cursor_new_from_pixmap (cursor_src, cursor_mask,
-                                                   data->white, data->black,
-                                                   paint_cursor_x_hot,
-                                                   paint_cursor_y_hot);
-  g_object_unref (cursor_src);
-  g_object_unref (cursor_mask);
 
-  cursor_src = gdk_bitmap_create_from_data (NULL, (const gchar*)erase_cursor_bits,
-                                            erase_cursor_width,
-                                            erase_cursor_height);
-  cursor_mask = gdk_bitmap_create_from_data (NULL, (const gchar*)erase_cursor_mask_bits,
-                                             erase_cursor_width,
-                                             erase_cursor_height);
-  data->erase_cursor = gdk_cursor_new_from_pixmap (cursor_src, cursor_mask,
-                                                   data->white, data->black,
-                                                   erase_cursor_x_hot,
-                                                   erase_cursor_y_hot);
-  g_object_unref (cursor_src);
-  g_object_unref (cursor_mask);
+  /* CURSORS */
+  GdkPixbuf* paint_cursor_pixbuf = gdk_pixbuf_new_from_xpm_data(paint_cursor_xpm);
+  data->paint_cursor = gdk_cursor_new_from_pixbuf(data->display,
+						  paint_cursor_pixbuf,
+						  paint_cursor_x_hot,
+						  paint_cursor_y_hot);
+  g_object_unref (paint_cursor_pixbuf);
+
+  GdkPixbuf* erase_cursor_pixbuf = gdk_pixbuf_new_from_xpm_data(erase_cursor_xpm);
+  data->erase_cursor = gdk_cursor_new_from_pixbuf(data->display,
+						  erase_cursor_pixbuf,
+						  erase_cursor_x_hot,
+						  erase_cursor_y_hot);
+  g_object_unref (erase_cursor_pixbuf);
+
 
   
   /* SHAPE PIXMAP */
   data->shape = gdk_pixmap_new (NULL, data->width, data->height, 1);
-  data->shape_gc = gdk_gc_new (data->shape);
-  data->shape_gcv = g_malloc (sizeof (GdkGCValues));
-  gdk_gc_get_values (data->shape_gc, data->shape_gcv);
-  data->transparent = gdk_color_copy (&(data->shape_gcv->foreground));
-  data->opaque = gdk_color_copy (&(data->shape_gcv->background));
-  gdk_gc_set_foreground (data->shape_gc, data->transparent);
-  gdk_draw_rectangle (data->shape, data->shape_gc,
-                      1, 0, 0, data->width, data->height);
+  data->shape_gc = gdk_cairo_create (data->shape);
+
+  clear_cairo_context(data->shape_gc); 
+
+  //data->shape_gcv = g_malloc (sizeof (GdkGCValues));
+  //gdk_gc_get_values (data->shape_gc, data->shape_gcv);
+
+  // FIXME!!
+  //data->transparent = g_malloc(sizeof(GdkColor));
+  //data->transparent = gdk_color_parse (NULL, data->transparent);
+  //data->transparent = gdk_color_copy (&(data->shape_gcv->foreground));
+  //data->opaque = gdk_color_copy (&(data->shape_gcv->background));
+
+  /*data->transparent_pixmap = gdk_pixmap_new (data->shape,
+					     data->width,
+					     data->height,
+					     -1);
+
+  cairo_t* transparent_cr = gdk_cairo_create(data->transparent_pixmap);
+
+  cairo_save(transparent_cr);
+  cairo_set_operator (transparent_cr, CAIRO_OPERATOR_CLEAR);
+  cairo_paint(transparent_cr);
+  cairo_restore(transparent_cr);
+
+  gdk_cairo_set_source_pixmap (data->shape_gc,
+			       data->transparent_pixmap,
+			       0, 
+			       0);
+			       cairo_paint(data->shape_gc);*/
+
+
+ 
+  //  gdk_gc_set_foreground (data->shape_gc, data->transparent);
+  //gdk_draw_rectangle (data->shape, data->shape_gc,
+  //                    1, 0, 0, data->width, data->height);
+
+
+
 
   /* DRAWING AREA */
   data->area = gtk_drawing_area_new ();

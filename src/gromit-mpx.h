@@ -70,9 +70,9 @@ typedef struct
   GromitPaintType type;
   guint           width;
   gfloat          arrowsize;
-  GdkColor       *fg_color;
-  GdkGC          *paint_gc;
-  GdkGC          *shape_gc;
+  GdkColor        *fg_color;
+  cairo_t         *paint_gc;
+  cairo_t         *shape_gc;
   gdouble         pressure;
 } GromitPaintContext;
 
@@ -125,10 +125,9 @@ typedef struct
   GHashTable  *tool_config;
 
   GdkBitmap   *shape;
-  GdkGC       *shape_gc;
-  GdkGCValues *shape_gcv;
-  GdkColor    *transparent;
-  GdkColor    *opaque;
+  cairo_t     *shape_gc;
+//  GdkGCValues *shape_gcv;
+  GdkPixmap   *transparent_pixmap;
 
   GHashTable  *devdatatable;
   gboolean     all_grabbed;

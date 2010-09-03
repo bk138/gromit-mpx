@@ -1,0 +1,41 @@
+/* XPM */
+#define paint_cursor_x_hot 14
+#define paint_cursor_y_hot 14
+const char *paint_cursor_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"31 31 2 1",
+"  c none",
+". c white",
+/* pixels */
+"              .                ",
+"              .                ",
+"              .                ",
+"              .                ",
+"              .                ",
+"              .                ",
+"              .                ",
+"              .                ",
+"              .                ",
+"                               ",
+"                               ",
+"                               ",
+"                               ",
+"                               ",
+".........           .........  ",
+"                               ",
+"                               ",
+"                               ",
+"                               ",
+"                               ",
+"              .                ",
+"              .                ",
+"              .                ",
+"              .                ",
+"              .                ",
+"              .                ",
+"              .                ",
+"              .                ",
+"              .                ",
+"                               ",
+"                               "
+};
