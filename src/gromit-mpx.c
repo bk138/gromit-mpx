@@ -72,6 +72,8 @@ gromit_paint_context_new (GromitData *data, GromitPaintType type,
       cairo_set_line_width(context->paint_gc, width);
       cairo_set_line_cap(context->paint_gc, CAIRO_LINE_CAP_ROUND);
       cairo_set_line_join(context->paint_gc, CAIRO_LINE_JOIN_ROUND);
+      // context->paint_gc = gdk_gc_new (data->pixmap);
+      // gdk_gc_set_foreground (context->paint_gc, fg_color);
       //      gdk_gc_set_line_attributes (context->paint_gc, width, GDK_LINE_SOLID,
       //                            GDK_CAP_ROUND, GDK_JOIN_ROUND);
     }
@@ -84,6 +86,7 @@ gromit_paint_context_new (GromitData *data, GromitPaintType type,
     {
       /* GROMIT_PEN || GROMIT_ERASER */
       context->shape_gc = gdk_cairo_create (data->shape);
+      // context->shape_gc = gdk_gc_new (data->shape);
       //      gdk_gc_get_values (context->shape_gc, &shape_gcv);
 
       if (type == GROMIT_ERASER)
