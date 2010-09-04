@@ -90,8 +90,8 @@ gromit_paint_context_new (GromitData *data, GromitPaintType type,
       //      gdk_gc_get_values (context->shape_gc, &shape_gcv);
 
       if (type == GROMIT_ERASER)
-	//FIXMEgdk_gc_set_foreground (context->shape_gc, &(shape_gcv.foreground));
-	gdk_cairo_set_source_color(context->shape_gc, fg_color);
+	//gdk_gc_set_foreground (context->shape_gc, &(shape_gcv.foreground));
+	cairo_set_operator(context->shape_gc, CAIRO_OPERATOR_CLEAR);
       else
          /* GROMIT_PEN */
 	//FIXMEgdk_gc_set_foreground (context->shape_gc, &(shape_gcv.background));
