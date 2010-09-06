@@ -133,6 +133,9 @@ void on_monitors_changed ( GdkScreen *screen,
   /* SHAPE PIXMAP */
   data->shape = gdk_pixmap_new (NULL, data->width, data->height, 1);
   data->shape_gc = gdk_cairo_create (data->shape);
+
+  clear_cairo_context(data->shape_gc); 
+
   //data->shape_gc = gdk_gc_new (data->shape);
   //data->shape_gcv = g_malloc (sizeof (GdkGCValues));
   //gdk_gc_get_values (data->shape_gc, data->shape_gcv);
@@ -140,16 +143,7 @@ void on_monitors_changed ( GdkScreen *screen,
   //FIXME
   //data->transparent = gdk_color_copy (&(data->shape_gcv->foreground));
   //data->opaque = gdk_color_copy (&(data->shape_gcv->background));
-  //  cairo_set_source_rgba(data->shape_gc, 0,0,0,0);
-  
-
-  gdk_cairo_set_source_pixmap (data->shape_gc,
-			       data->transparent_pixmap,
-			       0, 
-			       0);
-  cairo_paint(data->shape_gc);
-
-  
+ 
   //gdk_gc_set_foreground (data->shape_gc, data->transparent);
 
   //cairo_rectangle(data->shape_gc, 0, 0, data->width, data->height);

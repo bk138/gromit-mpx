@@ -126,8 +126,6 @@ typedef struct
 
   GdkBitmap   *shape;
   cairo_t     *shape_gc;
-//  GdkGCValues *shape_gcv;
-  GdkPixmap   *transparent_pixmap;
 
   GHashTable  *devdatatable;
   gboolean     all_grabbed;
@@ -184,6 +182,7 @@ void gromit_coord_list_free (GromitData *data, GdkDevice* dev);
 GromitPaintContext *gromit_paint_context_new (GromitData *data, GromitPaintType type,
 					      GdkColor *fg_color, guint width, guint arrowsize);
 
+void clear_cairo_context(cairo_t* cr);
 
 
 #endif
