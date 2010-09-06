@@ -29,60 +29,60 @@
 #include <gtk/gtk.h>
 
 
-gboolean event_expose (GtkWidget *widget,
+gboolean on_expose (GtkWidget *widget,
+		    GdkEventExpose *event,
+		    gpointer user_data);
+
+gboolean on_configure (GtkWidget *widget,
 		       GdkEventExpose *event,
 		       gpointer user_data);
 
-gboolean event_configure (GtkWidget *widget,
-			  GdkEventExpose *event,
-			  gpointer user_data);
 
-
-void event_monitors_changed(GdkScreen *screen,
-			    gpointer   user_data);
+void on_monitors_changed(GdkScreen *screen,
+			 gpointer   user_data);
 
 
 
-void clientapp_event_selection_get (GtkWidget          *widget,
-				    GtkSelectionData   *selection_data,
-				    guint               info,
-				    guint               time,
-				    gpointer            user_data);
+void on_clientapp_selection_get (GtkWidget          *widget,
+				 GtkSelectionData   *selection_data,
+				 guint               info,
+				 guint               time,
+				 gpointer            user_data);
 
-void clientapp_event_selection_received (GtkWidget *widget,
-					 GtkSelectionData *selection_data,
-					 guint time,
-					 gpointer user_data);
+void on_clientapp_selection_received (GtkWidget *widget,
+				      GtkSelectionData *selection_data,
+				      guint time,
+				      gpointer user_data);
 
-gboolean paint (GtkWidget *win, GdkEventButton *ev, gpointer user_data);
+gboolean on_buttonpress (GtkWidget *win, GdkEventButton *ev, gpointer user_data);
 
-gboolean paintto (GtkWidget *win, GdkEventMotion *ev, gpointer user_data);
+gboolean on_motion (GtkWidget *win, GdkEventMotion *ev, gpointer user_data);
 
-gboolean paintend (GtkWidget *win, GdkEventButton *ev, gpointer user_data);
+gboolean on_buttonrelease (GtkWidget *win, GdkEventButton *ev, gpointer user_data);
 
-gboolean proximity_in (GtkWidget *win, GdkEventProximity *ev, gpointer user_data);
+gboolean on_proximity_in (GtkWidget *win, GdkEventProximity *ev, gpointer user_data);
 
-gboolean proximity_out (GtkWidget *win, GdkEventProximity *ev, gpointer user_data);
-
-
-void mainapp_event_selection_get (GtkWidget          *widget,
-				  GtkSelectionData   *selection_data,
-				  guint               info,
-				  guint               time,
-				  gpointer            user_data);
+gboolean on_proximity_out (GtkWidget *win, GdkEventProximity *ev, gpointer user_data);
 
 
-void mainapp_event_selection_received (GtkWidget *widget,
-				       GtkSelectionData *selection_data,
-				       guint time,
-				       gpointer user_data);
+void on_mainapp_selection_get (GtkWidget          *widget,
+			       GtkSelectionData   *selection_data,
+			       guint               info,
+			       guint               time,
+			       gpointer            user_data);
 
 
-void device_removed_cb (GdkDeviceManager *device_manager,
+void on_mainapp_selection_received (GtkWidget *widget,
+				    GtkSelectionData *selection_data,
+				    guint time,
+				    gpointer user_data);
+
+
+void on_device_removed (GdkDeviceManager *device_manager,
 			GdkDevice        *device,
 			gpointer          user_data);
 
-void device_added_cb (GdkDeviceManager *device_manager,
+void on_device_added (GdkDeviceManager *device_manager,
 		      GdkDevice        *device,
 		      gpointer          user_data);
 

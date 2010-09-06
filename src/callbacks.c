@@ -26,9 +26,9 @@
 #include "gromit-mpx.h"
 #include "callbacks.h"
 
-gboolean event_expose (GtkWidget *widget,
-		       GdkEventExpose *event,
-		       gpointer user_data)
+gboolean on_expose (GtkWidget *widget,
+		    GdkEventExpose *event,
+		    gpointer user_data)
 {
   GromitData *data = (GromitData *) user_data;
 
@@ -52,9 +52,9 @@ gboolean event_expose (GtkWidget *widget,
 
 
 
-gboolean event_configure (GtkWidget *widget,
-			  GdkEventExpose *event,
-			  gpointer user_data)
+gboolean on_configure (GtkWidget *widget,
+		       GdkEventExpose *event,
+		       gpointer user_data)
 {
   GromitData *data = (GromitData *) user_data;
 
@@ -81,8 +81,8 @@ gboolean event_configure (GtkWidget *widget,
 
 
 
-void event_monitors_changed ( GdkScreen *screen,
-			      gpointer   user_data) 
+void on_monitors_changed ( GdkScreen *screen,
+			   gpointer   user_data) 
 {
   GromitData *data = (GromitData *) user_data;
 
@@ -165,26 +165,26 @@ void event_monitors_changed ( GdkScreen *screen,
   /* EVENTS */
   gtk_widget_set_events (data->area, GROMIT_PAINT_AREA_EVENTS);
   g_signal_connect (data->area, "expose_event",
-		    G_CALLBACK (event_expose), data);
+		    G_CALLBACK (on_expose), data);
   g_signal_connect (data->area,"configure_event",
-		    G_CALLBACK (event_configure), data);
+		    G_CALLBACK (on_configure), data);
   g_signal_connect (data->screen,"monitors_changed",
-		    G_CALLBACK (event_monitors_changed), data);
+		    G_CALLBACK (on_monitors_changed), data);
   g_signal_connect (data->win, "motion_notify_event",
-		    G_CALLBACK (paintto), data);
+		    G_CALLBACK (on_motion), data);
   g_signal_connect (data->win, "button_press_event", 
-		    G_CALLBACK(paint), data);
+		    G_CALLBACK (on_buttonpress), data);
   g_signal_connect (data->win, "button_release_event",
-		    G_CALLBACK (paintend), data);
+		    G_CALLBACK (on_buttonrelease), data);
   g_signal_connect (data->win, "proximity_in_event",
-		    G_CALLBACK (proximity_in), data);
+		    G_CALLBACK (on_proximity_in), data);
   g_signal_connect (data->win, "proximity_out_event",
-		    G_CALLBACK (proximity_out), data);
+		    G_CALLBACK (on_proximity_out), data);
  
   g_signal_connect (data->win, "selection_get",
-		    G_CALLBACK (mainapp_event_selection_get), data);
+		    G_CALLBACK (on_mainapp_selection_get), data);
   g_signal_connect (data->win, "selection_received",
-		    G_CALLBACK (mainapp_event_selection_received), data);
+		    G_CALLBACK (on_mainapp_selection_received), data);
 
   gtk_widget_set_extension_events (data->area, GDK_EXTENSION_EVENTS_ALL);
  
@@ -201,11 +201,11 @@ void event_monitors_changed ( GdkScreen *screen,
 
 
 
-void clientapp_event_selection_get (GtkWidget          *widget,
-				    GtkSelectionData   *selection_data,
-				    guint               info,
-				    guint               time,
-				    gpointer            user_data)
+void on_clientapp_selection_get (GtkWidget          *widget,
+				 GtkSelectionData   *selection_data,
+				 guint               info,
+				 guint               time,
+				 gpointer            user_data)
 {
   GromitData *data = (GromitData *) user_data;
   
@@ -225,10 +225,10 @@ void clientapp_event_selection_get (GtkWidget          *widget,
 }
 
 
-void clientapp_event_selection_received (GtkWidget *widget,
-					 GtkSelectionData *selection_data,
-					 guint time,
-					 gpointer user_data)
+void on_clientapp_selection_received (GtkWidget *widget,
+				      GtkSelectionData *selection_data,
+				      guint time,
+				      gpointer user_data)
 {
   GromitData *data = (GromitData *) user_data;
 
@@ -244,7 +244,9 @@ void clientapp_event_selection_received (GtkWidget *widget,
 
 
 
-gboolean paint (GtkWidget *win, GdkEventButton *ev, gpointer user_data)
+gboolean on_buttonpress (GtkWidget *win, 
+			 GdkEventButton *ev,
+			 gpointer user_data)
 {
   GromitData *data = (GromitData *) user_data;
   gdouble pressure = 0.5;
@@ -295,9 +297,9 @@ gboolean paint (GtkWidget *win, GdkEventButton *ev, gpointer user_data)
 }
 
 
-gboolean paintto (GtkWidget *win,
-		  GdkEventMotion *ev,
-		  gpointer user_data)
+gboolean on_motion (GtkWidget *win,
+		    GdkEventMotion *ev,
+		    gpointer user_data)
 {
   GromitData *data = (GromitData *) user_data;
   GdkTimeCoord **coords = NULL;
@@ -382,7 +384,9 @@ gboolean paintto (GtkWidget *win,
 }
 
 
-gboolean paintend (GtkWidget *win, GdkEventButton *ev, gpointer user_data)
+gboolean on_buttonrelease (GtkWidget *win, 
+			   GdkEventButton *ev, 
+			   gpointer user_data)
 {
   GromitData *data = (GromitData *) user_data;
   /* get the device data for this event */
@@ -396,7 +400,7 @@ gboolean paintend (GtkWidget *win, GdkEventButton *ev, gpointer user_data)
 
   if ((ev->x != devdata->lastx) ||
       (ev->y != devdata->lasty))
-     paintto (win, (GdkEventMotion *) ev, user_data);
+    on_motion(win, (GdkEventMotion *) ev, user_data);
 
   if (!devdata->is_grabbed)
     return FALSE;
@@ -413,7 +417,9 @@ gboolean paintend (GtkWidget *win, GdkEventButton *ev, gpointer user_data)
 
 
 
-gboolean proximity_in (GtkWidget *win, GdkEventProximity *ev, gpointer user_data)
+gboolean on_proximity_in (GtkWidget *win, 
+			  GdkEventProximity *ev,
+			  gpointer user_data)
 {
   GromitData *data = (GromitData *) user_data;
   gint x, y;
@@ -428,7 +434,9 @@ gboolean proximity_in (GtkWidget *win, GdkEventProximity *ev, gpointer user_data
 }
 
 
-gboolean proximity_out (GtkWidget *win, GdkEventProximity *ev, gpointer user_data)
+gboolean on_proximity_out (GtkWidget *win, 
+			   GdkEventProximity *ev, 
+			   gpointer user_data)
 {
   GromitData *data = (GromitData *) user_data;
   
@@ -447,11 +455,11 @@ gboolean proximity_out (GtkWidget *win, GdkEventProximity *ev, gpointer user_dat
 
 
 /* Remote control */
-void mainapp_event_selection_get (GtkWidget          *widget,
-				  GtkSelectionData   *selection_data,
-				  guint               info,
-				  guint               time,
-				  gpointer            user_data)
+void on_mainapp_selection_get (GtkWidget          *widget,
+			       GtkSelectionData   *selection_data,
+			       guint               info,
+			       guint               time,
+			       gpointer            user_data)
 {
   GromitData *data = (GromitData *) user_data;
   
@@ -482,10 +490,10 @@ void mainapp_event_selection_get (GtkWidget          *widget,
 }
 
 
-void mainapp_event_selection_received (GtkWidget *widget,
-				       GtkSelectionData *selection_data,
-				       guint time,
-				       gpointer user_data)
+void on_mainapp_selection_received (GtkWidget *widget,
+				    GtkSelectionData *selection_data,
+				    guint time,
+				    gpointer user_data)
 {
   GromitData *data = (GromitData *) user_data;
 
@@ -533,7 +541,7 @@ void mainapp_event_selection_received (GtkWidget *widget,
 }
 
 
-void device_removed_cb (GdkDeviceManager *device_manager,
+void on_device_removed (GdkDeviceManager *device_manager,
 			GdkDevice        *device,
 			gpointer          user_data)
 {
@@ -549,7 +557,7 @@ void device_removed_cb (GdkDeviceManager *device_manager,
   setup_input_devices(data);
 }
 
-void device_added_cb (GdkDeviceManager *device_manager,
+void on_device_added (GdkDeviceManager *device_manager,
 		      GdkDevice        *device,
 		      gpointer          user_data)
 {

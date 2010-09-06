@@ -953,9 +953,9 @@ setup_client_app (GromitData *data)
   g_signal_connect (data->win, "destroy", gtk_main_quit, NULL);
   /* the selectione event handlers will be overwritten if we become a mainapp */
   g_signal_connect (data->win, "selection_received", 
-		    G_CALLBACK (clientapp_event_selection_received), data);
+		    G_CALLBACK (on_clientapp_selection_received), data);
   g_signal_connect (data->win, "selection_get",
-		    G_CALLBACK (clientapp_event_selection_get), data);
+		    G_CALLBACK (on_clientapp_selection_get), data);
   
   gtk_widget_realize (data->win); 
 
@@ -1050,37 +1050,37 @@ setup_main_app (GromitData *data, gboolean activate)
   /* EVENTS */
   gtk_widget_set_events (data->area, GROMIT_PAINT_AREA_EVENTS);
   g_signal_connect (data->area, "expose_event",
-		    G_CALLBACK (event_expose), data);
+		    G_CALLBACK (on_expose), data);
   g_signal_connect (data->area,"configure_event",
-		    G_CALLBACK (event_configure), data);
+		    G_CALLBACK (on_configure), data);
   g_signal_connect (data->screen,"monitors_changed",
-		    G_CALLBACK (event_monitors_changed), data);
+		    G_CALLBACK (on_monitors_changed), data);
   g_signal_connect (gdk_display_get_device_manager (data->display), "device-added",
-                    G_CALLBACK (device_added_cb), data);
+                    G_CALLBACK (on_device_added), data);
   g_signal_connect (gdk_display_get_device_manager (data->display), "device-removed",
-                    G_CALLBACK (device_removed_cb), data);
+                    G_CALLBACK (on_device_removed), data);
   g_signal_connect (data->win, "motion_notify_event",
-		    G_CALLBACK (paintto), data);
+		    G_CALLBACK (on_motion), data);
   g_signal_connect (data->win, "button_press_event", 
-		    G_CALLBACK (paint), data);
+		    G_CALLBACK (on_buttonpress), data);
   g_signal_connect (data->win, "button_release_event",
-		    G_CALLBACK (paintend), data);
+		    G_CALLBACK (on_buttonrelease), data);
   g_signal_connect (data->win, "proximity_in_event",
-		    G_CALLBACK (proximity_in), data);
+		    G_CALLBACK (on_proximity_in), data);
   g_signal_connect (data->win, "proximity_out_event",
-		    G_CALLBACK (proximity_out), data);
+		    G_CALLBACK (on_proximity_out), data);
   /* disconnect previously defined selection handlers */
   g_signal_handlers_disconnect_by_func (data->win, 
-					G_CALLBACK (clientapp_event_selection_get),
+					G_CALLBACK (on_clientapp_selection_get),
 					data);
   g_signal_handlers_disconnect_by_func (data->win, 
-					G_CALLBACK (clientapp_event_selection_received),
+					G_CALLBACK (on_clientapp_selection_received),
 					data);
   /* and re-connect them to mainapp functions */
   g_signal_connect (data->win, "selection_get",
-		    G_CALLBACK (mainapp_event_selection_get), data);
+		    G_CALLBACK (on_mainapp_selection_get), data);
   g_signal_connect (data->win, "selection_received",
-		    G_CALLBACK (mainapp_event_selection_received), data);
+		    G_CALLBACK (on_mainapp_selection_received), data);
 
 
 
