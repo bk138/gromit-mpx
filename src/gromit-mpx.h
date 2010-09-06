@@ -145,42 +145,34 @@ typedef struct
 } GromitData;
 
 
-void gromit_toggle_visibility (GromitData *data);
+void toggle_visibility (GromitData *data);
 
-void gromit_release_grab (GromitData *data, GdkDevice *dev);
-void gromit_acquire_grab (GromitData *data, GdkDevice *dev);
-void gromit_toggle_grab  (GromitData *data, GdkDevice *dev);
+void release_grab (GromitData *data, GdkDevice *dev);
+void acquire_grab (GromitData *data, GdkDevice *dev);
+void toggle_grab  (GromitData *data, GdkDevice *dev);
   
 void parse_print_help (gpointer key, gpointer value, gpointer user_data);
 void setup_input_devices (GromitData *data);
 
-void mainapp_event_selection_get (GtkWidget          *widget,
-				  GtkSelectionData   *selection_data,
-				  guint               info,
-				  guint               time,
-				  gpointer            user_data);
-void mainapp_event_selection_received (GtkWidget *widget,
-				       GtkSelectionData *selection_data,
-				       guint time,
-				       gpointer user_data);
+void select_tool (GromitData *data, GdkDevice *device, guint state);
 
-void gromit_select_tool (GromitData *data, GdkDevice *device, guint state);
+void draw_line (GromitData *data, GdkDevice *dev, gint x1, gint y1, gint x2, gint y2);
+void draw_arrow (GromitData *data, GdkDevice *dev, gint x1, gint y1, gint width, gfloat direction);
+void clear_screen (GromitData *data);
 
-void gromit_draw_line (GromitData *data, GdkDevice *dev, gint x1, gint y1, gint x2, gint y2);
-void gromit_draw_arrow (GromitData *data, GdkDevice *dev, gint x1, gint y1, gint width, gfloat direction);
-void gromit_clear_screen (GromitData *data);
-
-gboolean gromit_coord_list_get_arrow_param (GromitData *data,
+gboolean coord_list_get_arrow_param (GromitData *data,
 					    GdkDevice  *dev,
 					    gint        search_radius,
 					    gint       *ret_width,
 					    gfloat     *ret_direction);
+void coord_list_prepend (GromitData *data, GdkDevice* dev, gint x, gint y, gint width);
+void coord_list_free (GromitData *data, GdkDevice* dev);
 
-void gromit_coord_list_prepend (GromitData *data, GdkDevice* dev, gint x, gint y, gint width);
-void gromit_coord_list_free (GromitData *data, GdkDevice* dev);
 
-GromitPaintContext *gromit_paint_context_new (GromitData *data, GromitPaintType type,
-					      GdkColor *fg_color, guint width, guint arrowsize);
+GromitPaintContext *paint_context_new (GromitData *data, GromitPaintType type,
+				       GdkColor *fg_color, guint width, guint arrowsize);
+void paint_context_free (GromitPaintContext *context);
+
 
 void clear_cairo_context(cairo_t* cr);
 

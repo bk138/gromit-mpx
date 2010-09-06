@@ -336,7 +336,7 @@ void parse_config (GromitData *data)
               exit (1);
             }
 
-          context = gromit_paint_context_new (data, type, fg_color, width, arrowsize);
+          context = paint_context_new (data, type, fg_color, width, arrowsize);
           g_hash_table_insert (data->tool_config, name, context);
         }
       else

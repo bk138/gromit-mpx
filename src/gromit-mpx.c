@@ -47,9 +47,11 @@ void clear_cairo_context(cairo_t* cr)
 }
 
 
-GromitPaintContext *
-gromit_paint_context_new (GromitData *data, GromitPaintType type,
-                          GdkColor *fg_color, guint width, guint arrowsize)
+GromitPaintContext *paint_context_new (GromitData *data, 
+				       GromitPaintType type,
+				       GdkColor *fg_color, 
+				       guint width,
+				       guint arrowsize)
 {
   GromitPaintContext *context;
 
@@ -109,8 +111,8 @@ gromit_paint_context_new (GromitData *data, GromitPaintType type,
 }
 
 
-void
-gromit_paint_context_print (gchar *name, GromitPaintContext *context)
+void paint_context_print (gchar *name, 
+			  GromitPaintContext *context)
 {
   g_printerr ("Tool name: \"%-20s\": ", name);
   switch (context->type)
@@ -132,8 +134,7 @@ gromit_paint_context_print (gchar *name, GromitPaintContext *context)
 }
 
 
-void
-gromit_paint_context_free (GromitPaintContext *context)
+void paint_context_free (GromitPaintContext *context)
 {
   g_object_unref (context->paint_gc);
   g_object_unref (context->shape_gc);
@@ -141,7 +142,11 @@ gromit_paint_context_free (GromitPaintContext *context)
 }
 
 
-void gromit_coord_list_prepend (GromitData *data, GdkDevice* dev, gint x, gint y, gint width)
+void coord_list_prepend (GromitData *data, 
+			 GdkDevice* dev, 
+			 gint x, 
+			 gint y, 
+			 gint width)
 {
   /* get the data for this device */
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
@@ -157,7 +162,8 @@ void gromit_coord_list_prepend (GromitData *data, GdkDevice* dev, gint x, gint y
 }
 
 
-void gromit_coord_list_free (GromitData *data, GdkDevice* dev)
+void coord_list_free (GromitData *data, 
+		      GdkDevice* dev)
 {
   /* get the data for this device */
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
@@ -177,11 +183,11 @@ void gromit_coord_list_free (GromitData *data, GdkDevice* dev)
 }
 
 
-gboolean gromit_coord_list_get_arrow_param (GromitData *data,
-                                   GdkDevice  *dev,
-                                   gint        search_radius,
-                                   gint       *ret_width,
-                                   gfloat     *ret_direction)
+gboolean coord_list_get_arrow_param (GromitData *data,
+				     GdkDevice  *dev,
+				     gint        search_radius,
+				     gint       *ret_width,
+				     gfloat     *ret_direction)
 {
   gint x0, y0, r2, dist;
   gboolean success = FALSE;
@@ -229,8 +235,7 @@ gboolean gromit_coord_list_get_arrow_param (GromitData *data,
 }
 
 
-void
-gromit_hide_window (GromitData *data)
+void hide_window (GromitData *data)
 {
   if (!data->hidden)
     {
@@ -245,14 +250,13 @@ gromit_hide_window (GromitData *data)
           devdata->was_grabbed = devdata->is_grabbed;
         }
       data->hidden = 1;
-      gromit_release_grab (data, NULL); /* release all */
+      release_grab (data, NULL); /* release all */
       gtk_widget_hide (data->win);
     }
 }
 
 
-void
-gromit_show_window (GromitData *data)
+void show_window (GromitData *data)
 {
   if (data->hidden)
     {
@@ -268,7 +272,7 @@ gromit_show_window (GromitData *data)
         {
           devdata = value;
           if(devdata->was_grabbed)
-            gromit_acquire_grab (data, devdata->device);
+            acquire_grab (data, devdata->device);
         }
     }
   gdk_window_raise (gtk_widget_get_window(data->win));
@@ -276,17 +280,17 @@ gromit_show_window (GromitData *data)
 
 
 
-void gromit_toggle_visibility (GromitData *data)
+void toggle_visibility (GromitData *data)
 {
   if (data->hidden)
-    gromit_show_window (data);
+    show_window (data);
   else
-    gromit_hide_window (data);
+    hide_window (data);
 }
 
 
-void
-gromit_release_grab (GromitData *data, GdkDevice *dev)
+void release_grab (GromitData *data, 
+		   GdkDevice *dev)
 {
   if(!dev) /* this means release all grabs */
     {
@@ -326,14 +330,14 @@ gromit_release_grab (GromitData *data, GdkDevice *dev)
     }
 
   if (!data->painted)
-    gromit_hide_window (data);
+    hide_window (data);
 }
 
 
-void
-gromit_acquire_grab (GromitData *data, GdkDevice *dev)
+void acquire_grab (GromitData *data, 
+		   GdkDevice *dev)
 {
-  gromit_show_window (data);
+  show_window (data);
 
   if(!dev) /* this means grab all */
     {
@@ -419,14 +423,15 @@ gromit_acquire_grab (GromitData *data, GdkDevice *dev)
 }
 
 
-void gromit_toggle_grab (GromitData *data, GdkDevice* dev)
+void toggle_grab (GromitData *data, 
+		  GdkDevice* dev)
 {
   if(dev == NULL) /* toggle all */
     {
       if (data->all_grabbed)
-	gromit_release_grab (data, NULL);
+	release_grab (data, NULL);
       else
-	gromit_acquire_grab (data, NULL);
+	acquire_grab (data, NULL);
       return; 
     }
 
@@ -436,16 +441,16 @@ void gromit_toggle_grab (GromitData *data, GdkDevice* dev)
   if(devdata)
     {
       if(devdata->is_grabbed)
-        gromit_release_grab (data, devdata->device);
+        release_grab (data, devdata->device);
       else
-        gromit_acquire_grab (data, devdata->device);
+        acquire_grab (data, devdata->device);
     }
   else
     g_printerr("ERROR: No such device '%s' in internal table.\n", gdk_device_get_name(dev));
 }
 
 
-void gromit_clear_screen (GromitData *data)
+void clear_screen (GromitData *data)
 {
   //gdk_gc_set_foreground (data->shape_gc, data->transparent);
   //gdk_draw_rectangle (data->shape, data->shape_gc, 1,
@@ -459,8 +464,7 @@ void gromit_clear_screen (GromitData *data)
 }
 
 
-gint
-reshape (gpointer user_data)
+gint reshape (gpointer user_data)
 {
   GromitData *data = (GromitData *) user_data;
 
@@ -481,7 +485,9 @@ reshape (gpointer user_data)
 }
 
 
-void gromit_select_tool (GromitData *data, GdkDevice *device, guint state)
+void select_tool (GromitData *data, 
+		  GdkDevice *device, 
+		  guint state)
 {
   guint buttons = 0, modifier = 0, len = 0, default_len = 0;
   guint req_buttons = 0, req_modifier = 0;
@@ -589,8 +595,10 @@ void gromit_select_tool (GromitData *data, GdkDevice *device, guint state)
 }
 
 
-void gromit_draw_line (GromitData *data, GdkDevice *dev, gint x1, gint y1,
-		       gint x2, gint y2)
+void draw_line (GromitData *data,
+		GdkDevice *dev,
+		gint x1, gint y1,
+		gint x2, gint y2)
 {
   GdkRectangle rect;
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
@@ -652,9 +660,11 @@ void gromit_draw_line (GromitData *data, GdkDevice *dev, gint x1, gint y1,
 }
 
 
-void
-gromit_draw_arrow (GromitData *data, GdkDevice *dev, gint x1, gint y1,
-                   gint width, gfloat direction)
+void draw_arrow (GromitData *data, 
+		 GdkDevice *dev,
+		 gint x1, gint y1,
+		 gint width,
+		 gfloat direction)
 {
   GdkRectangle rect;
   GdkPoint arrowhead [4];
@@ -773,10 +783,9 @@ gromit_draw_arrow (GromitData *data, GdkDevice *dev, gint x1, gint y1,
 
 /* Keyboard control */
 
-gint
-key_press_event (GtkWidget   *grab_widget,
-                 GdkEventKey *event,
-                 gpointer     func_data)
+gint key_press_event (GtkWidget   *grab_widget,
+		      GdkEventKey *event,
+		      gpointer     func_data)
 {
   GromitData *data = (GromitData *) func_data;
   GdkDevice *dev = gdk_event_get_device((GdkEvent*)event);
@@ -788,13 +797,13 @@ key_press_event (GtkWidget   *grab_widget,
 	g_printerr("DEBUG: Received hotkey press from device '%s'\n", gdk_device_get_name(dev));
 
       if (event->state & GDK_SHIFT_MASK)
-        gromit_clear_screen (data);
+        clear_screen (data);
       else if (event->state & GDK_CONTROL_MASK)
-        gromit_toggle_visibility (data);
+        toggle_visibility (data);
       else if (event->state & GDK_MOD1_MASK)
         gtk_main_quit ();
       else
-        gromit_toggle_grab (data, gdk_device_get_associated_device(dev));
+        toggle_grab (data, gdk_device_get_associated_device(dev));
 
       return TRUE;
     }
@@ -802,9 +811,8 @@ key_press_event (GtkWidget   *grab_widget,
 }
 
 
-void
-gromit_main_do_event (GdkEventAny *event,
-                      GromitData  *data)
+void main_do_event (GdkEventAny *event,
+		    GromitData  *data)
 {
 
   if ((event->type == GDK_KEY_PRESS ||
@@ -829,11 +837,10 @@ gromit_main_do_event (GdkEventAny *event,
  * Functions for setting up (parts of) the application
  */
 
-void
-setup_input_devices (GromitData *data)
+void setup_input_devices (GromitData *data)
 {
   /* ungrab all */
-  gromit_release_grab (data, NULL); 
+  release_grab (data, NULL); 
   /* and clear our own device data list */
   g_hash_table_remove_all(data->devdatatable);
 
@@ -927,8 +934,7 @@ setup_input_devices (GromitData *data)
 
 
 
-void
-setup_client_app (GromitData *data)
+void setup_client_app (GromitData *data)
 {
   data->display = gdk_display_get_default ();
   data->screen = gdk_display_get_default_screen (data->display);
@@ -964,8 +970,7 @@ setup_client_app (GromitData *data)
 }
 
 
-void
-setup_main_app (GromitData *data, gboolean activate)
+void setup_main_app (GromitData *data, gboolean activate)
 {
   gboolean   have_key = FALSE;
 
@@ -1134,15 +1139,15 @@ setup_main_app (GromitData *data, gboolean activate)
   gtk_widget_show_all (data->area);
 
   data->painted = 0;
-  gromit_hide_window (data);
+  hide_window (data);
 
   data->timeout_id = g_timeout_add (20, reshape, data);
  
   data->modified = 0;
 
-  data->default_pen = gromit_paint_context_new (data, GROMIT_PEN,
+  data->default_pen = paint_context_new (data, GROMIT_PEN,
                                                 data->red, 7, 0);
-  data->default_eraser = gromit_paint_context_new (data, GROMIT_ERASER,
+  data->default_eraser = paint_context_new (data, GROMIT_ERASER,
                                                    data->red, 75, 0);
 
   
@@ -1162,22 +1167,20 @@ setup_main_app (GromitData *data, gboolean activate)
   gtk_selection_add_target (data->win, GA_CONTROL, GA_RELOAD, 7);
 
  
-  gdk_event_handler_set ((GdkEventFunc) gromit_main_do_event, data, NULL);
+  gdk_event_handler_set ((GdkEventFunc) main_do_event, data, NULL);
   gtk_key_snooper_install (key_press_event, data);
 
   if (activate)
-    gromit_acquire_grab (data, NULL); /* grab all */
+    acquire_grab (data, NULL); /* grab all */
 }
 
-void
-parse_print_help (gpointer key, gpointer value, gpointer user_data)
+void parse_print_help (gpointer key, gpointer value, gpointer user_data)
 {
-  gromit_paint_context_print ((gchar *) key, (GromitPaintContext *) value);
+  paint_context_print ((gchar *) key, (GromitPaintContext *) value);
 }
 
 
-int
-app_parse_args (int argc, char **argv, GromitData *data)
+int app_parse_args (int argc, char **argv, GromitData *data)
 {
    gint      i;
    gchar    *arg;
@@ -1251,8 +1254,7 @@ app_parse_args (int argc, char **argv, GromitData *data)
  * Main programs
  */
 
-int
-main_client (int argc, char **argv, GromitData *data)
+int main_client (int argc, char **argv, GromitData *data)
 {
    GdkAtom   action = GDK_NONE;
    gint      i;
@@ -1323,8 +1325,7 @@ main_client (int argc, char **argv, GromitData *data)
    return 0;
 }
 
-int
-main (int argc, char **argv)
+int main (int argc, char **argv)
 {
   GromitData *data;
 
@@ -1353,7 +1354,7 @@ main (int argc, char **argv)
   /* Main application */
   setup_main_app (data, app_parse_args (argc, argv, data));
   gtk_main ();
-  gromit_release_grab(data, NULL); /* ungrab all */
+  release_grab(data, NULL); /* ungrab all */
   g_free (data);
   return 0;
 }

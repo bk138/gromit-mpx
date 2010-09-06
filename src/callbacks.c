@@ -260,7 +260,7 @@ gboolean on_buttonpress (GtkWidget *win,
 
 
   if (ev->state != devdata->state)
-    gromit_select_tool (data, ev->device, ev->state);
+    select_tool (data, ev->device, ev->state);
 
   gdk_window_set_background (gtk_widget_get_window(data->area),
                              devdata->cur_context->fg_color);
@@ -280,9 +280,9 @@ gboolean on_buttonpress (GtkWidget *win,
                         (double) devdata->cur_context->width);
     }
   if (ev->button <= 5)
-    gromit_draw_line (data, ev->device, ev->x, ev->y, ev->x, ev->y);
+    draw_line (data, ev->device, ev->x, ev->y, ev->x, ev->y);
 
-  gromit_coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
+  coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
 
   if (devdata->cur_context->shape_gc && !gtk_events_pending ())
     gtk_widget_shape_combine_mask (data->win, data->shape, 0,0); 
@@ -309,7 +309,7 @@ gboolean on_motion (GtkWidget *win,
 
   if (ev->state != devdata->state) 
     {
-      gromit_select_tool (data, ev->device, ev->state);
+      select_tool (data, ev->device, ev->state);
       gdk_window_set_background (gtk_widget_get_window(data->area),
 				 devdata->cur_context->fg_color);
     }
@@ -340,9 +340,9 @@ gboolean on_motion (GtkWidget *win,
               gdk_device_get_axis(ev->device, coords[i]->axes,
                                   GDK_AXIS_Y, &y);
 
-	      gromit_draw_line (data, ev->device, devdata->lastx, devdata->lasty, x, y);
+	      draw_line (data, ev->device, devdata->lastx, devdata->lasty, x, y);
 
-              gromit_coord_list_prepend (data, ev->device, x, y, data->maxwidth);
+              coord_list_prepend (data, ev->device, x, y, data->maxwidth);
               devdata->lastx = x;
               devdata->lasty = y;
             }
@@ -365,8 +365,8 @@ gboolean on_motion (GtkWidget *win,
 
       if(devdata->motion_time > 0)
 	{
-	  gromit_draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
-	  gromit_coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
+	  draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
+	  coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
 	}
     }
 
@@ -398,13 +398,13 @@ gboolean on_buttonrelease (GtkWidget *win,
 
   if (!devdata->is_grabbed)
     return FALSE;
-
+  
   if (devdata->cur_context->arrowsize != 0 &&
-      gromit_coord_list_get_arrow_param (data, ev->device, width * 3,
-                                         &width, &direction))
-    gromit_draw_arrow (data, ev->device, ev->x, ev->y, width, direction);
+      coord_list_get_arrow_param (data, ev->device, width * 3,
+				  &width, &direction))
+    draw_arrow (data, ev->device, ev->x, ev->y, width, direction);
 
-  gromit_coord_list_free (data, ev->device);
+  coord_list_free (data, ev->device);
 
   return TRUE;
 }
@@ -420,7 +420,7 @@ gboolean on_proximity_in (GtkWidget *win,
   GdkModifierType state;
 
   gdk_window_get_pointer (gtk_widget_get_window(data->win), &x, &y, &state);
-  gromit_select_tool (data, ev->device, state);
+  select_tool (data, ev->device, state);
 
   if(data->debug)
     g_printerr("DEBUG: prox in device  %s: \n", gdk_device_get_name(ev->device));
@@ -467,9 +467,9 @@ void on_mainapp_selection_get (GtkWidget          *widget,
       gtk_main(); /* Wait for the response */
     }
   else if (gtk_selection_data_get_target(selection_data) == GA_VISIBILITY)
-    gromit_toggle_visibility (data);
+    toggle_visibility (data);
   else if (gtk_selection_data_get_target(selection_data) == GA_CLEAR)
-    gromit_clear_screen (data);
+    clear_screen (data);
   else if (gtk_selection_data_get_target(selection_data) == GA_RELOAD)
     setup_input_devices(data);
   else if (gtk_selection_data_get_target(selection_data) == GA_QUIT)
@@ -506,7 +506,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
             g_printerr("DEBUG: mainapp got toggle id '%d' back from client.\n", dev_nr);
 
 	  if(dev_nr < 0)
-	    gromit_toggle_grab(data, NULL); /* toggle all */
+	    toggle_grab(data, NULL); /* toggle all */
 	  else 
 	    {
 	      /* find dev numbered dev_nr */
@@ -524,7 +524,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
 		}
 	      
 	      if(devdata)
-		gromit_toggle_grab(data, devdata->device);
+		toggle_grab(data, devdata->device);
 	      else
 		g_printerr("ERROR: No device at index %d.\n", dev_nr);
 	    }
