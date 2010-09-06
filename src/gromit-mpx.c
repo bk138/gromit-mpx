@@ -600,6 +600,9 @@ void gromit_draw_line (GromitData *data, GdkDevice *dev, gint x1, gint y1,
   rect.width = ABS (x1-x2) + data->maxwidth;
   rect.height = ABS (y1-y2) + data->maxwidth;
 
+  if(data->debug)
+    g_printerr("DEBUG: draw line from %d %d to %d %d\n", x1, y1, x2, y2);
+
   if (devdata->cur_context->paint_gc)
     {
       cairo_set_line_width(devdata->cur_context->paint_gc, data->maxwidth);

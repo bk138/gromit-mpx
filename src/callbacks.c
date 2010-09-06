@@ -66,6 +66,7 @@ gboolean event_configure (GtkWidget *widget,
 
   
   cairo_t *cr = gdk_cairo_create(data->pixmap);
+  gdk_cairo_set_source_color(cr, data->black);
   cairo_rectangle(cr, 0, 0, data->width, data->height);
   cairo_fill(cr);
   cairo_destroy (cr);
@@ -287,8 +288,8 @@ gboolean paint (GtkWidget *win, GdkEventButton *ev, gpointer user_data)
 
   gromit_coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
 
-  /* if (data->cur_context->shape_gc && !gtk_events_pending ())
-     gtk_widget_shape_combine_mask (data->win, data->shape, 0,0); */
+  if (devdata->cur_context->shape_gc && !gtk_events_pending ())
+    gtk_widget_shape_combine_mask (data->win, data->shape, 0,0); 
 
   return TRUE;
 }
@@ -309,7 +310,7 @@ gboolean paintto (GtkWidget *win,
 
   if (!devdata->is_grabbed)
     return FALSE;
- 
+
   if (ev->state != devdata->state)
     gromit_select_tool (data, ev->device, ev->state);
 
@@ -338,7 +339,7 @@ gboolean paintto (GtkWidget *win,
               gdk_device_get_axis(ev->device, coords[i]->axes,
                                   GDK_AXIS_Y, &y);
 
-              gromit_draw_line (data, ev->device, devdata->lastx, devdata->lasty, x, y);
+	      gromit_draw_line (data, ev->device, devdata->lastx, devdata->lasty, x, y);
 
               gromit_coord_list_prepend (data, ev->device, x, y, data->maxwidth);
               devdata->lastx = x;
@@ -360,13 +361,17 @@ gboolean paintto (GtkWidget *win,
       else
          data->maxwidth = (CLAMP (pressure * pressure,0,1) *
                            (double)devdata->cur_context->width);
-      gromit_draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
 
-      gromit_coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
+      if(devdata->motion_time > 0)
+	{
+	  gromit_draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
+	  gromit_coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
+	}
     }
 
   devdata->lastx = ev->x;
   devdata->lasty = ev->y;
+  devdata->motion_time = ev->time;
 
   return TRUE;
 }
