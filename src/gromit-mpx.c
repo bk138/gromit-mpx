@@ -573,7 +573,17 @@ void gromit_select_tool (GromitData *data, GdkDevice *device, guint state)
     cursor = data->erase_cursor; 
   else
     cursor = data->paint_cursor; 
-  gdk_window_set_device_cursor(gtk_widget_get_window(data->win), devdata->device, cursor);
+
+  // FIXME: should be 
+  //gdk_window_set_device_cursor(gtk_widget_get_window(data->area), devdata->device, cursor);
+  // but that is not working...
+  gdk_device_grab(devdata->device,
+		  gtk_widget_get_window(data->area),
+		  GDK_OWNERSHIP_NONE,
+		  FALSE,
+		  GROMIT_MOUSE_EVENTS,
+		  cursor,
+		  GDK_CURRENT_TIME);
    
   devdata->state = state;
 }
