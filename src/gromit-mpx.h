@@ -54,8 +54,6 @@
 #define GA_DATA       gdk_atom_intern ("Gromit/data", FALSE)
 #define GA_TOGGLEDATA gdk_atom_intern ("Gromit/toggledata", FALSE)
 
-/* fallback device name for config file */
-#define DEFAULT_DEVICE_NAME "default"
 
 
 typedef enum

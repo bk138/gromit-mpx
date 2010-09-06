@@ -24,6 +24,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+/* fallback device name for config file */
+#define DEFAULT_DEVICE_NAME "default"
 
 void parse_config (GromitData *data);
 
