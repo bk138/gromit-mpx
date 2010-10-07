@@ -1,2 +1,4 @@
 
+* GdkPixmap alternative
+* spot memleaks
 * code cleanup
