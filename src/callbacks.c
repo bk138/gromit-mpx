@@ -71,8 +71,6 @@ gboolean on_configure (GtkWidget *widget,
   cairo_fill(cr);
   cairo_destroy (cr);
 
-  //gdk_draw_rectangle (data->pixmap, gtk_widget_get_style(data->area)->black_gc,
-  //                    1, 0, 0, data->width, data->height);
   gdk_window_set_transient_for (gtk_widget_get_window(data->area), gtk_widget_get_window(data->win));
 
   return TRUE;
@@ -136,20 +134,6 @@ void on_monitors_changed ( GdkScreen *screen,
 
   clear_cairo_context(data->shape_gc); 
 
-  //data->shape_gc = gdk_gc_new (data->shape);
-  //data->shape_gcv = g_malloc (sizeof (GdkGCValues));
-  //gdk_gc_get_values (data->shape_gc, data->shape_gcv);
-
-  //FIXME
-  //data->transparent = gdk_color_copy (&(data->shape_gcv->foreground));
-  //data->opaque = gdk_color_copy (&(data->shape_gcv->background));
- 
-  //gdk_gc_set_foreground (data->shape_gc, data->transparent);
-
-  //cairo_rectangle(data->shape_gc, 0, 0, data->width, data->height);
-  //cairo_fill(data->shape_gc);
-  //gdk_draw_rectangle (data->shape, data->shape_gc,
-  //                    1, 0, 0, data->width, data->height);
 
   /* DRAWING AREA */
   data->area = gtk_drawing_area_new ();
