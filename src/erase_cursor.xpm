@@ -1,7 +1,7 @@
 /* XPM */
 #define erase_cursor_x_hot 14
 #define erase_cursor_y_hot 14
-static char * erase_cursor_xpm[] = {
+const char * erase_cursor_xpm[] = {
 "31 31 3 1",
 " 	c None",
 ".	c #000000",
