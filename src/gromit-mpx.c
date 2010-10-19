@@ -823,54 +823,67 @@ void setup_input_devices (GromitData *data)
 
 	  /* get attached keyboard and grab the hotkey */
 	  if (!data->hot_keycode)
-	      {
-		g_printerr("ERROR: Grabbing hotkey from attached keyboard of '%s' failed, no hotkey defined.\n",
-			   gdk_device_get_name(device));
-		g_free(devdata);
-		continue;
-	      }
-
-	  GdkDevice* attached_kbd = gdk_device_get_associated_device(device);
-	  if(attached_kbd)
 	    {
-	      gint kbd_dev_id = -1;
-	      g_object_get(attached_kbd, "device-id", &kbd_dev_id, NULL);
-	      if(kbd_dev_id != -1)
+	      g_printerr("ERROR: Grabbing hotkey from attached keyboard of '%s' failed, no hotkey defined.\n",
+			 gdk_device_get_name(device));
+	      g_free(devdata);
+	      continue;
+	    }
+
+	  gint dev_id = -1;
+	  g_object_get(device, "device-id", &dev_id, NULL);
+
+	  gint kbd_dev_id = -1;
+	  XIDeviceInfo* devinfo;
+	  int devicecount = 0;
+	  
+	  devinfo = XIQueryDevice(GDK_DISPLAY_XDISPLAY(data->display),
+				  dev_id,
+				  &devicecount);
+	  if(devicecount)
+	    kbd_dev_id = devinfo->attachment;
+	  XIFreeDeviceInfo(devinfo);
+	  
+ 
+	  if(kbd_dev_id != -1)
+	    {
+	      if(data->debug)
+		g_printerr("DEBUG: Grabbing hotkey from keyboard '%d' .\n", kbd_dev_id);
+
+	      XIEventMask mask;
+	      unsigned char bits[4] = {0,0,0,0};
+	      mask.mask = bits;
+	      mask.mask_len = sizeof(bits);
+	      
+	      XISetMask(bits, XI_KeyPress);
+	      XISetMask(bits, XI_KeyRelease);
+	      
+	      XIGrabModifiers modifiers[] = {{XIAnyModifier, 0}};
+	      int nmods = 1;
+	      
+	      gdk_error_trap_push ();
+	      
+	      XIGrabKeycode( GDK_DISPLAY_XDISPLAY(data->display),
+			     kbd_dev_id,
+			     data->hot_keycode,
+			     GDK_WINDOW_XWINDOW(data->root),
+			     GrabModeAsync,
+			     GrabModeAsync,
+			     True,
+			     &mask,
+			     nmods,
+			     modifiers);
+
+	      gdk_flush ();
+	      if(gdk_error_trap_pop())
 		{
-		  XIEventMask mask;
-		  unsigned char bits[4] = {0,0,0,0};
-		  mask.mask = bits;
-		  mask.mask_len = sizeof(bits);
-		  
-		  XISetMask(bits, XI_KeyPress);
-		  XISetMask(bits, XI_KeyRelease);
-
-		  XIGrabModifiers modifiers[] = {{XIAnyModifier, 0}};
-		  int nmods = 1;
-
-		  gdk_error_trap_push ();
-
-		  XIGrabKeycode( GDK_DISPLAY_XDISPLAY(data->display),
-				 kbd_dev_id,
-				 data->hot_keycode,
-				 GDK_WINDOW_XWINDOW(data->root),
-				 GrabModeAsync,
-				 GrabModeAsync,
-				 True,
-				 &mask,
-				 nmods,
-				 modifiers);
-
-		  gdk_flush ();
-		  if(gdk_error_trap_pop())
-		    {
-		      g_printerr("ERROR: Grabbing hotkey from keyboard '%s' failed.\n",
-				 gdk_device_get_name(attached_kbd));
-		      g_free(devdata);
-		      continue;
-		    }
+		  g_printerr("ERROR: Grabbing hotkey from keyboard device %d failed.\n",
+			     kbd_dev_id);
+		  g_free(devdata);
+		  continue;
 		}
 	    }
+	    
 
          
 	  g_hash_table_insert(data->devdatatable, device, devdata);
