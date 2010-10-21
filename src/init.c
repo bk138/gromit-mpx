@@ -137,6 +137,7 @@ void init_basic_stuff (GromitData *data)
 
   g_object_unref(data->win);
   data->win = gtk_window_new (GTK_WINDOW_POPUP);
+  g_object_ref(data->win);
 
   gtk_window_fullscreen(GTK_WINDOW(data->win)); 
   gtk_window_set_skip_taskbar_hint(GTK_WINDOW(data->win), TRUE);
@@ -195,6 +196,7 @@ void init_canvas(GromitData *data)
   /* DRAWING AREA */
   g_object_unref (data->area);
   data->area = gtk_drawing_area_new ();
+  g_object_ref (data->area);
   gtk_widget_set_size_request(GTK_WIDGET(data->area),
 			      data->width, data->height);
 
