@@ -24,7 +24,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include "gromit-mpx.h"
+#include "init.h"
 #include "callbacks.h"
+
 
 gboolean on_expose (GtkWidget *widget,
 		    GdkEventExpose *event,
@@ -87,93 +89,14 @@ void on_monitors_changed ( GdkScreen *screen,
   if(data->debug)
     g_printerr("DEBUG: screen size changed!\n");
 
+
+  init_basic_stuff(data);
     
-  data->screen = gdk_display_get_default_screen (data->display);
-  data->xinerama = gdk_screen_get_n_monitors (data->screen) > 1;
-  data->root = gdk_screen_get_root_window (data->screen);
-  data->width = gdk_screen_get_width (data->screen);
-  data->height = gdk_screen_get_height (data->screen);
+  init_colormaps(data);
 
-
-  data->win = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_widget_set_size_request(GTK_WIDGET (data->win), data->width, data->height);
-  /* gtk_widget_set_uposition (GTK_WIDGET (data->win), 0, 0); */
-  
-  gtk_widget_set_events (data->win, GROMIT_WINDOW_EVENTS);
-
-  g_signal_connect (data->win, "delete-event", gtk_main_quit, NULL);
-  g_signal_connect (data->win, "destroy", gtk_main_quit, NULL);
-
-  
-  gtk_widget_realize (data->win); 
-
-  gtk_selection_owner_set (data->win, GA_DATA, GDK_CURRENT_TIME);
-  gtk_selection_add_target (data->win, GA_DATA, GA_TOGGLEDATA, 1007);
-
-
-
-
-  /* COLORMAP */
-  data->cm = gdk_screen_get_default_colormap (data->screen);
-  data->white = g_malloc (sizeof (GdkColor));
-  data->black = g_malloc (sizeof (GdkColor));
-  data->red   = g_malloc (sizeof (GdkColor));
-  gdk_color_parse ("#FFFFFF", data->white);
-  gdk_colormap_alloc_color (data->cm, data->white, FALSE, TRUE);
-  gdk_color_parse ("#000000", data->black);
-  gdk_colormap_alloc_color (data->cm, data->black, FALSE, TRUE);
-  gdk_color_parse ("#FF0000", data->red);
-  gdk_colormap_alloc_color (data->cm, data->red,  FALSE, TRUE);
-
-     
-
-  
-  /* SHAPE PIXMAP */
-  data->shape = gdk_pixmap_new (NULL, data->width, data->height, 1);
-  data->shape_gc = gdk_cairo_create (data->shape);
-
-  clear_cairo_context(data->shape_gc); 
-
-
-  /* DRAWING AREA */
-  data->area = gtk_drawing_area_new ();
-  gtk_widget_set_size_request(GTK_WIDGET(data->area),
-			      data->width, data->height);
-
-  /* EVENTS */
-  gtk_widget_set_events (data->area, GROMIT_PAINT_AREA_EVENTS);
-  g_signal_connect (data->area, "expose_event",
-		    G_CALLBACK (on_expose), data);
-  g_signal_connect (data->area,"configure_event",
-		    G_CALLBACK (on_configure), data);
-  g_signal_connect (data->screen,"monitors_changed",
-		    G_CALLBACK (on_monitors_changed), data);
-  g_signal_connect (data->win, "motion_notify_event",
-		    G_CALLBACK (on_motion), data);
-  g_signal_connect (data->win, "button_press_event", 
-		    G_CALLBACK (on_buttonpress), data);
-  g_signal_connect (data->win, "button_release_event",
-		    G_CALLBACK (on_buttonrelease), data);
-  g_signal_connect (data->win, "proximity_in_event",
-		    G_CALLBACK (on_proximity_in), data);
-  g_signal_connect (data->win, "proximity_out_event",
-		    G_CALLBACK (on_proximity_out), data);
- 
-  g_signal_connect (data->win, "selection_get",
-		    G_CALLBACK (on_mainapp_selection_get), data);
-  g_signal_connect (data->win, "selection_received",
-		    G_CALLBACK (on_mainapp_selection_received), data);
-
-  gtk_widget_set_extension_events (data->area, GDK_EXTENSION_EVENTS_ALL);
- 
-
-
-  gtk_container_add (GTK_CONTAINER (data->win), data->area);
-
-  gtk_widget_shape_combine_mask (data->win, data->shape, 0,0);
+  init_canvas(data);
 
   gtk_widget_show_all (data->area);
-
 }
 
 
@@ -455,7 +378,7 @@ void on_mainapp_selection_get (GtkWidget          *widget,
   else if (gtk_selection_data_get_target(selection_data) == GA_CLEAR)
     clear_screen (data);
   else if (gtk_selection_data_get_target(selection_data) == GA_RELOAD)
-    setup_input_devices(data);
+    init_input_devices(data);
   else if (gtk_selection_data_get_target(selection_data) == GA_QUIT)
     gtk_main_quit ();
   else
@@ -532,7 +455,7 @@ void on_device_removed (GdkDeviceManager *device_manager,
   if(data->debug)
     g_printerr("DEBUG: device '%s' removed\n", gdk_device_get_name(device));
 
-  setup_input_devices(data);
+  init_input_devices(data);
 }
 
 void on_device_added (GdkDeviceManager *device_manager,
@@ -548,6 +471,6 @@ void on_device_added (GdkDeviceManager *device_manager,
   if(data->debug)
     g_printerr("DEBUG: device '%s' added\n", gdk_device_get_name(device));
 
-  setup_input_devices(data);
+  init_input_devices(data);
 }
 
