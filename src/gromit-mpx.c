@@ -754,7 +754,39 @@ gint key_press_event (GtkWidget   *grab_widget,
       else if (event->state & GDK_MOD1_MASK)
         gtk_main_quit ();
       else
-        toggle_grab (data, gdk_device_get_associated_device(dev));
+	{
+	  /* GAAAH */
+	  gint kbd_dev_id = -1;
+	  g_object_get(dev, "device-id", &kbd_dev_id, NULL);
+
+	  XIDeviceInfo* devinfo;
+	  int devicecount = 0;
+	  gint ptr_dev_id = -1;
+	  
+	  devinfo = XIQueryDevice(GDK_DISPLAY_XDISPLAY(data->display),
+				  kbd_dev_id,
+				  &devicecount);
+	  if(devicecount)
+	    ptr_dev_id = devinfo->attachment;
+	  XIFreeDeviceInfo(devinfo);
+	  
+ 
+	  GdkDeviceManager *device_manager = gdk_display_get_device_manager(data->display);
+	  GList *devices, *d;
+	  gint some_dev_id;
+	  GdkDevice *some_device = NULL;
+	  devices = gdk_device_manager_list_devices(device_manager, GDK_DEVICE_TYPE_MASTER);
+	  for(d = devices; d; d = d->next)
+	    {
+	      some_device = (GdkDevice *) d->data;
+	      g_object_get(some_device, "device-id", &some_dev_id, NULL);
+	      if(some_dev_id == ptr_dev_id)
+		break;
+	    }
+
+
+	  toggle_grab(data, some_device);
+	}
 
       return TRUE;
     }
