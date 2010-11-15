@@ -33,14 +33,14 @@ command to make Gromit grab the mouse, since you typically want to use
 the program you are demonstrating and highlighting something is a short
 interruption of your workflow.
 
-Gromit offers two ways to make this possible. It grabs the "Pause" key, so
+Gromit offers two ways to make this possible. It grabs the "F9" key, so
 that no other application can use it and it is available to Gromit only.
 The available commands are:
 
-   Pause:       toggle painting
-   SHIFT-Pause: clear screen
-   CTRL-Pause:  toggle visibility
-   ALT-Pause:   Quit Gromit.
+   F9:       toggle painting
+   SHIFT-F9: clear screen
+   CTRL-F9:  toggle visibility
+   ALT-F9:   Quit Gromit.
 
 You can specify the key to grab via "gromit --key <keysym>". Specifying
 an empty string or "none" for the keysym will prevent gromit from grabbing
@@ -62,7 +62,7 @@ Usage:
 
 If activated Gromit prevents you from using other programs with the
 mouse. You can press the button and paint on the screen. Key presses
-(except the "Pause"-Key, see above) will still reach the currently active
+(except the "F9"-Key, see above) will still reach the currently active
 window but it may be difficult to change the window-focus without mouse... 
 The next "gromit --toggle" will deactivate Gromit and you can use your
 programs as usual - only the painted regions will be obscured.
