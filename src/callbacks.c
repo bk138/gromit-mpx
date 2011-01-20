@@ -30,13 +30,14 @@
 
 
 gboolean on_expose (GtkWidget *widget,
-		    GdkEventExpose *event,
+		    cairo_t* cr,
 		    gpointer user_data)
 {
   GromitData *data = (GromitData *) user_data;
 
   if(data->debug)
-    g_printerr("DEBUG: got expose event\n");
+    g_printerr("DEBUG: got draw event\n");
+
 
   /*gdk_cairo_set_source_pixmap (data->shape_gc,
 			       data->pixmap,

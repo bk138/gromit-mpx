@@ -717,7 +717,7 @@ void setup_main_app (GromitData *data, gboolean activate)
   
   /* EVENTS */
   gtk_widget_set_events (data->area, GROMIT_PAINT_AREA_EVENTS);
-  g_signal_connect (data->area, "expose_event",
+  g_signal_connect (data->area, "draw",
 		    G_CALLBACK (on_expose), data);
   g_signal_connect (data->area,"configure_event",
 		    G_CALLBACK (on_configure), data);

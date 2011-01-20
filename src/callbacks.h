@@ -30,7 +30,7 @@
 
 
 gboolean on_expose (GtkWidget *widget,
-		    GdkEventExpose *event,
+		    cairo_t* cr,
 		    gpointer user_data);
 
 gboolean on_configure (GtkWidget *widget,
