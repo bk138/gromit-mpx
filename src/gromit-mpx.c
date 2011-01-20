@@ -441,7 +441,9 @@ void clear_screen (GromitData *data)
   cairo_paint (cr);
   cairo_destroy(cr);
   
-  gtk_widget_shape_combine_region(data->win, gdk_cairo_region_create_from_surface(data->shape));
+  cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
+  gtk_widget_shape_combine_region(data->win, r);
+  cairo_region_destroy(r);
 
   data->painted = 0;
 }
@@ -459,7 +461,10 @@ gint reshape (gpointer user_data)
         }
       else
         {
-          gtk_widget_shape_combine_region(data->win, gdk_cairo_region_create_from_surface(data->shape));
+	  cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
+	  gtk_widget_shape_combine_region(data->win, r);
+	  cairo_region_destroy(r);
+
           data->modified = 0;
           data->delayed = 0;
         }

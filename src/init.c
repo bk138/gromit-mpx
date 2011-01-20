@@ -237,8 +237,12 @@ void init_canvas(GromitData *data)
 
 
   gtk_container_add (GTK_CONTAINER (data->win), data->area);
-  gtk_widget_shape_combine_region (data->win, gdk_cairo_region_create_from_surface(data->shape));
 
+  
+  cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
+  gtk_widget_shape_combine_region(data->win, r);
+  cairo_region_destroy(r);
+  
 
   /* reset settings from client setup */
   gtk_selection_remove_all (data->win);

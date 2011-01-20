@@ -192,7 +192,11 @@ gboolean on_buttonpress (GtkWidget *win,
   coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
 
   if (devdata->cur_context->shape_gc && !gtk_events_pending ())
-    gtk_widget_shape_combine_region(data->win, gdk_cairo_region_create_from_surface(data->shape)); 
+    {
+      cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
+      gtk_widget_shape_combine_region(data->win, r);
+      cairo_region_destroy(r);
+    }
 
   return TRUE;
 }
