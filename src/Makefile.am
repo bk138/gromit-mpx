@@ -16,8 +16,8 @@ gromit_mpx_SOURCES = \
 	callbacks.h \
 	config.c \
 	config.h \
-	init.c \
-	init.h \
+	input.c \
+	input.h \
 	erase_cursor.xpm \
 	paint_cursor.xpm 
 

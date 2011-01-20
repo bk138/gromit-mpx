@@ -141,13 +141,10 @@ typedef struct
 
 
 void toggle_visibility (GromitData *data);
+void hide_window (GromitData *data);
+void show_window (GromitData *data);
 
-void release_grab (GromitData *data, GdkDevice *dev);
-void acquire_grab (GromitData *data, GdkDevice *dev);
-void toggle_grab  (GromitData *data, GdkDevice *dev);
-  
 void parse_print_help (gpointer key, gpointer value, gpointer user_data);
-void setup_input_devices (GromitData *data);
 
 void select_tool (GromitData *data, GdkDevice *device, guint state);
 

@@ -26,10 +26,10 @@
 #include <stdlib.h>
 #include <X11/extensions/XInput2.h>
 
-#include "gromit-mpx.h"
 #include "callbacks.h"
 #include "config.h"
-#include "init.h"
+#include "input.h"
+#include "gromit-mpx.h"
 
 #include "paint_cursor.xpm"
 #include "erase_cursor.xpm"
@@ -271,171 +271,6 @@ void toggle_visibility (GromitData *data)
     hide_window (data);
 }
 
-
-void release_grab (GromitData *data, 
-		   GdkDevice *dev)
-{
-  if(!dev) /* this means release all grabs */
-    {
-      GHashTableIter it;
-      gpointer value;
-      GromitDeviceData* devdata; 
-      g_hash_table_iter_init (&it, data->devdatatable);
-      while (g_hash_table_iter_next (&it, NULL, &value)) 
-        {
-          devdata = value;
-          if(devdata->is_grabbed)
-	  {
-	    gdk_device_ungrab(devdata->device, GDK_CURRENT_TIME);
-	    devdata->is_grabbed = 0;
-            /* workaround buggy GTK3 ? */
-	    devdata->motion_time = 0;
-	  }
-        }
-      
-      data->all_grabbed = 0;
-
-      if(data->debug)
-        g_printerr ("DEBUG: Ungrabbed all Devices.\n");
-
-      return;
-    }
-
-
-  /* get the data for this device */
-  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
-
-  if (devdata->is_grabbed)
-    {
-      gdk_device_ungrab(devdata->device, GDK_CURRENT_TIME);
-      devdata->is_grabbed = 0;
-      /* workaround buggy GTK3 ? */
-      devdata->motion_time = 0;
-
-
-      if(data->debug)
-        g_printerr ("DEBUG: Ungrabbed Device '%s'.\n", gdk_device_get_name(devdata->device));
-    }
-
-  if (!data->painted)
-    hide_window (data);
-}
-
-
-void acquire_grab (GromitData *data, 
-		   GdkDevice *dev)
-{
-  show_window (data);
-
-  if(!dev) /* this means grab all */
-    {
-      GHashTableIter it;
-      gpointer value;
-      GromitDeviceData* devdata = NULL; 
-      g_hash_table_iter_init (&it, data->devdatatable);
-      while (g_hash_table_iter_next (&it, NULL, &value)) 
-        {
-          GdkCursor *cursor;
-
-	  devdata = value;
-          if(devdata->is_grabbed)
-            continue;
-
-	  if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
-	    cursor = data->erase_cursor; 
-	  else
-	    cursor = data->paint_cursor; 
-
-	
-	  if(gdk_device_grab(devdata->device,
-			     gtk_widget_get_window(data->area),
-			     GDK_OWNERSHIP_NONE,
-			     FALSE,
-			     GROMIT_MOUSE_EVENTS,
-			     cursor,
-			     GDK_CURRENT_TIME) != GDK_GRAB_SUCCESS)
-	    {
-	      /* this probably means the device table is outdated, 
-		 e.g. this device doesn't exist anymore */
-	      g_printerr("Error grabbing Device '%s' while grabbing all, ignoring.\n", 
-			 gdk_device_get_name(devdata->device));
-	      continue;
-
-	    }
-	   
-          devdata->is_grabbed = 1;
-        }
-
-      data->all_grabbed = 1;
-
-      if(data->debug)
-        g_printerr("DEBUG: Grabbed all Devices.\n");
-      
-      return;
-    }
-
-
-  /* get the data for this device */
-  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
-
-  if (!devdata->is_grabbed)
-    {
-      GdkCursor *cursor;
-      if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
-	cursor = data->erase_cursor; 
-      else
-	cursor = data->paint_cursor; 
-      
-      if(gdk_device_grab(devdata->device,
-			 gtk_widget_get_window(data->area),
-			 GDK_OWNERSHIP_NONE,
-			 FALSE,
-			 GROMIT_MOUSE_EVENTS,
-			 cursor,
-			 GDK_CURRENT_TIME) != GDK_GRAB_SUCCESS)
-	{
-	  /* this probably means the device table is outdated,
-	     e.g. this device doesn't exist anymore */
-	  g_printerr("Error grabbing device '%s', rescanning device list.\n", 
-		     gdk_device_get_name(devdata->device));
-	  init_input_devices(data);
-	  return;
-	}
-
-      devdata->is_grabbed = 1;
-      
-      if(data->debug)
-        g_printerr("DEBUG: Grabbed Device '%s'.\n", gdk_device_get_name(devdata->device));
-    }
-
-}
-
-
-void toggle_grab (GromitData *data, 
-		  GdkDevice* dev)
-{
-  if(dev == NULL) /* toggle all */
-    {
-      if (data->all_grabbed)
-	release_grab (data, NULL);
-      else
-	acquire_grab (data, NULL);
-      return; 
-    }
-
-  /* get the data for this device */
-  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
-      
-  if(devdata)
-    {
-      if(devdata->is_grabbed)
-        release_grab (data, devdata->device);
-      else
-        acquire_grab (data, devdata->device);
-    }
-  else
-    g_printerr("ERROR: No such device '%s' in internal table.\n", gdk_device_get_name(dev));
-}
 
 
 void clear_screen (GromitData *data)
@@ -832,7 +667,16 @@ void setup_main_app (GromitData *data, gboolean activate)
 {
   gboolean   have_key = FALSE;
 
-  init_colors(data);
+  /* COLOURS */
+  g_free(data->white);
+  g_free(data->black);
+  g_free(data->red);
+  data->white = g_malloc (sizeof (GdkColor));
+  data->black = g_malloc (sizeof (GdkColor));
+  data->red   = g_malloc (sizeof (GdkColor));
+  gdk_color_parse ("#FFFFFF", data->white);
+  gdk_color_parse ("#000000", data->black);
+  gdk_color_parse ("#FF0000", data->red);
 
 
   /* 
@@ -858,7 +702,77 @@ void setup_main_app (GromitData *data, gboolean activate)
   /*
     DRAWING AREA
   */
-  init_canvas(data);
+  /* SHAPE SURFACE*/
+  cairo_surface_destroy(data->shape);
+  data->shape = cairo_image_surface_create(CAIRO_FORMAT_ARGB32 ,data->width, data->height);
+
+   
+  /* DRAWING AREA */
+  g_object_unref (data->area);
+  data->area = gtk_drawing_area_new ();
+  g_object_ref (data->area);
+  gtk_widget_set_size_request(GTK_WIDGET(data->area),
+			      data->width, data->height);
+
+  
+  /* EVENTS */
+  gtk_widget_set_events (data->area, GROMIT_PAINT_AREA_EVENTS);
+  g_signal_connect (data->area, "expose_event",
+		    G_CALLBACK (on_expose), data);
+  g_signal_connect (data->area,"configure_event",
+		    G_CALLBACK (on_configure), data);
+  g_signal_connect (data->screen,"monitors_changed",
+		    G_CALLBACK (on_monitors_changed), data);
+  g_signal_connect (gdk_display_get_device_manager (data->display), "device-added",
+                    G_CALLBACK (on_device_added), data);
+  g_signal_connect (gdk_display_get_device_manager (data->display), "device-removed",
+                    G_CALLBACK (on_device_removed), data);
+  g_signal_connect (data->win, "motion_notify_event",
+		    G_CALLBACK (on_motion), data);
+  g_signal_connect (data->win, "button_press_event", 
+		    G_CALLBACK (on_buttonpress), data);
+  g_signal_connect (data->win, "button_release_event",
+		    G_CALLBACK (on_buttonrelease), data);
+  g_signal_connect (data->win, "proximity_in_event",
+		    G_CALLBACK (on_proximity_in), data);
+  g_signal_connect (data->win, "proximity_out_event",
+		    G_CALLBACK (on_proximity_out), data);
+  /* disconnect previously defined selection handlers */
+  g_signal_handlers_disconnect_by_func (data->win, 
+					G_CALLBACK (on_clientapp_selection_get),
+					data);
+  g_signal_handlers_disconnect_by_func (data->win, 
+					G_CALLBACK (on_clientapp_selection_received),
+					data);
+  /* and re-connect them to mainapp functions */
+  g_signal_connect (data->win, "selection_get",
+		    G_CALLBACK (on_mainapp_selection_get), data);
+  g_signal_connect (data->win, "selection_received",
+		    G_CALLBACK (on_mainapp_selection_received), data);
+
+
+
+  gtk_container_add (GTK_CONTAINER (data->win), data->area);
+
+  
+  cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
+  gtk_widget_shape_combine_region(data->win, r);
+  cairo_region_destroy(r);
+  
+
+  /* reset settings from client setup */
+  gtk_selection_remove_all (data->win);
+  gtk_selection_owner_set (data->win, GA_CONTROL, GDK_CURRENT_TIME);
+
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_STATUS, 0);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_QUIT, 1);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_ACTIVATE, 2);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_DEACTIVATE, 3);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_TOGGLE, 4);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_VISIBILITY, 5);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_CLEAR, 6);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_RELOAD, 7);
+
 
  
 
@@ -905,7 +819,7 @@ void setup_main_app (GromitData *data, gboolean activate)
      INPUT DEVICES
   */
   data->devdatatable = g_hash_table_new(NULL, NULL);
-  init_input_devices (data);
+  setup_input_devices (data);
 
 
 
@@ -1090,10 +1004,43 @@ int main (int argc, char **argv)
   gtk_init (&argc, &argv);
   data = g_malloc0(sizeof (GromitData));
 
+  /* 
+     init basic stuff
+  */
+  data->display = gdk_display_get_default ();
+  data->screen = gdk_display_get_default_screen (data->display);
+  data->xinerama = gdk_screen_get_n_monitors (data->screen) > 1;
+  data->root = gdk_screen_get_root_window (data->screen);
+  data->width = gdk_screen_get_width (data->screen);
+  data->height = gdk_screen_get_height (data->screen);
 
-  /* g_set_printerr_handler (quiet_print_handler); */
+  g_object_unref(data->win);
+  data->win = gtk_window_new (GTK_WINDOW_POPUP);
+  g_object_ref(data->win);
 
-  init_basic_stuff(data);
+  gtk_window_fullscreen(GTK_WINDOW(data->win)); 
+  gtk_window_set_skip_taskbar_hint(GTK_WINDOW(data->win), TRUE);
+  gtk_window_set_opacity(GTK_WINDOW(data->win), 1); 
+
+  gtk_widget_set_size_request (GTK_WIDGET (data->win), data->width, data->height);
+  /* gtk_widget_set_uposition (GTK_WIDGET (data->win), 0, 0); */
+  
+  gtk_widget_set_events (data->win, GROMIT_WINDOW_EVENTS);
+
+  g_signal_connect (data->win, "delete-event", gtk_main_quit, NULL);
+  g_signal_connect (data->win, "destroy", gtk_main_quit, NULL);
+  /* the selectione event handlers will be overwritten if we become a mainapp */
+  g_signal_connect (data->win, "selection_received", 
+		    G_CALLBACK (on_clientapp_selection_received), data);
+  g_signal_connect (data->win, "selection_get",
+		    G_CALLBACK (on_clientapp_selection_get), data);
+  
+  gtk_widget_realize (data->win); 
+
+  gtk_selection_owner_set (data->win, GA_DATA, GDK_CURRENT_TIME);
+  gtk_selection_add_target (data->win, GA_DATA, GA_TOGGLEDATA, 1007);
+
+
 
   /* Try to get a status message. If there is a response gromit
    * is already acive.

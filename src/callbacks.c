@@ -24,7 +24,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "gromit-mpx.h"
-#include "init.h"
+#include "input.h"
 #include "callbacks.h"
 #include "config.h"
 
@@ -127,8 +127,7 @@ void on_monitors_changed ( GdkScreen *screen,
   gtk_widget_shape_combine_region(data->win, r);
   cairo_region_destroy(r);
 
-  init_input_devices(data);
-
+  setup_input_devices(data);
 
 
   gtk_widget_show_all (data->area);
@@ -417,7 +416,7 @@ void on_mainapp_selection_get (GtkWidget          *widget,
   else if (gtk_selection_data_get_target(selection_data) == GA_CLEAR)
     clear_screen (data);
   else if (gtk_selection_data_get_target(selection_data) == GA_RELOAD)
-    init_input_devices(data);
+    setup_input_devices(data);
   else if (gtk_selection_data_get_target(selection_data) == GA_QUIT)
     gtk_main_quit ();
   else
@@ -494,7 +493,7 @@ void on_device_removed (GdkDeviceManager *device_manager,
   if(data->debug)
     g_printerr("DEBUG: device '%s' removed\n", gdk_device_get_name(device));
 
-  init_input_devices(data);
+  setup_input_devices(data);
 }
 
 void on_device_added (GdkDeviceManager *device_manager,
@@ -510,6 +509,6 @@ void on_device_added (GdkDeviceManager *device_manager,
   if(data->debug)
     g_printerr("DEBUG: device '%s' added\n", gdk_device_get_name(device));
 
-  init_input_devices(data);
+  setup_input_devices(data);
 }
 
