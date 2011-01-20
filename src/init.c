@@ -16,7 +16,13 @@ void init_input_devices (GromitData *data)
 {
   /* ungrab all */
   release_grab (data, NULL); 
+
   /* and clear our own device data list */
+  GHashTableIter it;
+  gpointer value;
+  g_hash_table_iter_init (&it, data->devdatatable);
+  while (g_hash_table_iter_next (&it, NULL, &value)) 
+    g_free(value);
   g_hash_table_remove_all(data->devdatatable);
 
 
