@@ -1,4 +1,3 @@
 
-* get rid of 2 drawing contexts
 * spot memleaks
 * code cleanup
