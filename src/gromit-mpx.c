@@ -822,7 +822,7 @@ void setup_main_app (GromitData *data, gboolean activate)
 {
   gboolean   have_key = FALSE;
 
-  init_color(data);
+  init_colors(data);
 
 
   /* 
