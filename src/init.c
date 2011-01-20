@@ -180,16 +180,11 @@ void init_colors(GromitData *data)
 
 void init_canvas(GromitData *data)
 {
-  /* SHAPE */
+  /* SHAPE SURFACE*/
   g_object_unref (data->shape);
-  data->shape = cairo_image_surface_create(CAIRO_FORMAT_A1 ,data->width, data->height);
+  data->shape = cairo_image_surface_create(CAIRO_FORMAT_ARGB32 ,data->width, data->height);
 
-  cairo_destroy(data->shape_gc);
-  data->shape_gc = cairo_create(data->shape);
-
-  clear_cairo_context(data->shape_gc); 
-
- 
+   
   /* DRAWING AREA */
   g_object_unref (data->area);
   data->area = gtk_drawing_area_new ();

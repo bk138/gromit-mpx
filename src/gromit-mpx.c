@@ -35,18 +35,6 @@
 #include "erase_cursor.xpm"
 
 
-/* Clear cairo context */
-void clear_cairo_context(cairo_t* cr)
-{
-  if (cr)
-    {
-      cairo_save(cr);
-      cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-      cairo_paint(cr);
-      cairo_restore(cr);
-    } 
-}
-
 
 GromitPaintContext *paint_context_new (GromitData *data, 
 				       GromitPaintType type,
@@ -447,8 +435,12 @@ void toggle_grab (GromitData *data,
 
 void clear_screen (GromitData *data)
 {
-  clear_cairo_context(data->shape_gc);
-
+  cairo_t *cr = cairo_create(data->shape);
+  cairo_set_source_rgba(cr, 0, 0, 0, 0);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  cairo_paint (cr);
+  cairo_destroy(cr);
+  
   gtk_widget_shape_combine_region(data->win, gdk_cairo_region_create_from_surface(data->shape));
 
   data->painted = 0;

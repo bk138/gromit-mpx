@@ -121,7 +121,6 @@ typedef struct
   GHashTable  *tool_config;
 
   cairo_surface_t *shape;
-  cairo_t     *shape_gc;
 
   GHashTable  *devdatatable;
   gboolean     all_grabbed;
@@ -169,8 +168,6 @@ GromitPaintContext *paint_context_new (GromitData *data, GromitPaintType type,
 				       GdkColor *fg_color, guint width, guint arrowsize);
 void paint_context_free (GromitPaintContext *context);
 
-
-void clear_cairo_context(cairo_t* cr);
 
 
 #endif
