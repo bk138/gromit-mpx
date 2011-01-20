@@ -1,3 +1,4 @@
 
+* make use of compositing + input shape combining
 * spot memleaks
 * code cleanup
