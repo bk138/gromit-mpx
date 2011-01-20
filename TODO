@@ -1,3 +1,4 @@
 
+* may get rid of 2 drawing contexts? fix same-color problem after hide?
 * spot memleaks
 * code cleanup
