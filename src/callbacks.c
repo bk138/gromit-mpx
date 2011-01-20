@@ -38,19 +38,9 @@ gboolean on_expose (GtkWidget *widget,
   if(data->debug)
     g_printerr("DEBUG: got draw event\n");
 
+  cairo_set_source_surface (cr, data->shape, 0, 0);
+  cairo_paint (cr);
 
-  /*gdk_cairo_set_source_pixmap (data->shape_gc,
-			       data->pixmap,
-			       event->area.x, 
-			       event->area.y);
-			       cairo_paint(data->shape_gc);*/
-
-  /*gdk_draw_drawable (gtk_widget_get_window(data->area),
-                     gtk_widget_get_style(data->area)->fg_gc[gtk_widget_get_state(data->area)],
-                     data->pixmap,
-                     event->area.x, event->area.y,
-                     event->area.x, event->area.y,
-                     event->area.width, event->area.height);*/
   return TRUE;
 }
 
