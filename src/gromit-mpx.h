@@ -104,7 +104,6 @@ typedef struct
   GdkCursor   *paint_cursor;
   GdkCursor   *erase_cursor;
 
-  GdkPixmap   *pixmap;
   GdkDisplay  *display;
   GdkScreen   *screen;
   gboolean     xinerama;
@@ -112,7 +111,6 @@ typedef struct
   gchar       *hot_keyval;
   guint        hot_keycode;
 
-  GdkColormap *cm;
   GdkColor    *white;
   GdkColor    *black;
   GdkColor    *red;
@@ -122,7 +120,7 @@ typedef struct
  
   GHashTable  *tool_config;
 
-  GdkBitmap   *shape;
+  cairo_surface_t *shape;
   cairo_t     *shape_gc;
 
   GHashTable  *devdatatable;

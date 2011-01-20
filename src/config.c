@@ -274,17 +274,7 @@ void parse_config (GromitData *data)
                           if (gdk_color_parse (scanner->value.v_string,
                                                color))
                             {
-                              if (gdk_colormap_alloc_color (data->cm,
-                                                            color, 0, 1))
-                                {
-                                  fg_color = color;
-                                }
-                              else
-                                {
-                                  g_printerr ("Unable to allocate color. "
-                                              "Keeping default!\n");
-                                  g_free (color);
-                                }
+			      fg_color = color;
                             }
                           else
                             {

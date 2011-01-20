@@ -90,7 +90,7 @@ void init_input_devices (GromitData *data)
 	      XIGrabKeycode( GDK_DISPLAY_XDISPLAY(data->display),
 			     kbd_dev_id,
 			     data->hot_keycode,
-			     GDK_WINDOW_XWINDOW(data->root),
+			     GDK_WINDOW_XID(data->root),
 			     GrabModeAsync,
 			     GrabModeAsync,
 			     True,
@@ -163,10 +163,9 @@ void init_basic_stuff (GromitData *data)
 }
 
 
-void init_colormaps(GromitData *data)
+void init_colors(GromitData *data)
 {
-  /* COLORMAP */
-  data->cm = gdk_screen_get_default_colormap (data->screen);
+  /* COLOURS */
   g_free(data->white);
   g_free(data->black);
   g_free(data->red);
@@ -174,21 +173,19 @@ void init_colormaps(GromitData *data)
   data->black = g_malloc (sizeof (GdkColor));
   data->red   = g_malloc (sizeof (GdkColor));
   gdk_color_parse ("#FFFFFF", data->white);
-  gdk_colormap_alloc_color (data->cm, data->white, FALSE, TRUE);
   gdk_color_parse ("#000000", data->black);
-  gdk_colormap_alloc_color (data->cm, data->black, FALSE, TRUE);
   gdk_color_parse ("#FF0000", data->red);
-  gdk_colormap_alloc_color (data->cm, data->red,  FALSE, TRUE);
 }
 
 
 void init_canvas(GromitData *data)
 {
-  /* SHAPE PIXMAP */
+  /* SHAPE */
   g_object_unref (data->shape);
-  data->shape = gdk_pixmap_new (NULL, data->width, data->height, 1);
+  data->shape = cairo_image_surface_create(CAIRO_FORMAT_A1 ,data->width, data->height);
+
   cairo_destroy(data->shape_gc);
-  data->shape_gc = gdk_cairo_create (data->shape);
+  data->shape_gc = cairo_create(data->shape);
 
   clear_cairo_context(data->shape_gc); 
 
@@ -239,7 +236,7 @@ void init_canvas(GromitData *data)
 
 
   gtk_container_add (GTK_CONTAINER (data->win), data->area);
-  gtk_widget_shape_combine_mask (data->win, data->shape, 0,0);
+  gtk_widget_shape_combine_region (data->win, gdk_cairo_region_create_from_surface(data->shape));
 
 
   /* reset settings from client setup */

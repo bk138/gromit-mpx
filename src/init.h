@@ -12,7 +12,7 @@ void init_input_devices (GromitData *data);
 */
 void init_basic_stuff (GromitData *data);
 
-void init_colormaps (GromitData *data);
+void init_colors (GromitData *data);
 
 void init_canvas(GromitData *data);
 

@@ -63,11 +63,11 @@ gboolean on_configure (GtkWidget *widget,
   if(data->debug)
     g_printerr("DEBUG: got configure event\n");
 
-  data->pixmap = gdk_pixmap_new (gtk_widget_get_window(data->area), data->width,
-                                 data->height, -1);
+  //data->pixmap = gdk_pixmap_new (gtk_widget_get_window(data->area), data->width,
+  //                              data->height, -1);
 
   
-  cairo_t *cr = gdk_cairo_create(data->pixmap);
+  cairo_t *cr = gdk_cairo_create(gtk_widget_get_window(data->win));
   gdk_cairo_set_source_color(cr, data->black);
   cairo_rectangle(cr, 0, 0, data->width, data->height);
   cairo_fill(cr);
@@ -92,7 +92,7 @@ void on_monitors_changed ( GdkScreen *screen,
 
   init_basic_stuff(data);
     
-  init_colormaps(data);
+  init_colors(data);
 
   init_canvas(data);
 
@@ -192,7 +192,7 @@ gboolean on_buttonpress (GtkWidget *win,
   coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
 
   if (devdata->cur_context->shape_gc && !gtk_events_pending ())
-    gtk_widget_shape_combine_mask (data->win, data->shape, 0,0); 
+    gtk_widget_shape_combine_region(data->win, gdk_cairo_region_create_from_surface(data->shape)); 
 
   return TRUE;
 }
@@ -204,7 +204,7 @@ gboolean on_motion (GtkWidget *win,
 {
   GromitData *data = (GromitData *) user_data;
   GdkTimeCoord **coords = NULL;
-  guint nevents;
+  gint nevents;
   int i;
   gboolean ret;
   gdouble pressure = 0.5;

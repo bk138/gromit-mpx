@@ -70,7 +70,7 @@ GromitPaintContext *paint_context_new (GromitData *data,
   else
     {
       /* GROMIT_PEN || GROMIT_RECOLOR */
-      context->paint_gc = gdk_cairo_create (data->pixmap);
+      context->paint_gc = gdk_cairo_create (gtk_widget_get_window(data->win));
       gdk_cairo_set_source_color(context->paint_gc, fg_color);
       cairo_set_line_width(context->paint_gc, width);
       cairo_set_line_cap(context->paint_gc, CAIRO_LINE_CAP_ROUND);
@@ -84,7 +84,7 @@ GromitPaintContext *paint_context_new (GromitData *data,
   else
     {
       /* GROMIT_PEN || GROMIT_ERASER */
-      context->shape_gc = gdk_cairo_create (data->shape);
+      context->shape_gc = cairo_create (data->shape);
 
       if (type == GROMIT_ERASER)
 	cairo_set_operator(context->shape_gc, CAIRO_OPERATOR_CLEAR);
@@ -449,7 +449,7 @@ void clear_screen (GromitData *data)
 {
   clear_cairo_context(data->shape_gc);
 
-  gtk_widget_shape_combine_mask (data->win, data->shape, 0,0);
+  gtk_widget_shape_combine_region(data->win, gdk_cairo_region_create_from_surface(data->shape));
 
   data->painted = 0;
 }
@@ -467,7 +467,7 @@ gint reshape (gpointer user_data)
         }
       else
         {
-          gtk_widget_shape_combine_mask (data->win, data->shape, 0,0);
+          gtk_widget_shape_combine_region(data->win, gdk_cairo_region_create_from_surface(data->shape));
           data->modified = 0;
           data->delayed = 0;
         }
@@ -827,7 +827,7 @@ void setup_main_app (GromitData *data, gboolean activate)
 {
   gboolean   have_key = FALSE;
 
-  init_colormaps(data);
+  init_color(data);
 
 
   /* 
@@ -1081,9 +1081,6 @@ int main_client (int argc, char **argv, GromitData *data)
 int main (int argc, char **argv)
 {
   GromitData *data;
-
-  /* make sure we get really get MPX */
-  gdk_enable_multidevice();
 
   gtk_init (&argc, &argv);
   data = g_malloc0(sizeof (GromitData));
