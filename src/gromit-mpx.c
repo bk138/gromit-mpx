@@ -295,6 +295,8 @@ void release_grab (GromitData *data,
 	  {
 	    gdk_device_ungrab(devdata->device, GDK_CURRENT_TIME);
 	    devdata->is_grabbed = 0;
+            /* workaround buggy GTK3 ? */
+	    devdata->motion_time = 0;
 	  }
         }
       
@@ -314,6 +316,9 @@ void release_grab (GromitData *data,
     {
       gdk_device_ungrab(devdata->device, GDK_CURRENT_TIME);
       devdata->is_grabbed = 0;
+      /* workaround buggy GTK3 ? */
+      devdata->motion_time = 0;
+
 
       if(data->debug)
         g_printerr ("DEBUG: Ungrabbed Device '%s'.\n", gdk_device_get_name(devdata->device));
