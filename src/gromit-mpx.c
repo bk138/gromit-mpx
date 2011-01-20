@@ -230,6 +230,9 @@ void hide_window (GromitData *data)
       data->hidden = 1;
       release_grab (data, NULL); /* release all */
       gtk_widget_hide (data->win);
+      
+      if(data->debug)
+        g_printerr ("DEBUG: Hiding window.\n");
     }
 }
 
@@ -252,6 +255,8 @@ void show_window (GromitData *data)
           if(devdata->was_grabbed)
             acquire_grab (data, devdata->device);
         }
+      if(data->debug)
+        g_printerr ("DEBUG: Showing window.\n");
     }
   gdk_window_raise (gtk_widget_get_window(data->win));
 }
@@ -446,6 +451,9 @@ void clear_screen (GromitData *data)
   cairo_region_destroy(r);
 
   data->painted = 0;
+
+  if(data->debug)
+    g_printerr ("DEBUG: Cleared screen.\n");
 }
 
 
