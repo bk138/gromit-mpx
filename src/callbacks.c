@@ -26,6 +26,7 @@
 #include "gromit-mpx.h"
 #include "init.h"
 #include "callbacks.h"
+#include "config.h"
 
 
 gboolean on_expose (GtkWidget *widget,
@@ -63,10 +64,6 @@ gboolean on_configure (GtkWidget *widget,
   if(data->debug)
     g_printerr("DEBUG: got configure event\n");
 
-  //data->pixmap = gdk_pixmap_new (gtk_widget_get_window(data->area), data->width,
-  //                              data->height, -1);
-
-  
   cairo_t *cr = gdk_cairo_create(gtk_widget_get_window(data->win));
   gdk_cairo_set_source_color(cr, data->black);
   cairo_rectangle(cr, 0, 0, data->width, data->height);
@@ -89,12 +86,50 @@ void on_monitors_changed ( GdkScreen *screen,
   if(data->debug)
     g_printerr("DEBUG: screen size changed!\n");
 
+  // get new sizes
+  data->width = gdk_screen_get_width (data->screen);
+  data->height = gdk_screen_get_height (data->screen);
 
-  init_basic_stuff(data);
-    
-  init_colors(data);
+  // change sizes
+  gtk_widget_set_size_request(GTK_WIDGET(data->win), data->width, data->height);
+  gtk_widget_set_size_request(GTK_WIDGET(data->area), data->width, data->height);  
 
-  init_canvas(data);
+
+  /* recreate the shape surface */
+  cairo_surface_t *new_shape = cairo_image_surface_create(CAIRO_FORMAT_ARGB32 ,data->width, data->height);
+  cairo_t *cr = cairo_create (new_shape);
+  cairo_set_source_surface (cr, data->shape, 0, 0);
+  cairo_paint (cr);
+  cairo_destroy (cr);
+  cairo_surface_destroy(data->shape);
+  data->shape = new_shape;
+ 
+  /* 
+     these depend on the shape surface
+  */
+  GHashTableIter it;
+  gpointer value;
+  g_hash_table_iter_init (&it, data->tool_config);
+  while (g_hash_table_iter_next (&it, NULL, &value)) 
+    paint_context_free(value);
+  g_hash_table_remove_all(data->tool_config);
+
+
+  parse_config(data); // also calls paint_context_new() :-(
+
+
+  data->default_pen = paint_context_new (data, GROMIT_PEN,
+					 data->red, 7, 0);
+  data->default_eraser = paint_context_new (data, GROMIT_ERASER,
+					    data->red, 75, 0);
+
+  cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
+  gtk_widget_shape_combine_region(data->win, r);
+  cairo_region_destroy(r);
+
+  init_input_devices(data);
+
+
 
   gtk_widget_show_all (data->area);
 }
