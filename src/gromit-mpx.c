@@ -396,7 +396,7 @@ void select_tool (GromitData *data,
   //gdk_window_set_device_cursor(gtk_widget_get_window(data->area), devdata->device, cursor);
   // but that is not working...
   gdk_device_grab(devdata->device,
-		  gtk_widget_get_window(data->area),
+		  gtk_widget_get_window(data->win),
 		  GDK_OWNERSHIP_NONE,
 		  FALSE,
 		  GROMIT_MOUSE_EVENTS,
@@ -435,7 +435,7 @@ void draw_line (GromitData *data,
 
       data->modified = 1;
 
-      gdk_window_invalidate_rect(gtk_widget_get_window(data->area), &rect, 0); 
+      gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
     }
 
   data->painted = 1;
@@ -503,7 +503,7 @@ void draw_arrow (GromitData *data,
     
       data->modified = 1;
 
-      gdk_window_invalidate_rect(gtk_widget_get_window(data->area), &rect, 0); 
+      gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
     }
 
   data->painted = 1;
@@ -645,20 +645,12 @@ void setup_main_app (GromitData *data, gboolean activate)
   cairo_surface_destroy(data->shape);
   data->shape = cairo_image_surface_create(CAIRO_FORMAT_ARGB32 ,data->width, data->height);
 
-   
-  /* DRAWING AREA */
-  g_object_unref (data->area);
-  data->area = gtk_drawing_area_new ();
-  g_object_ref (data->area);
-  gtk_widget_set_size_request(GTK_WIDGET(data->area),
-			      data->width, data->height);
 
-  
   /* EVENTS */
-  gtk_widget_set_events (data->area, GROMIT_PAINT_AREA_EVENTS);
-  g_signal_connect (data->area, "draw",
+  gtk_widget_set_events (data->win, GROMIT_PAINT_AREA_EVENTS);
+  g_signal_connect (data->win, "draw",
 		    G_CALLBACK (on_expose), data);
-  g_signal_connect (data->area,"configure_event",
+  g_signal_connect (data->win,"configure_event",
 		    G_CALLBACK (on_configure), data);
   g_signal_connect (data->screen,"monitors_changed",
 		    G_CALLBACK (on_monitors_changed), data);
@@ -691,7 +683,6 @@ void setup_main_app (GromitData *data, gboolean activate)
 
 
 
-  gtk_container_add (GTK_CONTAINER (data->win), data->area);
 
   
   cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
@@ -762,7 +753,7 @@ void setup_main_app (GromitData *data, gboolean activate)
 
 
 
-  gtk_widget_show_all (data->area);
+  gtk_widget_show_all (data->win);
 
   data->painted = 0;
   hide_window (data);
@@ -962,8 +953,7 @@ int main (int argc, char **argv)
   gtk_window_set_opacity(GTK_WINDOW(data->win), 1); 
 
   gtk_widget_set_size_request (GTK_WIDGET (data->win), data->width, data->height);
-  /* gtk_widget_set_uposition (GTK_WIDGET (data->win), 0, 0); */
-  
+
   gtk_widget_set_events (data->win, GROMIT_WINDOW_EVENTS);
 
   g_signal_connect (data->win, "delete-event", gtk_main_quit, NULL);

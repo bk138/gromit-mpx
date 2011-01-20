@@ -98,7 +98,6 @@ typedef struct
 typedef struct
 {
   GtkWidget   *win;
-  GtkWidget   *area;
 
   GdkCursor   *paint_cursor;
   GdkCursor   *erase_cursor;

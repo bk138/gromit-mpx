@@ -200,7 +200,7 @@ void acquire_grab (GromitData *data,
 
 	
 	  if(gdk_device_grab(devdata->device,
-			     gtk_widget_get_window(data->area),
+			     gtk_widget_get_window(data->win),
 			     GDK_OWNERSHIP_NONE,
 			     FALSE,
 			     GROMIT_MOUSE_EVENTS,
@@ -239,7 +239,7 @@ void acquire_grab (GromitData *data,
 	cursor = data->paint_cursor; 
       
       if(gdk_device_grab(devdata->device,
-			 gtk_widget_get_window(data->area),
+			 gtk_widget_get_window(data->win),
 			 GDK_OWNERSHIP_NONE,
 			 FALSE,
 			 GROMIT_MOUSE_EVENTS,

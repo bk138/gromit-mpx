@@ -55,14 +55,6 @@ gboolean on_configure (GtkWidget *widget,
   if(data->debug)
     g_printerr("DEBUG: got configure event\n");
 
-  cairo_t *cr = gdk_cairo_create(gtk_widget_get_window(data->win));
-  gdk_cairo_set_source_color(cr, data->black);
-  cairo_rectangle(cr, 0, 0, data->width, data->height);
-  cairo_fill(cr);
-  cairo_destroy (cr);
-
-  gdk_window_set_transient_for (gtk_widget_get_window(data->area), gtk_widget_get_window(data->win));
-
   return TRUE;
 }
 
@@ -81,10 +73,8 @@ void on_monitors_changed ( GdkScreen *screen,
   data->width = gdk_screen_get_width (data->screen);
   data->height = gdk_screen_get_height (data->screen);
 
-  // change sizes
+  // change size
   gtk_widget_set_size_request(GTK_WIDGET(data->win), data->width, data->height);
-  gtk_widget_set_size_request(GTK_WIDGET(data->area), data->width, data->height);  
-
 
   /* recreate the shape surface */
   cairo_surface_t *new_shape = cairo_image_surface_create(CAIRO_FORMAT_ARGB32 ,data->width, data->height);
@@ -121,7 +111,7 @@ void on_monitors_changed ( GdkScreen *screen,
   setup_input_devices(data);
 
 
-  gtk_widget_show_all (data->area);
+  gtk_widget_show_all (data->win);
 }
 
 
@@ -194,7 +184,7 @@ gboolean on_buttonpress (GtkWidget *win,
   if (ev->state != devdata->state)
     select_tool (data, ev->device, ev->state);
 
-  gdk_window_set_background (gtk_widget_get_window(data->area),
+  gdk_window_set_background (gtk_widget_get_window(data->win),
                              devdata->cur_context->fg_color);
 
   devdata->lastx = ev->x;
@@ -246,7 +236,7 @@ gboolean on_motion (GtkWidget *win,
   if (ev->state != devdata->state) 
     {
       select_tool (data, ev->device, ev->state);
-      gdk_window_set_background (gtk_widget_get_window(data->area),
+      gdk_window_set_background (gtk_widget_get_window(data->win),
 				 devdata->cur_context->fg_color);
     }
     
