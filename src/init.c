@@ -187,7 +187,7 @@ void init_colors(GromitData *data)
 void init_canvas(GromitData *data)
 {
   /* SHAPE SURFACE*/
-  g_object_unref (data->shape);
+  cairo_surface_destroy(data->shape);
   data->shape = cairo_image_surface_create(CAIRO_FORMAT_ARGB32 ,data->width, data->height);
 
    
