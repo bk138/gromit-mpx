@@ -60,6 +60,24 @@ gboolean on_configure (GtkWidget *widget,
 
 
 
+void on_screen_changed(GtkWidget *widget,
+		       GdkScreen *previous_screen,
+		       gpointer   user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+
+  if(data->debug)
+    g_printerr("DEBUG: got screen-changed event\n");
+
+  GdkScreen *screen = gtk_widget_get_screen(GTK_WIDGET (widget));
+  GdkVisual *visual = gdk_screen_get_rgba_visual(screen);
+  if (visual == NULL)
+    visual = gdk_screen_get_system_visual (screen);
+
+  gtk_widget_set_visual (widget, visual);
+}
+
+
 
 void on_monitors_changed ( GdkScreen *screen,
 			   gpointer   user_data) 

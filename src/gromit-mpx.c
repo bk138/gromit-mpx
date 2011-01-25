@@ -647,11 +647,13 @@ void setup_main_app (GromitData *data, gboolean activate)
 
 
   /* EVENTS */
-  gtk_widget_set_events (data->win, GROMIT_PAINT_AREA_EVENTS);
+  gtk_widget_add_events (data->win, GROMIT_PAINT_AREA_EVENTS);
   g_signal_connect (data->win, "draw",
 		    G_CALLBACK (on_expose), data);
   g_signal_connect (data->win,"configure_event",
 		    G_CALLBACK (on_configure), data);
+  g_signal_connect (data->win,"screen-changed",
+		    G_CALLBACK (on_screen_changed), data);
   g_signal_connect (data->screen,"monitors_changed",
 		    G_CALLBACK (on_monitors_changed), data);
   g_signal_connect (gdk_display_get_device_manager (data->display), "device-added",
@@ -944,17 +946,22 @@ int main (int argc, char **argv)
   data->width = gdk_screen_get_width (data->screen);
   data->height = gdk_screen_get_height (data->screen);
 
-  g_object_unref(data->win);
+  /*
+    init our window
+  */
   data->win = gtk_window_new (GTK_WINDOW_POPUP);
-  g_object_ref(data->win);
+  // this sets an alpha channel
+  on_screen_changed(data->win, NULL, data);
 
   gtk_window_fullscreen(GTK_WINDOW(data->win)); 
   gtk_window_set_skip_taskbar_hint(GTK_WINDOW(data->win), TRUE);
   gtk_window_set_opacity(GTK_WINDOW(data->win), 1); 
+  gtk_widget_set_app_paintable (data->win, TRUE);
+  gtk_window_set_decorated (GTK_WINDOW (data->win), FALSE);
 
   gtk_widget_set_size_request (GTK_WIDGET (data->win), data->width, data->height);
 
-  gtk_widget_set_events (data->win, GROMIT_WINDOW_EVENTS);
+  gtk_widget_add_events (data->win, GROMIT_WINDOW_EVENTS);
 
   g_signal_connect (data->win, "delete-event", gtk_main_quit, NULL);
   g_signal_connect (data->win, "destroy", gtk_main_quit, NULL);

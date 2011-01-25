@@ -38,6 +38,10 @@ gboolean on_configure (GtkWidget *widget,
 		       gpointer user_data);
 
 
+void on_screen_changed(GtkWidget *widget,
+		       GdkScreen *previous_screen,
+		       gpointer   user_data);
+
 void on_monitors_changed(GdkScreen *screen,
 			 gpointer   user_data);
 
