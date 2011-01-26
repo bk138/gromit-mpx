@@ -961,7 +961,7 @@ int main (int argc, char **argv)
 
   gtk_window_fullscreen(GTK_WINDOW(data->win)); 
   gtk_window_set_skip_taskbar_hint(GTK_WINDOW(data->win), TRUE);
-  gtk_window_set_opacity(GTK_WINDOW(data->win), 1); 
+  gtk_window_set_opacity(GTK_WINDOW(data->win), 0.75);
   gtk_widget_set_app_paintable (data->win, TRUE);
   gtk_window_set_decorated (GTK_WINDOW (data->win), FALSE);
 
