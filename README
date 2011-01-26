@@ -150,14 +150,6 @@ quite expensive if you paint a complex pattern on screen. Especially
 terminal-programs tend to scroll incredibly slow if something is painted
 over their window. There is nothing I can do about this.
 
-Gromit partially disables DnD, since it lays a transparent window across
-the whole screen and everything gets "dropped" to this (invisible)
-window. Gromit tries to minimize this effect: When you clear the screen
-the shaped window will be hidden. It will be resurrected, when you want
-to paint something again. However: The window does not hide, if you
-erase everything with the eraser tool, you have to clear the screen
-explicitely with the "gromit --clear" command or hide Gromit with
-"gromit --visibility".
 
 This Program is distributed under the Gnu General Public License. See
 the file COPYING for details.
