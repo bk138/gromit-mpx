@@ -38,11 +38,15 @@ gboolean on_expose (GtkWidget *widget,
   if(data->debug)
     g_printerr("DEBUG: got draw event\n");
 
+  cairo_save (cr);
   cairo_set_source_surface (cr, data->shape, 0, 0);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
   cairo_paint (cr);
+  cairo_restore (cr);
 
   return TRUE;
 }
+
 
 
 
@@ -103,7 +107,7 @@ void on_monitors_changed ( GdkScreen *screen,
   cairo_surface_destroy(data->shape);
   data->shape = new_shape;
  
-  /* 
+  /*
      these depend on the shape surface
   */
   GHashTableIter it;
@@ -122,9 +126,12 @@ void on_monitors_changed ( GdkScreen *screen,
   data->default_eraser = paint_context_new (data, GROMIT_ERASER,
 					    data->red, 75, 0);
 
-  cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
-  gtk_widget_shape_combine_region(data->win, r);
-  cairo_region_destroy(r);
+  if(!data->composited)
+    {
+      cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
+      gtk_widget_input_shape_combine_region(data->win, r);
+      cairo_region_destroy(r);
+    }
 
   setup_input_devices(data);
 
@@ -224,10 +231,10 @@ gboolean on_buttonpress (GtkWidget *win,
 
   coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
 
-  if (devdata->cur_context->shape_gc && !gtk_events_pending ())
+  if (devdata->cur_context->shape_gc && !gtk_events_pending () && !data->composited)
     {
       cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
-      gtk_widget_shape_combine_region(data->win, r);
+      gtk_widget_input_shape_combine_region(data->win, r);
       cairo_region_destroy(r);
     }
 

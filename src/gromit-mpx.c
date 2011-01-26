@@ -262,9 +262,12 @@ void clear_screen (GromitData *data)
   cairo_paint (cr);
   cairo_destroy(cr);
   
-  cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
-  gtk_widget_shape_combine_region(data->win, r);
-  cairo_region_destroy(r);
+  if(!data->composited)
+    {
+      cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
+      gtk_widget_shape_combine_region(data->win, r);
+      cairo_region_destroy(r);
+    }
 
   data->painted = 0;
 
@@ -277,7 +280,7 @@ gint reshape (gpointer user_data)
 {
   GromitData *data = (GromitData *) user_data;
 
-  if (data->modified)
+  if (data->modified && !data->composited)
     {
       if (gtk_events_pending () && data->delayed < 5)
         {
@@ -686,10 +689,12 @@ void setup_main_app (GromitData *data, gboolean activate)
 
 
 
-  
-  cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
-  gtk_widget_shape_combine_region(data->win, r);
-  cairo_region_destroy(r);
+  if(!data->composited)
+    {
+      cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
+      gtk_widget_shape_combine_region(data->win, r);
+      cairo_region_destroy(r);
+    }
   
 
   /* reset settings from client setup */
@@ -942,6 +947,7 @@ int main (int argc, char **argv)
   data->display = gdk_display_get_default ();
   data->screen = gdk_display_get_default_screen (data->display);
   data->xinerama = gdk_screen_get_n_monitors (data->screen) > 1;
+  data->composited = gdk_screen_is_composited (data->screen);
   data->root = gdk_screen_get_root_window (data->screen);
   data->width = gdk_screen_get_width (data->screen);
   data->height = gdk_screen_get_height (data->screen);
@@ -950,7 +956,7 @@ int main (int argc, char **argv)
     init our window
   */
   data->win = gtk_window_new (GTK_WINDOW_POPUP);
-  // this sets an alpha channel
+  // this trys to set an alpha channel
   on_screen_changed(data->win, NULL, data);
 
   gtk_window_fullscreen(GTK_WINDOW(data->win)); 
@@ -965,7 +971,7 @@ int main (int argc, char **argv)
 
   g_signal_connect (data->win, "delete-event", gtk_main_quit, NULL);
   g_signal_connect (data->win, "destroy", gtk_main_quit, NULL);
-  /* the selectione event handlers will be overwritten if we become a mainapp */
+  /* the selection event handlers will be overwritten if we become a mainapp */
   g_signal_connect (data->win, "selection_received", 
 		    G_CALLBACK (on_clientapp_selection_received), data);
   g_signal_connect (data->win, "selection_get",
@@ -984,7 +990,7 @@ int main (int argc, char **argv)
 
 
   /* Try to get a status message. If there is a response gromit
-   * is already acive.
+   * is already active.
    */
 
   gtk_selection_convert (data->win, GA_CONTROL, GA_STATUS,

@@ -105,6 +105,7 @@ typedef struct
   GdkDisplay  *display;
   GdkScreen   *screen;
   gboolean     xinerama;
+  gboolean     composited;
   GdkWindow   *root;
   gchar       *hot_keyval;
   guint        hot_keycode;

@@ -1,3 +1,5 @@
 
 * Concurrent multi-user operation using GTK3 with Multi-Pointer-X.
 * Drawn annotations do not intercept mouse clicks.
+* Makes use of the Composite extension where available to allow
+  really fast drawing.
