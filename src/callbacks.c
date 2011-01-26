@@ -209,9 +209,6 @@ gboolean on_buttonpress (GtkWidget *win,
   if (ev->state != devdata->state)
     select_tool (data, ev->device, ev->state);
 
-  gdk_window_set_background (gtk_widget_get_window(data->win),
-                             devdata->cur_context->fg_color);
-
   devdata->lastx = ev->x;
   devdata->lasty = ev->y;
   devdata->motion_time = ev->time;
@@ -259,12 +256,7 @@ gboolean on_motion (GtkWidget *win,
     return FALSE;
 
   if (ev->state != devdata->state) 
-    {
-      select_tool (data, ev->device, ev->state);
-      gdk_window_set_background (gtk_widget_get_window(data->win),
-				 devdata->cur_context->fg_color);
-    }
-    
+    select_tool (data, ev->device, ev->state);
 
   ret = gdk_device_get_history (ev->device, ev->window,
                                 devdata->motion_time, ev->time,
