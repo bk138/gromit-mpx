@@ -625,7 +625,6 @@ void setup_main_app (GromitData *data, gboolean activate)
      CURSORS
   */
   GdkPixbuf* paint_cursor_pixbuf = gdk_pixbuf_new_from_xpm_data(paint_cursor_xpm);
-  g_object_unref(data->paint_cursor);
   data->paint_cursor = gdk_cursor_new_from_pixbuf(data->display,
 						  paint_cursor_pixbuf,
 						  paint_cursor_x_hot,
@@ -633,7 +632,6 @@ void setup_main_app (GromitData *data, gboolean activate)
   g_object_unref (paint_cursor_pixbuf);
 
   GdkPixbuf* erase_cursor_pixbuf = gdk_pixbuf_new_from_xpm_data(erase_cursor_xpm);
-  g_object_unref(data->erase_cursor);
   data->erase_cursor = gdk_cursor_new_from_pixbuf(data->display,
 						  erase_cursor_pixbuf,
 						  erase_cursor_x_hot,
