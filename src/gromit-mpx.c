@@ -971,7 +971,12 @@ int main (int argc, char **argv)
   g_signal_connect (data->win, "selection_get",
 		    G_CALLBACK (on_clientapp_selection_get), data);
   
-  gtk_widget_realize (data->win); 
+  gtk_widget_realize (data->win);
+
+  // try to set transparent for input
+  cairo_region_t* r =  cairo_region_create();
+  gdk_window_input_shape_combine_region(gtk_widget_get_window(data->win), r, 0, 0);
+  cairo_region_destroy(r);
 
   gtk_selection_owner_set (data->win, GA_DATA, GDK_CURRENT_TIME);
   gtk_selection_add_target (data->win, GA_DATA, GA_TOGGLEDATA, 1007);
