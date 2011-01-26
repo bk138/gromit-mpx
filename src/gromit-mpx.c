@@ -267,6 +267,10 @@ void clear_screen (GromitData *data)
       cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
       gtk_widget_shape_combine_region(data->win, r);
       cairo_region_destroy(r);
+      // try to set transparent for input
+      r =  cairo_region_create();
+      gdk_window_input_shape_combine_region(gtk_widget_get_window(data->win), r, 0, 0);
+      cairo_region_destroy(r);
     }
 
   data->painted = 0;
@@ -291,6 +295,11 @@ gint reshape (gpointer user_data)
 	  cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
 	  gtk_widget_shape_combine_region(data->win, r);
 	  cairo_region_destroy(r);
+	  // try to set transparent for input
+	  r =  cairo_region_create();
+	  gdk_window_input_shape_combine_region(gtk_widget_get_window(data->win), r, 0, 0);
+	  cairo_region_destroy(r);
+
 
           data->modified = 0;
           data->delayed = 0;
