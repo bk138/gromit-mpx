@@ -1,90 +1,91 @@
 Gromit-MPX
 ----------
 
-Gromit-MPX is a multi-pointer port of the original Gromit and enables
-graphical annotations with several pointers at once.
+Gromit-MPX is a multi-pointer port of the original Gromit annotation
+tool (http://www.home.unix-ag.org/simon/gromit) by Simon Budig
+<simon@budig.de>. 
 
-This port needs an XInput2-enabled version of GTK! This means GTK+
-version 2.90 or higher.
-
-Below's the original Gromit README from Simon. Everything said there
-also applies to Gromit-MPX.
-
-  Christian Beier <dontmind@freeshell.org>
-
+It enables graphical annotations with several pointers at once and is
+A LOT faster since it uses the XCOMPOSITE extension where
+available. Also, it does not inhibit Drag-and-Drop like the original
+Gromit tool.
+ 
 
 
-Gromit
-------
+What is it?
+-----------
 
-Gromit (GRaphics Over MIscellaneous Things) is a small tool to make
-annotations on the screen.
+Gromit-MPX (GRaphics Over MIscellaneous Things) is a small tool to
+make annotations on the screen.
 
-When making presentations of the Gimp I found myself often moving the
-mousepointer around the point of interest until hopefully everybody
-noticed it. This annoyed me, since it is a very vague way to highlight
-something. I dreamt of a small programm which allows me to simply draw
-on the screen, ignoring any window-borders.
+Its main use is for making presentations of some application.
+Normally, you would have to move the mouse pointer around the point of
+interest until hopefully everybody noticed it. With Gromit-MPX, you
+can draw everywhere onto the screen, highlighting some button or area.
 
-Gromit is a first implementation of this program.
 
-The main usage problem of Gromit is its activation. You need a special
-command to make Gromit grab the mouse, since you typically want to use
-the program you are demonstrating and highlighting something is a short
-interruption of your workflow.
 
-Gromit offers two ways to make this possible. It grabs the "F9" key, so
-that no other application can use it and it is available to Gromit only.
-The available commands are:
+How to use it
+-------------
+
+Since you typically want to use the program you are demonstrating and
+highlighting something is a short interruption of your workflow,
+Gromit-MPX can be toggled on and off on the fly via a hotkey:
+
+Per default, ut grabs the "F9" key, so that no other application can
+use it and it is available to Gromit-MPX only.  The available commands
+are:
 
    F9:       toggle painting
    SHIFT-F9: clear screen
    CTRL-F9:  toggle visibility
-   ALT-F9:   Quit Gromit.
+   ALT-F9:   Quit Gromit-MPX.
 
-You can specify the key to grab via "gromit --key <keysym>". Specifying
+You can specify the key to grab via "gromit-mpx --key <keysym>". Specifying
 an empty string or "none" for the keysym will prevent gromit from grabbing
 a key.
 
-Alternatively you can invoke Gromit with various arguments to control an
-already running Gromit (If you are curious: Communication between two
-gromit instances is done via a special X-Selection).
+Alternatively you can invoke Gromit-MPX with various arguments to control an
+already running Gromit-MPX .
 
 Usage:
-  gromit --quit
-      will cause the main Gromit process to quit (or "-q")
-  gromit --toggle
+  gromit-mpx --quit
+      will cause the main Gromit-Mpx-MPX process to quit (or "-q")
+  gromit-mpx --toggle
       will toggle the grabbing of the cursor (or "-t")
-  gromit --visibility
+  gromit-mpx --visibility
       will toggle the visibility of the window (or "-v")
-  gromit --clear
+  gromit-mpx --clear
       will clear the screen (or "-c")
 
-If activated Gromit prevents you from using other programs with the
+If activated Gromit-MPX prevents you from using other programs with the
 mouse. You can press the button and paint on the screen. Key presses
 (except the "F9"-Key, see above) will still reach the currently active
 window but it may be difficult to change the window-focus without mouse... 
-The next "gromit --toggle" will deactivate Gromit and you can use your
-programs as usual - only the painted regions will be obscured.
+The next "gromit-mpx --toggle" will deactivate Gromit-MPX and you can
+use your programs as usual - only the painted regions will be obscured.
 
-Gromit is pressure sensitive, if you are using properly configured
+Gromit-MPX is pressure sensitive, if you are using properly configured
 XInput-Devices you can draw lines with varying width. It is
 possible to erase something with the other end of the (Wacom) pen.
 
 
 
-Building:
+Building it
+-----------
 
-Gromit is small and lightwight. It needs GTK+ 2.X to build.
+Gromit-MPX is small and lightweight. It needs GTK+3 to build.
 Simply type "configure", "make" and "make install".
 
 
-Configuration:
 
-Gromit is configurable via the file ".gromitrc" in your Homedirectory.
-Here you can specify which Device/Button/Modifier combination invokes
-which tool. See the file "gromitconf" distributed with this program for
-an example. An overview on the syntax:
+Configuration:
+-------------
+
+Gromit-MPX is configurable via the file ".gromit-mpx.cfg" in your
+Homedirectory.  Here you can specify which Device/Button/Modifier
+combination invokes which tool. See the file "gromitconf" distributed
+with this program for an example. An overview on the syntax:
 
      # Comments can be either # Shell-Style or
      /* C-Style. */
@@ -135,26 +136,29 @@ The descision, which tool to use follows a simple policy:
   a) Buttons are more important than Modifiers
   b) Low number Buttons are more important than higher ones
   c) Modifiers: SHIFT > CONTROL > ALT/META.
-  d) Gromit tries partial matches:
+  d) Gromit-MPX tries partial matches:
       If you define "Core Pointer"[] and "Core Pointer"[SHIFT, CONTROL]
-      and only SHIFT actually is pressed, Gromit will use the second
+      and only SHIFT actually is pressed, Gromit-MPX will use the second
       definition if there is no "Core Pointer"[SHIFT] definition.
       Same logic goes for the buttons.
 
 
-Problems:
 
-Gromit may drastically slow down your X-Server, especially when you draw
-very thin lines. It makes heavily use of the shape extension, which is
+Potential Problems:
+------------------
+
+When there is no compositing manager such as Compiz or xcompmgr
+running, Gromit-MPX falls back to a legacy drawing mode. This may
+drastically slow down your X-Server, especially when you draw very
+thin lines. It makes heavy use of the shape extension, which is
 quite expensive if you paint a complex pattern on screen. Especially
-terminal-programs tend to scroll incredibly slow if something is painted
-over their window. There is nothing I can do about this.
+terminal-programs tend to scroll incredibly slow if something is
+painted over their window.
 
 
-This Program is distributed under the Gnu General Public License. See
-the file COPYING for details.
 
+Like the original Gromit, this program is distributed under the Gnu General Public License. See
+the file COPYING for details. Thanks to Simon for the groundwork done!
 
-Have fun,
-	Simon Budig <simon@budig.de>
-
+ 
+   Christian Beier <dontmind@freeshell.org>
