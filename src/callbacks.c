@@ -39,7 +39,7 @@ gboolean on_expose (GtkWidget *widget,
     g_printerr("DEBUG: got draw event\n");
 
   cairo_save (cr);
-  cairo_set_source_surface (cr, data->shape, 0, 0);
+  cairo_set_source_surface (cr, data->backbuffer, 0, 0);
   cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
   cairo_paint (cr);
   cairo_restore (cr);
@@ -105,11 +105,11 @@ void on_monitors_changed ( GdkScreen *screen,
   /* recreate the shape surface */
   cairo_surface_t *new_shape = cairo_image_surface_create(CAIRO_FORMAT_ARGB32 ,data->width, data->height);
   cairo_t *cr = cairo_create (new_shape);
-  cairo_set_source_surface (cr, data->shape, 0, 0);
+  cairo_set_source_surface (cr, data->backbuffer, 0, 0);
   cairo_paint (cr);
   cairo_destroy (cr);
-  cairo_surface_destroy(data->shape);
-  data->shape = new_shape;
+  cairo_surface_destroy(data->backbuffer);
+  data->backbuffer = new_shape;
  
   /*
      these depend on the shape surface
@@ -132,7 +132,7 @@ void on_monitors_changed ( GdkScreen *screen,
 
   if(!data->composited) // set shape
     {
-      cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
+      cairo_region_t* r = gdk_cairo_region_create_from_surface(data->backbuffer);
       gtk_widget_shape_combine_region(data->win, r);
       cairo_region_destroy(r);
     }
@@ -252,7 +252,7 @@ gboolean on_buttonpress (GtkWidget *win,
 
   /*if (devdata->cur_context->shape_gc && !gtk_events_pending () && !data->composited)
     {
-      cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
+      cairo_region_t* r = gdk_cairo_region_create_from_surface(data->backbuffer);
       gtk_widget_input_shape_combine_region(data->win, r);
       cairo_region_destroy(r);
       // try to set transparent for input

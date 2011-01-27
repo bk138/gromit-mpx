@@ -117,7 +117,7 @@ typedef struct
  
   GHashTable  *tool_config;
 
-  cairo_surface_t *shape;
+  cairo_surface_t *backbuffer;
 
   GHashTable  *devdatatable;
   gboolean     all_grabbed;

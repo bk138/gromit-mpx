@@ -52,7 +52,7 @@ GromitPaintContext *paint_context_new (GromitData *data,
   context->paint_color = paint_color;
 
   
-  context->paint_ctx = cairo_create (data->shape);
+  context->paint_ctx = cairo_create (data->backbuffer);
 
   gdk_cairo_set_source_color(context->paint_ctx, paint_color);
   cairo_set_line_width(context->paint_ctx, width);
@@ -256,7 +256,7 @@ void toggle_visibility (GromitData *data)
 
 void clear_screen (GromitData *data)
 {
-  cairo_t *cr = cairo_create(data->shape);
+  cairo_t *cr = cairo_create(data->backbuffer);
   cairo_set_source_rgba(cr, 0, 0, 0, 0);
   cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
   cairo_paint (cr);
@@ -267,7 +267,7 @@ void clear_screen (GromitData *data)
   
   if(!data->composited)
     {
-      cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
+      cairo_region_t* r = gdk_cairo_region_create_from_surface(data->backbuffer);
       gtk_widget_shape_combine_region(data->win, r);
       cairo_region_destroy(r);
       // try to set transparent for input
@@ -295,7 +295,7 @@ gint reshape (gpointer user_data)
         }
       else
         {
-	  cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
+	  cairo_region_t* r = gdk_cairo_region_create_from_surface(data->backbuffer);
 	  gtk_widget_shape_combine_region(data->win, r);
 	  cairo_region_destroy(r);
 	  // try to set transparent for input
@@ -654,8 +654,8 @@ void setup_main_app (GromitData *data, gboolean activate)
     DRAWING AREA
   */
   /* SHAPE SURFACE*/
-  cairo_surface_destroy(data->shape);
-  data->shape = cairo_image_surface_create(CAIRO_FORMAT_ARGB32 ,data->width, data->height);
+  cairo_surface_destroy(data->backbuffer);
+  data->backbuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32 ,data->width, data->height);
 
 
   /* EVENTS */
@@ -700,7 +700,7 @@ void setup_main_app (GromitData *data, gboolean activate)
 
   if(!data->composited) // set initial shape
     {
-      cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
+      cairo_region_t* r = gdk_cairo_region_create_from_surface(data->backbuffer);
       gtk_widget_shape_combine_region(data->win, r);
       cairo_region_destroy(r);
     }
