@@ -36,9 +36,7 @@
                               GDK_BUTTON_PRESS_MASK | \
                               GDK_BUTTON_RELEASE_MASK )
 
-#define GROMIT_PAINT_AREA_EVENTS  ( GROMIT_MOUSE_EVENTS | GDK_EXPOSURE_MASK )
-
-#define GROMIT_WINDOW_EVENTS ( GROMIT_PAINT_AREA_EVENTS )
+#define GROMIT_WINDOW_EVENTS ( GROMIT_MOUSE_EVENTS | GDK_EXPOSURE_MASK)
 
 /* Atoms used to control Gromit */
 #define GA_CONTROL    gdk_atom_intern ("Gromit/control", FALSE)
