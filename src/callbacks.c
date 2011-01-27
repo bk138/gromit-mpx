@@ -155,8 +155,24 @@ void on_composited_changed ( GdkScreen *screen,
 
   data->composited = gdk_screen_is_composited (data->screen);
 
-  if(data->composited) // undo shape
-    gtk_widget_shape_combine_region(data->win, NULL);
+  if(data->composited)
+    {
+      // undo shape
+      gtk_widget_shape_combine_region(data->win, NULL);
+      // re-apply transparency
+      gtk_window_set_opacity(GTK_WINDOW(data->win), 0.75);
+    }
+
+  // set anti-aliasing
+  GHashTableIter it;
+  gpointer value;
+  g_hash_table_iter_init (&it, data->tool_config);
+  while (g_hash_table_iter_next (&it, NULL, &value)) 
+    {
+      GromitPaintContext *context = value;
+      cairo_set_antialias(context->paint_ctx, data->composited ? CAIRO_ANTIALIAS_DEFAULT : CAIRO_ANTIALIAS_NONE);
+    }
+      
 
   GdkRectangle rect = {0, 0, data->width, data->height};
   gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
