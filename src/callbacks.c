@@ -97,6 +97,10 @@ void on_monitors_changed ( GdkScreen *screen,
 
   // change size
   gtk_widget_set_size_request(GTK_WIDGET(data->win), data->width, data->height);
+  // try to set transparent for input
+  cairo_region_t* r =  cairo_region_create();
+  gtk_widget_input_shape_combine_region(data->win, r);
+  cairo_region_destroy(r);
 
   /* recreate the shape surface */
   cairo_surface_t *new_shape = cairo_image_surface_create(CAIRO_FORMAT_ARGB32 ,data->width, data->height);
@@ -126,14 +130,10 @@ void on_monitors_changed ( GdkScreen *screen,
   data->default_eraser = paint_context_new (data, GROMIT_ERASER,
 					    data->red, 75, 0);
 
-  if(!data->composited)
+  if(!data->composited) // set shape
     {
       cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
-      gtk_widget_input_shape_combine_region(data->win, r);
-      cairo_region_destroy(r);
-      // try to set transparent for input
-      r =  cairo_region_create();
-      gdk_window_input_shape_combine_region(gtk_widget_get_window(data->win), r, 0, 0);
+      gtk_widget_shape_combine_region(data->win, r);
       cairo_region_destroy(r);
     }
 
@@ -143,6 +143,24 @@ void on_monitors_changed ( GdkScreen *screen,
   gtk_widget_show_all (data->win);
 }
 
+
+
+void on_composited_changed ( GdkScreen *screen,
+			   gpointer   user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+
+  if(data->debug)
+    g_printerr("DEBUG: got composited-changed event\n");
+
+  data->composited = gdk_screen_is_composited (data->screen);
+
+  if(data->composited) // undo shape
+    gtk_widget_shape_combine_region(data->win, NULL);
+
+  GdkRectangle rect = {0, 0, data->width, data->height};
+  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
+}
 
 
 
@@ -232,7 +250,7 @@ gboolean on_buttonpress (GtkWidget *win,
 
   coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
 
-  if (devdata->cur_context->shape_gc && !gtk_events_pending () && !data->composited)
+  /*if (devdata->cur_context->shape_gc && !gtk_events_pending () && !data->composited)
     {
       cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
       gtk_widget_input_shape_combine_region(data->win, r);
@@ -241,7 +259,7 @@ gboolean on_buttonpress (GtkWidget *win,
       r =  cairo_region_create();
       gdk_window_input_shape_combine_region(gtk_widget_get_window(data->win), r, 0, 0);
       cairo_region_destroy(r);
-    }
+      }*/
 
   return TRUE;
 }

@@ -45,7 +45,8 @@ void on_screen_changed(GtkWidget *widget,
 void on_monitors_changed(GdkScreen *screen,
 			 gpointer   user_data);
 
-
+void on_composited_changed(GdkScreen *screen,
+			   gpointer   user_data);
 
 void on_clientapp_selection_get (GtkWidget          *widget,
 				 GtkSelectionData   *selection_data,

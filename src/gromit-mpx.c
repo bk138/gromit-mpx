@@ -261,6 +261,9 @@ void clear_screen (GromitData *data)
   cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
   cairo_paint (cr);
   cairo_destroy(cr);
+
+  GdkRectangle rect = {0, 0, data->width, data->height};
+  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
   
   if(!data->composited)
     {
@@ -269,7 +272,7 @@ void clear_screen (GromitData *data)
       cairo_region_destroy(r);
       // try to set transparent for input
       r =  cairo_region_create();
-      gdk_window_input_shape_combine_region(gtk_widget_get_window(data->win), r, 0, 0);
+      gtk_widget_input_shape_combine_region(data->win, r);
       cairo_region_destroy(r);
     }
 
@@ -297,9 +300,8 @@ gint reshape (gpointer user_data)
 	  cairo_region_destroy(r);
 	  // try to set transparent for input
 	  r =  cairo_region_create();
-	  gdk_window_input_shape_combine_region(gtk_widget_get_window(data->win), r, 0, 0);
+	  gtk_widget_input_shape_combine_region(data->win, r);
 	  cairo_region_destroy(r);
-
 
           data->modified = 0;
           data->delayed = 0;
@@ -666,6 +668,8 @@ void setup_main_app (GromitData *data, gboolean activate)
 		    G_CALLBACK (on_screen_changed), data);
   g_signal_connect (data->screen,"monitors_changed",
 		    G_CALLBACK (on_monitors_changed), data);
+  g_signal_connect (data->screen,"composited-changed",
+		    G_CALLBACK (on_composited_changed), data);
   g_signal_connect (gdk_display_get_device_manager (data->display), "device-added",
                     G_CALLBACK (on_device_added), data);
   g_signal_connect (gdk_display_get_device_manager (data->display), "device-removed",
@@ -694,9 +698,7 @@ void setup_main_app (GromitData *data, gboolean activate)
 		    G_CALLBACK (on_mainapp_selection_received), data);
 
 
-
-
-  if(!data->composited)
+  if(!data->composited) // set initial shape
     {
       cairo_region_t* r = gdk_cairo_region_create_from_surface(data->shape);
       gtk_widget_shape_combine_region(data->win, r);
@@ -988,7 +990,7 @@ int main (int argc, char **argv)
 
   // try to set transparent for input
   cairo_region_t* r =  cairo_region_create();
-  gdk_window_input_shape_combine_region(gtk_widget_get_window(data->win), r, 0, 0);
+  gtk_widget_input_shape_combine_region(data->win, r);
   cairo_region_destroy(r);
 
   gtk_selection_owner_set (data->win, GA_DATA, GDK_CURRENT_TIME);
