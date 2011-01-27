@@ -66,8 +66,8 @@ typedef struct
   GromitPaintType type;
   guint           width;
   gfloat          arrowsize;
-  GdkColor        *fg_color;
-  cairo_t         *shape_gc;
+  GdkColor        *paint_color;
+  cairo_t         *paint_ctx;
   gdouble         pressure;
 } GromitPaintContext;
 

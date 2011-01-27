@@ -38,7 +38,7 @@
 
 GromitPaintContext *paint_context_new (GromitData *data, 
 				       GromitPaintType type,
-				       GdkColor *fg_color, 
+				       GdkColor *paint_color, 
 				       guint width,
 				       guint arrowsize)
 {
@@ -49,23 +49,23 @@ GromitPaintContext *paint_context_new (GromitData *data,
   context->type = type;
   context->width = width;
   context->arrowsize = arrowsize;
-  context->fg_color = fg_color;
+  context->paint_color = paint_color;
 
   
-  context->shape_gc = cairo_create (data->shape);
+  context->paint_ctx = cairo_create (data->shape);
 
-  gdk_cairo_set_source_color(context->shape_gc, fg_color);
-  cairo_set_line_width(context->shape_gc, width);
-  cairo_set_line_cap(context->shape_gc, CAIRO_LINE_CAP_ROUND);
-  cairo_set_line_join(context->shape_gc, CAIRO_LINE_JOIN_ROUND);
+  gdk_cairo_set_source_color(context->paint_ctx, paint_color);
+  cairo_set_line_width(context->paint_ctx, width);
+  cairo_set_line_cap(context->paint_ctx, CAIRO_LINE_CAP_ROUND);
+  cairo_set_line_join(context->paint_ctx, CAIRO_LINE_JOIN_ROUND);
   
   if (type == GROMIT_ERASER)
-    cairo_set_operator(context->shape_gc, CAIRO_OPERATOR_CLEAR);
+    cairo_set_operator(context->paint_ctx, CAIRO_OPERATOR_CLEAR);
   else
     if (type == GROMIT_RECOLOR)
-      cairo_set_operator(context->shape_gc, CAIRO_OPERATOR_ATOP);
+      cairo_set_operator(context->paint_ctx, CAIRO_OPERATOR_ATOP);
     else /* GROMIT_PEN */
-      cairo_set_operator(context->shape_gc, CAIRO_OPERATOR_OVER);
+      cairo_set_operator(context->paint_ctx, CAIRO_OPERATOR_OVER);
 
   return context;
 }
@@ -89,14 +89,14 @@ void paint_context_print (gchar *name,
 
   g_printerr ("width: %3d, ", context->width);
   g_printerr ("arrowsize: %.2f, ", context->arrowsize);
-  g_printerr ("color: #%02X%02X%02X\n", context->fg_color->red >> 8,
-              context->fg_color->green >> 8, context->fg_color->blue >> 8);
+  g_printerr ("color: #%02X%02X%02X\n", context->paint_color->red >> 8,
+              context->paint_color->green >> 8, context->paint_color->blue >> 8);
 }
 
 
 void paint_context_free (GromitPaintContext *context)
 {
-  cairo_destroy(context->shape_gc);
+  cairo_destroy(context->paint_ctx);
   g_free (context);
 }
 
@@ -437,15 +437,15 @@ void draw_line (GromitData *data,
   if(data->debug)
     g_printerr("DEBUG: draw line from %d %d to %d %d\n", x1, y1, x2, y2);
 
-  if (devdata->cur_context->shape_gc)
+  if (devdata->cur_context->paint_ctx)
     {
-      cairo_set_line_width(devdata->cur_context->shape_gc, data->maxwidth);
-      cairo_set_line_cap(devdata->cur_context->shape_gc, CAIRO_LINE_CAP_ROUND);
-      cairo_set_line_join(devdata->cur_context->shape_gc, CAIRO_LINE_JOIN_ROUND);
+      cairo_set_line_width(devdata->cur_context->paint_ctx, data->maxwidth);
+      cairo_set_line_cap(devdata->cur_context->paint_ctx, CAIRO_LINE_CAP_ROUND);
+      cairo_set_line_join(devdata->cur_context->paint_ctx, CAIRO_LINE_JOIN_ROUND);
  
-      cairo_move_to(devdata->cur_context->shape_gc, x1, y1);
-      cairo_line_to(devdata->cur_context->shape_gc, x2, y2);
-      cairo_stroke(devdata->cur_context->shape_gc);
+      cairo_move_to(devdata->cur_context->paint_ctx, x1, y1);
+      cairo_line_to(devdata->cur_context->paint_ctx, x2, y2);
+      cairo_stroke(devdata->cur_context->paint_ctx);
 
       data->modified = 1;
 
@@ -492,28 +492,28 @@ void draw_arrow (GromitData *data,
   arrowhead [3].y = y1 + 3 * width * cos (direction)
                        - 3 * width * sin (direction);
 
-  if (devdata->cur_context->shape_gc)
+  if (devdata->cur_context->paint_ctx)
     {
-      cairo_set_line_width(devdata->cur_context->shape_gc, 1);
-      cairo_set_line_cap(devdata->cur_context->shape_gc, CAIRO_LINE_CAP_ROUND);
-      cairo_set_line_join(devdata->cur_context->shape_gc, CAIRO_LINE_JOIN_ROUND);
+      cairo_set_line_width(devdata->cur_context->paint_ctx, 1);
+      cairo_set_line_cap(devdata->cur_context->paint_ctx, CAIRO_LINE_CAP_ROUND);
+      cairo_set_line_join(devdata->cur_context->paint_ctx, CAIRO_LINE_JOIN_ROUND);
  
-      cairo_move_to(devdata->cur_context->shape_gc, arrowhead[0].x, arrowhead[0].y);
-      cairo_line_to(devdata->cur_context->shape_gc, arrowhead[1].x, arrowhead[1].y);
-      cairo_line_to(devdata->cur_context->shape_gc, arrowhead[2].x, arrowhead[2].y);
-      cairo_line_to(devdata->cur_context->shape_gc, arrowhead[3].x, arrowhead[3].y);
-      cairo_fill(devdata->cur_context->shape_gc);
+      cairo_move_to(devdata->cur_context->paint_ctx, arrowhead[0].x, arrowhead[0].y);
+      cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[1].x, arrowhead[1].y);
+      cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[2].x, arrowhead[2].y);
+      cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[3].x, arrowhead[3].y);
+      cairo_fill(devdata->cur_context->paint_ctx);
 
-      gdk_cairo_set_source_color(devdata->cur_context->shape_gc, data->black);
+      gdk_cairo_set_source_color(devdata->cur_context->paint_ctx, data->black);
 
-      cairo_move_to(devdata->cur_context->shape_gc, arrowhead[0].x, arrowhead[0].y);
-      cairo_line_to(devdata->cur_context->shape_gc, arrowhead[1].x, arrowhead[1].y);
-      cairo_line_to(devdata->cur_context->shape_gc, arrowhead[2].x, arrowhead[2].y);
-      cairo_line_to(devdata->cur_context->shape_gc, arrowhead[3].x, arrowhead[3].y);
-      cairo_line_to(devdata->cur_context->shape_gc, arrowhead[0].x, arrowhead[0].y);
-      cairo_stroke(devdata->cur_context->shape_gc);
+      cairo_move_to(devdata->cur_context->paint_ctx, arrowhead[0].x, arrowhead[0].y);
+      cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[1].x, arrowhead[1].y);
+      cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[2].x, arrowhead[2].y);
+      cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[3].x, arrowhead[3].y);
+      cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[0].x, arrowhead[0].y);
+      cairo_stroke(devdata->cur_context->paint_ctx);
 
-      gdk_cairo_set_source_color(devdata->cur_context->shape_gc, devdata->cur_context->fg_color);
+      gdk_cairo_set_source_color(devdata->cur_context->paint_ctx, devdata->cur_context->paint_color);
     
       data->modified = 1;
 

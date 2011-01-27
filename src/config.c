@@ -211,7 +211,7 @@ void parse_config (GromitData *data)
                   type = context_template->type;
                   width = context_template->width;
                   arrowsize = context_template->arrowsize;
-                  fg_color = context_template->fg_color;
+                  fg_color = context_template->paint_color;
                 }
               else
                 {
