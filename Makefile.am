@@ -14,7 +14,7 @@ Applicationsdir = $(datadir)/applications/
 Applications_DATA = data/gromit-mpx.desktop
 
 pixmapdir = $(datadir)/pixmaps
-pixmap_DATA = data/gromit-mpx.xpm
+pixmap_DATA = data/gromit-mpx.png
 
 configdir = $(sysconfdir)/gromit-mpx
 config_DATA = data/gromit-mpx.cfg
