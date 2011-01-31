@@ -33,10 +33,6 @@ void setup_input_devices (GromitData *data)
     {
       GdkDevice *device = (GdkDevice *) d->data;
     
-      /* Guess "Eraser"-Type devices */
-      if (strstr (gdk_device_get_name(device), "raser") || strstr (gdk_device_get_name(device), "RASER"))
-	gdk_device_set_source (device, GDK_SOURCE_ERASER);
-
       /* only enable devices with 2 ore more axes */
       if (gdk_device_get_n_axes(device) >= 2)
         {
