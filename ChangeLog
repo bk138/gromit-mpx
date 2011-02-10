@@ -1,3 +1,598 @@
+commit 794c2ddd6c60620608d68aa9bfca2e6dcc8288cd
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Feb 10 23:27:08 2011 +0100
+
+    Bring manpage up to date.
+
+commit f56f54fb5862042f300ff51713a03beede912f25
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Feb 10 23:21:34 2011 +0100
+
+    Update debian packaging.
+
+commit 725f8727a07e1385e8c16b01db93ff6878165254
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Feb 10 23:12:54 2011 +0100
+
+    Raise version to 1.0
+
+commit d1542b0893a6f99fda8a79526b7a035be3997b35
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Feb 10 23:12:11 2011 +0100
+
+    Raise GTK version requirement.
+
+commit 94486f4aa9588565bddaa9684ae85a4c5a8db63d
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Jan 31 19:41:48 2011 +0100
+
+    Adapt to changed GTK3 API.
+
+commit a3e8cbd1505fbd86e2e36e29136c90d5ee43cb3d
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 27 18:14:09 2011 +0100
+
+    Use a PNG icon instead of XPM.
+
+commit 29ae56a653fb8e5b486f7356b9c6e708740713e6
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 27 17:44:26 2011 +0100
+
+    Adapt README, update NEWS.
+
+commit 62df11b02a8ec9d0c7a345a2dfe5236e6da631a2
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 27 16:41:03 2011 +0100
+
+    Turn of anti-aliasing when running non-composited.
+
+commit de2613eae0214082c75d8132060ab1680aa084e2
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 27 16:04:03 2011 +0100
+
+    Remove commented out code.
+
+commit 39f9608635e15257e8fc5f802be18ecfaac33ec7
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 27 16:01:52 2011 +0100
+
+    Rename data->shape.
+
+commit 232007b03a78a0acef6b67ab73c7b44323a4bdc8
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 27 15:56:44 2011 +0100
+
+    Rename shape_gc and fg_color.
+
+commit 709a2a77937ea1214de8f2cda6ed697ac590fd11
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 27 15:47:10 2011 +0100
+
+    Remove unneeded define.
+
+commit 37b30ef249b09fa2ce06e697cbccba07158eb0f7
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 27 14:11:16 2011 +0100
+
+    Handle compositing support change. Invalidate window when needed.
+
+commit 2f0528a2bafb056d2afaf709f16bcf6f164d5c03
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 27 00:02:55 2011 +0100
+
+    Remove obsolete README part.
+
+commit b146e4314763013f641beacddce367732bab386e
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 27 00:00:00 2011 +0100
+
+    Set input shape mask every time we change the shape.
+
+commit 1d7c2acddf8508c8df3dc93f9329868584e21646
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jan 26 23:10:35 2011 +0100
+
+    Remove unneeded changing of window background colour.
+
+commit 46ab12cf8715b44fa6c4350fa2865fd0397bc5ea
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jan 26 22:42:47 2011 +0100
+
+    Fix some warnings.
+
+commit 0e649b7028edf37f44681729b42b703a8a861262
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jan 26 22:08:14 2011 +0100
+
+    Draw with 75% opacity to make annotations slightly transparent.
+
+commit 29013ae51a89c271a2d5eacc288c7148845b1217
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jan 26 21:12:57 2011 +0100
+
+    Make use of XCOMPOSITE where available. Really fast drawing!
+
+commit b88b4134ca0153ebe08f65c556fb16bf0e02ae67
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jan 26 21:07:36 2011 +0100
+
+    Update NEWS.
+
+commit 5e4b3f1b7c80ac34cd6fb862734ea9cc61f4855e
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jan 26 21:05:51 2011 +0100
+
+    Set drawn stuff transparent for input.
+
+commit 4cfaa61e1ffa77aa9c56da767ee29291331fd8e3
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jan 26 00:04:45 2011 +0100
+
+    Possibility to add an alpha channel to main window.
+
+commit 89c1985b87f62b71d5bbbc2be442ea0a6cc07550
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue Jan 25 19:39:16 2011 +0100
+
+    Update TODO.
+
+commit 34221c550a982294795b8c16282d69787ae31120
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Jan 21 00:04:01 2011 +0100
+
+    Get rid of that extra drawing widget.
+
+commit a7aa282f51749ca99d5e7f22092ad90e602929f2
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 20 23:46:33 2011 +0100
+
+    Update NEWS + TODO.
+
+commit 92cebc419ec2c0761f1d3ef69c7645a08e34d4ea
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 20 23:01:08 2011 +0100
+
+    Get rid of one useless drawing context. Fix arrow drawing as well.
+
+commit 47bbd2706bb85bbcc0f59fa2451b4c910dbb52ad
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 20 22:01:59 2011 +0100
+
+    Fix redraw after unhide.
+    
+    Before, everything was restored with the same colour.
+
+commit d31fded484482740dabc251ef21d45821dc202c2
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 20 21:35:23 2011 +0100
+
+    Use right signal.
+
+commit 65834551d1c949cfbeceb1745139c7a8547df3f9
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 20 20:38:43 2011 +0100
+
+    Update TODO.
+
+commit 80998c31107dd4fb26b08eb04b005e4ca7895971
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 20 20:12:42 2011 +0100
+
+    refactor (once again)
+
+commit bc7a694ab9ce5883f526511d571697ec4cde99cf
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 20 19:53:35 2011 +0100
+
+    Make it work after screen resize.
+
+commit 776f2279797fc742ca6e11456eb8826c05e2c921
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 20 17:30:43 2011 +0100
+
+    Add some debug output.
+
+commit db0614a33fadaf428a8c65874760efd267d9c531
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 20 17:11:48 2011 +0100
+
+    Another potential memleak.
+
+commit 1fdde85ed325f8b76c1bd77da4bad3a3b68ab01b
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 20 17:06:56 2011 +0100
+
+    Plug memleak in shape combine.
+
+commit 5c867d636260157bf13f5ff048ee421dae6f5381
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 20 17:00:48 2011 +0100
+
+    PLug memleak in device init.
+
+commit 6b2b04597990755f46aa9ea402e56f79cc5fa478
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 20 16:45:10 2011 +0100
+
+    Update TODO.
+
+commit faa8f7c9023a062419322e7662ecbe6d79131b54
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 20 16:22:24 2011 +0100
+
+    Make clear_screen() work again.
+
+commit 39b3029a711b20f2a50862749a82447a40e0b7be
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 20 16:00:16 2011 +0100
+
+    Revert "Revert "Zero devdata->motion_time on ungrab.""
+    
+    This reverts commit baec3333beb16b5746b85f392889fef54ee5293e.
+    
+    Ooops.
+
+commit 77e13e17511ce4e02b702c4403764ad8eb8e3c48
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 20 15:56:12 2011 +0100
+
+    Fix typo.
+
+commit baec3333beb16b5746b85f392889fef54ee5293e
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 20 15:54:44 2011 +0100
+
+    Revert "Zero devdata->motion_time on ungrab."
+    
+    This reverts commit ea3a22879686c1dd3f7042c2a6950289e5b50ac2.
+
+commit 517872da06bf419363ca26849c1040ee5f7741b5
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jan 20 15:49:43 2011 +0100
+
+    The great big GTK3 compatibility commit.
+    
+    Hopefully the last one. Next for some cleanup.
+
+commit 68cf6140e77bb7d3d5dac432a9edb45fb1eaf77b
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue Nov 16 00:46:30 2010 +0100
+
+    Change hotkey to F9.
+
+commit ea3a22879686c1dd3f7042c2a6950289e5b50ac2
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Nov 8 23:09:38 2010 +0100
+
+    Zero devdata->motion_time on ungrab.
+    
+    This works around a (gtk?) bug where after grab, ungrab, grab the
+    button down event is lost, letting gromit-mpx draw from last_*
+    coords (dating from before the ungrab) to current position. Gahh.
+
+commit 6a9ac468e278f4f9c704ea8693894d306b838a74
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Oct 21 19:31:11 2010 +0200
+
+    Fix crash on screen change.
+
+commit 4d84d1885a0c7ca59969d4adb6090d7ba37fe9f9
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Oct 21 19:11:44 2010 +0200
+
+    Big refactoring. Fix some memleaks, fewer LOC.
+
+commit 8933904af9a77f62d2f5df4ae0b9a87f5b97cab8
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Oct 21 18:00:31 2010 +0200
+
+    Some more UGLY workarounds.
+
+commit bc4ebd8d20d18d719c133adc0300c94544ebb33d
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue Oct 19 15:10:08 2010 +0200
+
+    Workaround buggy getting of attached keyboard via GDK.
+
+commit 02f54532eb5b97bfee37379f84d2bbdcf3d74082
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue Oct 19 13:00:11 2010 +0200
+
+    Make cursor xpms const char*.
+
+commit f051158999b8961ec66d18abc6f24e118ef439bc
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue Oct 19 12:58:00 2010 +0200
+
+    Include hotspot in cursor xpm's.
+
+commit 82fa00996eb775c5631b1e3365d0b9d002614faf
+Merge: 3462a28 dfb94a9
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue Oct 19 12:55:15 2010 +0200
+
+    Merge branch 'master' of github.com:bk138/gromit-mpx
+
+commit 3462a2861b561fa3290cd13628ff12358329aec8
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue Oct 19 12:54:51 2010 +0200
+
+    Better cursors.
+
+commit dfb94a9bcb004559a4bd3f7a7448555fbee2eb6f
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue Oct 12 13:28:49 2010 +0200
+
+    Remove most of commented out code.
+
+commit 250be7259e513c199964684579d277b2721461d9
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Oct 7 15:35:13 2010 +0200
+
+    Update TODO.
+
+commit 7c788f840478245fc3c816d42bbb41fc9fd48053
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Sep 6 18:07:27 2010 +0200
+
+    Move config file related define to config.h
+
+commit a335295f88b826d9e40d54e5551ce66ac9a3325c
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Sep 6 17:58:28 2010 +0200
+
+    Remove gromit_ prefix from all functions.
+
+commit 1e186a1b3d3b9f235a8b0a8bc4b7ea539b095096
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Sep 6 17:47:48 2010 +0200
+
+    Some more cleanup.
+
+commit 4a30de31a5b8576d651aa6951cb728ea481e3747
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Sep 6 17:41:48 2010 +0200
+
+    Better callback function names.
+
+commit a14109e6965fe7b0850e21e557ff3c9d78961d99
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Sep 6 17:25:46 2010 +0200
+
+    Make colour change on modifier keys when mouse button down and moving.
+
+commit 4902110671d6056884f6899b9520202e5c7e452e
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Sep 6 17:17:08 2010 +0200
+
+    Update TODO.
+
+commit a09faa7341e408c572344ee0d241611cb8710425
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Sep 6 17:04:55 2010 +0200
+
+    Workaround grey line being drawn on startup.
+
+commit 7e77e0cebbb82546f073ec74e9a6e98bd155743d
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Sep 6 15:15:08 2010 +0200
+
+    Workaround broken device cursor setting.
+
+commit 64470a84b61902d03ca4286a6f39804d509c7ae0
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Sep 4 16:59:16 2010 +0200
+
+    Make Eraser work again. But cursor still not changed. GTK bug?
+
+commit ba8ad5d48cae735b5cbc1d078f052c3c51d7f4dd
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Sep 4 16:39:38 2010 +0200
+
+    Re-add some formerly removed lines as comments.
+
+commit 6927a26c64c21d73de4e03a4e2c6aa1cf8c4d405
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Sep 3 18:49:44 2010 +0200
+
+    Some debug output.
+
+commit 58abfab08255669f5482b5cfeb35f1c42c58602c
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Sep 3 18:32:30 2010 +0200
+
+    First early stab at porting to Cairo.
+    
+    TODO:
+     * eraser
+     * clean startup without grey line
+     * code cleanup
+
+commit 583c9782d074603e22bd9ccea132e38420a08a36
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue Jun 22 14:22:34 2010 +0200
+
+    Update manpage.
+
+commit b4e3f55b3304bc82db2bcc27527cbba8a9066e51
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue Jun 22 14:13:22 2010 +0200
+
+    Add debian packaging.
+
+commit 3bd11f237a490bc64a7acc4cbc1f8ebbc81c8c4f
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue Jun 22 14:11:36 2010 +0200
+
+    Add .desktop file and icon, rename config file.
+
+commit b5aff5e7687dcc425cd5df27bd661fc328a8c3eb
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue Jun 15 14:18:43 2010 +0200
+
+    Use GTK/GDK accessor functions throughout the code.
+
+commit 9be68d0ef0c1f6563987ccc63b71fb8db84fa5fc
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Jun 11 16:02:44 2010 +0200
+
+    Act on master pointer add or removal.
+
+commit 6d495414eb1a4d3329d5af02330364e5d8192db7
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jun 2 17:14:35 2010 +0200
+
+    Re-add gromit_select_tool() call to paintto().
+
+commit e922ef293f2b6667eadf675012d7800fef3decdb
+Merge: 376e0d6 cf273c5
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jun 2 16:39:15 2010 +0200
+
+    Merge branch 'master' of github.com:bk138/gromit-mpx
+    
+    Resolved conflicts:
+    	TODO
+
+commit 376e0d6179635ced4c8d9724727d6d8764984f94
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jun 2 16:36:11 2010 +0200
+
+    Grab hotkey per-device!
+    
+    With XIAllMasterDevices it doesn't seem to work. Anyway, we now have
+    per-device hotkey handling!
+
+commit 5d177b7d072ed6aae32ff2eeb581aca64f5c6f52
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jun 2 14:19:12 2010 +0200
+
+    Revert "Remove XInput stuff from build system."
+    
+    This reverts commit fc6841192289a53dd7682053c1171c15051c7d83.
+
+commit cf273c5558f3638c2095ebb78ef48571b6d53a0b
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu May 27 20:59:29 2010 +0200
+
+    Update README and TODO.
+
+commit 6d0f5822e14ffb9dc59bbdcb08f765f64fd7f639
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed May 26 15:32:02 2010 +0200
+
+    Change some C++ style comments to proper C style.
+
+commit 647543d90735ab5d25190581d615fbaa5f4d9e35
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue May 25 16:14:20 2010 +0200
+
+    Change toggle_grab() to take a GdkDevice* arg.
+    
+    And fix a segfault in gromit_acquire_grab().
+
+commit 99222701a808ca7b0dc23b8f7148abb82ed3099b
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue May 25 15:07:15 2010 +0200
+
+    Add device getter to hotkey handler.
+
+commit cf80650446a00c5b64a3477ee9d42ac8921b1cf8
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue May 25 13:39:44 2010 +0200
+
+    Update TODO.
+
+commit fc6841192289a53dd7682053c1171c15051c7d83
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue May 25 12:41:43 2010 +0200
+
+    Remove XInput stuff from build system.
+
+commit dbe41ece078af8b2863b2aadc4f310d4f3e1442b
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue May 25 12:39:17 2010 +0200
+
+    Split out config file parsing into extra files.
+
+commit 6bacd6064d82ccb1701e84492caf35dd6716ffad
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue May 25 11:59:32 2010 +0200
+
+    Change cursor whith the grab call.
+
+commit a50f3944d20c89655fd8283c0d1bd79f32e782a1
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue May 25 11:37:52 2010 +0200
+
+    Really fix device indexing.
+
+commit 6844981cea48e9e2ef0a27adddd3993ed6881895
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue May 25 11:09:56 2010 +0200
+
+    Remove last Xinput remnants.
+
+commit c1f977b83af3ae6531b2724158c95e9155fac6d4
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue May 25 10:58:18 2010 +0200
+
+    Adapt grab index to device order.
+
+commit c3d87b89029c615d799bf2c2180fde1c997defd2
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue May 25 10:39:43 2010 +0200
+
+    Use GDK cursors again.
+
+commit 21bc55cf904039fe4662a7c350a05b3ac83baf86
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue May 25 10:28:51 2010 +0200
+
+    Re-enable gdk_device_get_history() usage.
+
+commit 11b4b8b9c2f19989c787ece8b69991b5d3fb6278
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue May 25 09:20:36 2010 +0200
+
+    Remove device_id member from device data.
+
+commit 68e905e0cc2f534c346789e503f50df8c70b77d1
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue May 25 09:19:53 2010 +0200
+
+    Add -DGTK_MULTIDEVICE_SAFE to CFLAGS.
+
+commit 87c5e7c7913b52ed80c7ea41a2c3a9ce752c91d9
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue May 25 00:44:32 2010 +0200
+
+    Make it build with GTK3.
+
+commit 52a68771f0bb7d51234586d51c8ad7948a7a4cd2
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon May 24 23:10:33 2010 +0200
+
+    Raise GTK+ requirement to GTK+-3.0.
+
+commit 50345a3eecc17281c9c8e5568e931fe14f6cd6d7
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Apr 15 23:02:11 2010 +0200
+
+    More README updates.
+
+commit 41c1569edfa93e7a0fc375842e2251410a8ff733
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Apr 15 22:53:48 2010 +0200
+
+    Update ChangeLog.
+
+commit 9dc89a7bde08a6ca68e8029867cad00b1b4ed567
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Apr 15 22:53:28 2010 +0200
+
+    Really update README.
+
 commit 5b1849c033f60e942cc708e6476a33cad00f5299
 Author: Christian Beier <dontmind@freeshell.org>
 Date:   Thu Apr 15 22:46:57 2010 +0200
@@ -106,104 +701,3 @@ Author: Christian Beier <dontmind@freeshell.org>
 Date:   Thu May 14 21:14:15 2009 +0200
 
     initial import.
-
-
-
-Here are the pre-git change logs:
-
-
-2008-12-29 Christian Beier  <dontmind@freeshell.org>
-
-	* gromit.c: 
-	- changed to use g_signal* instead of gtk_signal* stuff
-	
-2008-12-23 Christian Beier  <dontmind@freeshell.org>
-
-	* gromit.c: 
-	- changed cursor setup to use X functions
-	- changed cursor source to xpm
-	- all this to make cursor setting device specific
-
-2008-12-21  Christian Beier  <dontmind@freeshell.org>
-
-	* gromit.c: 
-	- added trapping of XErrors when we try to grab/ungrab a device that's 
-	  been removed
-	
-2008-12-21  Christian Beier  <dontmind@freeshell.org>
-
-	* gromit.c: 
-	- made remote control a 2 way communication to be able to specify which 
-	  device to toggle
-
-2008-12-20  Christian Beier  <dontmind@freeshell.org>
-
-	* gromit.c: 
-	- made grabbing device specific
-
-2008-12-19  Christian Beier  <dontmind@freeshell.org>
-
-	* gromit.c: 
-	- fixed -d switch to actually work
-	- added 'default' device  support for config file. this is a fallback
-	  if no device matches
-	- added -r switch to reload devices list via remote control
-
-2008-12-18  Christian Beier  <dontmind@freeshell.org>
-	
-	* gromit.c: 
-	- moved lastx, lasty, motion_time, coord_list, device, 
-	  state, cur_context variables into device specific GromitDeviceData 
-	  and adjusted rest of the code
-
-2004-12-13  Simon Budig  <simon@gimp.org>
-	
-	* gromit.c: - Make activation on startup possible (gromit -a)
-	- add configure option for the key to grab (gromit -k "Pause")
-
-	* README: Adjusted.
-
-2004-10-14  Simon Budig  <simon@gimp.org>
-
-	* gromit.c: - Fix pressure sensitivity
-	- massive indentation madness.
-
-	* README: Adjusted to the XGrabKey change.
-
-2004-10-14  Simon Budig  <simon@gimp.org>
-
-	* gromit.c: - Use XGrabKey to grab the "Pause" key of the keyboard.
-	Use it to control gromits functionality. The selection-hack is no
-	longer needed (but still available).
-
-2004-10-14  Simon Budig  <simon@gimp.org>
-
-	* gromit.c: - Applied a (slightly modified) patch from
-	Bastien Nocera (hadess@hadess.net) to port gromit to GTK+ 2. Still
-	needs some testing with a Tablet.
-	- removed deprecated stuff
-	- changed the activation of input devices, having mice as extended
-	input devices apparently confuses GDK.
-
-2003-03-04  Simon Budig  <simon@gimp.org>
-
-	* gromit.c: Make sure that the arrowhead is connected to the line.
-	Draw black outline around the arrowhead.
-	Have just one global last coordinate. Tackles some problems when
-	switching tools while drawing.
-
-2001-12-10  Simon Budig  <simon@gimp.org>
-
-	* README
-	* gromit.c:  Implemented Arrowheads,
-		     changed Name of resourcefile to "~/.gromitrc"
-
-2001-02-26  Simon Budig  <simon@gimp.org>
-	
-	* */* Sorry, no real changelog.
-
-2000-08-28  Simon Budig  <simon@gimp.org>
-
-        * */* First version
-
-
