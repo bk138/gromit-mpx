@@ -1,3 +1,21 @@
+commit a0341543c2e0f1e008d798d70f9d80c89ba6cc81
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Feb 10 23:52:15 2011 +0100
+
+    Make debian packaging lintian conform.
+
+commit ec91795dc79e5d31a4122a9a1853caed9696cffb
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Feb 10 23:42:35 2011 +0100
+
+    Small fix to manpage.
+
+commit 8702b40b71698e30aa7bc65329ecfe9df5e9e0ce
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Feb 10 23:31:27 2011 +0100
+
+    Update ChangeLog.
+
 commit 794c2ddd6c60620608d68aa9bfca2e6dcc8288cd
 Author: Christian Beier <dontmind@freeshell.org>
 Date:   Thu Feb 10 23:27:08 2011 +0100
