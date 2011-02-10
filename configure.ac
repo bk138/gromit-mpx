@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT(gromit-mpx, 0.1, http://dontmind.freeshell.org)
+AC_INIT(gromit-mpx, 1.0, http://dontmind.freeshell.org)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_CONFIG_HEADER(config.h)
 
