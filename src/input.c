@@ -34,7 +34,7 @@ void setup_input_devices (GromitData *data)
       GdkDevice *device = (GdkDevice *) d->data;
     
       /* only enable devices with 2 ore more axes */
-      if (gdk_device_get_n_axes(device) >= 2)
+      if (gdk_device_get_source(device) != GDK_SOURCE_KEYBOARD && gdk_device_get_n_axes(device) >= 2)
         {
           gdk_device_set_mode (device, GDK_MODE_SCREEN);
 
