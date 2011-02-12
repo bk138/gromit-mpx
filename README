@@ -28,11 +28,12 @@ can draw everywhere onto the screen, highlighting some button or area.
 How to use it
 -------------
 
-Since you typically want to use the program you are demonstrating and
-highlighting something is a short interruption of your workflow,
-Gromit-MPX can be toggled on and off on the fly via a hotkey:
+You can operate Gromit-MPX using its tray icon, but since you typically
+want to use the program you are demonstrating and highlighting something
+is a short interruption of your workflow, Gromit-MPX can be toggled on 
+and off on the fly via a hotkey:
 
-Per default, ut grabs the "F9" key, so that no other application can
+Per default, it grabs the "F9" key, so that no other application can
 use it and it is available to Gromit-MPX only.  The available commands
 are:
 

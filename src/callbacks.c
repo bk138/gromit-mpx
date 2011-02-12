@@ -543,12 +543,65 @@ void on_device_added (GdkDeviceManager *device_manager,
 
 
 
+
+static void on_clear (GtkMenuItem *menuitem,
+		      gpointer     user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+  clear_screen(data);
+}
+
+
+static void on_toggle_vis(GtkMenuItem *menuitem,
+			  gpointer     user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+  toggle_visibility(data);
+}
+
+
+
 void on_trayicon_activate (GtkStatusIcon *status_icon,
 			   gpointer       user_data)
 {
   GromitData *data = (GromitData *) user_data;
   if(data->debug)
     g_printerr("DEBUG: trayicon activated\n");
+
+  /* create the menu */
+  GtkWidget *menu = gtk_menu_new ();
+  
+  /* Create the menu items */
+  GtkWidget* toggle_paint_item = gtk_image_menu_item_new_with_label ("Toggle Painting");
+  GtkWidget* clear_item = gtk_image_menu_item_new_with_label ("Clear Screen");
+  GtkWidget* toggle_vis_item = gtk_image_menu_item_new_with_label ("Toggle Visibility");
+
+
+  /* Add them to the menu */
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), toggle_paint_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), clear_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), toggle_vis_item);
+
+
+  /* Attach the callback functions to the respective activate signal */
+  // TODO add per-device submenu for toggle_paint_item 
+  g_signal_connect(G_OBJECT (clear_item), "activate",
+		   G_CALLBACK (on_clear),
+		   data);
+  g_signal_connect(G_OBJECT (toggle_vis_item), "activate",
+		   G_CALLBACK (on_toggle_vis),
+		   data);
+ 
+
+  /* We do need to show menu items */
+  gtk_widget_show (toggle_paint_item);
+  gtk_widget_show (clear_item);
+  gtk_widget_show (toggle_vis_item);
+ 
+
+  /* show menu */
+  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
+                  0, gtk_get_current_event_time());
 }
 
 
@@ -563,7 +616,32 @@ void on_trayicon_menu (GtkStatusIcon *status_icon,
   if(data->debug)
     g_printerr("DEBUG: trayicon menu popup\n");
 
+  /* create the menu */
+  GtkWidget *menu = gtk_menu_new ();
+  /* Create the menu items */
+  //TODO option menu
+  GtkWidget* sep_item = gtk_separator_menu_item_new();
+  GtkWidget* quit_item = gtk_image_menu_item_new_from_stock(GTK_STOCK_QUIT, NULL);
 
+
+  /* Add them to the menu */
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), sep_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), quit_item);
+
+  /* Attach the callback functions to the respective activate signal */
+  g_signal_connect(G_OBJECT (quit_item), "activate",
+		   G_CALLBACK (gtk_main_quit),
+		   NULL);
+
+
+  /* We do need to show menu items */
+  gtk_widget_show (sep_item);
+  gtk_widget_show (quit_item);
+
+
+  /* show menu */
+  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
+                  0, gtk_get_current_event_time());
 }
 
 
