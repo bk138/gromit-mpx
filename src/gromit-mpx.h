@@ -96,6 +96,7 @@ typedef struct
 typedef struct
 {
   GtkWidget   *win;
+  GtkStatusIcon *trayicon;
 
   GdkCursor   *paint_cursor;
   GdkCursor   *erase_cursor;

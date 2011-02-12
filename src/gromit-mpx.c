@@ -792,6 +792,17 @@ void setup_main_app (GromitData *data, gboolean activate)
 
   if (activate)
     acquire_grab (data, NULL); /* grab all */
+
+  /* 
+     TRAY ICON
+  */
+  data->trayicon = gtk_status_icon_new_from_file("/usr/share/pixmaps/gromit-mpx.png");
+  gtk_status_icon_set_tooltip_text (data->trayicon, "Gromit-MPX");
+  g_signal_connect (data->trayicon, "activate",
+		    G_CALLBACK (on_trayicon_activate), data);
+  g_signal_connect (data->trayicon, "popup-menu",
+		    G_CALLBACK (on_trayicon_menu), data);
+
 }
 
 void parse_print_help (gpointer key, gpointer value, gpointer user_data)

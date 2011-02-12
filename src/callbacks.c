@@ -541,3 +541,30 @@ void on_device_added (GdkDeviceManager *device_manager,
   setup_input_devices(data);
 }
 
+
+
+void on_trayicon_activate (GtkStatusIcon *status_icon,
+			   gpointer       user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+  if(data->debug)
+    g_printerr("DEBUG: trayicon activated\n");
+}
+
+
+
+
+void on_trayicon_menu (GtkStatusIcon *status_icon,
+		       guint          button,
+		       guint          activate_time,
+		       gpointer       user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+  if(data->debug)
+    g_printerr("DEBUG: trayicon menu popup\n");
+
+
+}
+
+
+
