@@ -97,7 +97,7 @@ void setup_input_devices (GromitData *data)
 			     nmods,
 			     modifiers);
 
-	      gdk_flush ();
+	      XSync(GDK_DISPLAY_XDISPLAY(data->display), False);
 	      if(gdk_error_trap_pop())
 		{
 		  g_printerr("ERROR: Grabbing hotkey from keyboard device %d failed.\n",
