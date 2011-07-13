@@ -33,6 +33,11 @@ PKG_CHECK_MODULES([XINPUT2], [xi >= 1.3])
 AC_SUBST(XINPUT2_CFLAGS)
 AC_SUBST(XINPUT2_LIBS)
 
+# check for XInput
+PKG_CHECK_MODULES([X11], [x11])
+AC_SUBST(X11_CFLAGS)
+AC_SUBST(X11_LIBS)
+
 
 
 # ***************************************************************************
