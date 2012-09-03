@@ -2,6 +2,7 @@
 
 AC_INIT(gromit-mpx, 1.0, http://dontmind.freeshell.org)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AM_CONFIG_HEADER(config.h)
 
 
