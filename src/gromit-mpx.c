@@ -987,7 +987,7 @@ int main (int argc, char **argv)
   gtk_widget_set_app_paintable (data->win, TRUE);
   gtk_window_set_decorated (GTK_WINDOW (data->win), FALSE);
 
-  gtk_widget_set_size_request (GTK_WIDGET (data->win), data->width, data->height);
+  gtk_widget_set_size_request (GTK_WIDGET (data->win), data->width, data->height-1);
 
   gtk_widget_add_events (data->win, GROMIT_WINDOW_EVENTS);
 
