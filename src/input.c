@@ -28,7 +28,10 @@ void setup_input_devices (GromitData *data)
   GList *devices, *d;
   int i = 0;
 
-  devices = gdk_device_manager_list_devices(device_manager, GDK_DEVICE_TYPE_MASTER);
+  devices = g_list_concat(gdk_device_manager_list_devices
+                          (device_manager, GDK_DEVICE_TYPE_MASTER),
+                          gdk_device_manager_list_devices
+                          (device_manager, GDK_DEVICE_TYPE_SLAVE));
   for(d = devices; d; d = d->next)
     {
       GdkDevice *device = (GdkDevice *) d->data;
@@ -47,14 +50,20 @@ void setup_input_devices (GromitData *data)
 	  /* get attached keyboard and grab the hotkey */
 	  if (!data->hot_keycode)
 	    {
-	      g_printerr("ERROR: Grabbing hotkey from attached keyboard of '%s' failed, no hotkey defined.\n",
+	      g_printerr("ERROR: Grabbing hotkey from attached keyboard "
+                         "of '%s' failed, no hotkey defined.\n",
 			 gdk_device_get_name(device));
 	      g_free(devdata);
 	      continue;
 	    }
 
+          /* if this is a slave device, we need the master */
+          GdkDevice *kdevice=device;
+          if(gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_SLAVE)
+            kdevice=gdk_device_get_associated_device (device);
+
 	  gint dev_id = -1;
-	  g_object_get(device, "device-id", &dev_id, NULL);
+	  g_object_get(kdevice, "device-id", &dev_id, NULL);
 
 	  gint kbd_dev_id = -1;
 	  XIDeviceInfo* devinfo;
@@ -66,7 +75,6 @@ void setup_input_devices (GromitData *data)
 	  if(devicecount)
 	    kbd_dev_id = devinfo->attachment;
 	  XIFreeDeviceInfo(devinfo);
-	  
  
 	  if(kbd_dev_id != -1)
 	    {
@@ -106,9 +114,7 @@ void setup_input_devices (GromitData *data)
 		  continue;
 		}
 	    }
-	    
 
-         
 	  g_hash_table_insert(data->devdatatable, device, devdata);
           g_printerr ("Enabled Device %d: \"%s\", (Type: %d)\n", 
 		      i++, gdk_device_get_name(device), gdk_device_get_source(device));
@@ -227,33 +233,31 @@ void acquire_grab (GromitData *data,
       return;
     }
 
-
-  /* get the data for this device */
-  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
-
+  GromitDeviceData *devdata =
+    g_hash_table_lookup(data->devdatatable, dev);
   if (!devdata->is_grabbed)
     {
       GdkCursor *cursor;
       if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
-	cursor = data->erase_cursor; 
+        cursor = data->erase_cursor; 
       else
-	cursor = data->paint_cursor; 
+        cursor = data->paint_cursor; 
       
       if(gdk_device_grab(devdata->device,
-			 gtk_widget_get_window(data->win),
-			 GDK_OWNERSHIP_NONE,
-			 FALSE,
-			 GROMIT_MOUSE_EVENTS,
-			 cursor,
-			 GDK_CURRENT_TIME) != GDK_GRAB_SUCCESS)
-	{
-	  /* this probably means the device table is outdated,
-	     e.g. this device doesn't exist anymore */
-	  g_printerr("Error grabbing device '%s', rescanning device list.\n", 
-		     gdk_device_get_name(devdata->device));
-	  setup_input_devices(data);
-	  return;
-	}
+                         gtk_widget_get_window(data->win),
+                         GDK_OWNERSHIP_NONE,
+                         FALSE,
+                         GROMIT_MOUSE_EVENTS,
+                         cursor,
+                         GDK_CURRENT_TIME) != GDK_GRAB_SUCCESS)
+        {
+          /* this probably means the device table is outdated,
+             e.g. this device doesn't exist anymore */
+          g_printerr("Error grabbing device '%s', rescanning device list.\n", 
+                     gdk_device_get_name(devdata->device));
+          setup_input_devices(data);
+          return;
+        }
 
       devdata->is_grabbed = 1;
       
@@ -273,12 +277,11 @@ void toggle_grab (GromitData *data,
 	release_grab (data, NULL);
       else
 	acquire_grab (data, NULL);
-      return; 
+      return;
     }
 
-  /* get the data for this device */
-  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
-      
+  GromitDeviceData *devdata =
+    g_hash_table_lookup(data->devdatatable, dev);
   if(devdata)
     {
       if(devdata->is_grabbed)

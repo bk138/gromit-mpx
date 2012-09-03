@@ -30,13 +30,12 @@
 #include <gtk/gtk.h>
 
 
-#define GROMIT_MOUSE_EVENTS ( GDK_PROXIMITY_IN_MASK | \
-                              GDK_PROXIMITY_OUT_MASK | \
+#define GROMIT_MOUSE_EVENTS ( GDK_POINTER_MOTION_MASK | \
                               GDK_BUTTON_MOTION_MASK | \
                               GDK_BUTTON_PRESS_MASK | \
                               GDK_BUTTON_RELEASE_MASK )
 
-#define GROMIT_WINDOW_EVENTS ( GROMIT_MOUSE_EVENTS | GDK_EXPOSURE_MASK)
+#define GROMIT_WINDOW_EVENTS ( GROMIT_MOUSE_EVENTS | GDK_EXPOSURE_MASK )
 
 /* Atoms used to control Gromit */
 #define GA_CONTROL    gdk_atom_intern ("Gromit/control", FALSE)
@@ -90,6 +89,7 @@ typedef struct
   GromitPaintContext *cur_context;
   gboolean     is_grabbed;
   gboolean     was_grabbed;
+  GdkDevice*   lastslave;
 } GromitDeviceData;
 
 
@@ -144,7 +144,7 @@ void show_window (GromitData *data);
 
 void parse_print_help (gpointer key, gpointer value, gpointer user_data);
 
-void select_tool (GromitData *data, GdkDevice *device, guint state);
+void select_tool (GromitData *data, GdkDevice *master, GdkDevice *slave, guint state);
 
 void draw_line (GromitData *data, GdkDevice *dev, gint x1, gint y1, gint x2, gint y2);
 void draw_arrow (GromitData *data, GdkDevice *dev, gint x1, gint y1, gint width, gfloat direction);

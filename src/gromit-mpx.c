@@ -314,7 +314,8 @@ gint reshape (gpointer user_data)
 
 
 void select_tool (GromitData *data, 
-		  GdkDevice *device, 
+		  GdkDevice *master, 
+		  GdkDevice *slave, 
 		  guint state)
 {
   guint buttons = 0, modifier = 0, len = 0, default_len = 0;
@@ -325,12 +326,15 @@ void select_tool (GromitData *data,
   guchar *default_name;
 
   /* get the data for this device */
-  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, device);
+  GromitDeviceData *masterdata =
+    g_hash_table_lookup(data->devdatatable, master);
+  GromitDeviceData *slavedata =
+    g_hash_table_lookup(data->devdatatable, slave);
  
-  if (device)
+  if (slave)
     {
-      len = strlen (gdk_device_get_name(device));
-      name = (guchar*) g_strndup (gdk_device_get_name(device), len + 3);
+      len = strlen (gdk_device_get_name(slave));
+      name = (guchar*) g_strndup (gdk_device_get_name(slave), len + 3);
       default_len = strlen(DEFAULT_DEVICE_NAME);
       default_name = (guchar*) g_strndup (DEFAULT_DEVICE_NAME, default_len + 3);
       
@@ -371,7 +375,7 @@ void select_tool (GromitData *data,
                 {
                   if(data->debug)
                     g_printerr("DEBUG: Context %s set\n", name);
-                  devdata->cur_context = context;
+                  slavedata->cur_context = context;
                   success = 1;
                 }
               else /* try default_name */
@@ -379,7 +383,7 @@ void select_tool (GromitData *data,
                   {
                     if(data->debug)
                       g_printerr("DEBUG: Default context %s set\n", default_name);
-                    devdata->cur_context = context;
+                    slavedata->cur_context = context;
                     success = 1;
                   }
                 
@@ -393,33 +397,40 @@ void select_tool (GromitData *data,
 
       if (!success)
         {
-          if (gdk_device_get_source(device) == GDK_SOURCE_ERASER)
-            devdata->cur_context = data->default_eraser;
+          if (gdk_device_get_source(slave) == GDK_SOURCE_ERASER)
+            slavedata->cur_context = data->default_eraser;
           else
-            devdata->cur_context = data->default_pen;
+            slavedata->cur_context = data->default_pen;
         }
     }
   else
     g_printerr ("ERROR: Attempt to select nonexistent device!\n");
 
   GdkCursor *cursor;
-  if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
-    cursor = data->erase_cursor; 
+  if(slavedata->cur_context && slavedata->cur_context->type == GROMIT_ERASER)
+    cursor = data->erase_cursor;
   else
-    cursor = data->paint_cursor; 
+    cursor = data->paint_cursor;
 
-  // FIXME: should be 
-  //gdk_window_set_device_cursor(gtk_widget_get_window(data->area), devdata->device, cursor);
-  // but that is not working...
-  gdk_device_grab(devdata->device,
-		  gtk_widget_get_window(data->win),
-		  GDK_OWNERSHIP_NONE,
-		  FALSE,
-		  GROMIT_MOUSE_EVENTS,
-		  cursor,
-		  GDK_CURRENT_TIME);
-   
-  devdata->state = state;
+
+  if(data->debug)
+    g_printerr("DEBUG: Setting cursor %p\n",cursor);
+
+
+  //FIXME!  Should be:
+  //gdk_window_set_cursor(gtk_widget_get_window(data->win), cursor);
+  // doesn't work during a grab?
+  gdk_device_grab(master,
+  		  gtk_widget_get_window(data->win),
+  		  GDK_OWNERSHIP_NONE,
+  		  FALSE,
+  		  GROMIT_MOUSE_EVENTS,
+  		  cursor,
+  		  GDK_CURRENT_TIME);
+
+  masterdata->lastslave = slave;
+  masterdata->state = state;
+  slavedata->state = state;
 }
 
 
@@ -682,10 +693,6 @@ void setup_main_app (GromitData *data, gboolean activate)
 		    G_CALLBACK (on_buttonpress), data);
   g_signal_connect (data->win, "button_release_event",
 		    G_CALLBACK (on_buttonrelease), data);
-  g_signal_connect (data->win, "proximity_in_event",
-		    G_CALLBACK (on_proximity_in), data);
-  g_signal_connect (data->win, "proximity_out_event",
-		    G_CALLBACK (on_proximity_out), data);
   /* disconnect previously defined selection handlers */
   g_signal_handlers_disconnect_by_func (data->win, 
 					G_CALLBACK (on_clientapp_selection_get),
