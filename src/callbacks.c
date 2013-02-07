@@ -471,10 +471,10 @@ void on_mainapp_selection_received (GtkWidget *widget,
     {
       if(gtk_selection_data_get_target(selection_data) == GA_TOGGLEDATA )
         {
-	  int dev_nr = strtoull((gchar*)gtk_selection_data_get_data(selection_data), NULL, 10);
+	  intptr_t dev_nr = strtoull((gchar*)gtk_selection_data_get_data(selection_data), NULL, 10);
 	  
           if(data->debug)
-            g_printerr("DEBUG: mainapp got toggle id '%d' back from client.\n", dev_nr);
+	    g_printerr("DEBUG: mainapp got toggle id '%ld' back from client.\n", (long)dev_nr);
 
 	  if(dev_nr < 0)
 	    toggle_grab(data, NULL); /* toggle all */
@@ -497,7 +497,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
 	      if(devdata)
 		toggle_grab(data, devdata->device);
 	      else
-		g_printerr("ERROR: No device at index %d.\n", dev_nr);
+		g_printerr("ERROR: No device at index %ld.\n", (long)dev_nr);
 	    }
         }
     }

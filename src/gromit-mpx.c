@@ -388,9 +388,9 @@ void select_tool (GromitData *data,
                   }
                 
             }
-          while (j<=3 && req_modifier >= (1 << j));
+          while (j<=3 && req_modifier >= (1u << j));
         }
-      while (i<=5 && req_buttons >= (1 << i));
+      while (i<=5 && req_buttons >= (1u << i));
 
       g_free (name);
       g_free (default_name);
