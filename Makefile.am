@@ -2,8 +2,7 @@
 
 SUBDIRS = src 
 
-gromit_mpxdocdir = $(datadir)/doc/gromit-mpx
-gromit_mpxdoc_DATA = \
+doc_DATA = \
 	README\
 	AUTHORS\
 	ChangeLog\
@@ -19,9 +18,8 @@ pixmap_DATA = data/gromit-mpx.png \
 configdir = $(sysconfdir)/gromit-mpx
 config_DATA = data/gromit-mpx.cfg
 
-EXTRA_DIST = $(gromit_mpxdoc_DATA) \
+EXTRA_DIST = $(doc_DATA) \
              $(Applications_DATA) \
              $(pixmap_DATA) \
              $(config_DATA) \
              COPYING
-
