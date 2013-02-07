@@ -15,6 +15,10 @@ pixmapdir = $(datadir)/pixmaps
 pixmap_DATA = data/gromit-mpx.png \
               data/gromit-mpx.xpm
 
+
+scalabledir = $(datadir)/icons/hicolor/scalable/apps
+scalable_DATA = data/gromit-mpx.svg
+
 configdir = $(sysconfdir)/gromit-mpx
 config_DATA = data/gromit-mpx.cfg
 
