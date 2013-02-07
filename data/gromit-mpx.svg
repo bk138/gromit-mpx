@@ -13,8 +13,8 @@
    height="32px"
    id="svg2816"
    version="1.1"
-   inkscape:version="0.48.1 r9760"
-   sodipodi:docname="gromit.svg">
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="gromit-mpx.svg">
   <defs
      id="defs2818">
     <inkscape:perspective
@@ -47,16 +47,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="23.201941"
-     inkscape:cx="26.834745"
-     inkscape:cy="17.325194"
+     inkscape:cx="31.781127"
+     inkscape:cy="16.21603"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
      inkscape:window-width="1920"
-     inkscape:window-height="1149"
-     inkscape:window-x="0"
-     inkscape:window-y="26"
+     inkscape:window-height="1174"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata2821">
@@ -100,5 +100,25 @@
            inkscape:connector-curvature="0" />
       </g>
     </g>
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Rufscript;-inkscape-font-specification:Rufscript Italic"
+       x="5.3012805"
+       y="23.940329"
+       id="text2990"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2992" /></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#00ff00;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:mikachan;-inkscape-font-specification:mikachan"
+       x="7.499373"
+       y="15.277262"
+       id="text2994"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2996"
+         x="7.499373"
+         y="15.277262">MPX</tspan></text>
   </g>
 </svg>
