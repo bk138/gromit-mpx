@@ -631,8 +631,6 @@ void main_do_event (GdkEventAny *event,
 
 void setup_main_app (GromitData *data, gboolean activate)
 {
-  gboolean   have_key = FALSE;
-
   /* COLOURS */
   g_free(data->white);
   g_free(data->black);
@@ -763,7 +761,6 @@ void setup_main_app (GromitData *data, gboolean activate)
               exit (1);
             }
 
-          have_key = TRUE;
           data->hot_keycode = keys[0].keycode;
           g_free (keys);
         }
