@@ -15,6 +15,7 @@ pixmapdir = $(datadir)/pixmaps
 pixmap_DATA = data/gromit-mpx.png \
               data/gromit-mpx.xpm
 
+man_MANS = gromit-mpx.1
 
 scalabledir = $(datadir)/icons/hicolor/scalable/apps
 scalable_DATA = data/gromit-mpx.svg
