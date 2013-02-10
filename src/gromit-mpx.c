@@ -822,7 +822,7 @@ int app_parse_args (int argc, char **argv, GromitData *data)
    gboolean  wrong_arg = FALSE;
    gboolean  activate = FALSE;
 
-   data->hot_keyval = "F9";
+   data->hot_keyval = DEFAULT_HOTKEY;
    data->hot_keycode = 0;
 
    for (i=1; i < argc ; i++)
