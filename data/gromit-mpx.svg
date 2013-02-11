@@ -47,16 +47,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="16.40625"
-     inkscape:cx="36.005881"
-     inkscape:cy="16.235425"
+     inkscape:cx="36.127786"
+     inkscape:cy="16.204949"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
      inkscape:window-width="1920"
-     inkscape:window-height="1144"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-height="1174"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata2821">
@@ -111,14 +111,14 @@
          id="tspan2992" /></text>
     <text
        xml:space="preserve"
-       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#00ff00;fill-opacity:1;stroke:#000000;stroke-width:0.40000001;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Johnny Mac Scrawl BRK;-inkscape-font-specification:Johnny Mac Scrawl BRK"
-       x="4.2678471"
-       y="16.075989"
+       style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#00ff00;fill-opacity:1;stroke:#000000;stroke-width:0.40000001;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:mikachan-PB;-inkscape-font-specification:mikachan-PB"
+       x="2.7440374"
+       y="17.782656"
        id="text2994"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan2996"
-         x="4.2678471"
-         y="16.075989">MPX</tspan></text>
+         x="2.7440374"
+         y="17.782656">MPX</tspan></text>
   </g>
 </svg>
