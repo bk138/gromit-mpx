@@ -223,6 +223,9 @@ void on_clientapp_selection_received (GtkWidget *widget,
 
 
 
+static float line_thickener = 0;
+
+
 gboolean on_buttonpress (GtkWidget *win, 
 			 GdkEventButton *ev,
 			 gpointer user_data)
@@ -265,7 +268,7 @@ gboolean on_buttonpress (GtkWidget *win,
   else
     {
       gdk_event_get_axis ((GdkEvent *) ev, GDK_AXIS_PRESSURE, &pressure);
-      data->maxwidth = (CLAMP (pressure * pressure,0,1) *
+      data->maxwidth = (CLAMP (pressure * pressure + line_thickener,0,1) *
                         (double) slavedata->cur_context->width);
     }
   if (ev->button <= 5)
@@ -329,7 +332,7 @@ gboolean on_motion (GtkWidget *win,
               if (gdk_device_get_source(slave) == GDK_SOURCE_MOUSE)
                 data->maxwidth = slavedata->cur_context->width;
               else
-                data->maxwidth = (CLAMP (pressure * pressure, 0, 1) *
+                data->maxwidth = (CLAMP (pressure * pressure + line_thickener, 0, 1) *
                                   (double) slavedata->cur_context->width);
 
               gdk_device_get_axis(slave, coords[i]->axes,
@@ -357,7 +360,7 @@ gboolean on_motion (GtkWidget *win,
       if (gdk_device_get_source(slave) == GDK_SOURCE_MOUSE)
 	data->maxwidth = slavedata->cur_context->width;
       else
-        data->maxwidth = (CLAMP (pressure * pressure,0,1) *
+        data->maxwidth = (CLAMP (pressure * pressure + line_thickener,0,1) *
                           (double)slavedata->cur_context->width);
 
       if(slavedata->motion_time > 0)
@@ -560,6 +563,21 @@ static void on_toggle_vis(GtkMenuItem *menuitem,
 
 
 
+static void on_thicker_lines(GtkMenuItem *menuitem,
+			     gpointer     user_data)
+{
+  line_thickener += 0.1;
+}
+
+static void on_thinner_lines(GtkMenuItem *menuitem,
+			     gpointer     user_data)
+{
+  line_thickener -= 0.1;
+  if (line_thickener < -1)
+    line_thickener = -1;
+}
+
+
 void on_trayicon_activate (GtkStatusIcon *status_icon,
 			   gpointer       user_data)
 {
@@ -574,12 +592,16 @@ void on_trayicon_activate (GtkStatusIcon *status_icon,
   GtkWidget* toggle_paint_item = gtk_image_menu_item_new_with_label ("Toggle Painting");
   GtkWidget* clear_item = gtk_image_menu_item_new_with_label ("Clear Screen");
   GtkWidget* toggle_vis_item = gtk_image_menu_item_new_with_label ("Toggle Visibility");
+  GtkWidget* thicker_lines_item = gtk_image_menu_item_new_with_label ("Thicker Lines");
+  GtkWidget* thinner_lines_item = gtk_image_menu_item_new_with_label ("Thinner Lines");
 
 
   /* Add them to the menu */
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), toggle_paint_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), clear_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), toggle_vis_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), thicker_lines_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), thinner_lines_item);
 
 
   /* Attach the callback functions to the respective activate signal */
@@ -590,12 +612,21 @@ void on_trayicon_activate (GtkStatusIcon *status_icon,
   g_signal_connect(G_OBJECT (toggle_vis_item), "activate",
 		   G_CALLBACK (on_toggle_vis),
 		   data);
+
+  g_signal_connect(G_OBJECT (thicker_lines_item), "activate",
+		   G_CALLBACK (on_thicker_lines),
+		   data);
+  g_signal_connect(G_OBJECT (thinner_lines_item), "activate",
+		   G_CALLBACK (on_thinner_lines),
+		   data);
  
 
   /* We do need to show menu items */
   gtk_widget_show (toggle_paint_item);
   gtk_widget_show (clear_item);
   gtk_widget_show (toggle_vis_item);
+  gtk_widget_show (thicker_lines_item);
+  gtk_widget_show (thinner_lines_item);
  
 
   /* show menu */
