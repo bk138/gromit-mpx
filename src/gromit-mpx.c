@@ -870,13 +870,13 @@ int app_parse_args (int argc, char **argv, GromitData *data)
          }
        else
          {
-           g_printerr ("Unknown Option for Gromit startup: \"%s\"\n", arg);
+           g_printerr ("Unknown Option for Gromit-MPX startup: \"%s\"\n", arg);
            wrong_arg = TRUE;
          }
 
        if (wrong_arg)
          {
-           g_printerr ("Please see the Gromit manpage for the correct usage\n");
+           g_printerr ("Please see the Gromit-MPX manpage for the correct usage\n");
            exit (1);
          }
      }
@@ -939,7 +939,7 @@ int main_client (int argc, char **argv, GromitData *data)
          }
        else
          {
-           g_printerr ("Unknown Option to control a running Gromit process: \"%s\"\n", arg);
+           g_printerr ("Unknown Option to control a running Gromit-MPX process: \"%s\"\n", arg);
            wrong_arg = TRUE;
          }
 
@@ -951,7 +951,7 @@ int main_client (int argc, char **argv, GromitData *data)
          }
        else if(wrong_arg)
          {
-           g_printerr ("Please see the Gromit manpage for the correct usage\n");
+           g_printerr ("Please see the Gromit-MPX manpage for the correct usage\n");
            return 1;
          }
      }
