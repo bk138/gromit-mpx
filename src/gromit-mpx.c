@@ -388,9 +388,9 @@ void select_tool (GromitData *data,
                   }
                 
             }
-          while (j<=3 && req_modifier >= (1 << j));
+          while (j<=3 && req_modifier >= (1u << j));
         }
-      while (i<=5 && req_buttons >= (1 << i));
+      while (i<=5 && req_buttons >= (1u << i));
 
       g_free (name);
       g_free (default_name);
@@ -631,8 +631,6 @@ void main_do_event (GdkEventAny *event,
 
 void setup_main_app (GromitData *data, gboolean activate)
 {
-  gboolean   have_key = FALSE;
-
   /* COLOURS */
   g_free(data->white);
   g_free(data->black);
@@ -763,7 +761,6 @@ void setup_main_app (GromitData *data, gboolean activate)
               exit (1);
             }
 
-          have_key = TRUE;
           data->hot_keycode = keys[0].keycode;
           g_free (keys);
         }
@@ -825,7 +822,7 @@ int app_parse_args (int argc, char **argv, GromitData *data)
    gboolean  wrong_arg = FALSE;
    gboolean  activate = FALSE;
 
-   data->hot_keyval = "F9";
+   data->hot_keyval = DEFAULT_HOTKEY;
    data->hot_keycode = 0;
 
    for (i=1; i < argc ; i++)
