@@ -117,7 +117,7 @@ void parse_config (GromitData *data)
   guint width, arrowsize;
 
   filename = g_strjoin (G_DIR_SEPARATOR_S,
-                        g_get_user_config_dir(), ".gromit-mpx.cfg", NULL);
+                        g_get_user_config_dir(), "gromit-mpx.cfg", NULL);
   file = open (filename, O_RDONLY);
 
   if (file < 0)
