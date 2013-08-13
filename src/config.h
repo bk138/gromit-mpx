@@ -31,5 +31,9 @@
 
 void parse_config (GromitData *data);
 
+/* fallback hot key, if not specified on command line or in config file */
+#ifndef DEFAULT_HOTKEY
+#define DEFAULT_HOTKEY "F9"
+#endif
 
 #endif
