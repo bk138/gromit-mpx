@@ -78,6 +78,8 @@ Building it
 Gromit-MPX is small and lightweight. It needs GTK+3 to build.
 Simply type "configure", "make" and "make install".
 
+If you checked out from git instead of using the tarball, an
+"autoreconf --install" is needed to setup the build system.
 
 
 Configuration:
