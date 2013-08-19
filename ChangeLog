@@ -1,3 +1,263 @@
+commit 2d0542bdca5f1ba2d5fad8b0b7dfc4cddd9f4e1a
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Aug 18 14:23:55 2013 +0200
+
+    Update README with more precise build instructions.
+
+commit 1f3714d8d0f178d2267d3d3b6db678a2420fc7bb
+Merge: e3af81c 78cfa4f
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue Aug 13 10:51:59 2013 -0700
+
+    Merge pull request #1 from barak/upstream-tweaks
+    
+    Merge work done by Barak A. Pearlmutter: autotools update, icon and desktop file update, silence compiler warnings etc.
+
+commit 78cfa4fdb33d41123997fe77a15a51afc97e8bad
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Tue Aug 13 00:42:21 2013 +0200
+
+    update URL to new upstream home
+
+commit fd49ec62fe87c540c8f029a3aa0cdacf9fc2d4c6
+Merge: e9fe472 e3af81c
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Tue Aug 13 00:35:02 2013 +0200
+
+    Merge branch 'upstream' into upstream-tweaks
+
+commit e3af81c48baba3cd12538d94c670e5e6f7fcf0bd
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue Aug 13 00:04:29 2013 +0200
+
+    Rename Gromit mentions in stderr to Gromit-MPX.
+
+commit 142c4ed39d66d4ae613bb5987f3bda517406eb6c
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue Aug 13 00:02:27 2013 +0200
+
+    Do not use a leading . for files stored in $XDG_CONFIG_HOME.
+
+commit e9fe4723bd263e50f6bc2af7afe2e7fd719d35bc
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Sat Feb 16 23:52:42 2013 +0000
+
+    line thickener menu item
+
+commit 1e45014a2bbb352f666e87983f7c6fb987aff69b
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Mon Feb 11 10:12:36 2013 +0000
+
+    thicken MPX on icon for visibility
+
+commit 726aed3a2baa83a80e88c519c8fdb891a79e4d33
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Fri Feb 8 14:22:01 2013 +0000
+
+    remove debian subdirectory from package proper
+
+commit 07a3eed9489a63f8542ae1cab846516fd8f4d964
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Fri Feb 8 14:21:43 2013 +0000
+
+    move man page into package proper
+
+commit fd0df3ba22d9f493c7199e66b9ba1ca3b37f7a26
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Sun Feb 10 23:14:50 2013 +0000
+
+    add cpp macro DEFAULT_HOTKEY that can be -D'ed at compile time
+
+commit 8798bbec36f4798fd3bca68030e15e917d42da03
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Sun Feb 10 15:19:31 2013 +0000
+
+    change font of "MPX" in scalable icon
+
+commit 2f6c3c759aff912f680188e7889d44a3dfc053d9
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Thu Feb 7 16:46:53 2013 +0000
+
+    Add "MPX" to scalable icon.
+
+commit 358b6c43bb19b7fd852ab1eec07caf2895298251
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Thu Feb 7 16:38:59 2013 +0000
+
+    Add scalable icon, copied from debian gromit git repo; inform Makefile.am
+    
+    The scalable icon is installed in .../icons/scalable/apps/
+
+commit 7ed810b2185df1cc5d3af919260e03787c2ce1e2
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Thu Feb 7 10:37:42 2013 +0000
+
+    Git ignore build debris.
+
+commit aa95fa9407228a26d1110216ce2eb8f1b5411caf
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Thu Feb 7 10:36:18 2013 +0000
+
+    Update autotools.
+    
+    Delete autogen.sh as this script is unnecessary.
+    Just use: autoreconf --install
+    
+    Run autoupdate, autoscan.
+    
+    Remove gromit_mpxdocdir; docdir is standard and points to the correct
+    package-specific documentation directory.
+    
+    Remove -lm from Makefile.am, instead support in configure.ac
+    
+    Appropriate AC_SUBSTs are done inside PKG_CHECK_MODULES, can remove
+    from configure.ac.
+    
+    Pass libraries from configure to make via standard interface: LIBS.
+    
+    Prune configure.ac debugging support (-DDEBUG is unused) and
+    migrate remaining extra compiler warning options to Makefile.am.
+    
+    Add correct package bug report pointer and homepage.
+    
+    Delete INSTALL, as it is created by autoreconf (if foreign is removed.)
+    
+    Automake maintainer-mode is goo is deprecated, remove.
+
+commit 753fc6e876f502dc3556f6ee3098dd161840ba62
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Thu Feb 7 16:05:33 2013 +0000
+
+    Snarf desktop file tweaks from repo: git://github.com/pld-linux/gromit
+
+commit ac6aeebe20173ea3a7435f6b5447849b3b688450
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Thu Feb 7 11:04:37 2013 +0000
+
+    Address desktop-file-validate issues.
+
+commit fe1c5b1ad0fbee9768c0e954ec9c0ab9c22e0bc8
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Thu Feb 7 15:55:56 2013 +0000
+
+    Remove unused variable have_key.
+
+commit f6296ed45397d38bb531cd4e738ced3e8babc132
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Thu Feb 7 15:52:28 2013 +0000
+
+    Silence sign/size compiler warnings.
+
+commit 5b224b9792ccdb52f50740ca3c124331bf707049
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Sep 3 16:33:29 2012 +0200
+
+    Use XDG .config dir for user config file.
+
+commit 335ff721b4416a4d5cd03a987f81716101e03540
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Sep 3 16:25:39 2012 +0200
+
+    Only grab master devices.
+    
+    If we grab slaves as well, we get no input at all.
+
+commit 58bdef4d49ab4269fedda55e825ce8ad8a62076c
+Author: Monty Montgomery <xiphmont@gmail.com>
+Date:   Mon Sep 3 16:03:47 2012 +0200
+
+    Add reasonably complete support for slave devices.
+    
+    The current code doesn't see slave devices. I'm guessing it all worked
+    when you originally updated the code since most of the support was already
+    there, but it got broken by further shifts in the XI2 model.
+    
+    1) I have a thinkpad tablet and the old gromit (which otherwise worked
+    rather poorly) let me configure the
+    trackpad/touchpoint/touchscreen/wacom pen and wacom eraser separately.
+    Gromit-mpx only sees 'Virtual Core Pointer'.  This patch adds
+    (updates?) slave visibility through XI2.
+    
+    2) Proximity events are deprecated (they're still in the headers but
+    do nothing).  I've eliminated that code and gone to a strategy of
+    doing 'proximity' events through mouse motion.
+
+commit e5d460eca4ccc3021ddd3eb8ea7aa08700afc21a
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Sep 3 15:49:41 2012 +0200
+
+    Enable silent make if available.
+
+commit 16a8dfcf8909f74ee303d23d33a5bf304ff42918
+Author: Monty Montgomery <xiphmont@gmail.com>
+Date:   Mon Sep 3 15:18:44 2012 +0200
+
+    Reduce the requested height in the size_request by one.
+    
+    The GNOME3 panel doesn't hide then when gromit-mpx is activated.
+    It looks like the panel is doing this on purpose because we're on top
+    and it thinks we want full screen.
+
+commit 13d2e8e19868737d80fe6c1d9ab480cddb62eb1c
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Oct 27 01:50:53 2011 +0200
+
+    Add libm to linker flags.
+
+commit 761b882b422a4fcb7ce556a40e04a356bbc906dc
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Jul 14 00:01:56 2011 +0200
+
+    Add libx11 dependency since we're using XSync().
+
+commit f2d99ce4d55374cd0d7901f6db30fe4593d7e346
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon May 9 18:37:21 2011 +0200
+
+    Fix crash when grabbed device goes away.
+
+commit 31219f4243849174ebcac230b726333f8fb97e66
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Apr 29 18:40:44 2011 +0200
+
+    Get rid of extra build flags.
+
+commit 73c52d654c9e54f73d0a05dc5134d8544a6a68a1
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Apr 29 18:37:46 2011 +0200
+
+    Use XSync() instead of gdk_flush().
+
+commit baa86b20462083bbb03b7239a463cddf1f3c26d3
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Apr 29 18:36:17 2011 +0200
+
+    Fix build dep.
+
+commit 43f73854d457856064df21dab7381cc97bb005ac
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Feb 12 17:52:01 2011 +0100
+
+    Some more tray icon work.
+
+commit e8e09bd806bbbe1f4dab0e1b1e442c075c043bda
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Feb 12 16:33:07 2011 +0100
+
+    Fix a runtime warning.
+
+commit 0403cae96db2b44e5361c96f9a1d8d36922a4db2
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Feb 12 16:26:59 2011 +0100
+
+    First stab at tray icon.
+
+commit acebbb960fcb7b8aa562292e6e6b6391818baa01
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Feb 10 23:59:33 2011 +0100
+
+    Last ChangeLog update for 1.0.
+
 commit a0341543c2e0f1e008d798d70f9d80c89ba6cc81
 Author: Christian Beier <dontmind@freeshell.org>
 Date:   Thu Feb 10 23:52:15 2011 +0100

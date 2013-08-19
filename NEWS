@@ -1,4 +1,10 @@
 
+Gromit-MPX 1.1
+   * Added reasonably complete support for slave devices thanks to Monty Montgomery.
+   * Tweaked build system, packaging, icon thanks to Barak A. Pearlmutter.
+   * Fixed some crashes.
+
+
 Gromit-MPX 1.0
    * Concurrent multi-user operation using GTK3 with Multi-Pointer-X.
    * Drawn annotations do not intercept mouse clicks.
