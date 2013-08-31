@@ -85,9 +85,10 @@ If you checked out from git instead of using the tarball, an
 Configuration:
 -------------
 
-Gromit-MPX is configurable via the file ".gromit-mpx.cfg" in your
-Homedirectory.  Here you can specify which Device/Button/Modifier
-combination invokes which tool. See the file "gromitconf" distributed
+Gromit-MPX is configurable via the file "gromit-mpx.cfg" in the
+directory defined by $XDG_CONFIG_HOME (usually ~/.config).  
+Here you can specify which Device/Button/Modifier
+combination invokes which tool. See the copy of "gromit-mpx.cfg" distributed
 with this program for an example. An overview on the syntax:
 
      # Comments can be either # Shell-Style or
