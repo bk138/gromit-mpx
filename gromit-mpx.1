@@ -68,6 +68,18 @@ identifying the key with the keysym can fail. You can then use the keycode
 to specify the key uniquely. To determine the keycode for different keys you
 can use the \fBxev\fP(1) command.
 .TP
+.B \-u <keysym>, \-\-undo\-key <keysym>
+will change the key used to undo/redo strokes. <keysym> can e.g. be
+"F9", "F12", "Control_R" or "Print". To determine the keysym for
+different keys you can use the \fBxev\fP(1) command. You can specify "none"
+to prevent Gromit-MPX from grabbing a key.
+.TP
+.B \-U <keycode>, \-\-undo\-keycode <keycode>
+will change the key used to undo/redo strokes. Under rare circumstances
+identifying the key with the keysym can fail. You can then use the keycode
+to specify the key uniquely. To determine the keycode for different keys you
+can use the \fBxev\fP(1) command.
+.TP
 .B \-d, \-\-debug
 gives some debug output.
 .SH OPTIONS (CONTROL)

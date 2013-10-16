@@ -33,18 +33,21 @@ want to use the program you are demonstrating and highlighting something
 is a short interruption of your workflow, Gromit-MPX can be toggled on 
 and off on the fly via a hotkey:
 
-Per default, it grabs the "F9" key, so that no other application can
-use it and it is available to Gromit-MPX only.  The available commands
-are:
+Per default, it grabs the "F9" and "F10" keys, so that no other application
+can use them and they are available to Gromit-MPX only.  The available
+commands are:
 
-   F9:       toggle painting
-   SHIFT-F9: clear screen
-   CTRL-F9:  toggle visibility
-   ALT-F9:   Quit Gromit-MPX.
+   F9:        toggle painting
+   SHIFT-F9:  clear screen
+   CTRL-F9:   toggle visibility
+   ALT-F9:    Quit Gromit-MPX.
+   F10:       undo last stroke
+   SHIFT-F10: redo last undone stroke
 
-You can specify the key to grab via "gromit-mpx --key <keysym>". Specifying
-an empty string or "none" for the keysym will prevent gromit from grabbing
-a key.
+You can specify the keys to grab via:
+    "gromit-mpx --key <keysym> --undo-key <keysym>".
+Specifying an empty string or "none" for the keysym will prevent gromit
+from grabbing a key.
 
 Alternatively you can invoke Gromit-MPX with various arguments to control an
 already running Gromit-MPX .
