@@ -60,6 +60,8 @@ Usage:
       will clear the screen (or "-c")
   gromit-mpx --undo
       will undo the last drawing stroke (or "-z")
+  gromit-mpx --redo
+      will redo the last undone drawing stroke (or "-y")
 
 If activated Gromit-MPX prevents you from using other programs with the
 mouse. You can press the button and paint on the screen. Key presses
@@ -72,6 +74,8 @@ Gromit-MPX is pressure sensitive, if you are using properly configured
 XInput-Devices you can draw lines with varying width. It is
 possible to erase something with the other end of the (Wacom) pen.
 
+Undo/redo commands are cumulative. For example, sending two undo commands
+will undo the last two strokes. The maximum undo/redo depth is 4 strokes.
 
 
 Building it
