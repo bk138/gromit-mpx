@@ -583,6 +583,22 @@ static void on_thinner_lines(GtkMenuItem *menuitem,
 }
 
 
+
+static void on_undo(GtkMenuItem *menuitem,
+                    gpointer     user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+  undo_drawing (data);
+}
+
+static void on_redo(GtkMenuItem *menuitem,
+                    gpointer     user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+  redo_drawing (data);
+}
+
+
 void on_trayicon_activate (GtkStatusIcon *status_icon,
 			   gpointer       user_data)
 {
@@ -599,6 +615,8 @@ void on_trayicon_activate (GtkStatusIcon *status_icon,
   GtkWidget* toggle_vis_item = gtk_image_menu_item_new_with_label ("Toggle Visibility");
   GtkWidget* thicker_lines_item = gtk_image_menu_item_new_with_label ("Thicker Lines");
   GtkWidget* thinner_lines_item = gtk_image_menu_item_new_with_label ("Thinner Lines");
+  GtkWidget* undo_item = gtk_image_menu_item_new_with_label ("Undo");
+  GtkWidget* redo_item = gtk_image_menu_item_new_with_label ("Redo");
 
 
   /* Add them to the menu */
@@ -607,6 +625,8 @@ void on_trayicon_activate (GtkStatusIcon *status_icon,
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), toggle_vis_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), thicker_lines_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), thinner_lines_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), undo_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), redo_item);
 
 
   /* Attach the callback functions to the respective activate signal */
@@ -624,6 +644,13 @@ void on_trayicon_activate (GtkStatusIcon *status_icon,
   g_signal_connect(G_OBJECT (thinner_lines_item), "activate",
 		   G_CALLBACK (on_thinner_lines),
 		   data);
+
+  g_signal_connect(G_OBJECT (undo_item), "activate",
+		   G_CALLBACK (on_undo),
+		   data);
+  g_signal_connect(G_OBJECT (redo_item), "activate",
+		   G_CALLBACK (on_redo),
+		   data);
  
 
   /* We do need to show menu items */
@@ -632,6 +659,8 @@ void on_trayicon_activate (GtkStatusIcon *status_icon,
   gtk_widget_show (toggle_vis_item);
   gtk_widget_show (thicker_lines_item);
   gtk_widget_show (thinner_lines_item);
+  gtk_widget_show (undo_item);
+  gtk_widget_show (redo_item);
  
 
   /* show menu */
