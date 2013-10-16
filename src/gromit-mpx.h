@@ -47,6 +47,8 @@
 #define GA_VISIBILITY gdk_atom_intern ("Gromit/visibility", FALSE)
 #define GA_CLEAR      gdk_atom_intern ("Gromit/clear", FALSE)
 #define GA_RELOAD     gdk_atom_intern ("Gromit/reload", FALSE)
+#define GA_UNDO       gdk_atom_intern ("Gromit/undo", FALSE)
+#define GA_REDO       gdk_atom_intern ("Gromit/redo", FALSE)
 
 #define GA_DATA       gdk_atom_intern ("Gromit/data", FALSE)
 #define GA_TOGGLEDATA gdk_atom_intern ("Gromit/toggledata", FALSE)
@@ -119,6 +121,7 @@ typedef struct
   GHashTable  *tool_config;
 
   cairo_surface_t *backbuffer;
+  cairo_surface_t *undobuffer;
 
   GHashTable  *devdatatable;
   gboolean     all_grabbed;
@@ -145,6 +148,10 @@ void show_window (GromitData *data);
 void parse_print_help (gpointer key, gpointer value, gpointer user_data);
 
 void select_tool (GromitData *data, GdkDevice *master, GdkDevice *slave, guint state);
+
+void snap_undo_state (GromitData *data);
+void undo_drawing (GromitData *data);
+void redo_drawing (GromitData *data);
 
 void draw_line (GromitData *data, GdkDevice *dev, gint x1, gint y1, gint x2, gint y2);
 void draw_arrow (GromitData *data, GdkDevice *dev, gint x1, gint y1, gint width, gfloat direction);

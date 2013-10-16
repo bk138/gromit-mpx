@@ -261,6 +261,7 @@ gboolean on_buttonpress (GtkWidget *win,
   slavedata->lasty = ev->y;
   slavedata->motion_time = ev->time;
 
+  snap_undo_state (data);
   if (gdk_device_get_source(slave) == GDK_SOURCE_MOUSE)
     {
       data->maxwidth = slavedata->cur_context->width;
@@ -421,7 +422,6 @@ gboolean on_buttonrelease (GtkWidget *win,
   return TRUE;
 }
 
-
 /* Remote control */
 void on_mainapp_selection_get (GtkWidget          *widget,
 			       GtkSelectionData   *selection_data,
@@ -432,22 +432,27 @@ void on_mainapp_selection_get (GtkWidget          *widget,
   GromitData *data = (GromitData *) user_data;
   
   gchar *uri = "OK";
+  GdkAtom action = gtk_selection_data_get_target(selection_data);
 
-  if(gtk_selection_data_get_target(selection_data) == GA_TOGGLE)
+  if(action == GA_TOGGLE)
     {
       /* ask back client for device id */
       gtk_selection_convert (data->win, GA_DATA,
                              GA_TOGGLEDATA, time);
       gtk_main(); /* Wait for the response */
     }
-  else if (gtk_selection_data_get_target(selection_data) == GA_VISIBILITY)
+  else if (action == GA_VISIBILITY)
     toggle_visibility (data);
-  else if (gtk_selection_data_get_target(selection_data) == GA_CLEAR)
+  else if (action == GA_CLEAR)
     clear_screen (data);
-  else if (gtk_selection_data_get_target(selection_data) == GA_RELOAD)
+  else if (action == GA_RELOAD)
     setup_input_devices(data);
-  else if (gtk_selection_data_get_target(selection_data) == GA_QUIT)
+  else if (action == GA_QUIT)
     gtk_main_quit ();
+  else if (action == GA_UNDO)
+    undo_drawing (data);
+  else if (action == GA_REDO)
+    redo_drawing (data);
   else
     uri = "NOK";
 

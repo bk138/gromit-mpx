@@ -434,6 +434,47 @@ void select_tool (GromitData *data,
 }
 
 
+
+void snap_undo_state (GromitData *data)
+{
+  /* Copy from backbuffer -> undobuffer */
+  cairo_t *cr = cairo_create(data->undobuffer);
+  cairo_set_source_surface(cr, data->backbuffer, 0, 0);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  cairo_paint (cr);
+  cairo_destroy(cr);
+
+  if(data->debug)
+    g_printerr ("DEBUG: Snapped undo buffer.\n");
+}
+
+
+
+void undo_drawing (GromitData *data)
+{
+  /* Swap data->backbuffer and data->undobuffer */
+  cairo_surface_t *temp = data->backbuffer;
+  data->backbuffer = data->undobuffer;
+  data->undobuffer = temp;
+
+  GdkRectangle rect = {0, 0, data->width, data->height};
+  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
+
+  if(data->debug)
+    g_printerr ("DEBUG: Undo drawing.\n");
+}
+
+
+
+void redo_drawing (GromitData *data)
+{
+  if(data->debug)
+    g_printerr("DEBUG: Redo drawing (same as undo currently).\n");
+  undo_drawing (data);
+}
+
+
+
 void draw_line (GromitData *data,
 		GdkDevice *dev,
 		gint x1, gint y1,
@@ -666,7 +707,9 @@ void setup_main_app (GromitData *data, gboolean activate)
   */
   /* SHAPE SURFACE*/
   cairo_surface_destroy(data->backbuffer);
-  data->backbuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32 ,data->width, data->height);
+  data->backbuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
+  cairo_surface_destroy(data->undobuffer);
+  data->undobuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
 
 
   /* EVENTS */
@@ -725,6 +768,8 @@ void setup_main_app (GromitData *data, gboolean activate)
   gtk_selection_add_target (data->win, GA_CONTROL, GA_VISIBILITY, 5);
   gtk_selection_add_target (data->win, GA_CONTROL, GA_CLEAR, 6);
   gtk_selection_add_target (data->win, GA_CONTROL, GA_RELOAD, 7);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_UNDO, 8);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_REDO, 9);
 
 
  
@@ -936,6 +981,16 @@ int main_client (int argc, char **argv, GromitData *data)
                 strcmp (arg, "--reload") == 0)
          {
            action = GA_RELOAD;
+         }
+       else if (strcmp (arg, "-z") == 0 ||
+                strcmp (arg, "--undo") == 0)
+         {
+           action = GA_UNDO;
+         }
+       else if (strcmp (arg, "-y") == 0 ||
+                strcmp (arg, "--redo") == 0)
+         {
+           action = GA_REDO;
          }
        else
          {

@@ -58,6 +58,8 @@ Usage:
       will toggle the visibility of the window (or "-v")
   gromit-mpx --clear
       will clear the screen (or "-c")
+  gromit-mpx --undo
+      will undo the last drawing stroke (or "-z")
 
 If activated Gromit-MPX prevents you from using other programs with the
 mouse. You can press the button and paint on the screen. Key presses
