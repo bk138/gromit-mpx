@@ -53,7 +53,7 @@
 #define GA_DATA       gdk_atom_intern ("Gromit/data", FALSE)
 #define GA_TOGGLEDATA gdk_atom_intern ("Gromit/toggledata", FALSE)
 
-
+#define GROMIT_MAX_UNDO 4
 
 typedef enum
 {
@@ -121,7 +121,6 @@ typedef struct
   GHashTable  *tool_config;
 
   cairo_surface_t *backbuffer;
-  cairo_surface_t *undobuffer;
 
   GHashTable  *devdatatable;
   gboolean     all_grabbed;
@@ -138,6 +137,10 @@ typedef struct
   gboolean     debug;
 
   gchar       *clientdata;
+
+  cairo_surface_t *undobuffer[GROMIT_MAX_UNDO];
+  gint            undo_head, undo_depth, redo_depth;
+
 } GromitData;
 
 
@@ -149,6 +152,8 @@ void parse_print_help (gpointer key, gpointer value, gpointer user_data);
 
 void select_tool (GromitData *data, GdkDevice *master, GdkDevice *slave, guint state);
 
+void copy_surface (cairo_surface_t *dst, cairo_surface_t *src);
+void swap_surfaces (cairo_surface_t *a, cairo_surface_t *b);
 void snap_undo_state (GromitData *data);
 void undo_drawing (GromitData *data);
 void redo_drawing (GromitData *data);

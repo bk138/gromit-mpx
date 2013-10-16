@@ -437,40 +437,91 @@ void select_tool (GromitData *data,
 
 void snap_undo_state (GromitData *data)
 {
-  /* Copy from backbuffer -> undobuffer */
-  cairo_t *cr = cairo_create(data->undobuffer);
-  cairo_set_source_surface(cr, data->backbuffer, 0, 0);
+  if(data->debug)
+    g_printerr ("DEBUG: Snapping undo buffer %d.\n", data->undo_head);
+
+  copy_surface(data->undobuffer[data->undo_head], data->backbuffer);
+
+  // Increment head position
+  data->undo_head++;
+  if(data->undo_head >= GROMIT_MAX_UNDO)
+    data->undo_head -= GROMIT_MAX_UNDO;
+  data->undo_depth++;
+  // See if we ran out of undo levels with oldest undo overwritten
+  if(data->undo_depth > GROMIT_MAX_UNDO)
+    data->undo_depth = GROMIT_MAX_UNDO;
+  // Invalidate any redo from this position
+  data->redo_depth = 0;
+}
+
+
+
+void copy_surface (cairo_surface_t *dst, cairo_surface_t *src)
+{
+  cairo_t *cr = cairo_create(dst);
+  cairo_set_source_surface(cr, src, 0, 0);
   cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
   cairo_paint (cr);
   cairo_destroy(cr);
+}
 
-  if(data->debug)
-    g_printerr ("DEBUG: Snapped undo buffer.\n");
+
+
+void swap_surfaces (cairo_surface_t *a, cairo_surface_t *b)
+{
+  int width = cairo_image_surface_get_width(a);
+  int height = cairo_image_surface_get_height(a);
+  cairo_surface_t *temp = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+  copy_surface(temp, a);
+  copy_surface(a, b);
+  copy_surface(b, temp);
+  cairo_surface_destroy(temp);
 }
 
 
 
 void undo_drawing (GromitData *data)
 {
-  /* Swap data->backbuffer and data->undobuffer */
-  cairo_surface_t *temp = data->backbuffer;
-  data->backbuffer = data->undobuffer;
-  data->undobuffer = temp;
+  /* Swap undobuffer[head-1]->backbuffer */
+  if(data->undo_depth <= 0)
+    return;
+  data->undo_depth--;
+  data->redo_depth++;
+  if(data->redo_depth > GROMIT_MAX_UNDO)
+    data->redo_depth -= GROMIT_MAX_UNDO;
+  data->undo_head--;
+  if(data->undo_head < 0)
+    data->undo_head += GROMIT_MAX_UNDO;
+
+  swap_surfaces(data->backbuffer, data->undobuffer[data->undo_head]);
 
   GdkRectangle rect = {0, 0, data->width, data->height};
   gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
 
   if(data->debug)
-    g_printerr ("DEBUG: Undo drawing.\n");
+    g_printerr ("DEBUG: Undo drawing %d.\n", data->undo_head);
 }
 
 
 
 void redo_drawing (GromitData *data)
 {
+  if(data->redo_depth <= 0)
+    return;
+
+  swap_surfaces(data->backbuffer, data->undobuffer[data->undo_head]);
+
+  data->redo_depth--;
+  data->undo_depth++;
+  data->undo_head++;
+  if(data->undo_head >= GROMIT_MAX_UNDO)
+    data->undo_head -= GROMIT_MAX_UNDO;
+  
+  GdkRectangle rect = {0, 0, data->width, data->height};
+  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
+
   if(data->debug)
-    g_printerr("DEBUG: Redo drawing (same as undo currently).\n");
-  undo_drawing (data);
+    g_printerr("DEBUG: Redo drawing.\n");
 }
 
 
@@ -708,8 +759,20 @@ void setup_main_app (GromitData *data, gboolean activate)
   /* SHAPE SURFACE*/
   cairo_surface_destroy(data->backbuffer);
   data->backbuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
-  cairo_surface_destroy(data->undobuffer);
-  data->undobuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
+  
+  /*
+    UNDO STATE
+  */
+  data->undo_head = 0;
+  data->undo_depth = 0;
+  data->redo_depth = 0;
+  int i;
+  for (i = 0; i < GROMIT_MAX_UNDO; i++)
+    {
+      cairo_surface_destroy(data->undobuffer[i]);
+      data->undobuffer[i] = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
+    }
+  
 
 
   /* EVENTS */
