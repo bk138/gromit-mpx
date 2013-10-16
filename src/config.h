@@ -35,5 +35,8 @@ void parse_config (GromitData *data);
 #ifndef DEFAULT_HOTKEY
 #define DEFAULT_HOTKEY "F9"
 #endif
+#ifndef DEFAULT_UNDOKEY
+#define DEFAULT_UNDOKEY "F10"
+#endif
 
 #endif
