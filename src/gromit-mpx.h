@@ -110,6 +110,8 @@ typedef struct
   GdkWindow   *root;
   gchar       *hot_keyval;
   guint        hot_keycode;
+  gchar       *undo_keyval;
+  guint        undo_keycode;
 
   GdkColor    *white;
   GdkColor    *black;

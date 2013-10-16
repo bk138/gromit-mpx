@@ -48,10 +48,10 @@ void setup_input_devices (GromitData *data)
           devdata->index = i;
 
 	  /* get attached keyboard and grab the hotkey */
-	  if (!data->hot_keycode)
+	  if (!data->hot_keycode || !data->undo_keycode)
 	    {
 	      g_printerr("ERROR: Grabbing hotkey from attached keyboard "
-                         "of '%s' failed, no hotkey defined.\n",
+                         "of '%s' failed, no hotkeys defined.\n",
 			 gdk_device_get_name(device));
 	      g_free(devdata);
 	      continue;
@@ -79,7 +79,7 @@ void setup_input_devices (GromitData *data)
 	  if(kbd_dev_id != -1)
 	    {
 	      if(data->debug)
-		g_printerr("DEBUG: Grabbing hotkey from keyboard '%d' .\n", kbd_dev_id);
+		g_printerr("DEBUG: Grabbing hotkeys from keyboard '%d' .\n", kbd_dev_id);
 
 	      XIEventMask mask;
 	      unsigned char bits[4] = {0,0,0,0};
@@ -97,6 +97,17 @@ void setup_input_devices (GromitData *data)
 	      XIGrabKeycode( GDK_DISPLAY_XDISPLAY(data->display),
 			     kbd_dev_id,
 			     data->hot_keycode,
+			     GDK_WINDOW_XID(data->root),
+			     GrabModeAsync,
+			     GrabModeAsync,
+			     True,
+			     &mask,
+			     nmods,
+			     modifiers);
+
+	      XIGrabKeycode( GDK_DISPLAY_XDISPLAY(data->display),
+			     kbd_dev_id,
+			     data->undo_keycode,
 			     GDK_WINDOW_XID(data->root),
 			     GrabModeAsync,
 			     GrabModeAsync,
