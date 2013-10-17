@@ -261,6 +261,7 @@ gboolean on_buttonpress (GtkWidget *win,
   slavedata->lasty = ev->y;
   slavedata->motion_time = ev->time;
 
+  snap_undo_state (data);
   if (gdk_device_get_source(slave) == GDK_SOURCE_MOUSE)
     {
       data->maxwidth = slavedata->cur_context->width;
@@ -421,7 +422,6 @@ gboolean on_buttonrelease (GtkWidget *win,
   return TRUE;
 }
 
-
 /* Remote control */
 void on_mainapp_selection_get (GtkWidget          *widget,
 			       GtkSelectionData   *selection_data,
@@ -432,22 +432,27 @@ void on_mainapp_selection_get (GtkWidget          *widget,
   GromitData *data = (GromitData *) user_data;
   
   gchar *uri = "OK";
+  GdkAtom action = gtk_selection_data_get_target(selection_data);
 
-  if(gtk_selection_data_get_target(selection_data) == GA_TOGGLE)
+  if(action == GA_TOGGLE)
     {
       /* ask back client for device id */
       gtk_selection_convert (data->win, GA_DATA,
                              GA_TOGGLEDATA, time);
       gtk_main(); /* Wait for the response */
     }
-  else if (gtk_selection_data_get_target(selection_data) == GA_VISIBILITY)
+  else if (action == GA_VISIBILITY)
     toggle_visibility (data);
-  else if (gtk_selection_data_get_target(selection_data) == GA_CLEAR)
+  else if (action == GA_CLEAR)
     clear_screen (data);
-  else if (gtk_selection_data_get_target(selection_data) == GA_RELOAD)
+  else if (action == GA_RELOAD)
     setup_input_devices(data);
-  else if (gtk_selection_data_get_target(selection_data) == GA_QUIT)
+  else if (action == GA_QUIT)
     gtk_main_quit ();
+  else if (action == GA_UNDO)
+    undo_drawing (data);
+  else if (action == GA_REDO)
+    redo_drawing (data);
   else
     uri = "NOK";
 
@@ -578,6 +583,22 @@ static void on_thinner_lines(GtkMenuItem *menuitem,
 }
 
 
+
+static void on_undo(GtkMenuItem *menuitem,
+                    gpointer     user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+  undo_drawing (data);
+}
+
+static void on_redo(GtkMenuItem *menuitem,
+                    gpointer     user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+  redo_drawing (data);
+}
+
+
 void on_trayicon_activate (GtkStatusIcon *status_icon,
 			   gpointer       user_data)
 {
@@ -594,6 +615,8 @@ void on_trayicon_activate (GtkStatusIcon *status_icon,
   GtkWidget* toggle_vis_item = gtk_image_menu_item_new_with_label ("Toggle Visibility");
   GtkWidget* thicker_lines_item = gtk_image_menu_item_new_with_label ("Thicker Lines");
   GtkWidget* thinner_lines_item = gtk_image_menu_item_new_with_label ("Thinner Lines");
+  GtkWidget* undo_item = gtk_image_menu_item_new_with_label ("Undo");
+  GtkWidget* redo_item = gtk_image_menu_item_new_with_label ("Redo");
 
 
   /* Add them to the menu */
@@ -602,6 +625,8 @@ void on_trayicon_activate (GtkStatusIcon *status_icon,
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), toggle_vis_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), thicker_lines_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), thinner_lines_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), undo_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), redo_item);
 
 
   /* Attach the callback functions to the respective activate signal */
@@ -619,6 +644,13 @@ void on_trayicon_activate (GtkStatusIcon *status_icon,
   g_signal_connect(G_OBJECT (thinner_lines_item), "activate",
 		   G_CALLBACK (on_thinner_lines),
 		   data);
+
+  g_signal_connect(G_OBJECT (undo_item), "activate",
+		   G_CALLBACK (on_undo),
+		   data);
+  g_signal_connect(G_OBJECT (redo_item), "activate",
+		   G_CALLBACK (on_redo),
+		   data);
  
 
   /* We do need to show menu items */
@@ -627,6 +659,8 @@ void on_trayicon_activate (GtkStatusIcon *status_icon,
   gtk_widget_show (toggle_vis_item);
   gtk_widget_show (thicker_lines_item);
   gtk_widget_show (thinner_lines_item);
+  gtk_widget_show (undo_item);
+  gtk_widget_show (redo_item);
  
 
   /* show menu */
