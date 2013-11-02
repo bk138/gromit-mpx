@@ -5,6 +5,8 @@
 
 #include <string.h>
 #include <X11/extensions/XInput2.h>
+#include <gdk/gdkx.h>
+
 
 #include "input.h"
 
@@ -302,4 +304,81 @@ void toggle_grab (GromitData *data,
     }
   else
     g_printerr("ERROR: No such device '%s' in internal table.\n", gdk_device_get_name(dev));
+}
+
+
+
+/* Key snooper */
+gint snoop_key_press(GtkWidget   *grab_widget,
+		     GdkEventKey *event,
+		     gpointer     func_data)
+{
+  GromitData *data = (GromitData *) func_data;
+  GdkDevice *dev = gdk_event_get_device((GdkEvent*)event);
+
+  if (event->type == GDK_KEY_PRESS &&
+      event->hardware_keycode == data->hot_keycode)
+    {
+      if(data->debug)
+	g_printerr("DEBUG: Received hotkey press from device '%s'\n", gdk_device_get_name(dev));
+
+      if (event->state & GDK_SHIFT_MASK)
+        clear_screen (data);
+      else if (event->state & GDK_CONTROL_MASK)
+        toggle_visibility (data);
+      else if (event->state & GDK_MOD1_MASK)
+        gtk_main_quit ();
+      else
+	{
+	  /* GAAAH */
+	  gint kbd_dev_id = -1;
+	  g_object_get(dev, "device-id", &kbd_dev_id, NULL);
+
+	  XIDeviceInfo* devinfo;
+	  int devicecount = 0;
+	  gint ptr_dev_id = -1;
+	  
+	  devinfo = XIQueryDevice(GDK_DISPLAY_XDISPLAY(data->display),
+				  kbd_dev_id,
+				  &devicecount);
+	  if(devicecount)
+	    ptr_dev_id = devinfo->attachment;
+	  XIFreeDeviceInfo(devinfo);
+	  
+ 
+	  GdkDeviceManager *device_manager = gdk_display_get_device_manager(data->display);
+	  GList *devices, *d;
+	  gint some_dev_id;
+	  GdkDevice *some_device = NULL;
+	  devices = gdk_device_manager_list_devices(device_manager, GDK_DEVICE_TYPE_MASTER);
+	  for(d = devices; d; d = d->next)
+	    {
+	      some_device = (GdkDevice *) d->data;
+	      g_object_get(some_device, "device-id", &some_dev_id, NULL);
+	      if(some_dev_id == ptr_dev_id)
+		break;
+	    }
+
+
+	  toggle_grab(data, some_device);
+	}
+
+      return TRUE;
+    }
+  if (event->type == GDK_KEY_PRESS &&
+      event->hardware_keycode == data->undo_keycode)
+    {
+      if(data->debug)
+	g_printerr("DEBUG: Received undokey press from device '%s'\n", gdk_device_get_name(dev));
+
+      if (data->hidden)
+        return FALSE;
+      if (event->state & GDK_SHIFT_MASK)
+        redo_drawing (data);
+      else
+        undo_drawing (data);
+
+      return TRUE;
+    }
+  return FALSE;
 }

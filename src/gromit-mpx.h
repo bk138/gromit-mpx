@@ -26,7 +26,6 @@
 
 #include <glib.h>
 #include <gdk/gdk.h>
-#include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 
 
