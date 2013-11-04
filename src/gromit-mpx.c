@@ -1094,21 +1094,6 @@ int main (int argc, char **argv)
   data->width = gdk_screen_get_width (data->screen);
   data->height = gdk_screen_get_height (data->screen);
 
-  /*
-     check platform
-  */
-  g_printerr("Supported backends: ");
-#ifdef GDK_WINDOWING_X11
-  g_printerr("x11 ");
-#endif
-#ifdef GDK_WINDOWING_WAYLAND
-  g_printerr("wayland ");
-#endif
-#ifdef GDK_WINDOWING_WIN32
-  g_printerr("win32 ");
-#endif
-  g_printerr("\n");
-
 
   /*
     init our window
