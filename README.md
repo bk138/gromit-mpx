@@ -1,4 +1,4 @@
-# Gromit-MPX
+## Gromit-MPX
 
 Gromit-MPX is a multi-pointer port of the original [Gromit annotation
 tool](http://www.home.unix-ag.org/simon/gromit) by [Simon
@@ -11,7 +11,7 @@ Gromit tool.
 
 
 
-## What is it?
+### What is it?
 
 Gromit-MPX (GRaphics Over MIscellaneous Things) is a small tool to
 make annotations on the screen.
@@ -28,7 +28,7 @@ is also the *Annotate* plugin, and the much-flashier *Firepaint (paint
 fire on screen)* plugin.
 
 
-## How to use it
+### How to use it
 
 You can operate Gromit-MPX using its tray icon, but since you
 typically want to use the program you are demonstrating and
@@ -48,7 +48,7 @@ commands are:
 
 You can specify the keys to grab via:
 ```
-    gromit-mpx --key <keysym> --undo-key <keysym>
+gromit-mpx --key <keysym> --undo-key <keysym>
 ```
 Specifying an empty string or `none` for the keysym will prevent gromit
 from grabbing a key.
@@ -86,7 +86,7 @@ Undo/redo commands are cumulative. For example, sending two undo commands
 will undo the last two strokes. The maximum undo/redo depth is 4 strokes.
 
 
-## Building it
+### Building it
 
 Gromit-MPX is small and lightweight. It needs GTK+3 to build.
 Simply type `./configure && make && make install`.
@@ -95,13 +95,13 @@ If you checked out from git instead of using the tarball, an
 `autoreconf --install` is needed to setup the build system.
 
 
-## Configuration:
+### Configuration:
 
-Gromit-MPX is configurable via the file "gromit-mpx.cfg" in the
-directory defined by $XDG_CONFIG_HOME (usually ~/.config).
-Here you can specify which Device/Button/Modifier
-combination invokes which tool. See the copy of "gromit-mpx.cfg" distributed
-with this program for an example. An overview on the syntax:
+Gromit-MPX is configurable via the file `gromit-mpx.cfg` in the
+directory defined by `$XDG_CONFIG_HOME` (usually `~/.config`).  Here
+you can specify which Device/Button/Modifier combination invokes which
+tool.  See the copy of `gromit-mpx.cfg` distributed with this program
+for an example.  An overview on the syntax:
 
     # Comments can be either # Shell-Style or
     /* C-Style. */
@@ -152,16 +152,16 @@ The descision, which tool to use follows a simple policy:
 
 1. Buttons are more important than Modifiers
 2. Low number Buttons are more important than higher ones
-3. Modifiers: SHIFT > CONTROL > ALT/META.
+3. Modifiers: `SHIFT` > `CONTROL` > `ALT`/`META`.
 4. Gromit-MPX tries partial matches:
-      If you define "Core Pointer"[] and "Core Pointer"[SHIFT, CONTROL]
-      and only SHIFT actually is pressed, Gromit-MPX will use the second
-      definition if there is no "Core Pointer"[SHIFT] definition.
-      Same logic goes for the buttons.
+      If you define `"Core Pointer"[]` and `"Core Pointer"[SHIFT, CONTROL]`
+      and only `SHIFT` actually is pressed, Gromit-MPX will use the second
+      definition if there is no `"Core Pointer"[SHIFT]` definition.
+      The same logic holds for the buttons.
 
 
 
-## Potential Problems:
+### Potential Problems:
 
 When there is no compositing manager such as Compiz or xcompmgr
 running, Gromit-MPX falls back to a legacy drawing mode. This may
@@ -178,4 +178,4 @@ General Public License.  See the file `COPYING` for details.  Thanks
 to Simon for the groundwork done!
 
 
-[Christian Beier](mailto:dontmind@freeshell.org)
+---[Christian Beier](mailto:dontmind@freeshell.org)
