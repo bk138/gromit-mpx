@@ -3,7 +3,7 @@
 SUBDIRS = src 
 
 doc_DATA = \
-	README\
+	README.md\
 	AUTHORS\
 	ChangeLog\
 	NEWS
