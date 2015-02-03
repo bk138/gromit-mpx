@@ -122,6 +122,7 @@ void parse_config (GromitData *data)
 
   if (file < 0)
     {
+      g_printerr ("Could not open %s: %s\n", filename, g_strerror (errno));
       /* try global config file */
       g_free (filename);
       filename = g_strdup ("/etc/gromit-mpx/gromit-mpx.cfg");
