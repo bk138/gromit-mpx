@@ -66,6 +66,7 @@ typedef struct
   GromitPaintType type;
   guint           width;
   gfloat          arrowsize;
+  guint           minwidth;
   GdkColor        *paint_color;
   cairo_t         *paint_ctx;
   gdouble         pressure;
@@ -173,7 +174,8 @@ void coord_list_free (GromitData *data, GdkDevice* dev);
 
 
 GromitPaintContext *paint_context_new (GromitData *data, GromitPaintType type,
-				       GdkColor *fg_color, guint width, guint arrowsize);
+				       GdkColor *fg_color, guint width, guint arrowsize,
+                                       guint minwidth);
 void paint_context_free (GromitPaintContext *context);
 
 
