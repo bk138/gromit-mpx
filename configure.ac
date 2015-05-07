@@ -2,7 +2,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([gromit-mpx],[1.1],[Christian Beier <dontmind@freeshell.org>],[gromit-mpx],[https://github.com/bk138/gromit-mpx])
-AM_INIT_AUTOMAKE([foreign -Wall])
+AM_INIT_AUTOMAKE([foreign subdir-objects -Wall])
 AC_CONFIG_SRCDIR([src/gromit-mpx.c])
 AC_CONFIG_HEADERS([config.h])
 
@@ -27,5 +27,5 @@ LIBS="$GTK3_LIBS $XINPUT2_LIBS $X11_LIBS $LIBS"
 # ***************************************************************************
 # finally
 # ***************************************************************************
-AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
