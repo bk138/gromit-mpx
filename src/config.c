@@ -114,7 +114,7 @@ void parse_config (GromitData *data)
 
   GromitPaintType type;
   GdkColor *fg_color=NULL;
-  guint width, arrowsize;
+  guint width, arrowsize, minwidth;
 
   filename = g_strjoin (G_DIR_SEPARATOR_S,
                         g_get_user_config_dir(), "gromit-mpx.cfg", NULL);
@@ -162,6 +162,7 @@ void parse_config (GromitData *data)
   g_scanner_scope_add_symbol (scanner, 2, "size",      (gpointer) 1);
   g_scanner_scope_add_symbol (scanner, 2, "color",     (gpointer) 2);
   g_scanner_scope_add_symbol (scanner, 2, "arrowsize", (gpointer) 3);
+  g_scanner_scope_add_symbol (scanner, 2, "minsize",   (gpointer) 4);
 
   g_scanner_set_scope (scanner, 0);
   scanner->config->scope_0_fallback = 0;
@@ -195,6 +196,7 @@ void parse_config (GromitData *data)
           type = GROMIT_PEN;
           width = 7;
           arrowsize = 0;
+          minwidth = 1;
           fg_color = data->red;
 
           if (token == G_TOKEN_SYMBOL)
@@ -212,6 +214,7 @@ void parse_config (GromitData *data)
                   type = context_template->type;
                   width = context_template->width;
                   arrowsize = context_template->arrowsize;
+                  minwidth = context_template->minwidth;
                   fg_color = context_template->paint_color;
                 }
               else
@@ -302,7 +305,24 @@ void parse_config (GromitData *data)
                             }
                           arrowsize = scanner->value.v_float;
                         }
-                      else
+                      else if ((intptr_t) scanner->value.v_symbol == 4)
+                        {
+                          token = g_scanner_get_next_token (scanner);
+                          if (token != G_TOKEN_EQUAL_SIGN)
+                            {
+                              g_printerr ("Missing \"=\"... aborting\n");
+                              exit (1);
+                            }
+                          token = g_scanner_get_next_token (scanner);
+                          if (token != G_TOKEN_FLOAT)
+                            {
+                              g_printerr ("Missing Minsize (float)... "
+                                          "aborting\n");
+                              exit (1);
+                            }
+                          minwidth = scanner->value.v_float;
+                        }
+		      else
                         {
                           g_printerr ("Unknown tool type?????\n");
                         }
@@ -327,7 +347,7 @@ void parse_config (GromitData *data)
               exit (1);
             }
 
-          context = paint_context_new (data, type, fg_color, width, arrowsize);
+          context = paint_context_new (data, type, fg_color, width, arrowsize, minwidth);
           g_hash_table_insert (data->tool_config, name, context);
         }
       else

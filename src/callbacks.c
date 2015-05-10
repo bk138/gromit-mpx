@@ -126,9 +126,9 @@ void on_monitors_changed ( GdkScreen *screen,
 
 
   data->default_pen = paint_context_new (data, GROMIT_PEN,
-					 data->red, 7, 0);
+					 data->red, 7, 0, 1);
   data->default_eraser = paint_context_new (data, GROMIT_ERASER,
-					    data->red, 75, 0);
+					    data->red, 75, 0, 1);
 
   if(!data->composited) // set shape
     {
@@ -269,8 +269,10 @@ gboolean on_buttonpress (GtkWidget *win,
   else
     {
       gdk_event_get_axis ((GdkEvent *) ev, GDK_AXIS_PRESSURE, &pressure);
-      data->maxwidth = (CLAMP (pressure * pressure + line_thickener,0,1) *
-                        (double) slavedata->cur_context->width);
+      data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
+                        (double) (slavedata->cur_context->width -
+				  slavedata->cur_context->minwidth) +
+			slavedata->cur_context->minwidth);
     }
   if (ev->button <= 5)
     draw_line (data, slave, ev->x, ev->y, ev->x, ev->y);
@@ -333,8 +335,10 @@ gboolean on_motion (GtkWidget *win,
               if (gdk_device_get_source(slave) == GDK_SOURCE_MOUSE)
                 data->maxwidth = slavedata->cur_context->width;
               else
-                data->maxwidth = (CLAMP (pressure * pressure + line_thickener, 0, 1) *
-                                  (double) slavedata->cur_context->width);
+		data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
+				  (double) (slavedata->cur_context->width -
+					    slavedata->cur_context->minwidth) +
+				  slavedata->cur_context->minwidth);
 
               gdk_device_get_axis(slave, coords[i]->axes,
                                   GDK_AXIS_X, &x);
@@ -361,8 +365,10 @@ gboolean on_motion (GtkWidget *win,
       if (gdk_device_get_source(slave) == GDK_SOURCE_MOUSE)
 	data->maxwidth = slavedata->cur_context->width;
       else
-        data->maxwidth = (CLAMP (pressure * pressure + line_thickener,0,1) *
-                          (double)slavedata->cur_context->width);
+	data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
+			  (double) (slavedata->cur_context->width -
+				    slavedata->cur_context->minwidth) +
+			  slavedata->cur_context->minwidth);
 
       if(slavedata->motion_time > 0)
 	{

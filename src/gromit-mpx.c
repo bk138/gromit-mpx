@@ -39,7 +39,8 @@ GromitPaintContext *paint_context_new (GromitData *data,
 				       GromitPaintType type,
 				       GdkColor *paint_color, 
 				       guint width,
-				       guint arrowsize)
+				       guint arrowsize,
+				       guint minwidth)
 {
   GromitPaintContext *context;
 
@@ -48,6 +49,7 @@ GromitPaintContext *paint_context_new (GromitData *data,
   context->type = type;
   context->width = width;
   context->arrowsize = arrowsize;
+  context->minwidth = minwidth;
   context->paint_color = paint_color;
 
   
@@ -89,6 +91,7 @@ void paint_context_print (gchar *name,
   }
 
   g_printerr ("width: %3d, ", context->width);
+  g_printerr ("minwidth: %3d, ", context->minwidth);
   g_printerr ("arrowsize: %.2f, ", context->arrowsize);
   g_printerr ("color: #%02X%02X%02X\n", context->paint_color->red >> 8,
               context->paint_color->green >> 8, context->paint_color->blue >> 8);
@@ -858,9 +861,9 @@ void setup_main_app (GromitData *data, gboolean activate)
   data->modified = 0;
 
   data->default_pen = paint_context_new (data, GROMIT_PEN,
-					 data->red, 7, 0);
+					 data->red, 7, 0, 1);
   data->default_eraser = paint_context_new (data, GROMIT_ERASER,
-					    data->red, 75, 0);
+					    data->red, 75, 0, 1);
 
   
 
