@@ -947,7 +947,7 @@ int app_parse_args (int argc, char **argv, GromitData *data)
                wrong_arg = TRUE;
              }
          }
-      else if (strcmp (arg, "-O") == 0 ||
+      else if (strcmp (arg, "-o") == 0 ||
                 strcmp (arg, "--opacity") == 0)
          {
            if (i+1 < argc && strtod (argv[i+1], NULL) >= 0.0 && strtod (argv[i+1], NULL) <= 1.0)
@@ -959,7 +959,7 @@ int app_parse_args (int argc, char **argv, GromitData *data)
              }
            else
              {
-               g_printerr ("-O requires an opacity >= 0,0 && <=1,0 as argument\n");
+               g_printerr ("-o requires an opacity >= 0,0 && <=1,0 as argument\n");
                wrong_arg = TRUE;
              }
          }
