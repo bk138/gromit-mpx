@@ -50,14 +50,13 @@ You can specify the keys to grab via:
 ```
 gromit-mpx --key <keysym> --undo-key <keysym>
 ```
-You can specify the opacity via:
-```
-gromit-mpx -O <opacity>
-or
-gromit-mpx --opacity <opacity>
-```
 Specifying an empty string or `none` for the keysym will prevent gromit
 from grabbing a key.
+
+You can specify the opacity simply via:
+```
+gromit-mpx -O <opacity>
+```
 
 Alternatively you can invoke Gromit-MPX with various arguments to
 control an already running Gromit-MPX .
