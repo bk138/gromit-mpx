@@ -55,7 +55,7 @@ from grabbing a key.
 
 You can specify the opacity simply via:
 ```
-gromit-mpx -O <opacity>
+gromit-mpx -o <opacity>
 ```
 
 Alternatively you can invoke Gromit-MPX with various arguments to
