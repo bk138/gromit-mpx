@@ -38,5 +38,8 @@ void parse_config (GromitData *data);
 #ifndef DEFAULT_UNDOKEY
 #define DEFAULT_UNDOKEY "F10"
 #endif
+#ifndef DEFAULT_OPACITY
+#define DEFAULT_OPACITY 0.75
+#endif
 
 #endif

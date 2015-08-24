@@ -112,6 +112,7 @@ typedef struct
   guint        hot_keycode;
   gchar       *undo_keyval;
   guint        undo_keycode;
+  gdouble      opacity;
 
   GdkColor    *white;
   GdkColor    *black;

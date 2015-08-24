@@ -589,6 +589,27 @@ static void on_thinner_lines(GtkMenuItem *menuitem,
 }
 
 
+static void on_opacity_bigger(GtkMenuItem *menuitem,
+			     gpointer     user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+  data->opacity += 0.1;
+  if(data->opacity>1.0)
+    data->opacity = 1.0;
+  gtk_window_set_opacity(GTK_WINDOW(data->win), data->opacity);
+}
+
+static void on_opacity_lesser(GtkMenuItem *menuitem,
+			     gpointer     user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+  data->opacity -= 0.1;
+  if(data->opacity<0.0)
+    data->opacity = 0.0;
+  gtk_window_set_opacity(GTK_WINDOW(data->win), data->opacity);
+}
+
+
 
 static void on_undo(GtkMenuItem *menuitem,
                     gpointer     user_data)
@@ -621,6 +642,8 @@ void on_trayicon_activate (GtkStatusIcon *status_icon,
   GtkWidget* toggle_vis_item = gtk_image_menu_item_new_with_label ("Toggle Visibility");
   GtkWidget* thicker_lines_item = gtk_image_menu_item_new_with_label ("Thicker Lines");
   GtkWidget* thinner_lines_item = gtk_image_menu_item_new_with_label ("Thinner Lines");
+  GtkWidget* opacity_bigger_item = gtk_image_menu_item_new_with_label ("Bigger Opacity");
+  GtkWidget* opacity_lesser_item = gtk_image_menu_item_new_with_label ("Lesser Opacity");
   GtkWidget* undo_item = gtk_image_menu_item_new_with_label ("Undo");
   GtkWidget* redo_item = gtk_image_menu_item_new_with_label ("Redo");
 
@@ -631,6 +654,8 @@ void on_trayicon_activate (GtkStatusIcon *status_icon,
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), toggle_vis_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), thicker_lines_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), thinner_lines_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), opacity_bigger_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), opacity_lesser_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), undo_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), redo_item);
 
@@ -650,6 +675,12 @@ void on_trayicon_activate (GtkStatusIcon *status_icon,
   g_signal_connect(G_OBJECT (thinner_lines_item), "activate",
 		   G_CALLBACK (on_thinner_lines),
 		   data);
+  g_signal_connect(G_OBJECT (opacity_bigger_item), "activate",
+		   G_CALLBACK (on_opacity_bigger),
+		   data);
+  g_signal_connect(G_OBJECT (opacity_lesser_item), "activate",
+		   G_CALLBACK (on_opacity_lesser),
+		   data);
 
   g_signal_connect(G_OBJECT (undo_item), "activate",
 		   G_CALLBACK (on_undo),
@@ -665,6 +696,8 @@ void on_trayicon_activate (GtkStatusIcon *status_icon,
   gtk_widget_show (toggle_vis_item);
   gtk_widget_show (thicker_lines_item);
   gtk_widget_show (thinner_lines_item);
+  gtk_widget_show (opacity_bigger_item);
+  gtk_widget_show (opacity_lesser_item);
   gtk_widget_show (undo_item);
   gtk_widget_show (redo_item);
  

@@ -947,6 +947,22 @@ int app_parse_args (int argc, char **argv, GromitData *data)
                wrong_arg = TRUE;
              }
          }
+      else if (strcmp (arg, "-o") == 0 ||
+                strcmp (arg, "--opacity") == 0)
+         {
+           if (i+1 < argc && strtod (argv[i+1], NULL) >= 0.0 && strtod (argv[i+1], NULL) <= 1.0)
+             {
+               data->opacity = strtod (argv[i+1], NULL);
+               g_printerr ("Opacity set to: %.2f\n", data->opacity);
+               gtk_window_set_opacity(GTK_WINDOW(data->win), data->opacity);
+               i++;
+             }
+           else
+             {
+               g_printerr ("-o requires an opacity >= 0,0 && <=1,0 as argument\n");
+               wrong_arg = TRUE;
+             }
+         }
        else if (strcmp (arg, "-u") == 0 ||
                 strcmp (arg, "--undo-key") == 0)
          {
@@ -1096,7 +1112,7 @@ int main (int argc, char **argv)
   data->root = gdk_screen_get_root_window (data->screen);
   data->width = gdk_screen_get_width (data->screen);
   data->height = gdk_screen_get_height (data->screen);
-
+  data->opacity = DEFAULT_OPACITY;
 
   /*
     init our window
@@ -1107,7 +1123,7 @@ int main (int argc, char **argv)
 
   gtk_window_fullscreen(GTK_WINDOW(data->win)); 
   gtk_window_set_skip_taskbar_hint(GTK_WINDOW(data->win), TRUE);
-  gtk_window_set_opacity(GTK_WINDOW(data->win), 0.75);
+  gtk_window_set_opacity(GTK_WINDOW(data->win), data->opacity);
   gtk_widget_set_app_paintable (data->win, TRUE);
   gtk_window_set_decorated (GTK_WINDOW (data->win), FALSE);
 
