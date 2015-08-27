@@ -1,6 +1,25 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = src 
+AM_CFLAGS = -Wall -Wextra -Wno-unused-parameter
+
+AM_CPPFLAGS = \
+	$(GTK3_CFLAGS) \
+	$(XINPUT2_CFLAGS) \
+	$(X11_CFLAGS)
+
+bin_PROGRAMS = gromit-mpx
+
+gromit_mpx_SOURCES = \
+	src/gromit-mpx.c \
+	src/gromit-mpx.h \
+	src/callbacks.c \
+	src/callbacks.h \
+	src/config.c \
+	src/config.h \
+	src/input.c \
+	src/input.h \
+	src/erase_cursor.xpm \
+	src/paint_cursor.xpm
 
 doc_DATA = \
 	README.md\

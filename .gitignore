@@ -1,5 +1,6 @@
 *.o
 .deps/
+.dirstamp
 /aclocal.m4
 /autom4te.cache/
 /compile
@@ -9,9 +10,9 @@
 /config.status
 /configure
 /depcomp
+/gromit-mpx
 /install-sh
 /missing
-/src/gromit-mpx
 /stamp-h1
 Makefile
 Makefile.in

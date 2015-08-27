@@ -1,63 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="32px"
-   height="32px"
-   id="svg2816"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="gromit-mpx.svg">
+   id="svg2816"
+   height="32px"
+   width="32px">
   <defs
-     id="defs2818">
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 16 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="32 : 16 : 1"
-       inkscape:persp3d-origin="16 : 10.666667 : 1"
-       id="perspective2824" />
-    <inkscape:perspective
-       id="perspective2855"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_x="0 : 0.5 : 1"
-       sodipodi:type="inkscape:persp3d" />
-    <inkscape:perspective
-       id="perspective2847"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_x="0 : 0.5 : 1"
-       sodipodi:type="inkscape:persp3d" />
-  </defs>
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="16.40625"
-     inkscape:cx="36.127786"
-     inkscape:cy="16.204949"
-     inkscape:current-layer="layer1"
-     showgrid="true"
-     inkscape:grid-bbox="true"
-     inkscape:document-units="px"
-     inkscape:window-width="1920"
-     inkscape:window-height="1174"
-     inkscape:window-x="1920"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1" />
+     id="defs2818" />
   <metadata
      id="metadata2821">
     <rdf:RDF>
@@ -66,59 +19,50 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
-     id="layer1"
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer">
+     id="layer1">
     <g
-       transform="matrix(0.3125,0,0,-0.3125,-80.081441,139.87435)"
-       inkscape:label="ink_ext_XXXXXX"
+       style="fill:#ff0000;fill-opacity:1;stroke:#000000;stroke-width:3.20000005;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="g2849"
-       style="fill:#ff0000;fill-opacity:1;stroke:#000000;stroke-width:3.20000005;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none">
+       transform="matrix(0.3125,0,0,-0.3125,-80.081441,139.87435)">
       <g
-         transform="scale(0.1,0.1)"
+         style="fill:#ff0000;fill-opacity:1;stroke:#000000;stroke-width:32;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
          id="g2851"
-         style="fill:#ff0000;fill-opacity:1;stroke:#000000;stroke-width:32;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none">
+         transform="scale(0.1,0.1)">
         <path
-           id="path2855"
-           style="fill:#ff0000;fill-opacity:1;stroke:#000000;stroke-width:32;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
            d="m 2977.99,3741.2909 c -21.75,9.32 -27.96,42.26 -0.93,70.53 27.03,28.28 87.31,51.89 152.87,81.41 65.57,29.52 136.41,64.94 183.33,63.39 46.92,-1.56 87.4643,-45.9314 91.5043,-103.1114 4.04,-57.17 -8.9295,-132.98 -24.1495,-187.05 -15.23,-54.07 -17.1067,-80.5286 -37.9267,-90.1586 -20.82,-9.63 -58.6229,-14.1343 -57.3829,36.8157 1.24,50.96 22.0281,153.4833 28.8681,197.6033 6.84,44.12 -21.7333,47.401 -45.0333,40.881 -23.31,-6.53 -55,-18.96 -88.87,-35.12 -33.87,-16.15 -69.91,-36.04 -106.58,-53.13 -36.66,-17.09 -73.95,-31.38 -95.7,-22.06"
-           sodipodi:nodetypes="csssssssssssc" />
-        <path
-           id="path2857"
-           style="fill:#ff0000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:32;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-           d="m 3071.77,4272.08 c -72.7,-59.34 -136.71,-134.54 -183.94,-206.31 -47.23,-71.78 -77.68,-140.14 -95.71,-201.66 -18.01,-61.52 -23.61,-116.21 -12.42,-169.97 11.18,-53.75 39.15,-106.57 87.62,-125.53 48.47,-18.95 117.45,-4.04 175.25,18.03 57.79,22.06 104.4,51.27 136.09,98.49 31.7,47.23 48.47,112.48 69.6,138.58 21.13,26.11 46.61,13.06 50.34,-26.72 3.73,-39.77 -14.3,-106.26 -41.95,-156.29 -27.65,-50.02 -64.94,-83.58 -114.96,-111.86 -50.03,-28.27 -112.8,-51.27 -175.87,-60.9 -63.08,-9.63 -126.46,-5.9 -175.87,19.27 -49.4,25.17 -84.83,71.77 -101.91,142.93 -17.09,71.15 -15.85,166.85 5.59,258.2 21.44,91.36 63.07,178.36 132.67,266.91 69.61,88.56 167.17,178.67 251.07,231.8 83.89,53.13 154.11,69.29 209.73,71.47 55.62,2.17 96.64,-9.64 128.64,-27.97 32.01,-18.33 55,-43.19 59.66,-64.94 4.66,-21.75 -9.01,-40.39 -40.08,-31.07 -31.08,9.32 -79.55,46.61 -144.49,43.5 -64.94,-3.11 -146.35,-46.61 -219.06,-105.96" />
-        <path
-           id="path2859"
            style="fill:#ff0000;fill-opacity:1;stroke:#000000;stroke-width:32;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+           id="path2855" />
+        <path
+           d="m 3071.77,4272.08 c -72.7,-59.34 -136.71,-134.54 -183.94,-206.31 -47.23,-71.78 -77.68,-140.14 -95.71,-201.66 -18.01,-61.52 -23.61,-116.21 -12.42,-169.97 11.18,-53.75 39.15,-106.57 87.62,-125.53 48.47,-18.95 117.45,-4.04 175.25,18.03 57.79,22.06 104.4,51.27 136.09,98.49 31.7,47.23 48.47,112.48 69.6,138.58 21.13,26.11 46.61,13.06 50.34,-26.72 3.73,-39.77 -14.3,-106.26 -41.95,-156.29 -27.65,-50.02 -64.94,-83.58 -114.96,-111.86 -50.03,-28.27 -112.8,-51.27 -175.87,-60.9 -63.08,-9.63 -126.46,-5.9 -175.87,19.27 -49.4,25.17 -84.83,71.77 -101.91,142.93 -17.09,71.15 -15.85,166.85 5.59,258.2 21.44,91.36 63.07,178.36 132.67,266.91 69.61,88.56 167.17,178.67 251.07,231.8 83.89,53.13 154.11,69.29 209.73,71.47 55.62,2.17 96.64,-9.64 128.64,-27.97 32.01,-18.33 55,-43.19 59.66,-64.94 4.66,-21.75 -9.01,-40.39 -40.08,-31.07 -31.08,9.32 -79.55,46.61 -144.49,43.5 -64.94,-3.11 -146.35,-46.61 -219.06,-105.96"
+           style="fill:#ff0000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:32;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+           id="path2857" />
+        <path
            d="m 3071.77,4272.08 c -72.7,-59.34 -148.4129,-134.54 -195.6429,-206.31 -47.23,-71.78 -75.7295,-134.2886 -93.7595,-195.8086 -18.01,-61.52 -19.709,-127.9128 -8.519,-181.6728 11.18,-53.75 37.1995,-110.471 85.6695,-129.431 48.47,-18.95 129.1529,-2.0895 186.9529,19.9805 57.79,22.06 100.499,59.0719 132.189,106.2919 31.7,47.23 30.9157,108.579 52.0457,134.679 21.13,26.11 64.1643,16.961 67.8943,-22.819 3.73,-39.77 -14.3,-106.26 -41.95,-156.29 -27.65,-50.02 -64.94,-83.58 -114.96,-111.86 -50.03,-28.27 -112.8,-51.27 -175.87,-60.9 -63.08,-9.63 -114.7571,-9.801 -164.1671,15.369 -49.4,25.17 -98.4834,89.3243 -115.5634,160.4843 -17.09,71.15 -19.7509,145.3948 1.6891,236.7448 21.44,91.36 68.9214,186.1619 138.5214,274.7119 69.61,88.56 167.17,178.67 251.07,231.8 83.89,53.13 154.11,69.29 209.73,71.47 55.62,2.17 96.64,-9.64 128.64,-27.97 32.01,-18.33 61.896,-44.5692 66.556,-66.3192 4.66,-21.75 -20.0436,-54.1819 -51.1136,-44.8619 -31.08,9.32 -74.0332,56.2643 -138.9732,53.1543 -64.94,-3.11 -147.7292,-41.0932 -220.4392,-100.4432"
-           sodipodi:nodetypes="csssssssssssssssssssssc"
-           inkscape:connector-curvature="0" />
+           style="fill:#ff0000;fill-opacity:1;stroke:#000000;stroke-width:32;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+           id="path2859" />
       </g>
     </g>
     <text
-       xml:space="preserve"
-       style="font-size:10px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Rufscript;-inkscape-font-specification:Rufscript Italic"
-       x="5.3012805"
-       y="23.940329"
        id="text2990"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
+       y="23.940329"
+       x="5.3012805"
+       style="font-size:10px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Rufscript;-inkscape-font-specification:Rufscript Italic"
+       xml:space="preserve"><tspan
          id="tspan2992" /></text>
     <text
-       xml:space="preserve"
-       style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#00ff00;fill-opacity:1;stroke:#000000;stroke-width:0.40000001;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:mikachan-PB;-inkscape-font-specification:mikachan-PB"
-       x="2.7440374"
-       y="17.782656"
        id="text2994"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan2996"
-         x="2.7440374"
-         y="17.782656">MPX</tspan></text>
+       y="14.540291"
+       x="2.1580226"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.44270325px;line-height:125%;font-family:'Droid Serif';-inkscape-font-specification:'Droid Serif, Bold Italic';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#00ff00;fill-opacity:1;stroke:#000000;stroke-width:0.25429109;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.44270325px;line-height:125%;font-family:'Droid Serif';-inkscape-font-specification:'Droid Serif, Bold Italic';text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.25429109"
+         y="14.540291"
+         x="2.1580226"
+         id="tspan2996">MPX</tspan></text>
   </g>
 </svg>
