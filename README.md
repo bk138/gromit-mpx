@@ -1,14 +1,12 @@
 I modify a bit to fit Thinkpad Yoga 12
 
-1 exit painting when clear screen (master branch do not exit painting mode when clear screen)
+1. exit painting when clear screen (master branch do not exit painting mode when clear screen)
 
-2 swap shortcut key for "clear screen" and "toggle visibility". In my Yoga 12, "gromit-mpx-git --key Pause --undo-key Delete", then
+2. swap shortcut key for "clear screen" and "toggle visibility". In my Yoga 12, "gromit-mpx-git --key Pause --undo-key Delete", then
 
-    Fn+P:   toggle painting
-    
-    Fn+B:   clear screen **and exit painting**
-    
-    Fn+SHIFT-P:   toggle visibility
+- Fn+P:   toggle painting
+- Fn+B:   clear screen **and exit painting**
+- Fn+SHIFT-P:   toggle visibility
 
 
 
