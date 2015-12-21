@@ -281,6 +281,7 @@ void clear_screen (GromitData *data)
     }
 
   data->painted = 0;
+  hide_window (data);	//exit painting mode
 
   if(data->debug)
     g_printerr ("DEBUG: Cleared screen.\n");
