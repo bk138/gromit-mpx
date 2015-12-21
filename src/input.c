@@ -346,9 +346,11 @@ gint snoop_key_press(GtkWidget   *grab_widget,
 	g_printerr("DEBUG: Received hotkey press from device '%s'\n", gdk_device_get_name(dev));
 
       if (event->state & GDK_SHIFT_MASK)
-        clear_screen (data);
-      else if (event->state & GDK_CONTROL_MASK)
+        //clear_screen (data);
         toggle_visibility (data);
+      else if (event->state & GDK_CONTROL_MASK)
+        //toggle_visibility (data);
+        clear_screen (data);
       else if (event->state & GDK_MOD1_MASK)
         gtk_main_quit ();
       else
