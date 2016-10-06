@@ -99,6 +99,7 @@ Simply type `./configure && make && make install`.
 If you checked out from git instead of using the tarball, an
 `autoreconf --install` is needed to setup the build system.
 
+You might also need to install `automake` and `gtk3-devel`.
 
 ### Configuration:
 
