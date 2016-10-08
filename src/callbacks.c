@@ -306,6 +306,9 @@ gboolean on_motion (GtkWidget *win,
   GromitDeviceData *slavedata =
     g_hash_table_lookup(data->devdatatable, slave);
 
+  if(data->debug)
+      g_printerr("DEBUG: Device '%s': motion to (x,y)=(%.2f : %.2f)\n", gdk_device_get_name(slave), ev->x, ev->y);
+
   if (ev->state != masterdata->state ||
       ev->state != slavedata->state ||
       masterdata->lastslave != slave)
