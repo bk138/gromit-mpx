@@ -640,15 +640,15 @@ void on_trayicon_activate (GtkStatusIcon *status_icon,
   GtkWidget *menu = gtk_menu_new ();
   
   /* Create the menu items */
-  GtkWidget* toggle_paint_item = gtk_image_menu_item_new_with_label ("Toggle Painting");
-  GtkWidget* clear_item = gtk_image_menu_item_new_with_label ("Clear Screen");
-  GtkWidget* toggle_vis_item = gtk_image_menu_item_new_with_label ("Toggle Visibility");
-  GtkWidget* thicker_lines_item = gtk_image_menu_item_new_with_label ("Thicker Lines");
-  GtkWidget* thinner_lines_item = gtk_image_menu_item_new_with_label ("Thinner Lines");
-  GtkWidget* opacity_bigger_item = gtk_image_menu_item_new_with_label ("Bigger Opacity");
-  GtkWidget* opacity_lesser_item = gtk_image_menu_item_new_with_label ("Lesser Opacity");
-  GtkWidget* undo_item = gtk_image_menu_item_new_with_label ("Undo");
-  GtkWidget* redo_item = gtk_image_menu_item_new_with_label ("Redo");
+  GtkWidget* toggle_paint_item = gtk_menu_item_new_with_label ("Toggle Painting");
+  GtkWidget* clear_item = gtk_menu_item_new_with_label ("Clear Screen");
+  GtkWidget* toggle_vis_item = gtk_menu_item_new_with_label ("Toggle Visibility");
+  GtkWidget* thicker_lines_item = gtk_menu_item_new_with_label ("Thicker Lines");
+  GtkWidget* thinner_lines_item = gtk_menu_item_new_with_label ("Thinner Lines");
+  GtkWidget* opacity_bigger_item = gtk_menu_item_new_with_label ("Bigger Opacity");
+  GtkWidget* opacity_lesser_item = gtk_menu_item_new_with_label ("Lesser Opacity");
+  GtkWidget* undo_item = gtk_menu_item_new_with_label ("Undo");
+  GtkWidget* redo_item = gtk_menu_item_new_with_label ("Redo");
 
 
   /* Add them to the menu */
@@ -727,7 +727,7 @@ void on_trayicon_menu (GtkStatusIcon *status_icon,
   /* Create the menu items */
   //TODO option menu
   GtkWidget* sep_item = gtk_separator_menu_item_new();
-  GtkWidget* quit_item = gtk_image_menu_item_new_from_stock(GTK_STOCK_QUIT, NULL);
+  GtkWidget* quit_item = gtk_menu_item_new_with_mnemonic("_Quit");
 
 
   /* Add them to the menu */
