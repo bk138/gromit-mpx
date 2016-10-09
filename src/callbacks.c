@@ -160,7 +160,7 @@ void on_composited_changed ( GdkScreen *screen,
       // undo shape
       gtk_widget_shape_combine_region(data->win, NULL);
       // re-apply transparency
-      gtk_window_set_opacity(GTK_WINDOW(data->win), 0.75);
+      gtk_widget_set_opacity(data->win, 0.75);
     }
 
   // set anti-aliasing
@@ -599,7 +599,7 @@ static void on_opacity_bigger(GtkMenuItem *menuitem,
   data->opacity += 0.1;
   if(data->opacity>1.0)
     data->opacity = 1.0;
-  gtk_window_set_opacity(GTK_WINDOW(data->win), data->opacity);
+  gtk_widget_set_opacity(data->win, data->opacity);
 }
 
 static void on_opacity_lesser(GtkMenuItem *menuitem,
@@ -609,7 +609,7 @@ static void on_opacity_lesser(GtkMenuItem *menuitem,
   data->opacity -= 0.1;
   if(data->opacity<0.0)
     data->opacity = 0.0;
-  gtk_window_set_opacity(GTK_WINDOW(data->win), data->opacity);
+  gtk_widget_set_opacity(data->win, data->opacity);
 }
 
 
