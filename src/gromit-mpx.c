@@ -876,10 +876,16 @@ void setup_main_app (GromitData *data, gboolean activate)
   /* 
      TRAY ICON
   */
-  if(! (data->trayicon = gtk_status_icon_new_from_file("data/gromit-mpx.svg")))
-      if(! (data->trayicon = gtk_status_icon_new_from_file("/usr/local/share/icons/hicolor/scalable/apps/gromit-mpx.svg")))
-	  if(! (data->trayicon = gtk_status_icon_new_from_file("/usr/share/icons/hicolor/scalable/apps/gromit-mpx.svg")))
+  data->trayicon = gtk_status_icon_new_from_file("data/gromit-mpx.svg");
+  if(gtk_status_icon_get_storage_type(data->trayicon) == GTK_IMAGE_EMPTY) {
+      data->trayicon = gtk_status_icon_new_from_file("/usr/local/share/icons/hicolor/scalable/apps/gromit-mpx.svg");
+      if(gtk_status_icon_get_storage_type(data->trayicon) == GTK_IMAGE_EMPTY) {
+	  data->trayicon = gtk_status_icon_new_from_file("/usr/share/icons/hicolor/scalable/apps/gromit-mpx.svg");
+	  if(gtk_status_icon_get_storage_type(data->trayicon) == GTK_IMAGE_EMPTY)
 	      g_printerr("WARNING: Unable to find systray icon file!\n");
+      }
+  }
+	      
   gtk_status_icon_set_tooltip_text (data->trayicon, "Gromit-MPX");
   g_signal_connect (data->trayicon, "activate",
 		    G_CALLBACK (on_trayicon_activate), data);
