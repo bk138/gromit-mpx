@@ -876,7 +876,10 @@ void setup_main_app (GromitData *data, gboolean activate)
   /* 
      TRAY ICON
   */
-  data->trayicon = gtk_status_icon_new_from_file("/usr/share/pixmaps/gromit-mpx.png");
+  if(! (data->trayicon = gtk_status_icon_new_from_file("data/gromit-mpx.png")))
+      if(! (data->trayicon = gtk_status_icon_new_from_file("/usr/local/share/pixmaps/gromit-mpx.png")))
+	  if(! (data->trayicon = gtk_status_icon_new_from_file("/usr/share/pixmaps/gromit-mpx.png")))
+	      g_printerr("WARNING: Unable to find systray icon file!\n");
   gtk_status_icon_set_tooltip_text (data->trayicon, "Gromit-MPX");
   g_signal_connect (data->trayicon, "activate",
 		    G_CALLBACK (on_trayicon_activate), data);
