@@ -628,6 +628,23 @@ static void on_redo(GtkMenuItem *menuitem,
   redo_drawing (data);
 }
 
+static void on_about(GtkMenuItem *menuitem,
+                    gpointer     user_data)
+{
+    const gchar *authors [] = { "Christian Beier <dontmind@freeshell.org>", "Simon Budig <Simon.Budig@unix-ag.org>", NULL };
+    gtk_show_about_dialog (NULL,
+			   "program-name", "Gromit-MPX",
+			   "logo-icon-name", "gromit-mpx",
+			   "title", "About Gromit-MPX",
+			   "comments", "Gromit-MPX (GRaphics Over MIscellaneous Things) is a small tool to make annotations on the screen. Gromit-MPX is a multi-pointer port of the original Gromit annotation tool by Simon Budig.",
+			   "version", "1.1",
+			   "website", "https://github.com/bk138/gromit-mpx",
+			   "authors", authors,
+			   "copyright", "Copyright 2000 Simon Budig, 2009-2016 Christian Beier",
+			   "license-type", GTK_LICENSE_GPL_2_0,
+			   NULL);
+}
+
 
 void on_trayicon_activate (GtkStatusIcon *status_icon,
 			   gpointer       user_data)
@@ -725,22 +742,27 @@ void on_trayicon_menu (GtkStatusIcon *status_icon,
   /* create the menu */
   GtkWidget *menu = gtk_menu_new ();
   /* Create the menu items */
-  //TODO option menu
+  GtkWidget* about_item = gtk_menu_item_new_with_mnemonic("_About");
   GtkWidget* sep_item = gtk_separator_menu_item_new();
   GtkWidget* quit_item = gtk_menu_item_new_with_mnemonic("_Quit");
 
 
   /* Add them to the menu */
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), about_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), sep_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), quit_item);
 
   /* Attach the callback functions to the respective activate signal */
+  g_signal_connect(G_OBJECT (about_item), "activate",
+		   G_CALLBACK (on_about),
+		   NULL);
   g_signal_connect(G_OBJECT (quit_item), "activate",
 		   G_CALLBACK (gtk_main_quit),
 		   NULL);
 
 
   /* We do need to show menu items */
+  gtk_widget_show (about_item);
   gtk_widget_show (sep_item);
   gtk_widget_show (quit_item);
 
