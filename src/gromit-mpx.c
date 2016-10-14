@@ -962,7 +962,7 @@ int app_parse_args (int argc, char **argv, GromitData *data)
              {
                data->opacity = strtod (argv[i+1], NULL);
                g_printerr ("Opacity set to: %.2f\n", data->opacity);
-               gtk_window_set_opacity(GTK_WINDOW(data->win), data->opacity);
+               gtk_widget_set_opacity(data->win, data->opacity);
                i++;
              }
            else
@@ -1131,7 +1131,7 @@ int main (int argc, char **argv)
 
   gtk_window_fullscreen(GTK_WINDOW(data->win)); 
   gtk_window_set_skip_taskbar_hint(GTK_WINDOW(data->win), TRUE);
-  gtk_window_set_opacity(GTK_WINDOW(data->win), data->opacity);
+  gtk_widget_set_opacity(data->win, data->opacity);
   gtk_widget_set_app_paintable (data->win, TRUE);
   gtk_window_set_decorated (GTK_WINDOW (data->win), FALSE);
 
