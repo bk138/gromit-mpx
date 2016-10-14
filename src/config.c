@@ -113,7 +113,7 @@ void parse_config (GromitData *data)
   gchar *name, *copy;
 
   GromitPaintType type;
-  GdkColor *fg_color=NULL;
+  GdkRGBA *fg_color=NULL;
   guint width, arrowsize, minwidth;
 
   filename = g_strjoin (G_DIR_SEPARATOR_S,
@@ -235,7 +235,7 @@ void parse_config (GromitData *data)
 
           if (token == G_TOKEN_LEFT_PAREN)
             {
-              GdkColor *color = NULL;
+              GdkRGBA *color = NULL;
               g_scanner_set_scope (scanner, 2);
               scanner->config->int_2_float = 1;
               token = g_scanner_get_next_token (scanner);
@@ -274,9 +274,8 @@ void parse_config (GromitData *data)
                                           "aborting\n");
                               exit (1);
                             }
-                          color = g_malloc (sizeof (GdkColor));
-                          if (gdk_color_parse (scanner->value.v_string,
-                                               color))
+                          color = g_malloc (sizeof (GdkRGBA));
+                          if (gdk_rgba_parse (color, scanner->value.v_string))
                             {
 			      fg_color = color;
                             }

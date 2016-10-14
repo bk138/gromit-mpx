@@ -37,7 +37,7 @@
 
 GromitPaintContext *paint_context_new (GromitData *data, 
 				       GromitPaintType type,
-				       GdkColor *paint_color, 
+				       GdkRGBA *paint_color, 
 				       guint width,
 				       guint arrowsize,
 				       guint minwidth)
@@ -55,7 +55,7 @@ GromitPaintContext *paint_context_new (GromitData *data,
   
   context->paint_ctx = cairo_create (data->backbuffer);
 
-  gdk_cairo_set_source_color(context->paint_ctx, paint_color);
+  gdk_cairo_set_source_rgba(context->paint_ctx, paint_color);
   if(!data->composited)
     cairo_set_antialias(context->paint_ctx, CAIRO_ANTIALIAS_NONE);
   cairo_set_line_width(context->paint_ctx, width);
@@ -93,8 +93,7 @@ void paint_context_print (gchar *name,
   g_printerr ("width: %3d, ", context->width);
   g_printerr ("minwidth: %3d, ", context->minwidth);
   g_printerr ("arrowsize: %.2f, ", context->arrowsize);
-  g_printerr ("color: #%02X%02X%02X\n", context->paint_color->red >> 8,
-              context->paint_color->green >> 8, context->paint_color->blue >> 8);
+  g_printerr ("color: %s\n", gdk_rgba_to_string(context->paint_color));
 }
 
 
@@ -611,7 +610,7 @@ void draw_arrow (GromitData *data,
       cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[3].x, arrowhead[3].y);
       cairo_fill(devdata->cur_context->paint_ctx);
 
-      gdk_cairo_set_source_color(devdata->cur_context->paint_ctx, data->black);
+      gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, data->black);
 
       cairo_move_to(devdata->cur_context->paint_ctx, arrowhead[0].x, arrowhead[0].y);
       cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[1].x, arrowhead[1].y);
@@ -620,7 +619,7 @@ void draw_arrow (GromitData *data,
       cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[0].x, arrowhead[0].y);
       cairo_stroke(devdata->cur_context->paint_ctx);
 
-      gdk_cairo_set_source_color(devdata->cur_context->paint_ctx, devdata->cur_context->paint_color);
+      gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->paint_color);
     
       data->modified = 1;
 
@@ -667,12 +666,12 @@ void setup_main_app (GromitData *data, gboolean activate)
   g_free(data->white);
   g_free(data->black);
   g_free(data->red);
-  data->white = g_malloc (sizeof (GdkColor));
-  data->black = g_malloc (sizeof (GdkColor));
-  data->red   = g_malloc (sizeof (GdkColor));
-  gdk_color_parse ("#FFFFFF", data->white);
-  gdk_color_parse ("#000000", data->black);
-  gdk_color_parse ("#FF0000", data->red);
+  data->white = g_malloc (sizeof (GdkRGBA));
+  data->black = g_malloc (sizeof (GdkRGBA));
+  data->red   = g_malloc (sizeof (GdkRGBA));
+  gdk_rgba_parse(data->white, "#FFFFFF");
+  gdk_rgba_parse(data->black, "#000000");
+  gdk_rgba_parse(data->red, "#FF0000");
 
 
   /* 
