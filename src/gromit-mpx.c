@@ -886,10 +886,9 @@ void setup_main_app (GromitData *data, gboolean activate)
   }
 	      
   gtk_status_icon_set_tooltip_text (data->trayicon, "Gromit-MPX");
-  g_signal_connect (data->trayicon, "activate",
-		    G_CALLBACK (on_trayicon_activate), data);
-  g_signal_connect (data->trayicon, "popup-menu",
-		    G_CALLBACK (on_trayicon_menu), data);
+  g_signal_connect(data->trayicon, "button-press-event",
+		   G_CALLBACK(on_trayicon_buttonpress),
+		   data);
 
 }
 

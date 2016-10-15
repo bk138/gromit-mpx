@@ -91,13 +91,9 @@ void on_device_added (GdkDeviceManager *device_manager,
 		      GdkDevice        *device,
 		      gpointer          user_data);
 
-void on_trayicon_activate (GtkStatusIcon *status_icon,
-			   gpointer       user_data);
-
-void on_trayicon_menu (GtkStatusIcon *status_icon,
-		       guint          button,
-		       guint          activate_time,
-		       gpointer       user_data);
+gboolean on_trayicon_buttonpress(GtkWidget *widget,
+				 GdkEventButton  *ev,
+				 gpointer   user_data);
 
 
 #endif
