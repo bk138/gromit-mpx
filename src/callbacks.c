@@ -651,7 +651,30 @@ static void on_redo(GtkMenuItem *menuitem,
 static void on_help(GtkMenuItem *menuitem,
                     gpointer     user_data)
 {
+    GromitData *data = (GromitData *) user_data;
+
+    gchar helpString[4096];
+    snprintf(helpString, 4096,  "The available commands are:\n\n<tt><b>\
+    toggle painting:         %s\n\
+    clear screen:            SHIFT-%s\n\
+    toggle visibility:       CTRL-%s\n\
+    quit:                    ALT-%s\n\
+    undo last stroke:        %s\n\
+    redo last undone stroke: SHIFT-%s</b></tt>",
+	     data->hot_keyval, data->hot_keyval, data->hot_keyval, data->hot_keyval,
+	     data->undo_keyval, data->undo_keyval);
+
+    GtkWidget *dialog = gtk_message_dialog_new_with_markup (NULL,
+							 GTK_DIALOG_DESTROY_WITH_PARENT,
+							 GTK_MESSAGE_INFO,
+							 GTK_BUTTONS_CLOSE,
+							 helpString);
   
+    g_signal_connect_swapped (dialog, "response",
+			      G_CALLBACK (gtk_widget_destroy),
+			      dialog);
+
+    gtk_widget_show_all(dialog);
 }
 
 
@@ -795,7 +818,7 @@ gboolean on_trayicon_buttonpress(GtkWidget *widget,
 	    /* Attach the callback functions to the respective activate signal */
 	    g_signal_connect(G_OBJECT (help_item), "activate",
 			     G_CALLBACK (on_help),
-			     NULL);
+			     data);
 	    g_signal_connect(G_OBJECT (about_item), "activate",
 			     G_CALLBACK (on_about),
 			     NULL);
