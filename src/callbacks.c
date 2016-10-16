@@ -647,6 +647,15 @@ static void on_redo(GtkMenuItem *menuitem,
   redo_drawing (data);
 }
 
+
+static void on_help(GtkMenuItem *menuitem,
+                    gpointer     user_data)
+{
+  
+}
+
+
+
 static void on_about(GtkMenuItem *menuitem,
                     gpointer     user_data)
 {
@@ -771,17 +780,22 @@ gboolean on_trayicon_buttonpress(GtkWidget *widget,
 	    /* create the menu */
 	    GtkWidget *menu = gtk_menu_new ();
 	    /* Create the menu items */
+	    GtkWidget* help_item = gtk_menu_item_new_with_mnemonic("_Help");
 	    GtkWidget* about_item = gtk_menu_item_new_with_mnemonic("_About");
 	    GtkWidget* sep_item = gtk_separator_menu_item_new();
 	    GtkWidget* quit_item = gtk_menu_item_new_with_mnemonic("_Quit");
 
 
 	    /* Add them to the menu */
+	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), help_item);
 	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), about_item);
 	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), sep_item);
 	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), quit_item);
 
 	    /* Attach the callback functions to the respective activate signal */
+	    g_signal_connect(G_OBJECT (help_item), "activate",
+			     G_CALLBACK (on_help),
+			     NULL);
 	    g_signal_connect(G_OBJECT (about_item), "activate",
 			     G_CALLBACK (on_about),
 			     NULL);
@@ -791,6 +805,7 @@ gboolean on_trayicon_buttonpress(GtkWidget *widget,
 
 
 	    /* We do need to show menu items */
+	    gtk_widget_show (help_item);
 	    gtk_widget_show (about_item);
 	    gtk_widget_show (sep_item);
 	    gtk_widget_show (quit_item);
