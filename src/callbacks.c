@@ -27,6 +27,7 @@
 #include "input.h"
 #include "callbacks.h"
 #include "config.h"
+#include "build-config.h"
 
 
 gboolean on_expose (GtkWidget *widget,
@@ -655,7 +656,7 @@ static void on_about(GtkMenuItem *menuitem,
 			   "logo-icon-name", "gromit-mpx",
 			   "title", "About Gromit-MPX",
 			   "comments", "Gromit-MPX (GRaphics Over MIscellaneous Things) is a small tool to make annotations on the screen. Gromit-MPX is a multi-pointer port of the original Gromit annotation tool by Simon Budig.",
-			   "version", "1.1",
+			   "version", VERSION,
 			   "website", "https://github.com/bk138/gromit-mpx",
 			   "authors", authors,
 			   "copyright", "Copyright 2000 Simon Budig, 2009-2016 Christian Beier",
