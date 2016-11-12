@@ -560,9 +560,9 @@ void on_device_added (GdkDeviceManager *device_manager,
 
 
 
-static gboolean on_toggle_paint(GtkWidget *widget,
-				GdkEventButton  *ev,
-				gpointer   user_data)
+gboolean on_toggle_paint(GtkWidget *widget,
+			 GdkEventButton  *ev,
+			 gpointer   user_data)
 {
     GromitData *data = (GromitData *) user_data;
 
@@ -578,32 +578,30 @@ static gboolean on_toggle_paint(GtkWidget *widget,
     return TRUE;
 }
 
-
-static void on_clear (GtkMenuItem *menuitem,
-		      gpointer     user_data)
+void on_clear (GtkMenuItem *menuitem,
+	       gpointer     user_data)
 {
   GromitData *data = (GromitData *) user_data;
   clear_screen(data);
 }
 
 
-static void on_toggle_vis(GtkMenuItem *menuitem,
-			  gpointer     user_data)
+void on_toggle_vis(GtkMenuItem *menuitem,
+		   gpointer     user_data)
 {
   GromitData *data = (GromitData *) user_data;
   toggle_visibility(data);
 }
 
 
-
-static void on_thicker_lines(GtkMenuItem *menuitem,
-			     gpointer     user_data)
+void on_thicker_lines(GtkMenuItem *menuitem,
+		      gpointer     user_data)
 {
   line_thickener += 0.1;
 }
 
-static void on_thinner_lines(GtkMenuItem *menuitem,
-			     gpointer     user_data)
+void on_thinner_lines(GtkMenuItem *menuitem,
+		      gpointer     user_data)
 {
   line_thickener -= 0.1;
   if (line_thickener < -1)
@@ -611,8 +609,8 @@ static void on_thinner_lines(GtkMenuItem *menuitem,
 }
 
 
-static void on_opacity_bigger(GtkMenuItem *menuitem,
-			     gpointer     user_data)
+void on_opacity_bigger(GtkMenuItem *menuitem,
+		       gpointer     user_data)
 {
   GromitData *data = (GromitData *) user_data;
   data->opacity += 0.1;
@@ -621,8 +619,8 @@ static void on_opacity_bigger(GtkMenuItem *menuitem,
   gtk_widget_set_opacity(data->win, data->opacity);
 }
 
-static void on_opacity_lesser(GtkMenuItem *menuitem,
-			     gpointer     user_data)
+void on_opacity_lesser(GtkMenuItem *menuitem,
+		       gpointer     user_data)
 {
   GromitData *data = (GromitData *) user_data;
   data->opacity -= 0.1;
@@ -632,24 +630,23 @@ static void on_opacity_lesser(GtkMenuItem *menuitem,
 }
 
 
-
-static void on_undo(GtkMenuItem *menuitem,
-                    gpointer     user_data)
+void on_undo(GtkMenuItem *menuitem,
+	     gpointer     user_data)
 {
   GromitData *data = (GromitData *) user_data;
   undo_drawing (data);
 }
 
-static void on_redo(GtkMenuItem *menuitem,
-                    gpointer     user_data)
+void on_redo(GtkMenuItem *menuitem,
+	     gpointer     user_data)
 {
   GromitData *data = (GromitData *) user_data;
   redo_drawing (data);
 }
 
 
-static void on_help(GtkMenuItem *menuitem,
-                    gpointer     user_data)
+void on_help(GtkMenuItem *menuitem,
+	     gpointer     user_data)
 {
     GromitData *data = (GromitData *) user_data;
 
@@ -679,8 +676,8 @@ static void on_help(GtkMenuItem *menuitem,
 
 
 
-static void on_about(GtkMenuItem *menuitem,
-                    gpointer     user_data)
+void on_about(GtkMenuItem *menuitem,
+	      gpointer     user_data)
 {
     const gchar *authors [] = { "Christian Beier <dontmind@freeshell.org>", "Simon Budig <Simon.Budig@unix-ag.org>", NULL };
     gtk_show_about_dialog (NULL,
@@ -695,167 +692,5 @@ static void on_about(GtkMenuItem *menuitem,
 			   "license-type", GTK_LICENSE_GPL_2_0,
 			   NULL);
 }
-
-
-gboolean on_trayicon_buttonpress(GtkWidget *widget,
-				 GdkEventButton  *ev,
-				 gpointer   user_data)
-{
-    GromitData *data = (GromitData *) user_data;
-
-    GdkDevice *master = ev->device;
-    GdkDevice *slave = gdk_event_get_source_device ((GdkEvent *) ev);
-
-    if(data->debug)
-	g_printerr("DEBUG: Device '%s': Button %i on_trayicon_buttonpress at (x,y)=(%.2f : %.2f)\n",
-		   gdk_device_get_name(slave), ev->button, ev->x_root, ev->y_root);
-
-    switch(ev->button) {
-    case 1:
-	{
-	    /* create the menu */
-	    GtkWidget *menu = gtk_menu_new ();
-  
-	    /* Create the menu items */
-	    GtkWidget* toggle_paint_item = gtk_menu_item_new_with_label ("Toggle Painting");
-	    GtkWidget* clear_item = gtk_menu_item_new_with_label ("Clear Screen");
-	    GtkWidget* toggle_vis_item = gtk_menu_item_new_with_label ("Toggle Visibility");
-	    GtkWidget* thicker_lines_item = gtk_menu_item_new_with_label ("Thicker Lines");
-	    GtkWidget* thinner_lines_item = gtk_menu_item_new_with_label ("Thinner Lines");
-	    GtkWidget* opacity_bigger_item = gtk_menu_item_new_with_label ("Bigger Opacity");
-	    GtkWidget* opacity_lesser_item = gtk_menu_item_new_with_label ("Lesser Opacity");
-	    GtkWidget* undo_item = gtk_menu_item_new_with_label ("Undo");
-	    GtkWidget* redo_item = gtk_menu_item_new_with_label ("Redo");
-
-
-	    /* Add them to the menu */
-	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), toggle_paint_item);
-	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), clear_item);
-	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), toggle_vis_item);
-	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), thicker_lines_item);
-	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), thinner_lines_item);
-	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), opacity_bigger_item);
-	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), opacity_lesser_item);
-	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), undo_item);
-	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), redo_item);
-
-
-	    /* Attach the callback functions to the respective activate signal */
-	    g_signal_connect(toggle_paint_item, "button-press-event",
-			     G_CALLBACK(on_toggle_paint),
-			     data);
-	    g_signal_connect(G_OBJECT (clear_item), "activate",
-			     G_CALLBACK (on_clear),
-			     data);
-	    g_signal_connect(G_OBJECT (toggle_vis_item), "activate",
-			     G_CALLBACK (on_toggle_vis),
-			     data);
-	    g_signal_connect(G_OBJECT (thicker_lines_item), "activate",
-			     G_CALLBACK (on_thicker_lines),
-			     data);
-	    g_signal_connect(G_OBJECT (thinner_lines_item), "activate",
-			     G_CALLBACK (on_thinner_lines),
-			     data);
-	    g_signal_connect(G_OBJECT (opacity_bigger_item), "activate",
-			     G_CALLBACK (on_opacity_bigger),
-			     data);
-	    g_signal_connect(G_OBJECT (opacity_lesser_item), "activate",
-			     G_CALLBACK (on_opacity_lesser),
-			     data);
-	    g_signal_connect(G_OBJECT (undo_item), "activate",
-			     G_CALLBACK (on_undo),
-			     data);
-	    g_signal_connect(G_OBJECT (redo_item), "activate",
-			     G_CALLBACK (on_redo),
-			     data);
- 
-
-	    /* We do need to show menu items */
-	    gtk_widget_show (toggle_paint_item);
-	    gtk_widget_show (clear_item);
-	    gtk_widget_show (toggle_vis_item);
-	    gtk_widget_show (thicker_lines_item);
-	    gtk_widget_show (thinner_lines_item);
-	    gtk_widget_show (opacity_bigger_item);
-	    gtk_widget_show (opacity_lesser_item);
-	    gtk_widget_show (undo_item);
-	    gtk_widget_show (redo_item);
- 
-
-	    /* show menu */
-	    gtk_menu_popup_for_device(GTK_MENU (menu),
-				      master, // device
-				      NULL, // parent_menu_shell
-				      NULL, // parent_menu_item
-				      NULL, // pos func
-				      NULL, // data
-				      NULL, // destroy-func
-				      0,    // button
-				      gtk_get_current_event_time()
-				      );
-
-	}
-	break;
-
-
-    case 3:
-	{
-	    /* create the menu */
-	    GtkWidget *menu = gtk_menu_new ();
-	    /* Create the menu items */
-	    GtkWidget* help_item = gtk_menu_item_new_with_mnemonic("_Help");
-	    GtkWidget* about_item = gtk_menu_item_new_with_mnemonic("_About");
-	    GtkWidget* sep_item = gtk_separator_menu_item_new();
-	    GtkWidget* quit_item = gtk_menu_item_new_with_mnemonic("_Quit");
-
-
-	    /* Add them to the menu */
-	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), help_item);
-	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), about_item);
-	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), sep_item);
-	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), quit_item);
-
-	    /* Attach the callback functions to the respective activate signal */
-	    g_signal_connect(G_OBJECT (help_item), "activate",
-			     G_CALLBACK (on_help),
-			     data);
-	    g_signal_connect(G_OBJECT (about_item), "activate",
-			     G_CALLBACK (on_about),
-			     NULL);
-	    g_signal_connect(G_OBJECT (quit_item), "activate",
-			     G_CALLBACK (gtk_main_quit),
-			     NULL);
-
-
-	    /* We do need to show menu items */
-	    gtk_widget_show (help_item);
-	    gtk_widget_show (about_item);
-	    gtk_widget_show (sep_item);
-	    gtk_widget_show (quit_item);
-
-
-	    /* show menu */
-	    gtk_menu_popup_for_device(GTK_MENU (menu),
-				      master, // device
-				      NULL, // parent_menu_shell
-				      NULL, // parent_menu_item
-				      NULL, // pos func
-				      NULL, // data
-				      NULL, // destroy-func
-				      0,    // button
-				      gtk_get_current_event_time()
-				      );
-
-	}
-	break;
-
-    default:
-	return FALSE;
-    }
-
-    return TRUE;
-}
-
-
 
 

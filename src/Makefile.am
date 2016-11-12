@@ -4,6 +4,7 @@ AM_CFLAGS = -Wall -Wextra -Wno-unused-parameter
 
 AM_CPPFLAGS = \
 	$(GTK3_CFLAGS) \
+	$(APPINDICATOR_CFLAGS) \
 	$(XINPUT2_CFLAGS) \
 	$(X11_CFLAGS)
 

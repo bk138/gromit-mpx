@@ -91,9 +91,44 @@ void on_device_added (GdkDeviceManager *device_manager,
 		      GdkDevice        *device,
 		      gpointer          user_data);
 
-gboolean on_trayicon_buttonpress(GtkWidget *widget,
-				 GdkEventButton  *ev,
-				 gpointer   user_data);
+/*
+  menu callbacks
+ */
+gboolean on_toggle_paint(GtkWidget *widget,
+			 GdkEventButton  *ev,
+			 gpointer   user_data);
+
+void on_clear (GtkMenuItem *menuitem,
+	       gpointer     user_data);
+
+void on_toggle_vis(GtkMenuItem *menuitem,
+		   gpointer     user_data);
+
+void on_thicker_lines(GtkMenuItem *menuitem,
+		      gpointer     user_data);
+
+void on_thinner_lines(GtkMenuItem *menuitem,
+		      gpointer     user_data);
+
+void on_opacity_bigger(GtkMenuItem *menuitem,
+		       gpointer     user_data);
+
+void on_opacity_lesser(GtkMenuItem *menuitem,
+		       gpointer     user_data);
+
+void on_undo(GtkMenuItem *menuitem,
+	     gpointer     user_data);
+
+void on_redo(GtkMenuItem *menuitem,
+	     gpointer     user_data);
+
+
+void on_help(GtkMenuItem *menuitem,
+	     gpointer     user_data);
+
+void on_about(GtkMenuItem *menuitem,
+	      gpointer     user_data);
+
 
 
 #endif

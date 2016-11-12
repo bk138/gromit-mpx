@@ -27,6 +27,7 @@
 #include <glib.h>
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
+#include <libappindicator/app-indicator.h>
 
 
 #define GROMIT_MOUSE_EVENTS ( GDK_POINTER_MOTION_MASK | \
@@ -98,7 +99,7 @@ typedef struct
 typedef struct
 {
   GtkWidget   *win;
-  GtkStatusIcon *trayicon;
+  AppIndicator *trayicon;
 
   GdkCursor   *paint_cursor;
   GdkCursor   *erase_cursor;

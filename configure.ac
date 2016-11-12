@@ -17,12 +17,14 @@ PKG_PROG_PKG_CONFIG([0.20])
 AC_SEARCH_LIBS([atan2], [m])
 # check for gtk
 PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= 2.99.3])
+# libappindicator for tray icon
+PKG_CHECK_MODULES([APPINDICATOR], appindicator3-0.1 >= 0.4.92)
 # check for XInput
 PKG_CHECK_MODULES([XINPUT2], [xi >= 1.3])
 # check for X
 PKG_CHECK_MODULES([X11], [x11])
 # export linker flags in the right order
-LIBS="$GTK3_LIBS $XINPUT2_LIBS $X11_LIBS $LIBS"
+LIBS="$GTK3_LIBS $APPINDICATOR_LIBS $XINPUT2_LIBS $X11_LIBS $LIBS"
 
 # ***************************************************************************
 # finally
