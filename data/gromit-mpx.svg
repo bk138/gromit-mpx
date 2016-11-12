@@ -22,16 +22,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="959"
-     inkscape:window-height="1013"
+     inkscape:window-width="1920"
+     inkscape:window-height="1014"
      id="namedview15"
      showgrid="false"
      inkscape:zoom="14.75"
-     inkscape:cx="19.752627"
+     inkscape:cx="19.88822"
      inkscape:cy="8.0567076"
-     inkscape:window-x="959"
+     inkscape:window-x="0"
      inkscape:window-y="27"
-     inkscape:window-maximized="0"
+     inkscape:window-maximized="1"
      inkscape:current-layer="svg2816" />
   <defs
      id="defs2818" />
@@ -43,7 +43,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -79,11 +79,11 @@
      sodipodi:linespacing="125%"
      xml:space="preserve"
      style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12px;line-height:125%;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans Bold';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#00ff00;fill-opacity:1;stroke:#000000;stroke-width:0.25429109;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     x="5.547853"
-     y="31.540289"
+     x="7.5139546"
+     y="32.150459"
      id="text2994"><tspan
        id="tspan2996"
-       x="5.547853"
-       y="31.540289"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12px;line-height:125%;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans Bold';text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.25429109">MPX</tspan></text>
+       x="7.5139546"
+       y="32.150459"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.25429109">MPX</tspan></text>
 </svg>
