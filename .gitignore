@@ -15,3 +15,10 @@
 /stamp-h1
 Makefile
 Makefile.in
+
+/.idea/
+/Build/
+/cmake-build-debug/
+*~
+/Build_Release/
+/Build_Debug/
