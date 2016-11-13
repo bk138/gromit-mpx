@@ -87,70 +87,72 @@ void setup_input_devices (GromitData *data)
           if(gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_SLAVE)
             kdevice=gdk_device_get_associated_device (device);
 
-	  gint dev_id = -1;
-	  g_object_get(kdevice, "device-id", &dev_id, NULL);
-
-	  gint kbd_dev_id = -1;
-	  XIDeviceInfo* devinfo;
-	  int devicecount = 0;
-	  
-	  devinfo = XIQueryDevice(GDK_DISPLAY_XDISPLAY(data->display),
-				  dev_id,
-				  &devicecount);
-	  if(devicecount)
-	    kbd_dev_id = devinfo->attachment;
-	  XIFreeDeviceInfo(devinfo);
+	  if (GDK_IS_X11_DISPLAY(data->display)) {
+	      gint dev_id = -1;
+	      g_object_get(kdevice, "device-id", &dev_id, NULL);
+	      
+	      gint kbd_dev_id = -1;
+	      XIDeviceInfo* devinfo;
+	      int devicecount = 0;
+	      
+	      devinfo = XIQueryDevice(GDK_DISPLAY_XDISPLAY(data->display),
+				      dev_id,
+				      &devicecount);
+	      if(devicecount)
+		  kbd_dev_id = devinfo->attachment;
+	      XIFreeDeviceInfo(devinfo);
  
-	  if(kbd_dev_id != -1)
-	    {
-	      if(data->debug)
-		g_printerr("DEBUG: Grabbing hotkeys from keyboard '%d' .\n", kbd_dev_id);
+	      if(kbd_dev_id != -1)
+		  {
+		      if(data->debug)
+			  g_printerr("DEBUG: Grabbing hotkeys from keyboard '%d' .\n", kbd_dev_id);
 
-	      XIEventMask mask;
-	      unsigned char bits[4] = {0,0,0,0};
-	      mask.mask = bits;
-	      mask.mask_len = sizeof(bits);
+		      XIEventMask mask;
+		      unsigned char bits[4] = {0,0,0,0};
+		      mask.mask = bits;
+		      mask.mask_len = sizeof(bits);
 	      
-	      XISetMask(bits, XI_KeyPress);
-	      XISetMask(bits, XI_KeyRelease);
+		      XISetMask(bits, XI_KeyPress);
+		      XISetMask(bits, XI_KeyRelease);
 	      
-	      XIGrabModifiers modifiers[] = {{XIAnyModifier, 0}};
-	      int nmods = 1;
+		      XIGrabModifiers modifiers[] = {{XIAnyModifier, 0}};
+		      int nmods = 1;
 	      
-	      gdk_error_trap_push ();
+		      gdk_error_trap_push ();
 	      
-	      XIGrabKeycode( GDK_DISPLAY_XDISPLAY(data->display),
-			     kbd_dev_id,
-			     data->hot_keycode,
-			     GDK_WINDOW_XID(data->root),
-			     GrabModeAsync,
-			     GrabModeAsync,
-			     True,
-			     &mask,
-			     nmods,
-			     modifiers);
+		      XIGrabKeycode( GDK_DISPLAY_XDISPLAY(data->display),
+				     kbd_dev_id,
+				     data->hot_keycode,
+				     GDK_WINDOW_XID(data->root),
+				     GrabModeAsync,
+				     GrabModeAsync,
+				     True,
+				     &mask,
+				     nmods,
+				     modifiers);
 
-	      XIGrabKeycode( GDK_DISPLAY_XDISPLAY(data->display),
-			     kbd_dev_id,
-			     data->undo_keycode,
-			     GDK_WINDOW_XID(data->root),
-			     GrabModeAsync,
-			     GrabModeAsync,
-			     True,
-			     &mask,
-			     nmods,
-			     modifiers);
+		      XIGrabKeycode( GDK_DISPLAY_XDISPLAY(data->display),
+				     kbd_dev_id,
+				     data->undo_keycode,
+				     GDK_WINDOW_XID(data->root),
+				     GrabModeAsync,
+				     GrabModeAsync,
+				     True,
+				     &mask,
+				     nmods,
+				     modifiers);
 
-	      XSync(GDK_DISPLAY_XDISPLAY(data->display), False);
-	      if(gdk_error_trap_pop())
-		{
-		  g_printerr("ERROR: Grabbing hotkey from keyboard device %d failed.\n",
-			     kbd_dev_id);
-		  g_free(devdata);
-		  continue;
-		}
-	    }
-
+		      XSync(GDK_DISPLAY_XDISPLAY(data->display), False);
+		      if(gdk_error_trap_pop())
+			  {
+			      g_printerr("ERROR: Grabbing hotkey from keyboard device %d failed.\n",
+					 kbd_dev_id);
+			      g_free(devdata);
+			      continue;
+			  }
+		  }
+	  } // GDK_IS_X11_DISPLAY()
+	      
 	  g_hash_table_insert(data->devdatatable, device, devdata);
           g_printerr ("Enabled Device %d: \"%s\", (Type: %d)\n", 
 		      i++, gdk_device_get_name(device), gdk_device_get_source(device));
