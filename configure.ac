@@ -2,13 +2,14 @@
 
 AC_PREREQ([2.69])
 AC_INIT([gromit-mpx],[1.2],[Christian Beier <dontmind@freeshell.org>],[gromit-mpx],[https://github.com/bk138/gromit-mpx])
-AM_INIT_AUTOMAKE([foreign -Wall])
+AM_INIT_AUTOMAKE([foreign subdir-objects -Wall])
 AC_CONFIG_SRCDIR([src/gromit-mpx.c])
 AC_CONFIG_HEADERS([build-config.h])
 
 # Checks for programs.
 AC_PROG_CC
 AM_PROG_CC_C_O
+AX_CFLAGS_WARN_ALL
 AC_HEADER_STDC
 PKG_PROG_PKG_CONFIG([0.20]) 
 
