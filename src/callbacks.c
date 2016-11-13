@@ -665,7 +665,7 @@ void on_help(GtkMenuItem *menuitem,
 							 GTK_DIALOG_DESTROY_WITH_PARENT,
 							 GTK_MESSAGE_INFO,
 							 GTK_BUTTONS_CLOSE,
-							 helpString);
+							 "%s", helpString);
   
     g_signal_connect_swapped (dialog, "response",
 			      G_CALLBACK (gtk_widget_destroy),
