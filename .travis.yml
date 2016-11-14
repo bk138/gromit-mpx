@@ -1,4 +1,6 @@
 language: c
+dist: trusty
+sudo: required
 
 # install build dependencies
 before_install:
