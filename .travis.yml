@@ -1,0 +1,11 @@
+language: c
+
+# install build dependencies
+before_install:
+  - sudo apt-get install libgtk-3-dev libappindicator3-dev libxi-dev
+
+# before build script, run autoreconf
+before_script: autoreconf -fiv
+
+# Default is "./configure && make && make test", but no tests yet
+script: "./configure && make"
