@@ -2,7 +2,7 @@ language: c
 
 # install build dependencies
 before_install:
-  - sudo apt-get install libgtk-3-dev libappindicator3-dev libxi-dev
+  - sudo apt-get install automake libgtk-3-dev libappindicator3-dev libxi-dev
 
 # before build script, run autoreconf
 before_script: autoreconf -fiv
