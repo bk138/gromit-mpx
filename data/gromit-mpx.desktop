@@ -5,6 +5,7 @@ Name=Gromit-MPX
 Type=Application
 Comment=GRaphics Over MIscellaneous Things, a multi pointer annotation tool
 Comment[pl]=Program do rysowania bezpośrednio po ekranie
+Keywords=presentation;overlay;markup;pointer;
 Terminal=false
 StartupNotify=false
 Categories=Graphics;
