@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/bk138/gromit-mpx.svg?branch=master)](https://travis-ci.org/bk138/gromit-mpx)
+
 ## Gromit-MPX
 
 Gromit-MPX is a multi-pointer port of the original [Gromit annotation
