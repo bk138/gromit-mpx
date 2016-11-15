@@ -661,12 +661,13 @@ void on_help(GtkMenuItem *menuitem,
 	     data->hot_keyval, data->hot_keyval, data->hot_keyval, data->hot_keyval,
 	     data->undo_keyval, data->undo_keyval);
 
-    GtkWidget *dialog = gtk_message_dialog_new_with_markup (NULL,
-							 GTK_DIALOG_DESTROY_WITH_PARENT,
-							 GTK_MESSAGE_INFO,
-							 GTK_BUTTONS_CLOSE,
-							 "%s", helpString);
-  
+    GtkWidget *dialog = gtk_message_dialog_new(NULL,
+					       GTK_DIALOG_DESTROY_WITH_PARENT,
+					       GTK_MESSAGE_INFO,
+					       GTK_BUTTONS_CLOSE,
+					       NULL);
+    gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog), helpString);
+
     g_signal_connect_swapped (dialog, "response",
 			      G_CALLBACK (gtk_widget_destroy),
 			      dialog);
