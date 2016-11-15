@@ -1,4 +1,13 @@
 
+Gromit-MPX 1.2
+   * Added undo/redo functionality thanks to Nathan Whitehead.
+   * Added opacity-set functionality thanks to Lukas Hermann.
+   * Added a tray icon.
+   * Added an About and a Help dialog.
+   * Added CMake build system support thanks to Russel Winder.
+   * Replaced GTK3 deprecated functions with newer counterparts.
+
+
 Gromit-MPX 1.1
    * Added reasonably complete support for slave devices thanks to Monty Montgomery.
    * Tweaked build system, packaging, icon thanks to Barak A. Pearlmutter.
