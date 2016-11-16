@@ -1,3 +1,550 @@
+commit c2b4d4a044edea046494e6c628c01ea26e8246a5
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Nov 16 22:34:09 2016 +0100
+
+    Make the line thickness changer applicable to mouse drawing as well.
+    
+    This commit removes the special mouse handling by settings default
+    pressure to full-on. Thus, dynamic line thickness will be taken into account
+    for mouse events as well now.
+
+commit 5b50ba374d5c46e5cc3ee3e9e5d9d3501e6ce5ad
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Nov 16 20:04:38 2016 +0100
+
+    CMake: mark all libs as required.
+
+commit d38cb4217a9eb42178285a12716bd4308bebcd8d
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Nov 16 11:51:10 2016 +0100
+
+    Update man page a bit.
+
+commit 1b6c55804e80a1483cdf66afaa7c1e6db101c25a
+Author: Christian Beier <cb@shoutrlabs.com>
+Date:   Tue Nov 15 20:13:59 2016 +0100
+
+    Fix help dialog formatting.
+    
+    Was broken by 463afe30133b5e8cc814c77aef4e186696d55eca.
+
+commit fc00515902d387dc4b99c6aa5eb80f04cc714d14
+Author: Christian Beier <cb@shoutrlabs.com>
+Date:   Tue Nov 15 19:42:53 2016 +0100
+
+    Update NEWS.
+
+commit 806562e917c1a148e36be56fe427c1fc93967928
+Author: Christian Beier <cb@shoutrlabs.com>
+Date:   Tue Nov 15 19:25:31 2016 +0100
+
+    Update TODO.
+
+commit b09bc0117fd65965570771360e8854c52e35f920
+Merge: 8cf5da1 ce06532
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue Nov 15 19:22:38 2016 +0100
+
+    Merge pull request #33 from russel/cmake-build
+    
+    Add a first cut at a CMake build system
+
+commit ce065329e314ee63564ea0d36fdd72e0626b5296
+Author: Russel Winder <russel@winder.org.uk>
+Date:   Sun Nov 13 08:10:09 2016 +0000
+
+    Add a first cut at a CMake build system – allows for use of CLion as IDE.
+
+commit 8cf5da19e10cab9b985e84852942a2e1b6cea1cb
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Nov 14 10:46:46 2016 +0100
+
+    TravisCI: add a build badge to README.md.
+
+commit 35bb13f2846f32add7700c4a14981020d8417e2e
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Nov 14 10:43:35 2016 +0100
+
+    TravisCI: switch to a more recent Ubuntu.
+
+commit 4d72eb7c0f1827626261590a04b55e07a58e6918
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Nov 14 09:26:04 2016 +0100
+
+    Add automake to Travis build deps.
+
+commit ac31c08f81452b3834a922658b3468e6a961d12d
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Nov 14 09:19:07 2016 +0100
+
+    Add a .travis.yml file.
+
+commit 7a3c494425d70e37076f86c18380f29ed017da41
+Merge: a3bd7ab 620bc36
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Nov 14 08:57:18 2016 +0100
+
+    Merge pull request #34 from barak/upstream
+    
+    minor matters noted while packaging latest development version
+
+commit 620bc3677d130722a235035052c74b81a0c1ac7e
+Author: Barak A. Pearlmutter <barak+git@pearlmutter.net>
+Date:   Sun Nov 13 23:05:43 2016 +0000
+
+    add desktop file keywords, silencing lintian tag desktop-entry-lacks-keywords-entry
+
+commit 463afe30133b5e8cc814c77aef4e186696d55eca
+Author: Barak A. Pearlmutter <barak+git@pearlmutter.net>
+Date:   Sun Nov 13 22:35:01 2016 +0000
+
+    address gcc -Werror=format-security
+
+commit 545f5e84265fc1e18927d8b2f453c77b1c8e66ad
+Author: Barak A. Pearlmutter <barak+git@pearlmutter.net>
+Date:   Sun Nov 13 22:28:06 2016 +0000
+
+    AX_CFLAGS_WARN_ALL and automake subdir-objects
+
+commit 13a967101475409d57fb96a6514683b3d5cc0e75
+Author: Barak A. Pearlmutter <barak+git@pearlmutter.net>
+Date:   Sun Nov 13 22:12:33 2016 +0000
+
+    git ignore build debris
+
+commit a3bd7ab8028d4544d7396e9bcf69abdf2862356a
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Nov 13 01:04:29 2016 +0100
+
+    Only use the X11-specific bits in input device setup when actually running on an X11 display.
+
+commit efb3e4a603e33487c9b51e9eb92e65ba42555a4a
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Nov 12 20:34:40 2016 +0100
+
+    Use a commonly available font for the SVG icon.
+
+commit 6ca9dc53a55e07bcb9c4edc0870664017a1d6487
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Nov 12 20:29:58 2016 +0100
+
+    Update SVG icon.
+
+commit 20dee4f7aac4da4fa1c45c53b9da19846175eef5
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Nov 12 20:10:58 2016 +0100
+
+    Convert the tray icon code to be compatible to Ubuntu-Unity.
+
+commit b9df54f24b9100653268423039c3acdab28a1a78
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Oct 16 17:57:30 2016 +0200
+
+    Add a poor man's help dialog displaying at least the hot key commands.
+
+commit b98a9ef9da63afa1093d15dea5e606f4c9921126
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Oct 16 15:50:03 2016 +0200
+
+    Add (still empty) help menu item.
+
+commit 9db0439a2ec9ec9ad79827ad0cf8c15530c462c6
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Oct 16 14:03:39 2016 +0200
+
+    Version up.
+
+commit 519767765d9bf91e85a6f09776ffc82460268e16
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Oct 16 14:03:03 2016 +0200
+
+    Get the About dialog version from the build system.
+
+commit 5fc19c7f68fa4151b7e3bf20824e31bfb1d308a4
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Oct 15 16:51:28 2016 +0200
+
+    Rework try icon menu to be device-specific.
+    
+    Problem though is that GDK always reports the core pointer, event if another
+    master clicked the menu. mhhh.
+
+commit f83c153ea76e17825ddbfc333754eb208a5deb28
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Oct 14 16:43:56 2016 +0200
+
+    Revert "flatten into single Makefile.am"
+    
+    This reverts commit 2bb6f900f144332b08016d390450fc42b7d8f889.
+    
+    It made developing cumbersome as make has to be called from outside the
+    source directory.
+
+commit d632a9a823500bc650e8e9c526216fc9199eaebe
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Oct 14 15:04:53 2016 +0200
+
+    Fix two more warnings.
+
+commit 917d8c10f11db115d328ed5738056d536bbfb34f
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Oct 14 15:03:30 2016 +0200
+
+    Convert all deprecated GdkColor stuff to GdkRGBA.
+
+commit 04bb86fa5bb82ee0443dbfe4fbef7a1739467df2
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Oct 14 14:38:42 2016 +0200
+
+    Add an About dialog.
+    
+    Version still hardcoded...
+
+commit c8ea7dd4e0fc54e4d54093a6bdf8d9235622af4c
+Author: Christian Beier <cb@shoutrlabs.com>
+Date:   Mon Oct 10 20:16:58 2016 +0200
+
+    Rework ther systray icon find logic to something that actually works.
+
+commit 4ebf4c89f29a14a764e6667cd74166546e132899
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Oct 10 10:23:44 2016 +0200
+
+    Fix path to installed systray icons.
+
+commit 721dd2afc936a1322beae43fba970d29bbd82501
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Oct 10 10:20:46 2016 +0200
+
+    Use the SVG icon for the tray.
+
+commit 52ffa118ff4c2f8923681198507301a2e55b5165
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Oct 10 10:20:25 2016 +0200
+
+    Fix font and clipping on SVG icon.
+
+commit 7bc446198a164ad10f7936aa883f0b5f1808ff30
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Oct 10 10:03:19 2016 +0200
+
+    Change the SVG icon to more resemble the original PNG one.
+
+commit ded5df902b3b1b4c674e9edf65981c747b218318
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Oct 10 09:52:10 2016 +0200
+
+    Try to load tray icon from different locations.
+
+commit 3ed28df1135898529b78e94a3dcaba7bc015187d
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Oct 9 15:58:29 2016 +0200
+
+    Replace some more deprecated calls in callbacks.c.
+
+commit 1ec34cfeedec9504ccd6e559ca42b176de344c79
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Oct 9 15:56:57 2016 +0200
+
+    Replace some deprecated GTK/GDK functions.
+
+commit 7bc5f21fd2f8033320d927c5765e47705a9dd81f
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Oct 8 18:34:45 2016 +0200
+
+    Get rid of the X11 intrinsics to find the paired device in snoop_key_press().
+
+commit 53f981df8e469f1e3c2c19fd2ae1eec0c2d80619
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Oct 8 17:12:30 2016 +0200
+
+    Add a motion debug log.
+
+commit 6d463e7a7b38c74ea5ba7d29ca672fad9b965a87
+Merge: 2abb29b 7374264
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Oct 7 01:18:59 2016 +0200
+
+    Merge pull request #26 from tobias47n9e/patch-1
+    
+    README: Add some required packages for building
+
+commit 73742645a5d55bba88c23024d1c883457be8af34
+Author: Tobias Schönberg <tobias47n9e@gmail.com>
+Date:   Thu Oct 6 20:57:24 2016 +0200
+
+    README: Add some required packages for building
+
+commit 2abb29b9ba6aeee5644602bf65aba44664b16e03
+Merge: 98e92c2 2bb6f90
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Aug 27 12:29:01 2015 +0200
+
+    Merge pull request #21 from barak/tweaks
+    
+    Tweaks from barak
+
+commit 98e92c282e160889db2c17330945e897cd59093a
+Merge: fe9f718 bb5688e
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Aug 24 12:35:47 2015 +0200
+
+    Merge pull request #20 from Tuxilero/master
+    
+    Opacity support
+
+commit bb5688e9cee6551d66c2c4ae5479aad352d411a1
+Author: Lukas Hermann <tuxilero@gmail.com>
+Date:   Sat Aug 22 17:50:48 2015 +0200
+
+    Update README.md
+
+commit ecb5d9f022bd736190d7d0c91ecb2f8aefcce496
+Merge: 344c69a 4ea5ed0
+Author: Lukáš Hermann <tuxilero@gmail.com>
+Date:   Fri Aug 21 13:50:05 2015 +0200
+
+    Merge branch 'master' of https://github.com/Tuxilero/gromit-mpx
+
+commit 344c69a2fd59db2070b5f8f4ec8d84393655802d
+Author: Lukáš Hermann <tuxilero@gmail.com>
+Date:   Fri Aug 21 13:49:33 2015 +0200
+
+    Opacity menu entry, argument fix
+
+commit 4ea5ed078c4df3f666a61a349c003b4d8baa20a0
+Author: Lukas Hermann <tuxilero@gmail.com>
+Date:   Fri Aug 21 11:58:57 2015 +0200
+
+    Update README.md
+
+commit 188dd42cbf1db93606e4108f1f52500279f42a4d
+Author: Lukáš Hermann <tuxilero@gmail.com>
+Date:   Fri Aug 21 11:57:07 2015 +0200
+
+    Opacity support
+
+commit fe9f718c932aea8828a06f5df096c52d8d08f57b
+Merge: a506290 bb51710
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun May 10 18:03:09 2015 +0200
+
+    Merge pull request #17 from wavexx/minwidth
+    
+    Add minsize as a pen setting (defaulting to 1).
+
+commit 2bb6f900f144332b08016d390450fc42b7d8f889
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Thu May 7 16:19:24 2015 +0100
+
+    flatten into single Makefile.am
+
+commit db7d9bf8990b4b7b56d53b031fe30c19795cb9e2
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Thu May 7 16:13:48 2015 +0100
+
+    fix clipped svg icon
+
+commit 5a7f6333b06e268b0d83e10c2c725d888f9cff1f
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Thu May 7 16:03:50 2015 +0100
+
+    update construct in configure.ac
+
+commit bb51710f4f3371480030ae7f9d6da91a1f37e6ea
+Author: Yuri D'Elia <yuri.delia@eurac.edu>
+Date:   Thu May 7 14:39:03 2015 +0200
+
+    Add minwidth as a pen setting (defaulting to 1).
+
+commit a506290adff369962a4eab3c2865285221af223e
+Author: Christian Beier <cb@shoutrlabs.com>
+Date:   Tue Feb 3 14:01:04 2015 +0100
+
+    Add debug output if user conf file not found.
+
+commit a9a76ac0c97ef3852c22c099e59145a576101d67
+Merge: 964b161 05a2c0b
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Mar 30 06:38:05 2014 +0200
+
+    Merge pull request #14 from barak/upstream
+    
+    install README.md
+
+commit 05a2c0bff71d5747b599a04727d428e89ce40fa0
+Merge: fb3c7f8 964b161
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Sat Mar 29 22:40:24 2014 +0000
+
+    Merge remote-tracking branch 'upstream/master' into upstream
+
+commit 964b1615700b5c84c5fc8a1d41e86092bb4876a2
+Merge: 4f9e690 16aba76
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Mar 29 06:37:58 2014 +0100
+
+    Merge pull request #13 from mehmetaergun/patch-2
+    
+    typo fix without the i
+
+commit 16aba766e6d3a7e7c5df296e6d208c51e859895f
+Author: Mehmet Atif Ergun <mehmetaergun@users.noreply.github.com>
+Date:   Sat Mar 29 00:33:44 2014 -0400
+
+    typo fix without the i
+
+commit fb3c7f8f54961226d9cde7f137522b90f9d4e7d3
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Thu Mar 20 13:46:14 2014 +0000
+
+    inform build system that README is now README.md
+
+commit 4f9e690f2b98743fcc2164e0c666372a54101725
+Merge: 2bac387 a7ba808
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Mar 19 15:16:08 2014 +0100
+
+    Merge pull request #11 from barak/upstream
+    
+    Upstream
+
+commit a7ba80827b0a14682dacd99758f1cc727ed73b91
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Wed Mar 19 13:31:00 2014 +0000
+
+    further markdown-ify README.md
+
+commit 59573f69df610295a918408a45fca2c4edd07b50
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Wed Mar 19 13:27:11 2014 +0000
+
+    markdown-ify README.md
+
+commit e9ee9c5689be5da8df89c8f3fd18b3a8e0b94772
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Wed Mar 19 13:05:20 2014 +0000
+
+    mv README README.md
+
+commit aa7be9975835e9e3c86c50470f812e9adc34f111
+Author: Barak A. Pearlmutter <barak+git@cs.nuim.ie>
+Date:   Wed Mar 19 12:58:45 2014 +0000
+
+    trim whitespace in README
+
+commit 2bac387a5bf84029ce69a0f33757b4c6fe52372a
+Merge: 6112ffa 41c09e1
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Tue Mar 18 12:38:00 2014 +0100
+
+    Merge pull request #10 from TaoK/patch-1
+    
+    Update README to reference similar tools
+
+commit 41c09e16f35f2247a22727add4896cd2f873d8f9
+Author: Tao Klerks <tao@klerks.biz>
+Date:   Mon Mar 17 15:58:25 2014 -0400
+
+    Update README to reference similar tools
+    
+    Adding some references to equivalent or similar utilities for Windows (and Linux) works both ways - would make it easier to find this if you know the windows tools, and helps those who (like me) find the Linux utility but have a hard time finding the windows equivalent.
+
+commit 6112ffaa144b37fd785475976de23db652acedf1
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Nov 4 18:14:41 2013 +0100
+
+    Put the backend check into the backend specific file.
+
+commit 717b7d6d241209d7565b7141695c8c01b8bda52d
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Nov 4 17:33:04 2013 +0100
+
+    Add GDK platform support check.
+
+commit 64a46929326323f32eb99625e8b2253fcbea8273
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Nov 2 15:15:26 2013 +0100
+
+    Move X11 specific stuff into input.c, prepping for native Wayland support some time.
+
+commit 1e4e806d46c6836b57531eefc83fb6b0a9d6db52
+Merge: 1f34d32 42c44ca
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Oct 17 13:35:53 2013 -0700
+
+    Merge pull request #8 from nwhitehead/undo
+    
+    Add simple undo functionality.
+
+commit 42c44caa4f505454d08898a34694cac759ab686e
+Author: Nathan Whitehead <nwhitehe@gmail.com>
+Date:   Wed Oct 16 12:03:55 2013 -0700
+
+    Document undo/redo hotkey binding.
+
+commit a649282cf2532751b26e448f444efa6573380852
+Author: Nathan Whitehead <nwhitehe@gmail.com>
+Date:   Wed Oct 16 11:57:50 2013 -0700
+
+    Add undo/redo hotkey.
+    
+    Press of undo hotkey is undo, shift-press is redo.
+    No action when window is hidden.
+
+commit 974cb7bbf7f94eb6f061a3a1042935e93e268eb7
+Author: Nathan Whitehead <nwhitehe@gmail.com>
+Date:   Wed Oct 16 11:07:00 2013 -0700
+
+    Add undo/redo menu items to systray menu.
+
+commit d05872ea6ef9ff508877abba184b0589b496257f
+Author: Nathan Whitehead <nwhitehe@gmail.com>
+Date:   Wed Oct 16 10:34:04 2013 -0700
+
+    Update documentation for undo/redo.
+
+commit 3f94c3e1fce50c46a2223b52a5160f62f5160f14
+Author: Nathan Whitehead <nwhitehe@gmail.com>
+Date:   Wed Oct 16 10:24:38 2013 -0700
+
+    Add multiple levels of undo/redo.
+    
+    Allows undo/redo using --undo and --redo commands. Currently preallocates
+    large surfaces to save entire drawing state, wastes memory.
+
+commit bc7b69e463c87559162f82b1529dbc2a20cb1624
+Author: Nathan Whitehead <nwhitehe@gmail.com>
+Date:   Wed Oct 16 00:12:22 2013 -0700
+
+    Add simple undo functionality.
+    
+    An extra backing surface is used to record the screen state between
+    strokes. Adds "gromit-mpx --undo" and "gromit-mpx --redo" commands.
+    Both have the same effect, swap undo backing surface and current
+    backing surface. Prepares for future multiple levels of undo and redo.
+
+commit 1f34d327397f0fa6d1c8171fe3beb4f3eaaf393f
+Merge: e24553c 51043ae
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Aug 31 08:27:10 2013 -0700
+
+    Merge pull request #4 from AlisterH/patch-1
+    
+    Update README: correct references to the config file and its location
+
+commit 51043aeef906412fb66856d8fa8c7ca32604ccdd
+Author: AlisterH <alister.hood@gmail.com>
+Date:   Sat Aug 31 16:39:02 2013 +1200
+
+    Update README: correct references to the config file and its location
+
+commit e24553c6bf42fc8dffe3a4ab341e42469059d62c
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Aug 19 20:58:19 2013 +0200
+
+    Update version to 1.1.
+
 commit 2d0542bdca5f1ba2d5fad8b0b7dfc4cddd9f4e1a
 Author: Christian Beier <dontmind@freeshell.org>
 Date:   Sun Aug 18 14:23:55 2013 +0200
