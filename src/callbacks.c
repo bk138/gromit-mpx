@@ -232,7 +232,7 @@ gboolean on_buttonpress (GtkWidget *win,
 			 gpointer user_data)
 {
   GromitData *data = (GromitData *) user_data;
-  gdouble pressure = 0.5;
+  gdouble pressure = 1;
 
   /* get the data for this device */
   GdkDevice *master = ev->device;
@@ -263,18 +263,13 @@ gboolean on_buttonpress (GtkWidget *win,
   slavedata->motion_time = ev->time;
 
   snap_undo_state (data);
-  if (gdk_device_get_source(slave) == GDK_SOURCE_MOUSE)
-    {
-      data->maxwidth = slavedata->cur_context->width;
-    }
-  else
-    {
-      gdk_event_get_axis ((GdkEvent *) ev, GDK_AXIS_PRESSURE, &pressure);
-      data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
-                        (double) (slavedata->cur_context->width -
-				  slavedata->cur_context->minwidth) +
-			slavedata->cur_context->minwidth);
-    }
+
+  gdk_event_get_axis ((GdkEvent *) ev, GDK_AXIS_PRESSURE, &pressure);
+  data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
+		    (double) (slavedata->cur_context->width -
+			      slavedata->cur_context->minwidth) +
+		    slavedata->cur_context->minwidth);
+
   if (ev->button <= 5)
     draw_line (data, slave, ev->x, ev->y, ev->x, ev->y);
 
@@ -292,7 +287,7 @@ gboolean on_motion (GtkWidget *win,
   GdkTimeCoord **coords = NULL;
   gint nevents;
   int i;
-  gdouble pressure = 0.5;
+  gdouble pressure = 1;
 
   /* get the data for this device */
   GdkDevice *master = ev->device;
@@ -336,13 +331,10 @@ gboolean on_motion (GtkWidget *win,
                                GDK_AXIS_PRESSURE, &pressure);
           if (pressure > 0)
             {
-              if (gdk_device_get_source(slave) == GDK_SOURCE_MOUSE)
-                data->maxwidth = slavedata->cur_context->width;
-              else
-		data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
-				  (double) (slavedata->cur_context->width -
-					    slavedata->cur_context->minwidth) +
-				  slavedata->cur_context->minwidth);
+	      data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
+				(double) (slavedata->cur_context->width -
+					  slavedata->cur_context->minwidth) +
+				slavedata->cur_context->minwidth);
 
               gdk_device_get_axis(slave, coords[i]->axes,
                                   GDK_AXIS_X, &x);
@@ -366,13 +358,10 @@ gboolean on_motion (GtkWidget *win,
 
   if (pressure > 0)
     {
-      if (gdk_device_get_source(slave) == GDK_SOURCE_MOUSE)
-	data->maxwidth = slavedata->cur_context->width;
-      else
-	data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
-			  (double) (slavedata->cur_context->width -
-				    slavedata->cur_context->minwidth) +
-			  slavedata->cur_context->minwidth);
+      data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
+			(double) (slavedata->cur_context->width -
+				  slavedata->cur_context->minwidth) +
+			slavedata->cur_context->minwidth);
 
       if(slavedata->motion_time > 0)
 	{
