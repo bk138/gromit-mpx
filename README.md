@@ -95,13 +95,15 @@ will undo the last two strokes. The maximum undo/redo depth is 4 strokes.
 
 ### Building it
 
-Gromit-MPX is small and lightweight. It needs GTK+3 to build.
-Simply type `./configure && make && make install`.
+Gromit-MPX uses CMake as its build system. Thus, it's the usual:
 
-If you checked out from git instead of using the tarball, an
-`autoreconf --install` is needed to setup the build system.
+    mkdir build
+    cd build
+    cmake ..
+    make
 
-You might also need to install `automake` and `gtk3-devel`.
+from the root of the source tree.
+
 
 ### Configuration:
 
