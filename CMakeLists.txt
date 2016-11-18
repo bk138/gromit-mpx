@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 project(Gromit_MPX LANGUAGES C)
 
 set(target_name gromit-mpx)
-set(version 1.2)
+set(version 1.3)
 
 set(CMAKE_C_FLAGS  " ${CMAKE_C_FLAGS} -Wall -Wextra -Wno-unused-parameter")
 
