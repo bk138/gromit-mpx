@@ -4,10 +4,10 @@ sudo: required
 
 # install build dependencies
 before_install:
-  - sudo apt-get install automake libgtk-3-dev libappindicator3-dev libxi-dev
+  - sudo apt-get install cmake libgtk-3-dev libappindicator3-dev libxi-dev
 
-# before build script, run autoreconf
-before_script: autoreconf -fiv
-
-# Default is "./configure && make && make test", but no tests yet
-script: "./configure && make"
+# Build steps
+script:
+  - mkdir build
+  - cd build
+  - cmake .. && make
