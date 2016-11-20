@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(Gromit_MPX LANGUAGES C)
+project(gromit-mpx LANGUAGES C)
 
 set(target_name gromit-mpx)
 set(version 1.3)
@@ -51,13 +51,15 @@ target_link_libraries(${target_name}
     -lm
 )
 
-install(TARGETS ${target_name} RUNTIME DESTINATION bin)
-install(FILES data/gromit-mpx.desktop DESTINATION share/applications)
-install(FILES data/gromit-mpx.cfg DESTINATION etc/gromit-mpx)
-install(FILES README.md AUTHORS ChangeLog NEWS DESTINATION share/doc/gromit-mpx)
-install(FILES gromit-mpx.1 DESTINATION share/man/man1)
-install(FILES data/gromit-mpx.png data/gromit-mpx.xpm DESTINATION share/pixmaps)
-install(FILES data/gromit-mpx.svg DESTINATION share/icons/hicolor/scalable/apps)
+include(GNUInstallDirs)
+
+install(TARGETS ${target_name} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES data/gromit-mpx.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+install(FILES data/gromit-mpx.cfg DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/gromit-mpx)
+install(FILES README.md AUTHORS ChangeLog NEWS DESTINATION ${CMAKE_INSTALL_DOCDIR})
+install(FILES gromit-mpx.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
+install(FILES data/gromit-mpx.png data/gromit-mpx.xpm DESTINATION ${CMAKE_INSTALL_DATADIR}/pixmaps)
+install(FILES data/gromit-mpx.svg DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
 
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
