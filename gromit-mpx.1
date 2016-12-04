@@ -103,6 +103,24 @@ will undo the last drawing stroke.
 .TP
 .B \-y, \-\-redo
 will redo the last undone drawing stroke.
+.SH ENVIRONMENT
+.TP
+.B GDK_BACKEND
+Set to force use of a particular backend, valid values are
+.I x11
+or
+.IR wayland .
+.TP
+.B XDG_CONFIG_HOME
+Directory to search for user's custom configuration file, defaults to
+.BI ~ /.config/ .
+.SH FILES
+.TP
+.I gromit\-mpx.cfg
+Configuration file which defines pens and maps mouse buttons and
+modifiers to them. Searched for in user's custom configuration file
+directory and, if not found there, in
+.IR /etc/gromit\-mpx/ .
 .SH BUGS
 When there is no compositing manager such as Compiz, xcompmgr or Mutter
 running, Gromit-MPX falls back to a legacy drawing mode. This may
