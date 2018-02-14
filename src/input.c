@@ -73,7 +73,7 @@ void setup_input_devices (GromitData *data)
           devdata->index = i;
 
 	  /* get attached keyboard and grab the hotkey */
-	  if (!data->hot_keycode || !data->undo_keycode)
+	  if (!data->hot_keycode && !data->undo_keycode)
 	    {
 	      g_printerr("ERROR: Grabbing hotkey from attached keyboard "
                          "of '%s' failed, no hotkeys defined.\n",
@@ -120,27 +120,31 @@ void setup_input_devices (GromitData *data)
 	      
 		      gdk_error_trap_push ();
 	      
-		      XIGrabKeycode( GDK_DISPLAY_XDISPLAY(data->display),
-				     kbd_dev_id,
-				     data->hot_keycode,
-				     GDK_WINDOW_XID(data->root),
-				     GrabModeAsync,
-				     GrabModeAsync,
-				     True,
-				     &mask,
-				     nmods,
-				     modifiers);
+		      if (data->hot_keycode) {
+			      XIGrabKeycode( GDK_DISPLAY_XDISPLAY(data->display),
+					     kbd_dev_id,
+					     data->hot_keycode,
+					     GDK_WINDOW_XID(data->root),
+					     GrabModeAsync,
+					     GrabModeAsync,
+					     True,
+					     &mask,
+					     nmods,
+					     modifiers);
+		      }
 
-		      XIGrabKeycode( GDK_DISPLAY_XDISPLAY(data->display),
-				     kbd_dev_id,
-				     data->undo_keycode,
-				     GDK_WINDOW_XID(data->root),
-				     GrabModeAsync,
-				     GrabModeAsync,
-				     True,
-				     &mask,
-				     nmods,
-				     modifiers);
+		      if (data->undo_keycode) {
+			      XIGrabKeycode( GDK_DISPLAY_XDISPLAY(data->display),
+					     kbd_dev_id,
+					     data->undo_keycode,
+					     GDK_WINDOW_XID(data->root),
+					     GrabModeAsync,
+					     GrabModeAsync,
+					     True,
+					     &mask,
+					     nmods,
+					     modifiers);
+		      }
 
 		      XSync(GDK_DISPLAY_XDISPLAY(data->display), False);
 		      if(gdk_error_trap_pop())
