@@ -20,6 +20,7 @@ Makefile.in
 
 /.idea/
 /Build/
+/build/
 /cmake-build-debug/
 *~
 /Build_Release/
