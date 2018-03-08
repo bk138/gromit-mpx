@@ -32,10 +32,10 @@ fire on screen)* plugin.
 
 ### How to use it
 
-You can operate Gromit-MPX using its tray icon, but since you
-typically want to use the program you are demonstrating and
-highlighting something is a short interruption of your workflow,
-Gromit-MPX can be toggled on and off on the fly via a hotkey:
+You can operate Gromit-MPX using its tray icon (if your desktop environment
+provides a sys tray), but since you typically want to use the program you
+are demonstrating and highlighting something is a short interruption of
+your workflow, Gromit-MPX can be toggled on and off on the fly via a hotkey:
 
 Per default, it grabs the `F9` and `F10` keys, so that no other application
 can use them and they are available to Gromit-MPX only.  The available
