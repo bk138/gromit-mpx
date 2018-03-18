@@ -370,13 +370,13 @@ void select_tool (GromitData *data,
               default_name [default_len+2] = modifier + 48;
 
 	      if(data->debug)
-		g_printerr("DEBUG: Looking up context %s\n", name);
+		g_printerr("DEBUG: select_tool looking up context %s\n", name);
 
               context = g_hash_table_lookup (data->tool_config, name);
               if(context)
                 {
                   if(data->debug)
-                    g_printerr("DEBUG: Context %s set\n", name);
+                    g_printerr("DEBUG: select_tool set context %s\n", name);
                   slavedata->cur_context = context;
                   success = 1;
                 }
@@ -384,7 +384,7 @@ void select_tool (GromitData *data,
                 if((context = g_hash_table_lookup (data->tool_config, default_name)))
                   {
                     if(data->debug)
-                      g_printerr("DEBUG: Default context %s set\n", default_name);
+                      g_printerr("DEBUG: select_tool set default context %s\n", default_name);
                     slavedata->cur_context = context;
                     success = 1;
                   }
@@ -406,7 +406,7 @@ void select_tool (GromitData *data,
         }
     }
   else
-    g_printerr ("ERROR: Attempt to select nonexistent device!\n");
+    g_printerr ("ERROR: select_tool attempted to select nonexistent device!\n");
 
   GdkCursor *cursor;
   if(slavedata->cur_context && slavedata->cur_context->type == GROMIT_ERASER)
@@ -416,7 +416,7 @@ void select_tool (GromitData *data,
 
 
   if(data->debug)
-    g_printerr("DEBUG: Setting cursor %p\n",cursor);
+    g_printerr("DEBUG: select_tool setting cursor %p\n",cursor);
 
 
   //FIXME!  Should be:
