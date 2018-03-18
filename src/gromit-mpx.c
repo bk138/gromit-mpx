@@ -370,13 +370,13 @@ void select_tool (GromitData *data,
               default_name [default_len+2] = modifier + 48;
 
 	      if(data->debug)
-		g_printerr("DEBUG: select_tool looking up context %s\n", name);
+		g_printerr("DEBUG: select_tool looking up context for %s\n", name);
 
               context = g_hash_table_lookup (data->tool_config, name);
               if(context)
                 {
                   if(data->debug)
-                    g_printerr("DEBUG: select_tool set context %s\n", name);
+                    g_printerr("DEBUG: select_tool set context for %s\n", name);
                   slavedata->cur_context = context;
                   success = 1;
                 }
@@ -384,7 +384,7 @@ void select_tool (GromitData *data,
                 if((context = g_hash_table_lookup (data->tool_config, default_name)))
                   {
                     if(data->debug)
-                      g_printerr("DEBUG: select_tool set default context %s\n", default_name);
+                      g_printerr("DEBUG: select_tool set default context %s for %s\n", default_name, name);
                     slavedata->cur_context = context;
                     success = 1;
                   }
