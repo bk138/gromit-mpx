@@ -678,7 +678,7 @@ void on_about(GtkMenuItem *menuitem,
 			   "version", VERSION,
 			   "website", "https://github.com/bk138/gromit-mpx",
 			   "authors", authors,
-			   "copyright", "Copyright 2000 Simon Budig, 2009-2016 Christian Beier",
+			   "copyright", "Copyright 2000 Simon Budig, 2009-2018 Christian Beier",
 			   "license-type", GTK_LICENSE_GPL_2_0,
 			   NULL);
 }
