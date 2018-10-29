@@ -89,12 +89,12 @@ void on_monitors_changed ( GdkScreen *screen,
 {
   GromitData *data = (GromitData *) user_data;
 
-  if(data->debug)
-    g_printerr("DEBUG: screen size changed!\n");
-
   // get new sizes
   data->width = gdk_screen_get_width (data->screen);
   data->height = gdk_screen_get_height (data->screen);
+
+  if(data->debug)
+    g_printerr("DEBUG: screen size changed to %d x %d!\n", data->width, data->height);
 
   // change size
   gtk_widget_set_size_request(GTK_WIDGET(data->win), data->width, data->height);
