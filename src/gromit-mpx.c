@@ -887,21 +887,28 @@ void setup_main_app (GromitData *data, gboolean activate)
   /* create the menu */
   GtkWidget *menu = gtk_menu_new ();
 
+  char labelBuf[128];
   /* Create the menu items */
-  GtkWidget* toggle_paint_item = gtk_menu_item_new_with_label ("Toggle Painting");
-  GtkWidget* clear_item = gtk_menu_item_new_with_label ("Clear Screen");
-  GtkWidget* toggle_vis_item = gtk_menu_item_new_with_label ("Toggle Visibility");
+  snprintf(labelBuf, sizeof(labelBuf), "Toggle Painting (%s)", data->hot_keyval);
+  GtkWidget* toggle_paint_item = gtk_menu_item_new_with_label (labelBuf);
+  snprintf(labelBuf, sizeof(labelBuf), "Clear Screen (SHIFT-%s)", data->hot_keyval);
+  GtkWidget* clear_item = gtk_menu_item_new_with_label (labelBuf);
+  snprintf(labelBuf, sizeof(labelBuf), "Toggle Visibility (CTRL-%s)", data->hot_keyval);
+  GtkWidget* toggle_vis_item = gtk_menu_item_new_with_label (labelBuf);
   GtkWidget* thicker_lines_item = gtk_menu_item_new_with_label ("Thicker Lines");
   GtkWidget* thinner_lines_item = gtk_menu_item_new_with_label ("Thinner Lines");
   GtkWidget* opacity_bigger_item = gtk_menu_item_new_with_label ("Bigger Opacity");
   GtkWidget* opacity_lesser_item = gtk_menu_item_new_with_label ("Lesser Opacity");
-  GtkWidget* undo_item = gtk_menu_item_new_with_label ("Undo");
-  GtkWidget* redo_item = gtk_menu_item_new_with_label ("Redo");
+  snprintf(labelBuf, sizeof(labelBuf), "Undo (%s)", data->undo_keyval);
+  GtkWidget* undo_item = gtk_menu_item_new_with_label (labelBuf);
+  snprintf(labelBuf, sizeof(labelBuf), "Redo (SHIFT-%s)", data->undo_keyval);
+  GtkWidget* redo_item = gtk_menu_item_new_with_label (labelBuf);
 
   GtkWidget* sep_item = gtk_separator_menu_item_new();
   GtkWidget* help_item = gtk_menu_item_new_with_mnemonic("_Help");
   GtkWidget* about_item = gtk_menu_item_new_with_mnemonic("_About");
-  GtkWidget* quit_item = gtk_menu_item_new_with_mnemonic("_Quit");
+  snprintf(labelBuf, sizeof(labelBuf), "_Quit (ALT-%s)", data->hot_keyval);
+  GtkWidget* quit_item = gtk_menu_item_new_with_mnemonic(labelBuf);
 
 
   /* Add them to the menu */
