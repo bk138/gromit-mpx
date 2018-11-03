@@ -44,7 +44,7 @@ commands are:
     F9:        toggle painting
     SHIFT-F9:  clear screen
     CTRL-F9:   toggle visibility
-    ALT-F9:    Quit Gromit-MPX.
+    ALT-F9:    quit Gromit-MPX
     F10:       undo last stroke
     SHIFT-F10: redo last undone stroke
 
