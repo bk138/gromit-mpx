@@ -634,38 +634,6 @@ void on_redo(GtkMenuItem *menuitem,
 }
 
 
-void on_help(GtkMenuItem *menuitem,
-	     gpointer     user_data)
-{
-    GromitData *data = (GromitData *) user_data;
-
-    gchar helpString[4096];
-    snprintf(helpString, 4096,  "The available commands are:\n\n<tt><b>\
-    toggle painting:         %s\n\
-    clear screen:            SHIFT-%s\n\
-    toggle visibility:       CTRL-%s\n\
-    quit:                    ALT-%s\n\
-    undo last stroke:        %s\n\
-    redo last undone stroke: SHIFT-%s</b></tt>",
-	     data->hot_keyval, data->hot_keyval, data->hot_keyval, data->hot_keyval,
-	     data->undo_keyval, data->undo_keyval);
-
-    GtkWidget *dialog = gtk_message_dialog_new(NULL,
-					       GTK_DIALOG_DESTROY_WITH_PARENT,
-					       GTK_MESSAGE_INFO,
-					       GTK_BUTTONS_CLOSE,
-					       NULL);
-    gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog), helpString);
-
-    g_signal_connect_swapped (dialog, "response",
-			      G_CALLBACK (gtk_widget_destroy),
-			      dialog);
-
-    gtk_widget_show_all(dialog);
-}
-
-
-
 void on_about(GtkMenuItem *menuitem,
 	      gpointer     user_data)
 {

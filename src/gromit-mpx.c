@@ -905,7 +905,6 @@ void setup_main_app (GromitData *data, gboolean activate)
   GtkWidget* redo_item = gtk_menu_item_new_with_label (labelBuf);
 
   GtkWidget* sep_item = gtk_separator_menu_item_new();
-  GtkWidget* help_item = gtk_menu_item_new_with_mnemonic("_Help");
   GtkWidget* about_item = gtk_menu_item_new_with_mnemonic("_About");
   snprintf(labelBuf, sizeof(labelBuf), "_Quit (ALT-%s)", data->hot_keyval);
   GtkWidget* quit_item = gtk_menu_item_new_with_mnemonic(labelBuf);
@@ -923,7 +922,6 @@ void setup_main_app (GromitData *data, gboolean activate)
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), redo_item);
 
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), sep_item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), help_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), about_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), quit_item);
 
@@ -957,9 +955,6 @@ void setup_main_app (GromitData *data, gboolean activate)
 		   G_CALLBACK (on_redo),
 		   data);
 
-  g_signal_connect(G_OBJECT (help_item), "activate",
-		   G_CALLBACK (on_help),
-		   data);
   g_signal_connect(G_OBJECT (about_item), "activate",
 		   G_CALLBACK (on_about),
 		   NULL);
@@ -980,7 +975,6 @@ void setup_main_app (GromitData *data, gboolean activate)
   gtk_widget_show (redo_item);
 
   gtk_widget_show (sep_item);
-  gtk_widget_show (help_item);
   gtk_widget_show (about_item);
   gtk_widget_show (quit_item);
 
