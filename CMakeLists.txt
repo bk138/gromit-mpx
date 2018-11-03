@@ -39,6 +39,8 @@ set(sources
     src/gromit-mpx.h
     src/input.c
     src/input.h
+    src/paint_cursor.xpm
+    src/erase_cursor.xpm
 )
 
 add_executable(${target_name} ${sources})
