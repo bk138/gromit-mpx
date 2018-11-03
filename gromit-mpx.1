@@ -56,6 +56,9 @@ below for the options to control an already running Gromit-MPX process:
 .B \-a, \-\-active
 start Gromit-MPX and immediately activate it.
 .TP
+.B \-d, \-\-debug
+gives some debug output.
+.TP
 .B \-k <keysym>, \-\-key <keysym>
 will change the key used to grab the mouse. <keysym> can e.g. be
 "F9", "F12", "Control_R" or "Print". To determine the keysym for
@@ -82,12 +85,12 @@ will change the key used to undo/redo strokes. Under rare circumstances
 identifying the key with the keysym can fail. You can then use the keycode
 to specify the key uniquely. To determine the keycode for different keys you
 can use the \fBxev\fP(1) command.
-.TP
-.B \-d, \-\-debug
-gives some debug output.
 .SH OPTIONS (CONTROL)
 A sort summary of the available commandline arguments to control an already
 running Gromit-MPX process, see above for the options available to start Gromit-MPX.
+.TP
+.B \-c, \-\-clear
+will clear the screen.
 .TP
 .B \-q, \-\-quit
 will cause the main Gromit-MPX process to quit.
@@ -98,14 +101,11 @@ will toggle the grabbing of the cursor.
 .B \-v, \-\-visibility
 will toggle the visibility of the window.
 .TP
-.B \-c, \-\-clear
-will clear the screen.
+.B \-y, \-\-redo
+will redo the last undone drawing stroke.
 .TP
 .B \-z, \-\-undo
 will undo the last drawing stroke.
-.TP
-.B \-y, \-\-redo
-will redo the last undone drawing stroke.
 .SH ENVIRONMENT
 .TP
 .B GDK_BACKEND
