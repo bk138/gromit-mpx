@@ -68,6 +68,9 @@ identifying the key with the keysym can fail. You can then use the keycode
 to specify the key uniquely. To determine the keycode for different keys you
 can use the \fBxev\fP(1) command.
 .TP
+.B \-o, \-\-opacity <value>
+will set the initial opacity of the window using a floating point value between 0 and 1.
+.TP
 .B \-u <keysym>, \-\-undo\-key <keysym>
 will change the key used to undo/redo strokes. <keysym> can e.g. be
 "F9", "F12", "Control_R" or "Print". To determine the keysym for
