@@ -42,4 +42,8 @@ void parse_config (GromitData *data);
 #define DEFAULT_OPACITY 0.75
 #endif
 
+void read_keyfile(GromitData *data);
+
+void write_keyfile(GromitData *data);
+
 #endif

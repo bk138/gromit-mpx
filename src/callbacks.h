@@ -125,6 +125,7 @@ void on_redo(GtkMenuItem *menuitem,
 void on_about(GtkMenuItem *menuitem,
 	      gpointer     user_data);
 
-
+void on_intro(GtkMenuItem *menuitem,
+	      gpointer user_data);
 
 #endif

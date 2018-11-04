@@ -145,6 +145,8 @@ typedef struct
   cairo_surface_t *undobuffer[GROMIT_MAX_UNDO];
   gint            undo_head, undo_depth, redo_depth;
 
+  gboolean show_intro_on_startup;
+
 } GromitData;
 
 

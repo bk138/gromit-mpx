@@ -652,3 +652,76 @@ void on_about(GtkMenuItem *menuitem,
 }
 
 
+static void on_intro_show_again_button_toggled(GtkCheckButton *toggle, GromitData *data)
+{
+  data->show_intro_on_startup = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (toggle));
+}
+
+void on_intro(GtkMenuItem *menuitem,
+	      gpointer user_data)
+{
+    GromitData *data = (GromitData *) user_data;
+
+    // Create a new assistant widget with no pages.
+    GtkWidget *assistant = gtk_assistant_new ();
+    gtk_window_set_position (GTK_WINDOW(assistant), GTK_WIN_POS_CENTER);
+
+    // set page one
+    GtkWidget *widgetOne = gtk_label_new ("Gromit-MPX (GRaphics Over MIscellaneous Things) is a small tool to make\n"
+					  "annotations on the screen.\n\n"
+					  "Its main use is for making presentations of some application. Normally,\n"
+					  "you would have to move the mouse pointer around the point of interest\n"
+					  "until hopefully everybody noticed it.  With Gromit-MPX, you can draw\n"
+					  "everywhere onto the screen, highlighting some button or area.");
+    gtk_assistant_append_page (GTK_ASSISTANT (assistant), widgetOne);
+    gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), widgetOne, "Gromit-MPX - What is it?");
+    gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), widgetOne, GTK_ASSISTANT_PAGE_INTRO);
+    gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), widgetOne, TRUE);
+
+    // set page two
+    GtkWidget *widgetTwo = gtk_label_new (NULL);
+    char widgetTwoBuf[4096];
+    snprintf(widgetTwoBuf, sizeof(widgetTwoBuf),
+	     "You can operate Gromit-MPX using its tray icon (if your desktop environment\n"
+	     "provides a sys tray), but since you typically want to use the program you are\n"
+	     "demonstrating and highlighting something is a short interruption of your\n"
+	     "workflow, Gromit-MPX can be toggled on and off on the fly via a hotkey:\n\n"
+	     "It grabs the `%s` and `%s` keys, so that no other application can use them\n"
+	     "and they are available to Gromit-MPX only.  The available commands are:\n\n<tt><b>"
+	     "   toggle painting:         %s\n"
+	     "   clear screen:            SHIFT-%s\n"
+	     "   toggle visibility:       CTRL-%s\n"
+	     "   quit:                    ALT-%s\n"
+	     "   undo last stroke:        %s\n"
+	     "   redo last undone stroke: SHIFT-%s</b></tt>",
+	     data->hot_keyval, data->undo_keyval,
+	     data->hot_keyval, data->hot_keyval, data->hot_keyval, data->hot_keyval, data->undo_keyval, data->undo_keyval);
+    gtk_label_set_markup (GTK_LABEL (widgetTwo), widgetTwoBuf);
+    gtk_assistant_append_page (GTK_ASSISTANT (assistant), widgetTwo);
+    gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), widgetTwo, "Gromit-MPX - How to use it");
+    gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), widgetTwo, GTK_ASSISTANT_PAGE_CONTENT);
+    gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), widgetTwo, TRUE);
+
+    // set page three
+    GtkWidget *widgetThree = gtk_grid_new ();
+    GtkWidget *widgetThreeText = gtk_label_new ("Do you want to show this introduction again on the next start of Gromit-MPX?\n"
+						"You can always access it again via the sys tray menu.\n");
+    GtkWidget *widgetThreeButton = gtk_check_button_new_with_label ("Show again on startup");
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widgetThreeButton), data->show_intro_on_startup);
+    gtk_grid_attach (GTK_GRID (widgetThree), widgetThreeText, 0, 0, 1, 1);
+    gtk_grid_attach_next_to (GTK_GRID (widgetThree), widgetThreeButton, widgetThreeText, GTK_POS_BOTTOM, 1, 1);
+    g_signal_connect (G_OBJECT (widgetThreeButton), "toggled",
+		      G_CALLBACK (on_intro_show_again_button_toggled), data);
+    gtk_assistant_append_page (GTK_ASSISTANT (assistant), widgetThree);
+    gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), widgetThree, GTK_ASSISTANT_PAGE_CONFIRM);
+    gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), widgetThree, TRUE);
+
+    // connect the close buttons
+    g_signal_connect (G_OBJECT (assistant), "cancel",
+		      G_CALLBACK (gtk_widget_destroy), NULL);
+    g_signal_connect (G_OBJECT (assistant), "close",
+		      G_CALLBACK (gtk_widget_destroy), NULL);
+
+    // show
+    gtk_widget_show_all (assistant);
+}
