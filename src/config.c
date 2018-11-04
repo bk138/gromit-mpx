@@ -368,10 +368,10 @@ void parse_config (GromitData *data)
 
 void read_keyfile(GromitData *data)
 {
-   g_autofree gchar *filename = g_strjoin (G_DIR_SEPARATOR_S,
-					   g_get_user_config_dir(), "gromit-mpx.ini", NULL);
+    gchar *filename = g_strjoin (G_DIR_SEPARATOR_S,
+				 g_get_user_config_dir(), "gromit-mpx.ini", NULL);
 
-   /*
+    /*
       set defaults
     */
     data->show_intro_on_startup = KEY_DFLT_SHOW_INTRO_ON_STARTUP;
@@ -379,33 +379,43 @@ void read_keyfile(GromitData *data)
     /*
       read actual settings
     */
-    g_autoptr(GError) error = NULL;
-    g_autoptr(GKeyFile) key_file = g_key_file_new ();
+    GError *error = NULL;
+    GKeyFile *key_file = g_key_file_new ();
 
     if (!g_key_file_load_from_file (key_file, filename, KEYFILE_FLAGS, &error)) {
 	// treat file-not-found not as an error
 	if (!g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
 	    g_warning ("Error loading key file: %s", error->message);
-	return;
+	g_error_free(error);
+	goto cleanup;
     }
 
     data->show_intro_on_startup = g_key_file_get_boolean (key_file, "General", "ShowIntroOnStartup", &error);
+
+ cleanup:
+    g_free(filename);
+    g_key_file_free(key_file);
 }
 
 
 void write_keyfile(GromitData *data)
 {
-    g_autofree gchar *filename = g_strjoin (G_DIR_SEPARATOR_S,
-					    g_get_user_config_dir(), "gromit-mpx.ini", NULL);
+    gchar *filename = g_strjoin (G_DIR_SEPARATOR_S,
+				 g_get_user_config_dir(), "gromit-mpx.ini", NULL);
 
-    g_autoptr(GError) error = NULL;
-    g_autoptr(GKeyFile) key_file = g_key_file_new ();
+    GError *error = NULL;
+    GKeyFile *key_file = g_key_file_new ();
 
     g_key_file_set_boolean (key_file, "General", "ShowIntroOnStartup", data->show_intro_on_startup);
 
     // Save as a file.
     if (!g_key_file_save_to_file (key_file, filename, &error)) {
 	g_warning ("Error saving key file: %s", error->message);
-	return;
+	g_error_free(error);
+	goto cleanup;
     }
+
+ cleanup:
+    g_free(filename);
+    g_key_file_free(key_file);
 }
