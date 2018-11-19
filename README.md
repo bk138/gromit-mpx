@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/bk138/gromit-mpx.svg?branch=master)](https://travis-ci.org/bk138/gromit-mpx)
 
-## Gromit-MPX
+# Gromit-MPX
 
 Gromit-MPX is a multi-pointer port of the original [Gromit annotation
 tool](http://www.home.unix-ag.org/simon/gromit) by [Simon
@@ -13,7 +13,7 @@ Gromit tool.
 
 
 
-### What is it?
+## What is it?
 
 Gromit-MPX (GRaphics Over MIscellaneous Things) is a small tool to
 make annotations on the screen.
@@ -30,7 +30,7 @@ is also the *Annotate* plugin, and the much-flashier *Firepaint (paint
 fire on screen)* plugin.
 
 
-### How to use it
+## How to use it
 
 You can operate Gromit-MPX using its tray icon (if your desktop environment
 provides a sys tray), but since you typically want to use the program you
@@ -93,7 +93,7 @@ Undo/redo commands are cumulative. For example, sending two undo commands
 will undo the last two strokes. The maximum undo/redo depth is 4 strokes.
 
 
-### Building it
+## Building it
 
 Gromit-MPX uses CMake as its build system. Thus, it's the usual:
 
@@ -105,7 +105,7 @@ Gromit-MPX uses CMake as its build system. Thus, it's the usual:
 from the root of the source tree.
 
 
-### Configuration:
+## Configuration:
 
 Gromit-MPX is configurable via the file `gromit-mpx.cfg` in the
 directory defined by `$XDG_CONFIG_HOME` (usually `~/.config`).  Here
@@ -171,7 +171,7 @@ The descision, which tool to use follows a simple policy:
 
 
 
-### Potential Problems:
+## Potential Problems:
 
 When there is no compositing manager such as Compiz or xcompmgr
 running, Gromit-MPX falls back to a legacy drawing mode. This may
