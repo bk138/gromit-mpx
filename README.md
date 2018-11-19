@@ -108,8 +108,9 @@ it's hotkey will activate annotation mode for the associated pointer only.
 This way, can use a second pair of input devices to annotate while
 continuing to work normally with the first pair.
 
-Alternatively, you can also use the graphical tool [gnome-device-manager]
-(https://github.com/bk138/gnome-device-manager) to arrange your MPX setup.
+Alternatively, you can also use the graphical tool [gnome-device-
+manager](https://github.com/bk138/gnome-device-manager) to arrange your
+MPX setup.
 
 
 ### Configuration:
