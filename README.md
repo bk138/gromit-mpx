@@ -104,7 +104,7 @@ You can create a simple MPX setup via the `xinput` utility:
     xinput --reattach <slave-id> <master-id-of-'two'> # reattach slave
 
 If you attach a keyboard slave device to the newly created second master,
-it's hotkey will activate annotation mode for the associated pointer only.
+its hotkey will activate annotation mode for the associated pointer only.
 This way, can use a second pair of input devices to annotate while
 continuing to work normally with the first pair.
 
