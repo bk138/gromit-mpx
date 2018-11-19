@@ -92,20 +92,7 @@ possible to erase something with the other end of the (Wacom) pen.
 Undo/redo commands are cumulative. For example, sending two undo commands
 will undo the last two strokes. The maximum undo/redo depth is 4 strokes.
 
-
-## Building it
-
-Gromit-MPX uses CMake as its build system. Thus, it's the usual:
-
-    mkdir build
-    cd build
-    cmake ..
-    make
-
-from the root of the source tree.
-
-
-## Configuration:
+### Configuration:
 
 Gromit-MPX is configurable via the file `gromit-mpx.cfg` in the
 directory defined by `$XDG_CONFIG_HOME` (usually `~/.config`).  Here
@@ -158,7 +145,7 @@ and Modifiers (`SHIFT`, `CONTROL`, `ALT`, `META`, while `ALT==META`).
     "Core Pointer"[2] = "green Marker";
     "Core Pointer"[Button3] = "Eraser";
 
-The descision, which tool to use follows a simple policy:
+The descision which tool to use follows a simple policy:
 
 1. Buttons are more important than Modifiers
 2. Low number Buttons are more important than higher ones
@@ -169,6 +156,17 @@ The descision, which tool to use follows a simple policy:
       definition if there is no `"Core Pointer"[SHIFT]` definition.
       The same logic holds for the buttons.
 
+
+## Building it
+
+Gromit-MPX uses CMake as its build system. Thus, it's the usual:
+
+    mkdir build
+    cd build
+    cmake ..
+    make
+
+from the root of the source tree.
 
 
 ## Potential Problems:
