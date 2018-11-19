@@ -92,6 +92,26 @@ possible to erase something with the other end of the (Wacom) pen.
 Undo/redo commands are cumulative. For example, sending two undo commands
 will undo the last two strokes. The maximum undo/redo depth is 4 strokes.
 
+### Setting up multi-pointer
+
+As its name implies, Gromit-MPX relies on Multi-Pointer-X functionality
+provided by the XInput2 extension.
+
+You can create a simple MPX setup via the `xinput` utility:
+
+    xinput --create-master two # create a second input focus (master)
+    xinput --list # see your master and slave devices and ids
+    xinput --reattach <slave-id> <master-id-of-'two'> # reattach slave
+
+If you attach a keyboard slave device to the newly created second master,
+it's hotkey will activate annotation mode for the associated pointer only.
+This way, can use a second pair of input devices to annotate while
+continuing to work normally with the first pair.
+
+Alternatively, you can also use the graphical tool [gnome-device-manager]
+(https://github.com/bk138/gnome-device-manager) to arrange your MPX setup.
+
+
 ### Configuration:
 
 Gromit-MPX is configurable via the file `gromit-mpx.cfg` in the
