@@ -386,45 +386,6 @@ gboolean on_buttonrelease (GtkWidget *win,
   return TRUE;
 }
 
-
-
-gboolean on_proximity_in (GtkWidget *win, 
-			  GdkEventProximity *ev,
-			  gpointer user_data)
-{
-  GromitData *data = (GromitData *) user_data;
-  gint x, y;
-  GdkModifierType state;
-
-  gdk_window_get_pointer (gtk_widget_get_window(data->win), &x, &y, &state);
-  select_tool (data, ev->device, state);
-
-  if(data->debug)
-    g_printerr("DEBUG: prox in device  %s: \n", gdk_device_get_name(ev->device));
-  return TRUE;
-}
-
-
-gboolean on_proximity_out (GtkWidget *win, 
-			   GdkEventProximity *ev, 
-			   gpointer user_data)
-{
-  GromitData *data = (GromitData *) user_data;
-  
-  /* get the data for this device */
-  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, ev->device);
-
-  devdata->cur_context = data->default_pen;
-
-  devdata->state = 0;
-  devdata->device = NULL;
-
-  if(data->debug)
-    g_printerr("DEBUG: prox out device  %s: \n", gdk_device_get_name(ev->device));
-  return FALSE;
-}
-
-
 /* Remote control */
 void on_mainapp_selection_get (GtkWidget          *widget,
 			       GtkSelectionData   *selection_data,

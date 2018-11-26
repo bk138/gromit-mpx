@@ -731,10 +731,6 @@ void setup_main_app (GromitData *data, gboolean activate)
 		    G_CALLBACK (on_buttonpress), data);
   g_signal_connect (data->win, "button_release_event",
 		    G_CALLBACK (on_buttonrelease), data);
-  g_signal_connect (data->win, "proximity_in_event",
-		    G_CALLBACK (on_proximity_in), data);
-  g_signal_connect (data->win, "proximity_out_event",
-		    G_CALLBACK (on_proximity_out), data);
   /* disconnect previously defined selection handlers */
   g_signal_handlers_disconnect_by_func (data->win, 
 					G_CALLBACK (on_clientapp_selection_get),

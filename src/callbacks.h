@@ -65,11 +65,6 @@ gboolean on_motion (GtkWidget *win, GdkEventMotion *ev, gpointer user_data);
 
 gboolean on_buttonrelease (GtkWidget *win, GdkEventButton *ev, gpointer user_data);
 
-gboolean on_proximity_in (GtkWidget *win, GdkEventProximity *ev, gpointer user_data);
-
-gboolean on_proximity_out (GtkWidget *win, GdkEventProximity *ev, gpointer user_data);
-
-
 void on_mainapp_selection_get (GtkWidget          *widget,
 			       GtkSelectionData   *selection_data,
 			       guint               info,

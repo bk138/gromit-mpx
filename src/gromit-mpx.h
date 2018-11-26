@@ -30,9 +30,7 @@
 #include <libappindicator/app-indicator.h>
 
 
-#define GROMIT_MOUSE_EVENTS ( GDK_PROXIMITY_IN_MASK | \
-                              GDK_PROXIMITY_OUT_MASK | \
-                              GDK_BUTTON_MOTION_MASK | \
+#define GROMIT_MOUSE_EVENTS ( GDK_BUTTON_MOTION_MASK | \
                               GDK_BUTTON_PRESS_MASK | \
                               GDK_BUTTON_RELEASE_MASK )
 
