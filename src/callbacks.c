@@ -235,45 +235,39 @@ gboolean on_buttonpress (GtkWidget *win,
   gdouble pressure = 1;
 
   /* get the data for this device */
-  GdkDevice *master = ev->device;
-  GromitDeviceData *masterdata =
-    g_hash_table_lookup(data->devdatatable, master);
-  GdkDevice *slave =
-    gdk_event_get_source_device ((GdkEvent *) ev);
-  GromitDeviceData *slavedata =
-    g_hash_table_lookup(data->devdatatable, slave);
+  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, ev->device);
 
   if(data->debug)
     g_printerr("DEBUG: Device '%s': Button %i Down at (x,y)=(%.2f : %.2f)\n", 
-	       gdk_device_get_name(slave), ev->button, ev->x, ev->y);
+	       gdk_device_get_name(ev->device), ev->button, ev->x, ev->y);
 
-  if (!masterdata->is_grabbed)
+  if (!devdata->is_grabbed)
     return FALSE;
 
+ 
   /* See GdkModifierType. Am I fixing a Gtk misbehaviour???  */
   ev->state |= 1 << (ev->button + 7);
 
-  if (ev->state != masterdata->state ||
-      ev->state != slavedata->state ||
-      masterdata->lastslave != slave)
-    select_tool (data, master, slave, ev->state);
 
-  slavedata->lastx = ev->x;
-  slavedata->lasty = ev->y;
-  slavedata->motion_time = ev->time;
+  if (ev->state != devdata->state)
+    select_tool (data, ev->device, ev->state);
+
+  devdata->lastx = ev->x;
+  devdata->lasty = ev->y;
+  devdata->motion_time = ev->time;
 
   snap_undo_state (data);
 
   gdk_event_get_axis ((GdkEvent *) ev, GDK_AXIS_PRESSURE, &pressure);
   data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
-		    (double) (slavedata->cur_context->width -
-			      slavedata->cur_context->minwidth) +
-		    slavedata->cur_context->minwidth);
+		    (double) (devdata->cur_context->width -
+			      devdata->cur_context->minwidth) +
+		    devdata->cur_context->minwidth);
 
   if (ev->button <= 5)
-    draw_line (data, slave, ev->x, ev->y, ev->x, ev->y);
+    draw_line (data, ev->device, ev->x, ev->y, ev->x, ev->y);
 
-  coord_list_prepend (data, slave, ev->x, ev->y, data->maxwidth);
+  coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
 
   return TRUE;
 }
@@ -288,38 +282,21 @@ gboolean on_motion (GtkWidget *win,
   gint nevents;
   int i;
   gdouble pressure = 1;
-
   /* get the data for this device */
-  GdkDevice *master = ev->device;
-  GromitDeviceData *masterdata =
-    g_hash_table_lookup(data->devdatatable, master);
+  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, ev->device);
 
-  if (!masterdata->is_grabbed)
+  if (!devdata->is_grabbed)
     return FALSE;
 
-  GdkDevice *slave =
-    gdk_event_get_source_device ((GdkEvent *) ev);
-  GromitDeviceData *slavedata =
-    g_hash_table_lookup(data->devdatatable, slave);
-
   if(data->debug)
-      g_printerr("DEBUG: Device '%s': motion to (x,y)=(%.2f : %.2f)\n", gdk_device_get_name(slave), ev->x, ev->y);
+      g_printerr("DEBUG: Device '%s': motion to (x,y)=(%.2f : %.2f)\n", gdk_device_get_name(ev->device), ev->x, ev->y);
 
-  if (ev->state != masterdata->state ||
-      ev->state != slavedata->state ||
-      masterdata->lastslave != slave)
-    select_tool (data, master, slave, ev->state);
+  if (ev->state != devdata->state) 
+    select_tool (data, ev->device, ev->state);
 
-  if(!(ev->state & (GDK_BUTTON1_MASK|
-                    GDK_BUTTON2_MASK|
-                    GDK_BUTTON3_MASK|
-                    GDK_BUTTON4_MASK|
-                    GDK_BUTTON5_MASK)))
-    return TRUE;
-
-  gdk_device_get_history (slave, ev->window,
-                          slavedata->motion_time, ev->time,
-                          &coords, &nevents);
+  gdk_device_get_history (ev->device, ev->window,
+			  devdata->motion_time, ev->time,
+			  &coords, &nevents);
 
   if(!data->xinerama && nevents > 0)
     {
@@ -327,29 +304,29 @@ gboolean on_motion (GtkWidget *win,
         {
           gdouble x, y;
 
-          gdk_device_get_axis (slave, coords[i]->axes,
+          gdk_device_get_axis (ev->device, coords[i]->axes,
                                GDK_AXIS_PRESSURE, &pressure);
           if (pressure > 0)
             {
 	      data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
-				(double) (slavedata->cur_context->width -
-					  slavedata->cur_context->minwidth) +
-				slavedata->cur_context->minwidth);
+				(double) (devdata->cur_context->width -
+					  devdata->cur_context->minwidth) +
+				devdata->cur_context->minwidth);
 
-              gdk_device_get_axis(slave, coords[i]->axes,
+              gdk_device_get_axis(ev->device, coords[i]->axes,
                                   GDK_AXIS_X, &x);
-              gdk_device_get_axis(slave, coords[i]->axes,
+              gdk_device_get_axis(ev->device, coords[i]->axes,
                                   GDK_AXIS_Y, &y);
 
-	      draw_line (data, slave, slavedata->lastx, slavedata->lasty, x, y);
+	      draw_line (data, ev->device, devdata->lastx, devdata->lasty, x, y);
 
-              coord_list_prepend (data, slave, x, y, data->maxwidth);
-              slavedata->lastx = x;
-              slavedata->lasty = y;
+              coord_list_prepend (data, ev->device, x, y, data->maxwidth);
+              devdata->lastx = x;
+              devdata->lasty = y;
             }
         }
 
-      slavedata->motion_time = coords[nevents-1]->time;
+      devdata->motion_time = coords[nevents-1]->time;
       g_free (coords);
     }
 
@@ -359,20 +336,20 @@ gboolean on_motion (GtkWidget *win,
   if (pressure > 0)
     {
       data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
-			(double) (slavedata->cur_context->width -
-				  slavedata->cur_context->minwidth) +
-			slavedata->cur_context->minwidth);
+			(double) (devdata->cur_context->width -
+				  devdata->cur_context->minwidth) +
+			devdata->cur_context->minwidth);
 
-      if(slavedata->motion_time > 0)
+      if(devdata->motion_time > 0)
 	{
-	  draw_line (data, slave, slavedata->lastx, slavedata->lasty, ev->x, ev->y);
-	  coord_list_prepend (data, slave, ev->x, ev->y, data->maxwidth);
+	  draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
+	  coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
 	}
     }
 
-  slavedata->lastx = ev->x;
-  slavedata->lasty = ev->y;
-  slavedata->motion_time = ev->time;
+  devdata->lastx = ev->x;
+  devdata->lasty = ev->y;
+  devdata->motion_time = ev->time;
 
   return TRUE;
 }
@@ -383,43 +360,70 @@ gboolean on_buttonrelease (GtkWidget *win,
 			   gpointer user_data)
 {
   GromitData *data = (GromitData *) user_data;
-
-  /* get the data for this device */
-  GdkDevice *master = ev->device;
-  GromitDeviceData *masterdata =
-    g_hash_table_lookup(data->devdatatable, master);
-  GdkDevice *slave =
-    gdk_event_get_source_device ((GdkEvent *) ev);
-  GromitDeviceData *slavedata =
-    g_hash_table_lookup(data->devdatatable, slave);
-
-  if(data->debug)
-    g_printerr("DEBUG: Device '%s': Button %i Up at (x,y)=(%.2f : %.2f)\n", 
-	       gdk_device_get_name(slave), ev->button, ev->x, ev->y);
+  /* get the device data for this event */
+  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, ev->device);
 
   gfloat direction = 0;
   gint width = 0;
-  if(slavedata->cur_context)
-    width = slavedata->cur_context->arrowsize *
-      slavedata->cur_context->width / 2;
+  if(devdata->cur_context)
+    width = devdata->cur_context->arrowsize * devdata->cur_context->width / 2;
+   
 
-  if ((ev->x != slavedata->lastx) ||
-      (ev->y != slavedata->lasty))
+  if ((ev->x != devdata->lastx) ||
+      (ev->y != devdata->lasty))
     on_motion(win, (GdkEventMotion *) ev, user_data);
 
-
-  if (!masterdata->is_grabbed)
+  if (!devdata->is_grabbed)
     return FALSE;
-
-  if (slavedata->cur_context->arrowsize != 0 &&
-      coord_list_get_arrow_param (data, slave, width * 3,
+  
+  if (devdata->cur_context->arrowsize != 0 &&
+      coord_list_get_arrow_param (data, ev->device, width * 3,
 				  &width, &direction))
-    draw_arrow (data, slave, ev->x, ev->y, width, direction);
+    draw_arrow (data, ev->device, ev->x, ev->y, width, direction);
 
-  coord_list_free (data, slave);
+  coord_list_free (data, ev->device);
 
   return TRUE;
 }
+
+
+
+gboolean on_proximity_in (GtkWidget *win, 
+			  GdkEventProximity *ev,
+			  gpointer user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+  gint x, y;
+  GdkModifierType state;
+
+  gdk_window_get_pointer (gtk_widget_get_window(data->win), &x, &y, &state);
+  select_tool (data, ev->device, state);
+
+  if(data->debug)
+    g_printerr("DEBUG: prox in device  %s: \n", gdk_device_get_name(ev->device));
+  return TRUE;
+}
+
+
+gboolean on_proximity_out (GtkWidget *win, 
+			   GdkEventProximity *ev, 
+			   gpointer user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+  
+  /* get the data for this device */
+  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, ev->device);
+
+  devdata->cur_context = data->default_pen;
+
+  devdata->state = 0;
+  devdata->device = NULL;
+
+  if(data->debug)
+    g_printerr("DEBUG: prox out device  %s: \n", gdk_device_get_name(ev->device));
+  return FALSE;
+}
+
 
 /* Remote control */
 void on_mainapp_selection_get (GtkWidget          *widget,
@@ -518,12 +522,11 @@ void on_device_removed (GdkDeviceManager *device_manager,
 			gpointer          user_data)
 {
   GromitData *data = (GromitData *) user_data;
-  GdkInputSource hardware_type = gdk_device_get_source(device);
-
-  if( hardware_type == GDK_SOURCE_KEYBOARD ||
-      gdk_device_get_n_axes(device) < 2)
+    
+  if(!gdk_device_get_device_type(device) == GDK_DEVICE_TYPE_MASTER
+     || gdk_device_get_n_axes(device) < 2)
     return;
-
+  
   if(data->debug)
     g_printerr("DEBUG: device '%s' removed\n", gdk_device_get_name(device));
 
@@ -535,10 +538,9 @@ void on_device_added (GdkDeviceManager *device_manager,
 		      gpointer          user_data)
 {
   GromitData *data = (GromitData *) user_data;
-  GdkInputSource hardware_type = gdk_device_get_source(device);
 
-  if( hardware_type == GDK_SOURCE_KEYBOARD ||
-      gdk_device_get_n_axes(device) < 2)
+  if(!gdk_device_get_device_type(device) == GDK_DEVICE_TYPE_MASTER
+     || gdk_device_get_n_axes(device) < 2)
     return;
 
   if(data->debug)
