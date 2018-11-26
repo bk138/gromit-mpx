@@ -239,7 +239,7 @@ void acquire_grab (GromitData *data,
           GdkCursor *cursor;
 
 	  devdata = value;
-          if(devdata->is_grabbed || gdk_device_get_device_type(devdata->device) == GDK_DEVICE_TYPE_SLAVE)
+          if(devdata->is_grabbed)
             continue;
 
 	  if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
