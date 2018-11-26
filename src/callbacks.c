@@ -557,14 +557,11 @@ gboolean on_toggle_paint(GtkWidget *widget,
 {
     GromitData *data = (GromitData *) user_data;
 
-    GdkDevice *master = ev->device;
-    GdkDevice *slave = gdk_event_get_source_device ((GdkEvent *) ev);
-
     if(data->debug)
 	g_printerr("DEBUG: Device '%s': Button %i on_toggle_paint at (x,y)=(%.2f : %.2f)\n",
-		   gdk_device_get_name(slave), ev->button, ev->x, ev->y);
+		   gdk_device_get_name(ev->device), ev->button, ev->x, ev->y);
 
-    toggle_grab(data, master);
+    toggle_grab(data, ev->device);
 
     return TRUE;
 }
