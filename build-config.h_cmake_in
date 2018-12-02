@@ -1,4 +1,4 @@
-#ifndef BUILD_CONFIG_h
+#ifndef BUILD_CONFIG_H
 #define BUILD_CONFIG_H
 
 /* Name of package */
