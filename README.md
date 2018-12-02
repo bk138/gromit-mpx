@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/bk138/gromit-mpx.svg?branch=master)](https://travis-ci.org/bk138/gromit-mpx)
-
 # Gromit-MPX
+
+[![Build Status](https://travis-ci.org/bk138/gromit-mpx.svg?branch=master)](https://travis-ci.org/bk138/gromit-mpx)
 
 Gromit-MPX is a multi-pointer port of the original [Gromit annotation
 tool](http://www.home.unix-ag.org/simon/gromit) by [Simon
@@ -11,9 +11,7 @@ A **lot** faster since it uses the XCOMPOSITE extension where
 available.  Also, it does not inhibit Drag-and-Drop like the original
 Gromit tool.
 
-
-
-## What is it?
+## What it is
 
 Gromit-MPX (GRaphics Over MIscellaneous Things) is a small tool to
 make annotations on the screen.
@@ -23,12 +21,10 @@ Normally, you would have to move the mouse pointer around the point of
 interest until hopefully everybody noticed it.  With Gromit-MPX, you
 can draw everywhere onto the screen, highlighting some button or area.
 
-
 Similar tools for MS-Windows include *DemoHelper* (GPLv2 also), or
 proprietary tools like *ZoomIt* and *ScreenMarker*.  For Compiz, there
 is also the *Annotate* plugin, and the much-flashier *Firepaint (paint
 fire on screen)* plugin.
-
 
 ## How to use it
 
@@ -49,16 +45,15 @@ commands are:
     SHIFT-F10: redo last undone stroke
 
 You can specify the keys to grab via:
-```
-gromit-mpx --key <keysym> --undo-key <keysym>
-```
+
+    gromit-mpx --key <keysym> --undo-key <keysym>
+
 Specifying an empty string or `none` for the keysym will prevent gromit
 from grabbing a key.
 
 You can specify the opacity simply via:
-```
-gromit-mpx -o <opacity>
-```
+
+    gromit-mpx -o <opacity>
 
 Alternatively you can invoke Gromit-MPX with various arguments to
 control an already running Gromit-MPX .
@@ -112,8 +107,7 @@ Alternatively, you can also use the graphical tool [gnome-device-
 manager](https://github.com/bk138/gnome-device-manager) to arrange your
 MPX setup.
 
-
-### Configuration:
+### Configuration
 
 Gromit-MPX is configurable via the file `gromit-mpx.cfg` in the
 directory defined by `$XDG_CONFIG_HOME` (usually `~/.config`).  Here
@@ -152,7 +146,6 @@ the shape. Try it out to see the effect.
 
     "green Marker" = RECOLOR (color = "Limegreen");
 
-
 If you define a tool with the same name as an input-device
 (see the output of `xsetpointer -l`, if there is a `SWITCH`-Tool
 it is uninteresting...) this input-device uses this tool.
@@ -177,7 +170,6 @@ The descision which tool to use follows a simple policy:
       definition if there is no `"Core Pointer"[SHIFT]` definition.
       The same logic holds for the buttons.
 
-
 ## Building it
 
 Gromit-MPX uses CMake as its build system. Thus, it's the usual:
@@ -189,8 +181,7 @@ Gromit-MPX uses CMake as its build system. Thus, it's the usual:
 
 from the root of the source tree.
 
-
-## Potential Problems:
+## Potential Problems
 
 When there is no compositing manager such as Compiz or xcompmgr
 running, Gromit-MPX falls back to a legacy drawing mode. This may
@@ -200,11 +191,8 @@ quite expensive if you paint a complex pattern on screen. Especially
 terminal-programs tend to scroll incredibly slow if something is
 painted over their window.
 
-
-
 Like the original Gromit, this program is distributed under the Gnu
 General Public License.  See the file `COPYING` for details.  Thanks
 to Simon for the groundwork done!
-
 
 ---[Christian Beier](mailto:dontmind@freeshell.org)
