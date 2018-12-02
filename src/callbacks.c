@@ -23,6 +23,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include "gromit-mpx.h"
 #include "input.h"
 #include "callbacks.h"
