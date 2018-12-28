@@ -91,6 +91,7 @@ typedef struct
   GromitPaintContext *cur_context;
   gboolean     is_grabbed;
   gboolean     was_grabbed;
+  GdkDevice*   lastslave;
 } GromitDeviceData;
 
 
@@ -154,7 +155,7 @@ void show_window (GromitData *data);
 
 void parse_print_help (gpointer key, gpointer value, gpointer user_data);
 
-void select_tool (GromitData *data, GdkDevice *device, guint state);
+void select_tool (GromitData *data, GdkDevice *device, GdkDevice *slave_device, guint state);
 
 void copy_surface (cairo_surface_t *dst, cairo_surface_t *src);
 void swap_surfaces (cairo_surface_t *a, cairo_surface_t *b);

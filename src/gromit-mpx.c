@@ -317,12 +317,14 @@ gint reshape (gpointer user_data)
 
 void select_tool (GromitData *data, 
 		  GdkDevice *device, 
+		  GdkDevice *slave_device,
 		  guint state)
 {
-  guint buttons = 0, modifier = 0, len = 0, default_len = 0;
+  guint buttons = 0, modifier = 0, slave_len = 0, len = 0, default_len = 0;
   guint req_buttons = 0, req_modifier = 0;
   guint i, j, success = 0;
   GromitPaintContext *context = NULL;
+  guchar *slave_name;
   guchar *name;
   guchar *default_name;
 
@@ -331,6 +333,8 @@ void select_tool (GromitData *data,
  
   if (device)
     {
+      slave_len = strlen (gdk_device_get_name(slave_device));
+      slave_name = (guchar*) g_strndup (gdk_device_get_name(slave_device), slave_len + 3);
       len = strlen (gdk_device_get_name(device));
       name = (guchar*) g_strndup (gdk_device_get_name(device), len + 3);
       default_len = strlen(DEFAULT_DEVICE_NAME);
@@ -343,6 +347,8 @@ void select_tool (GromitData *data,
       req_modifier = (state >> 1) & 7;
       if (state & GDK_SHIFT_MASK) req_modifier |= 1;
 
+      slave_name [slave_len] = 124;
+      slave_name [slave_len+3] = 0;
       name [len] = 124;
       name [len+3] = 0;
       default_name [default_len] = 124;
@@ -360,19 +366,28 @@ void select_tool (GromitData *data,
             {
               j++;
               modifier = req_modifier & ((1 << j)-1);
+              slave_name [slave_len+1] = buttons + 64;
+              slave_name [slave_len+2] = modifier + 48;
               name [len+1] = buttons + 64;
               name [len+2] = modifier + 48;
               default_name [default_len+1] = buttons + 64;
               default_name [default_len+2] = modifier + 48;
 
-	      if(data->debug)
-		g_printerr("DEBUG: select_tool looking up context for %s\n", name);
+	            if(data->debug)
+                g_printerr("DEBUG: select_tool looking up context for '%s' attached to '%s'\n", slave_name, name);
 
-              context = g_hash_table_lookup (data->tool_config, name);
-              if(context)
+              context = g_hash_table_lookup (data->tool_config, slave_name);
+              if(context) {
+                  if(data->debug)
+                    g_printerr("DEBUG: select_tool set context for '%s'\n", slave_name);
+                  devdata->cur_context = context;
+                  success = 1;
+              }
+              else /* try master name */
+              if ((context = g_hash_table_lookup (data->tool_config, name)))
                 {
                   if(data->debug)
-                    g_printerr("DEBUG: select_tool set context for %s\n", name);
+                    g_printerr("DEBUG: select_tool set context for '%s'\n", name);
                   devdata->cur_context = context;
                   success = 1;
                 }
@@ -380,7 +395,7 @@ void select_tool (GromitData *data,
                 if((context = g_hash_table_lookup (data->tool_config, default_name)))
                   {
                     if(data->debug)
-                      g_printerr("DEBUG: select_tool set default context %s for %s\n", default_name, name);
+                      g_printerr("DEBUG: select_tool set default context '%s' for '%s'\n", default_name, name);
                     devdata->cur_context = context;
                     success = 1;
                   }
@@ -427,6 +442,7 @@ void select_tool (GromitData *data,
   		  GDK_CURRENT_TIME);
 
   devdata->state = state;
+  devdata->lastslave = slave_device;
 }
 
 
