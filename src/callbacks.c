@@ -600,7 +600,20 @@ void on_redo(GtkMenuItem *menuitem,
 void on_about(GtkMenuItem *menuitem,
 	      gpointer     user_data)
 {
-    const gchar *authors [] = { "Christian Beier <dontmind@freeshell.org>", "Simon Budig <Simon.Budig@unix-ag.org>", NULL };
+    const gchar *authors [] = { "Christian Beier <dontmind@freeshell.org>",
+                                "Simon Budig <Simon.Budig@unix-ag.org>",
+                                "Barak A. Pearlmutter <barak+git@pearlmutter.net>",
+                                "Nathan Whitehead <nwhitehe@gmail.com>",
+                                "Lukáš Hermann <tuxilero@gmail.com>",
+                                "Katie Holly <git@meo.ws>",
+                                "Monty Montgomery <xiphmont@gmail.com>",
+                                "AlisterH <alister.hood@gmail.com>",
+                                "Mehmet Atif Ergun <mehmetaergun@users.noreply.github.com>",
+                                "Russel Winder <russel@winder.org.uk>",
+                                "Tao Klerks <tao@klerks.biz>",
+                                "Tobias Schönberg <tobias47n9e@gmail.com>",
+                                "Yuri D'Elia <yuri.delia@eurac.edu>",
+                                 NULL };
     gtk_show_about_dialog (NULL,
 			   "program-name", "Gromit-MPX",
 			   "logo-icon-name", "gromit-mpx",
