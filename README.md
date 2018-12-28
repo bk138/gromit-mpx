@@ -147,8 +147,7 @@ the shape. Try it out to see the effect.
     "green Marker" = RECOLOR (color = "Limegreen");
 
 If you define a tool with the same name as an input-device
-(see the output of `xsetpointer -l`, if there is a `SWITCH`-Tool
-it is uninteresting...) this input-device uses this tool.
+(see the output of `xinput --list`) this input-device uses this tool.
 Additionally you can limit the Scope to specific combinations of
 Mousebuttons (1,2,3,4,5 or Button1,...,Button5)
 and Modifiers (`SHIFT`, `CONTROL`, `ALT`, `META`, while `ALT==META`).
@@ -169,6 +168,8 @@ The descision which tool to use follows a simple policy:
       and only `SHIFT` actually is pressed, Gromit-MPX will use the second
       definition if there is no `"Core Pointer"[SHIFT]` definition.
       The same logic holds for the buttons.
+5. Slave device config takes precedence over master device config, which
+   in turn takes precedence over the fallback default config.
 
 ## Building it
 
