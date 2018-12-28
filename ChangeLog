@@ -1,3 +1,307 @@
+commit b4ed990916d40c2c418d5e12f43672a8b2ddead8
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Dec 28 16:37:58 2018 +0100
+
+    Update TODO
+
+commit 4bcaee501994817355eb4a87510dd6f072a592aa
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Dec 28 16:30:28 2018 +0100
+
+    Update NEWS
+
+commit 05341fa4d17eb4c5a9eb63a5e04ddcc69992fec8
+Author: Christian Beier <cb@shoutrlabs.com>
+Date:   Fri Dec 28 16:16:04 2018 +0100
+
+    Update AUTHORS
+
+commit 718738752aa14efa172a57a618cba5c81caf77bc
+Merge: a185c56 c5506dd
+Author: Christian Beier <cb@shoutrlabs.com>
+Date:   Fri Dec 28 15:44:39 2018 +0100
+
+    Merge branch 'fix-slavehandling'
+
+commit c5506dd1025771bc23ee9f5855a52cf06f3e26c5
+Author: Christian Beier <cb@shoutrlabs.com>
+Date:   Fri Dec 28 15:42:07 2018 +0100
+
+    Allow configuration of slave devices, too
+    
+    This is a rework of 58bdef4d49ab4269fedda55e825ce8ad8a62076c.
+
+commit a185c564fd94759190d6c9363c5a66b04abfd7a7
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Dec 2 23:22:12 2018 +0100
+
+    README: fix issues pointed out by markdownlint
+
+commit 032d46f5e3a20d428c5a071178ae4f328e429454
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Dec 2 23:03:30 2018 +0100
+
+    CMake: fix build-config.h template header guard
+
+commit 2b21482e16a010f026d1a81d822b8876429584fa
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Dec 2 22:41:34 2018 +0100
+
+    Add stdint.h to define intptr_t on all compilers
+
+commit 53062c7427983d5f2c6669ecc127bf8870ceccdb
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Nov 26 22:11:15 2018 +0100
+
+    Remove proximity event handling
+    
+    It is not supported in XInput2.
+
+commit b16c685e6b1ad9787481c93d1ef7516c8392c255
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Nov 26 13:10:51 2018 +0100
+
+    Remove last slave handling remnants
+
+commit cc3c090a96c91d758299cfafdfecd361450c9dd2
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Nov 26 12:42:30 2018 +0100
+
+    Revert "Add reasonably complete support for slave devices."
+    
+    This reverts commit 58bdef4d49ab4269fedda55e825ce8ad8a62076c.
+    
+    Closes #29
+
+commit bd47b373fedd6aecf066644a08c8eb68247a9e40
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Nov 26 12:12:54 2018 +0100
+
+    Revert "Only grab master devices."
+    
+    This reverts commit 335ff721b4416a4d5cd03a987f81716101e03540.
+
+commit 017c4f4b5d033e6686e99a8e57fd220d6da2f93b
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Nov 19 17:10:48 2018 +0100
+
+    README: fix typo
+
+commit a751b83a303a865fa5dc157e9f40b05c92c4f58d
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Nov 19 11:10:02 2018 +0100
+
+    README: fix linking
+
+commit 080282e14b5235bd9176636b68d9f01b32777cdb
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Nov 19 11:07:11 2018 +0100
+
+    README: add instructions on how to setup MPX
+    
+    Closes #59
+
+commit c451f01410b30827d317be0856ba4be614359142
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Nov 19 10:22:34 2018 +0100
+
+    README: move the 'Configuration' section into 'How to use'
+
+commit 2f7ca97200b14bdaed8c5d7e47212e5d6e9bc929
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Mon Nov 19 10:11:11 2018 +0100
+
+    README: fix headings
+
+commit ee6815e458eb1710e703ed41b3f097501099023b
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Nov 4 17:53:57 2018 +0100
+
+    config: use pre glib-2.44 style
+
+commit 1eef4b5d27648d88926ad3932f135ea75f8ebab8
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Nov 4 16:22:46 2018 +0100
+
+    Add an introduction screen
+    
+    This replaces the old poor-man's help screen and hopefully serves its
+    purpose of telling users about the hotkeys better.
+    
+    In the wake of adding this, Gromit-MPX also received a basic config
+    system based on GKeyFile, which some day might replace the handwritten
+    config parser we rely on now.
+    
+    GKeyFile was not there when Simon started the original Gromit (it
+    appeared around 2004), so he had to resort to GScanner.
+    
+    Closes #56
+
+commit d96106f9a30b2bc377a5f9a1c3d95f3dcbf37719
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Nov 3 16:28:00 2018 +0100
+
+    README: fix typo
+
+commit f3ddd27ab65787d4afbc40ce40ff716d293a1fdb
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Nov 3 13:21:32 2018 +0100
+
+    CMake: add xpms to sources
+
+commit 07e3dd3d322032f86047889b38fc793b7cb77ca2
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Nov 3 13:10:30 2018 +0100
+
+    Remove the now-obsolete help menu entry
+
+commit 487a6e3035b57b02421a4c1a9bb180a072500514
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Nov 3 12:55:09 2018 +0100
+
+    Update man page date
+
+commit a7122e4cdea2ba7e238202f6ebb25b0fadefeb18
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Nov 3 12:52:39 2018 +0100
+
+    Order options in manpage alphabetically
+
+commit 0022af97aec57f6db0cf1f8ddb49e0537f083697
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Nov 3 12:49:28 2018 +0100
+
+    Add opacity-setting to man page
+    
+    Closes #54
+
+commit 2c8dd6391e733723a93098bdcfcb3ef9d13c478a
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Nov 3 12:46:47 2018 +0100
+
+    Make the opacity error message locale-independent
+
+commit 4c2eb4f3eb7a519fbe62f5fde6a9d399b03308d1
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Nov 3 12:29:18 2018 +0100
+
+    Directly show hotkeys in the menu
+    
+    re #42 #56
+
+commit a4103b2fa1c40965df2f219d126b0a9596689a3f
+Author: Christian Beier <cb@shoutrlabs.com>
+Date:   Mon Oct 29 13:16:47 2018 +0100
+
+    Add screen size values to on-change debug log
+    
+    re #55
+
+commit 40f928f1bcfdc1e47aa6d8ee2eb29f5551c231c1
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Oct 28 22:53:35 2018 +0100
+
+    Update copyright year
+
+commit 3f85689b9fe3e371873643c2a8fd9d5605b8738f
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Mar 18 15:28:19 2018 +0100
+
+    Make select_tool debug logs a bit clearer
+
+commit 73caad9023dbeb1037830f2d0d3984aad723aefc
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Mar 18 15:07:20 2018 +0100
+
+    Prefix select_tool debug logs
+
+commit 6cc126bf4a4a5608d02aaeb488583bfaaa849aa2
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Thu Mar 8 01:56:43 2018 +0100
+
+    README: add a note about maybe-missing sys tray
+    
+    Closes #47.
+
+commit df4194b332dbfad5eb6341b9f8a19b32b47a489c
+Merge: 295a34b 5ce93ee
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Feb 25 18:12:58 2018 +0100
+
+    Merge pull request #48 from Fusl/master
+    
+     Allow not grabbing undo-key
+
+commit 5ce93ee0e32950f6fdfc7ddd391e8820ef7b9e5d
+Author: Katie Holly <git@meo.ws>
+Date:   Wed Feb 14 03:09:28 2018 +0100
+
+    Adding `build/` directory to .gitignore (documented in README.md)
+    
+    Signed-off-by: Katie Holly <git@meo.ws>
+
+commit b67083b32d077e0bd4e0b623adc515230acc9880
+Author: Katie Holly <git@meo.ws>
+Date:   Wed Feb 14 03:08:31 2018 +0100
+
+    Allow unbinding undo-key
+    
+    Signed-off-by: Katie Holly <git@meo.ws>
+
+commit 295a34b164788d8826892bd108eb2edfc90cc204
+Merge: 218e75a d627d3c
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Dec 4 18:07:01 2016 +0100
+
+    Merge pull request #39 from barak/upstream
+    
+    add ENVIRONMENT and FILES man page sections
+
+commit d627d3c05e432750fcf0e4ec540ee4f3ab97be87
+Author: Barak A. Pearlmutter <barak+git@pearlmutter.net>
+Date:   Sun Dec 4 17:12:38 2016 +0100
+
+    add ENVIRONMENT and FILES man page sections
+
+commit 218e75a593f5268a244f1e50a750d9b3486b4863
+Merge: ad169c9 cfc916f
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Nov 20 12:35:57 2016 +0100
+
+    Merge pull request #36 from barak/tweaks
+    
+    cmake installation dirs
+
+commit cfc916f63803e3a8e1dde7a35c5fc5191d7711eb
+Author: Barak A. Pearlmutter <barak+git@pearlmutter.net>
+Date:   Sat Nov 19 15:19:28 2016 +0000
+
+    cmake installation dirs
+
+commit ad169c97034fecc9768cbec9033fad7c65ba7e03
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Nov 18 19:37:59 2016 +0100
+
+    Next version will be 1.3.
+
+commit a11478c3bdbc26e443a7cd4ab8d0f9e1f0683481
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Nov 18 19:36:39 2016 +0100
+
+    Remove Autotools, CMake now is the only build system.
+
+commit eba556e20bc1b3abc556d8c73ff12beeb838b839
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Nov 18 14:31:40 2016 +0100
+
+    TravisCI: swtich to cmake as default build system
+
+commit a835decff6d0186bd96075bca8ed31144f2ff9e2
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Nov 16 22:44:50 2016 +0100
+
+    Update ChangeLog.
+
 commit c2b4d4a044edea046494e6c628c01ea26e8246a5
 Author: Christian Beier <dontmind@freeshell.org>
 Date:   Wed Nov 16 22:34:09 2016 +0100
@@ -1277,7 +1581,7 @@ Date:   Wed Jun 2 16:39:15 2010 +0200
     Merge branch 'master' of github.com:bk138/gromit-mpx
     
     Resolved conflicts:
-    	TODO
+            TODO
 
 commit 376e0d6179635ced4c8d9724727d6d8764984f94
 Author: Christian Beier <dontmind@freeshell.org>
