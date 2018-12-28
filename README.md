@@ -1,6 +1,7 @@
 # Gromit-MPX
 
 [![Build Status](https://travis-ci.org/bk138/gromit-mpx.svg?branch=master)](https://travis-ci.org/bk138/gromit-mpx)
+[![Help making this possible](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/bk138/donate)
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=N7GSSPRPUSTPU&source=url)
 
 Gromit-MPX is a multi-pointer port of the original [Gromit annotation
