@@ -309,7 +309,7 @@ gboolean on_motion (GtkWidget *win,
 
           gdk_device_get_axis (ev->device, coords[i]->axes,
                                GDK_AXIS_PRESSURE, &pressure);
-          if (pressure > 0)
+          if (pressure > 0 || devdata->cur_context->minwidth > 0)
             {
 	      data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
 				(double) (devdata->cur_context->width -
@@ -336,7 +336,7 @@ gboolean on_motion (GtkWidget *win,
   /* always paint to the current event coordinate. */
   gdk_event_get_axis ((GdkEvent *) ev, GDK_AXIS_PRESSURE, &pressure);
 
-  if (pressure > 0)
+  if (pressure > 0 || devdata->cur_context->minwidth > 0)
     {
       data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
 			(double) (devdata->cur_context->width -
