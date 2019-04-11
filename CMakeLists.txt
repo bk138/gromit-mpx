@@ -3,6 +3,7 @@ project(gromit-mpx LANGUAGES C)
 
 set(target_name gromit-mpx)
 set(version 1.3)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_C_FLAGS  " ${CMAKE_C_FLAGS} -Wall -Wextra -Wno-unused-parameter")
 
