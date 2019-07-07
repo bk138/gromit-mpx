@@ -110,7 +110,7 @@ void setup_input_devices (GromitData *data)
 		      XIGrabModifiers modifiers[] = {{XIAnyModifier, 0}};
 		      int nmods = 1;
 	      
-		      gdk_error_trap_push ();
+		      gdk_x11_display_error_trap_push(data->display);
 	      
 		      if (data->hot_keycode) {
 			      XIGrabKeycode( GDK_DISPLAY_XDISPLAY(data->display),
@@ -139,7 +139,7 @@ void setup_input_devices (GromitData *data)
 		      }
 
 		      XSync(GDK_DISPLAY_XDISPLAY(data->display), False);
-		      if(gdk_error_trap_pop())
+		      if(gdk_x11_display_error_trap_pop(data->display))
 			  {
 			      g_printerr("ERROR: Grabbing hotkey from keyboard device %d failed.\n",
 					 kbd_dev_id);
@@ -174,10 +174,10 @@ void release_grab (GromitData *data,
           devdata = value;
           if(devdata->is_grabbed)
 	  {
-	    gdk_error_trap_push();
+	    gdk_x11_display_error_trap_push(data->display);
 	    gdk_device_ungrab(devdata->device, GDK_CURRENT_TIME);
 	    XSync(GDK_DISPLAY_XDISPLAY(data->display), False);
-	    if(gdk_error_trap_pop())
+	    if(gdk_x11_display_error_trap_pop(data->display))
 	      g_printerr("WARNING: Ungrabbing device '%s' failed.\n", gdk_device_get_name(devdata->device));
 
 	    devdata->is_grabbed = 0;
