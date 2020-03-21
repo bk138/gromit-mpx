@@ -25,3 +25,4 @@ Makefile.in
 *~
 /Build_Release/
 /Build_Debug/
+.ccls-cache
