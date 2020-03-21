@@ -36,7 +36,7 @@ provides a sys tray), but since you typically want to use the program you
 are demonstrating and highlighting something is a short interruption of
 your workflow, Gromit-MPX can be toggled on and off on the fly via a hotkey:
 
-Per default, it grabs the `F9` and `F10` keys, so that no other application
+Per default, it grabs the `F9` and `F8` keys, so that no other application
 can use them and they are available to Gromit-MPX only.  The available
 commands are:
 
@@ -44,8 +44,8 @@ commands are:
     SHIFT-F9:  clear screen
     CTRL-F9:   toggle visibility
     ALT-F9:    quit Gromit-MPX
-    F10:       undo last stroke
-    SHIFT-F10: redo last undone stroke
+    F8:       undo last stroke
+    SHIFT-F8: redo last undone stroke
 
 You can specify the keys to grab via:
 
