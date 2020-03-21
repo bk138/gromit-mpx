@@ -97,7 +97,7 @@ void setup_input_devices (GromitData *data)
 	      if(kbd_dev_id != -1)
 		  {
 		      if(data->debug)
-			  g_printerr("DEBUG: Grabbing hotkeys from keyboard '%d' .\n", kbd_dev_id);
+			  g_printerr("DEBUG: Grabbing hotkeys '%s' and '%s' from keyboard '%d' .\n", data->hot_keyval, data->undo_keyval, kbd_dev_id);
 
 		      XIEventMask mask;
 		      unsigned char bits[4] = {0,0,0,0};
