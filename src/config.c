@@ -34,7 +34,8 @@
 
 #define KEYFILE_FLAGS G_KEY_FILE_KEEP_COMMENTS|G_KEY_FILE_KEEP_TRANSLATIONS
 
-static gpointer HOTKEY_SYMBOL_VALUE = (gpointer) 3;
+static gpointer HOTKEY_SYMBOL_VALUE  = (gpointer) 3;
+static gpointer UNDOKEY_SYMBOL_VALUE = (gpointer) 4;
 
 /*
  * Functions for parsing the Configuration-file
@@ -155,6 +156,7 @@ void parse_config (GromitData *data)
   g_scanner_scope_add_symbol (scanner, 0, "ERASER", (gpointer) GROMIT_ERASER);
   g_scanner_scope_add_symbol (scanner, 0, "RECOLOR",(gpointer) GROMIT_RECOLOR);
   g_scanner_scope_add_symbol (scanner, 0, "HOTKEY",            HOTKEY_SYMBOL_VALUE);
+  g_scanner_scope_add_symbol (scanner, 0, "UNDOKEY",           UNDOKEY_SYMBOL_VALUE);
 
   g_scanner_scope_add_symbol (scanner, 1, "BUTTON1", (gpointer) 1);
   g_scanner_scope_add_symbol (scanner, 1, "BUTTON2", (gpointer) 2);
@@ -355,8 +357,11 @@ void parse_config (GromitData *data)
           context = paint_context_new (data, type, fg_color, width, arrowsize, minwidth);
           g_hash_table_insert (data->tool_config, name, context);
         }
-      else if (token == G_TOKEN_SYMBOL && scanner->value.v_symbol == HOTKEY_SYMBOL_VALUE)
+      else if (token == G_TOKEN_SYMBOL &&
+               (scanner->value.v_symbol == HOTKEY_SYMBOL_VALUE ||
+                scanner->value.v_symbol == UNDOKEY_SYMBOL_VALUE))
         {
+          gpointer key_type = scanner->value.v_symbol;
           /*
            * Hot key definition
            */
@@ -379,7 +384,15 @@ void parse_config (GromitData *data)
               exit (1);
             }
 
-          data->hot_keyval = g_strdup(scanner->value.v_string);
+          if (key_type == HOTKEY_SYMBOL_VALUE)
+            {
+              data->hot_keyval = g_strdup(scanner->value.v_string);
+            }
+          else
+            {
+              data->undo_keyval = g_strdup(scanner->value.v_string);
+            }
+
           token = g_scanner_get_next_token(scanner);
 
           if (token != ';')
