@@ -361,11 +361,11 @@ void parse_config (GromitData *data)
                (scanner->value.v_symbol == HOTKEY_SYMBOL_VALUE ||
                 scanner->value.v_symbol == UNDOKEY_SYMBOL_VALUE))
         {
-          gpointer key_type = scanner->value.v_symbol;
           /*
            * Hot key definition
            */
 
+          gpointer key_type = scanner->value.v_symbol;
           token = g_scanner_get_next_token(scanner);
 
           if (token != G_TOKEN_EQUAL_SIGN)
