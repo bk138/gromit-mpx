@@ -389,7 +389,7 @@ void parse_config (GromitData *data)
             {
               data->hot_keyval = g_strdup(scanner->value.v_string);
             }
-          else if (key_type == UNDOKEY_SYMBOL_VALUE && g_strcmp0(data->hot_keyval, DEFAULT_UNDOKEY) == 0)
+          else if (key_type == UNDOKEY_SYMBOL_VALUE && g_strcmp0(data->undo_keyval, DEFAULT_UNDOKEY) == 0)
             {
               data->undo_keyval = g_strdup(scanner->value.v_string);
             }
