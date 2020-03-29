@@ -28,6 +28,7 @@
 #include <fcntl.h>
 #include <errno.h>
 
+#include "config.h"
 #include "gromit-mpx.h"
 
 #define KEY_DFLT_SHOW_INTRO_ON_STARTUP TRUE
@@ -384,11 +385,11 @@ void parse_config (GromitData *data)
               exit (1);
             }
 
-          if (key_type == HOTKEY_SYMBOL_VALUE)
+          if (key_type == HOTKEY_SYMBOL_VALUE && g_strcmp0(data->hot_keyval, DEFAULT_HOTKEY) == 0)
             {
               data->hot_keyval = g_strdup(scanner->value.v_string);
             }
-          else
+          else if (key_type == UNDOKEY_SYMBOL_VALUE && g_strcmp0(data->undo_keyval, DEFAULT_UNDOKEY) == 0)
             {
               data->undo_keyval = g_strdup(scanner->value.v_string);
             }
