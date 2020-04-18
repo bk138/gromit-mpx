@@ -173,6 +173,9 @@ The descision which tool to use follows a simple policy:
       The same logic holds for the buttons.
 5. Slave device config takes precedence over master device config, which
    in turn takes precedence over the fallback default config.
+   
+You can also change the [hotkeys from the config](data/gromit-mpx.cfg#L5) file by setting the respective
+`HOTKEY` and/or `UNDOKEY` values.
 
 ## Building it
 
