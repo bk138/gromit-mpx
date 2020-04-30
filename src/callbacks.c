@@ -582,6 +582,53 @@ void on_opacity_lesser(GtkMenuItem *menuitem,
 }
 
 
+static gboolean
+cmw_destroy_cb(GtkWidget *widget)
+{
+  /* This is needed to get out of gtk_main */
+  gtk_main_quit();
+  return FALSE;
+}
+
+
+static void
+dialog_response (GtkDialog *dialog, gint response, gpointer user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+  switch (response)
+    {
+    case GTK_RESPONSE_OK:
+      gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (dialog), data->default_pen->paint_color);
+      gdk_cairo_set_source_rgba(data->default_pen->paint_ctx, data->default_pen->paint_color);
+      break;
+    default:
+      break;
+    }
+  gtk_widget_destroy(dialog);
+}
+
+
+void on_select_color(GtkMenuItem *menuitem,
+		     gpointer     user_data)
+{
+  GtkWidget *csd;
+
+  csd = gtk_color_chooser_dialog_new ("Select color", NULL);
+
+  /* Set as modal */
+  gtk_window_set_modal (GTK_WINDOW(csd),TRUE);
+
+  g_signal_connect (csd, "destroy",
+		    G_CALLBACK (cmw_destroy_cb), NULL);
+  g_signal_connect (csd, "response",
+		    G_CALLBACK (dialog_response), user_data);
+
+  gtk_widget_show (csd);
+  gtk_main ();
+
+}
+
+
 void on_undo(GtkMenuItem *menuitem,
 	     gpointer     user_data)
 {

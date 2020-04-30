@@ -918,6 +918,8 @@ void setup_main_app (GromitData *data, gboolean activate)
   snprintf(labelBuf, sizeof(labelBuf), "Redo (SHIFT-%s)", data->undo_keyval);
   GtkWidget* redo_item = gtk_menu_item_new_with_label (labelBuf);
 
+  GtkWidget* select_color_item = gtk_menu_item_new_with_label ("Select color");
+
   GtkWidget* sep_item = gtk_separator_menu_item_new();
   GtkWidget* intro_item = gtk_menu_item_new_with_mnemonic("_Introduction");
   GtkWidget* about_item = gtk_menu_item_new_with_mnemonic("_About");
@@ -935,6 +937,7 @@ void setup_main_app (GromitData *data, gboolean activate)
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), opacity_lesser_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), undo_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), redo_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), select_color_item);
 
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), sep_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), intro_item);
@@ -971,6 +974,10 @@ void setup_main_app (GromitData *data, gboolean activate)
 		   G_CALLBACK (on_redo),
 		   data);
 
+  g_signal_connect(G_OBJECT (select_color_item), "activate",
+		   G_CALLBACK (on_select_color),
+		   data);
+
   g_signal_connect(G_OBJECT (intro_item), "activate",
 		   G_CALLBACK (on_intro),
 		   data);
@@ -992,6 +999,7 @@ void setup_main_app (GromitData *data, gboolean activate)
   gtk_widget_show (opacity_lesser_item);
   gtk_widget_show (undo_item);
   gtk_widget_show (redo_item);
+  gtk_widget_show (select_color_item);
 
   gtk_widget_show (sep_item);
   gtk_widget_show (intro_item);

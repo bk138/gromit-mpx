@@ -117,6 +117,9 @@ void on_undo(GtkMenuItem *menuitem,
 void on_redo(GtkMenuItem *menuitem,
 	     gpointer     user_data);
 
+void on_select_color(GtkMenuItem *menuitem,
+		     gpointer     user_data);
+
 void on_about(GtkMenuItem *menuitem,
 	      gpointer     user_data);
 
