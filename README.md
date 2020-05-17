@@ -134,6 +134,11 @@ The following Entries copy an existing configuration (in this case
     "blue Pen" = "red Pen" (color="blue");
     "yellow Pen" = "red Pen" (color="yellow");
 
+If you want another minimum size instead of the default 1, add `minsize`
+like this:
+
+	"red Marker" = "red Pen" (minsize=14);
+
 You can also draw lines that end in an arrow head. For this you
 have to specify `arrowsize`. This is a factor relative to the width
 of the line. For reasonable arrowheads start with 1.
