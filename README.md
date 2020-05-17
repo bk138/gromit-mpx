@@ -156,7 +156,11 @@ the shape. Try it out to see the effect.
     "green Marker" = RECOLOR (color = "Limegreen");
 
 If you define a tool with the same name as an input-device
-(see the output of `xinput --list`) this input-device uses this tool.
+(see the output of `xinput --list`) this input-device uses this tool:
+
+	"ELAN Touchscreen Pen (0)" = "red Pen";
+	"ELAN Touchscreen Eraser (0)" = "Eraser";
+
 Additionally you can limit the Scope to specific combinations of
 Mousebuttons (1,2,3,4,5 or Button1,...,Button5)
 and Modifiers (`SHIFT`, `CONTROL`, `ALT`, `META`, while `ALT==META`).
