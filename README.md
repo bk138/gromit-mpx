@@ -167,7 +167,7 @@ and Modifiers (`SHIFT`, `CONTROL`, `ALT`, `META`, while `ALT==META`).
     "Core Pointer"[2] = "green Marker";
     "Core Pointer"[Button3] = "Eraser";
 
-The descision which tool to use follows a simple policy:
+The decision which tool to use follows a simple policy:
 
 1. Buttons are more important than Modifiers
 2. Low number Buttons are more important than higher ones
