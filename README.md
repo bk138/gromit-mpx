@@ -167,6 +167,14 @@ and Modifiers (`SHIFT`, `CONTROL`, `ALT`, `META`, while `ALT==META`).
     "Core Pointer"[2] = "green Marker";
     "Core Pointer"[Button3] = "Eraser";
 
+If you want to limit drawing to a specific input device, define a
+tool with the same name as an input device like above and disable
+drawing for all others by assigning a zero-width tool like this:
+
+	"no Pen" = PEN (size=0);
+	"default" = "no Pen";
+
+
 The decision which tool to use follows a simple policy:
 
 1. Buttons are more important than Modifiers
