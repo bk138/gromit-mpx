@@ -120,7 +120,9 @@ typedef struct
 
   GromitPaintContext *default_pen;
   GromitPaintContext *default_eraser;
- 
+
+  GromitPaintContext *current_tool_context;
+
   GHashTable  *tool_config;
 
   cairo_surface_t *backbuffer;

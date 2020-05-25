@@ -381,6 +381,7 @@ void select_tool (GromitData *data,
                   if(data->debug)
                     g_printerr("DEBUG: select_tool set context for '%s'\n", slave_name);
                   devdata->cur_context = context;
+		  data->current_tool_context = context;
                   success = 1;
               }
               else /* try master name */
@@ -389,6 +390,7 @@ void select_tool (GromitData *data,
                   if(data->debug)
                     g_printerr("DEBUG: select_tool set context for '%s'\n", name);
                   devdata->cur_context = context;
+		  data->current_tool_context = context;
                   success = 1;
                 }
               else /* try default_name */
@@ -397,6 +399,7 @@ void select_tool (GromitData *data,
                     if(data->debug)
                       g_printerr("DEBUG: select_tool set default context '%s' for '%s'\n", default_name, name);
                     devdata->cur_context = context;
+		    data->current_tool_context = context;
                     success = 1;
                   }
                 
@@ -1032,6 +1035,7 @@ int app_parse_args (int argc, char **argv, GromitData *data)
 
    data->undo_keyval = DEFAULT_UNDOKEY;
    data->undo_keycode = 0;
+   data->current_tool_context = NULL;
 
    for (i=1; i < argc ; i++)
      {

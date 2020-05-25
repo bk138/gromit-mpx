@@ -599,7 +599,16 @@ dialog_response (GtkDialog *dialog, gint response, gpointer user_data)
     {
     case GTK_RESPONSE_OK:
       gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (dialog), data->default_pen->paint_color);
+      /* Set default tool color in case of no config file*/
+      *data->red = *data->default_pen->paint_color;
       gdk_cairo_set_source_rgba(data->default_pen->paint_ctx, data->default_pen->paint_color);
+      cairo_set_operator(data->default_pen->paint_ctx, CAIRO_OPERATOR_OVER);
+
+      if (data->current_tool_context) {
+	      /* Change the color of the current tool */
+	      *(data->current_tool_context->paint_color) = *(data->red);
+	      gdk_cairo_set_source_rgba(data->current_tool_context->paint_ctx, data->current_tool_context->paint_color);
+      }
       break;
     default:
       break;
