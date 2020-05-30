@@ -244,6 +244,7 @@ void show_window (GromitData *data)
         g_printerr ("DEBUG: Showing window.\n");
     }
   gdk_window_raise (gtk_widget_get_window(data->win));
+  gdk_window_set_event_compression(gtk_widget_get_window(data->win), FALSE);
 }
 
 
