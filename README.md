@@ -15,6 +15,8 @@ A **lot** faster since it uses the XCOMPOSITE extension where
 available.  Also, it does not inhibit Drag-and-Drop like the original
 Gromit tool.
 
+If you already used Gromit-MPX, you probably want to read [NEWS](NEWS.md).
+
 ## What it is
 
 Gromit-MPX (GRaphics Over MIscellaneous Things) is a small tool to

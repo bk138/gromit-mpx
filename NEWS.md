@@ -1,4 +1,4 @@
-Gromit-MPX 1.3
+# Gromit-MPX 1.3
    * Gromit-MPX now shows the hotkeys bound to some functionality directly in the menu.
    * Replaced the help menu with an introduction to Gromit-MPX that shows on startup.
    * Reworked slave device handling so that per-slave configuration is now done The Right
@@ -6,7 +6,7 @@ Gromit-MPX 1.3
    * Build system switched to CMake, removed Autotools.
 
 
-Gromit-MPX 1.2
+# Gromit-MPX 1.2
    * Added undo/redo functionality thanks to Nathan Whitehead.
    * Added opacity-set functionality thanks to Lukas Hermann.
    * Added a tray icon.
@@ -15,13 +15,13 @@ Gromit-MPX 1.2
    * Replaced GTK3 deprecated functions with newer counterparts.
 
 
-Gromit-MPX 1.1
+# Gromit-MPX 1.1
    * Added reasonably complete support for slave devices thanks to Monty Montgomery.
    * Tweaked build system, packaging, icon thanks to Barak A. Pearlmutter.
    * Fixed some crashes.
 
 
-Gromit-MPX 1.0
+# Gromit-MPX 1.0
    * Concurrent multi-user operation using GTK3 with Multi-Pointer-X.
    * Drawn annotations do not intercept mouse clicks.
    * Makes use of the Composite extension where available to allow for
