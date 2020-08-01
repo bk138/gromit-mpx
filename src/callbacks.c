@@ -648,7 +648,10 @@ void on_intro(GtkMenuItem *menuitem,
 					  "Its main use is for making presentations of some application. Normally,\n"
 					  "you would have to move the mouse pointer around the point of interest\n"
 					  "until hopefully everybody noticed it.  With Gromit-MPX, you can draw\n"
-					  "everywhere onto the screen, highlighting some button or area.");
+					  "everywhere onto the screen, highlighting some button or area.\n\n"
+                                          "If you happen to enjoy using Gromit-MPX, please consider supporting\n"
+					  "its development by using one of the donation options on the project's\n"
+					  "website.");
     gtk_assistant_append_page (GTK_ASSISTANT (assistant), widgetOne);
     gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), widgetOne, "Gromit-MPX - What is it?");
     gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), widgetOne, GTK_ASSISTANT_PAGE_INTRO);
