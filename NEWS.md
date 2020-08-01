@@ -1,3 +1,9 @@
+# Gromit-MPX 1.3.1
+   * Documented donation options.
+   * Added ability to configure the Hot key and Undo key in gromit-mpx.cfg.
+   * Added lotsa special-case config documentation.
+   * Added GUI error displays in case one of the hotkeys can't be grabbed.
+
 # Gromit-MPX 1.3
    * Gromit-MPX now shows the hotkeys bound to some functionality directly in the menu.
    * Replaced the help menu with an introduction to Gromit-MPX that shows on startup.
