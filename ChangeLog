@@ -1,3 +1,214 @@
+commit b5a3eeb9ba40455aff354c07ee6d49849b9d32e5
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Aug 1 13:43:55 2020 +0200
+
+    NEWS: update
+
+commit de164aeb380f2037d706511292b28db3957685c1
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Aug 1 13:39:17 2020 +0200
+
+    Update AUTHORS
+
+commit ca2347a326176b41d17a7bdf0fb7981dfe700406
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Aug 1 12:38:02 2020 +0200
+
+    NEWS: rename, markdownify and link
+
+commit 92d3ea144b2bcd33889e6d970db73f7c6f4dc93d
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Aug 1 12:23:36 2020 +0200
+
+    input: show user-visible gui dialogs on key grab fail
+    
+    Closes #77
+
+commit 009eef7c107eb598d59b41a10fd6e20292486ad0
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Aug 1 11:50:50 2020 +0200
+
+    callbacks: add a very simple donation hint
+    
+    TODO: link website
+
+commit 7c83680253929e5bec4b882b763704653a679196
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun May 17 19:13:17 2020 +0200
+
+    README: mention how to set eraser for some touchpads
+    
+    re #16
+
+commit 8d5aa920270439bacf423bbbdb30610bbbbd7f54
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun May 17 18:57:13 2020 +0200
+
+    README: document how to disable drawing for all but one input device
+    
+    Closes #86
+
+commit 997f2c58cf36bbe18802d944c0f982e8265ad617
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun May 17 18:53:49 2020 +0200
+
+    README: fix typo
+
+commit a451a1c055e61188a4258850cc3907f1c4809c6c
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun May 17 15:16:40 2020 +0200
+
+    README: document how to configure minsize
+    
+    re #85
+
+commit dd50fcfaa05277484aa81b4603a992fb17f76234
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri May 1 14:55:47 2020 +0200
+
+    README: add a Gitter badge
+
+commit ffe968214c27689a182559b150f008d1d40c411d
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Apr 25 12:56:18 2020 +0200
+
+    CMake: make sure compile_commands.json is readable by ccls
+
+commit fbda8bd2d1997381e2b8aa9ea9bf944d642207ac
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Apr 18 17:43:26 2020 +0200
+
+    README: document how to set hotkeys w/ config file
+    
+    re #81
+
+commit 6964494b2a99e425867aed463d5e5244848a5947
+Author: Julián Unrrein <junrrein@gmail.com>
+Date:   Sun Mar 29 15:38:14 2020 -0300
+
+    config: set hot key and undo key only if they weren't changed from their default values already (#80)
+
+commit 0c9e6924ab5feef64f23ceeb837bddc0cba95dfb
+Author: Julián Unrrein <junrrein@gmail.com>
+Date:   Fri Mar 27 11:08:26 2020 -0300
+
+    Add the ability to configure the Hot key and Undo key in gromit-mpx.cfg (#78)
+    
+    Closes #40
+
+commit d9b1627c92d3a96b96a048d972da229ec36bc0ce
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Mar 27 14:44:10 2020 +0100
+
+    input: log when hotkey or undo key grabbing fails
+    
+    re #77
+
+commit cc85db2f23c86b9fb608598a738a9b8ae2902e6c
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Mar 21 14:54:13 2020 +0100
+
+    .gitignore: add ccls cache dir
+
+commit 317e78471953194533d664c3cf60609dbf78490a
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Mar 21 14:50:12 2020 +0100
+
+    config: change default undo key to F8
+    
+    F10 seems to be grabbed by somehting else on at least GNOME 3.22.
+    Also, F10 is a common menu popup hotkey.
+
+commit 16cc6cc8ec5a81c873d12a64048500f0bf099c22
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sat Mar 21 14:39:36 2020 +0100
+
+    input: log which keys are to be grabbed
+
+commit ffeb900f56f6f64cc4513df65c2ad9c059fe34a2
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Sun Jul 7 17:30:39 2019 +0200
+
+    input: fix 4 deprecation warnings
+
+commit 0b2054be8f1a54207f6872f1773da46b4e09bec6
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jul 3 18:55:58 2019 +0200
+
+    Update issue templates
+
+commit 38c8fdd036c3da5ba1179ebe473f6086d781ae37
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jul 3 16:17:04 2019 +0200
+
+    FUNDING.yml: update issuehunt
+
+commit e42a627143bc7dabb1e8387136b52ea67254367c
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jul 3 14:47:02 2019 +0200
+
+    FUNDING.yml: add issuehunt
+
+commit 07aaa6b8da1cfad49fa67f61dfb48f41252ef918
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jun 26 14:21:40 2019 +0200
+
+    README: update paypal badge
+
+commit cb0bcb46a4c651b5575eeab25c35cf9f5528d49e
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jun 26 14:20:43 2019 +0200
+
+    README: update liberapay badge
+
+commit 3be3d0ffaebe9f6959ca7ab13b95bd246e8727e7
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jun 26 14:15:43 2019 +0200
+
+    README: add patreon badge
+
+commit 6283d0ff89407998d9e639544a6d558f5d817489
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jun 26 14:02:54 2019 +0200
+
+    FUNDING.yml: add patreon
+
+commit 753fd58ff7cb69efe1a72c944598513f4a2154b5
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jun 26 12:11:27 2019 +0200
+
+    FUNDING.yml: fix syntax problems
+
+commit 48ebec6aad2dfa883d5691cd7f1d3e6d896477fd
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Wed Jun 26 12:09:18 2019 +0200
+
+    Create FUNDING.yml
+
+commit a0b7d5ba44bf7283777948874c895d655dd38bb4
+Author: Christian Beier <cb@shoutrlabs.com>
+Date:   Thu Apr 11 11:40:23 2019 +0200
+
+    CMake: export compile setttings for LSP
+
+commit bf5a8ef2747931b2307c8926cf4fa6c218d87ced
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Dec 28 18:19:34 2018 +0100
+
+    README: add LiberaPay button
+
+commit 978d2079f228bbed0b1d4f520a4b96225cb0c470
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Dec 28 17:25:30 2018 +0100
+
+    README: add a PayPal donate button
+
+commit 7594796c48a786dd5dc3ca821a4b3537f649a4ca
+Author: Christian Beier <dontmind@freeshell.org>
+Date:   Fri Dec 28 16:39:41 2018 +0100
+
+    Update ChangeLog
+
 commit b4ed990916d40c2c418d5e12f43672a8b2ddead8
 Author: Christian Beier <dontmind@freeshell.org>
 Date:   Fri Dec 28 16:37:58 2018 +0100
