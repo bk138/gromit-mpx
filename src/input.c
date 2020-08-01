@@ -124,6 +124,16 @@ void setup_input_devices (GromitData *data)
 					   nmods,
 					   modifiers) != 0) {
 			      g_printerr("ERROR: Grabbing hotkey from keyboard device %d failed.\n", kbd_dev_id);
+			      GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(data->win),
+									 GTK_DIALOG_DESTROY_WITH_PARENT,
+									 GTK_MESSAGE_ERROR,
+									  GTK_BUTTONS_CLOSE,
+									 "Grabbing hotkey %s from keyboard %d failed. The drawing hotkey function will not work unless configured to use another key.",
+									 data->hot_keyval,
+									 kbd_dev_id);
+			      gtk_dialog_run (GTK_DIALOG (dialog));
+			      gtk_widget_destroy (dialog);
+
 			  }
 		      }
 
@@ -139,6 +149,15 @@ void setup_input_devices (GromitData *data)
 					   nmods,
 					   modifiers) != 0) {
 			      g_printerr("ERROR: Grabbing undo key from keyboard device %d failed.\n", kbd_dev_id);
+			      GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(data->win),
+									 GTK_DIALOG_DESTROY_WITH_PARENT,
+									 GTK_MESSAGE_ERROR,
+									  GTK_BUTTONS_CLOSE,
+									 "Grabbing undo key %s from keyboard %d failed. The undo hotkey function will not work unless configured to use another key.",
+									 data->undo_keyval,
+									 kbd_dev_id);
+			      gtk_dialog_run (GTK_DIALOG (dialog));
+			      gtk_widget_destroy (dialog);
 			  }
 		      }
 
