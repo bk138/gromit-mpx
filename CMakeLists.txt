@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 project(gromit-mpx LANGUAGES C)
 
 set(target_name gromit-mpx)
-set(version 1.3)
+set(version 1.3.1)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 if(CMAKE_GENERATOR MATCHES "Unix Makefiles|Ninja")
 # some LSP servers expect compile_commands.json in the project root
