@@ -80,9 +80,8 @@ void setup_input_devices (GromitData *data)
 
 
 	  if (GDK_IS_X11_DISPLAY(data->display)) {
-	      gint dev_id = -1;
-	      g_object_get(device, "device-id", &dev_id, NULL);
-	      
+	      gint dev_id = gdk_x11_device_get_id(device);
+
 	      gint kbd_dev_id = -1;
 	      XIDeviceInfo* devinfo;
 	      int devicecount = 0;
