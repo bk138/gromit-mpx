@@ -673,6 +673,13 @@ void main_do_event (GdkEventAny *event,
 
 void setup_main_app (GromitData *data, gboolean activate)
 {
+
+  if(getenv("GDK_CORE_DEVICE_EVENTS")) {
+      g_printerr("GDK is set to not use the XInput extension, Gromit-MPX can not work this way.\n"
+		 "Probably the GDK_CORE_DEVICE_EVENTS environment variable is set, try to start Gromit-MPX with this variable unset.\n");
+      exit(1);
+  }
+
   /* COLOURS */
   g_free(data->white);
   g_free(data->black);
