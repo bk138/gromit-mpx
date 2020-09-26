@@ -333,12 +333,12 @@ void select_tool (GromitData *data,
  
   if (device)
     {
-      slave_len = strlen(gdk_device_get_name(slave_device));
-      slave_name = (guchar*) g_strndup(gdk_device_get_name(slave_device), slave_len + 3);
-      len = strlen(gdk_device_get_name(device));
-      name = (guchar*) g_strndup(gdk_device_get_name(device), len + 3);
-      default_len = strlen(DEFAULT_DEVICE_NAME);
-      default_name = (guchar*) g_strndup(DEFAULT_DEVICE_NAME, default_len + 3);
+      slave_len = strlen (gdk_device_get_name(slave_device));
+      slave_name = (guchar*) g_strndup (gdk_device_get_name(slave_device), slave_len + 3);
+      len = strlen (gdk_device_get_name(device));
+      name = (guchar*) g_strndup (gdk_device_get_name(device), len + 3);
+      default_len = strlen (DEFAULT_DEVICE_NAME);
+      default_name = (guchar*) g_strndup (DEFAULT_DEVICE_NAME, default_len + 3);
       
       
       /* Extract Button/Modifiers from state (see GdkModifierType) */
@@ -639,6 +639,7 @@ void draw_arrow (GromitData *data,
       cairo_stroke(devdata->cur_context->paint_ctx);
 
       gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->paint_color);
+
       data->modified = 1;
 
       gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
@@ -876,6 +877,8 @@ void setup_main_app (GromitData *data, gboolean activate)
   */
   data->devdatatable = g_hash_table_new(NULL, NULL);
   setup_input_devices (data);
+  
+
 
   gtk_widget_show_all (data->win); /* Error in wayland here */
 

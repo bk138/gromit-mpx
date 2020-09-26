@@ -53,7 +53,6 @@ void setup_input_devices (GromitData *data)
   GList *devices, *d;
   int i = 0;
 
-
   devices = gdk_device_manager_list_devices(device_manager, GDK_DEVICE_TYPE_MASTER);
   for(d = devices; d; d = d->next)
     {

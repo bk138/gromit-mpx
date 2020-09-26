@@ -252,7 +252,7 @@ gboolean on_buttonpress (GtkWidget *win,
 
   if (ev->state != devdata->state ||
       devdata->lastslave != gdk_event_get_source_device ((GdkEvent *) ev))
-    select_tool(data, ev->device, gdk_event_get_source_device ((GdkEvent *) ev), ev->state);
+    select_tool (data, ev->device, gdk_event_get_source_device ((GdkEvent *) ev), ev->state);
 
   devdata->lastx = ev->x;
   devdata->lasty = ev->y;
@@ -295,7 +295,7 @@ gboolean on_motion (GtkWidget *win,
 
   if (ev->state != devdata->state ||
       devdata->lastslave != gdk_event_get_source_device ((GdkEvent *) ev))
-    select_tool(data, ev->device, gdk_event_get_source_device ((GdkEvent *) ev), ev->state);
+    select_tool (data, ev->device, gdk_event_get_source_device ((GdkEvent *) ev), ev->state);
 
   gdk_device_get_history (ev->device, ev->window,
 			  devdata->motion_time, ev->time,
@@ -509,7 +509,7 @@ void on_device_added (GdkDeviceManager *device_manager,
 
   if(data->debug)
     g_printerr("DEBUG: device '%s' added\n", gdk_device_get_name(device));
-  
+
   setup_input_devices(data);
 }
 
