@@ -53,6 +53,7 @@ void setup_input_devices (GromitData *data)
   GList *devices, *d;
   int i = 0;
 
+
   devices = gdk_device_manager_list_devices(device_manager, GDK_DEVICE_TYPE_MASTER);
   for(d = devices; d; d = d->next)
     {
@@ -355,6 +356,7 @@ void toggle_grab (GromitData *data,
 
 
 /* Key snooper */
+/* Deprecated  */
 gint snoop_key_press(GtkWidget   *grab_widget,
 		     GdkEventKey *event,
 		     gpointer     func_data)

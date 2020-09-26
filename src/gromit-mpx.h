@@ -105,6 +105,8 @@ typedef struct
 
   GdkDisplay  *display;
   GdkScreen   *screen;
+  GdkMonitor  *monitor;
+  GdkRectangle *geometry;
   gboolean     xinerama;
   gboolean     composited;
   GdkWindow   *root;
