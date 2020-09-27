@@ -632,7 +632,7 @@ void draw_arrow (GromitData *data,
       cairo_stroke(devdata->cur_context->paint_ctx);
 
       gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->paint_color);
-
+    
       data->modified = 1;
 
       gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
