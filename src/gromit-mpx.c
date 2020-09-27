@@ -316,7 +316,7 @@ gint reshape (gpointer user_data)
 
 
 void select_tool (GromitData *data, 
-		  GdkDevice *device,
+		  GdkDevice *device, 
 		  GdkDevice *slave_device,
 		  guint state)
 {
@@ -433,13 +433,6 @@ void select_tool (GromitData *data,
   //FIXME!  Should be:
   //gdk_window_set_cursor(gtk_widget_get_window(data->win), cursor);
   // doesn't work during a grab?
-  //gdk_device_grab(device,
-  //		  gtk_widget_get_window(data->win),
-  //		  GDK_OWNERSHIP_NONE,
-  //		  FALSE,
-  //		  GROMIT_MOUSE_EVENTS,
-  //		  cursor,
-  //		  GDK_CURRENT_TIME);
   gdk_seat_grab(gdk_device_get_seat(device),
           gtk_widget_get_window(data->win),
           GDK_SEAT_CAPABILITY_ALL,
@@ -638,8 +631,8 @@ void draw_arrow (GromitData *data,
       cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[0].x, arrowhead[0].y);
       cairo_stroke(devdata->cur_context->paint_ctx);
 
-      gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->paint_color);
-
+      gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->paint_color); 
+  
       data->modified = 1;
 
       gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
@@ -877,10 +870,9 @@ void setup_main_app (GromitData *data, gboolean activate)
   */
   data->devdatatable = g_hash_table_new(NULL, NULL);
   setup_input_devices (data);
-  
 
 
-  gtk_widget_show_all (data->win); /* Error in wayland here */
+  gtk_widget_show_all (data->win);
 
   data->painted = 0;
   hide_window (data);
@@ -897,7 +889,7 @@ void setup_main_app (GromitData *data, gboolean activate)
   
 
   gdk_event_handler_set ((GdkEventFunc) main_do_event, data, NULL);
-  gtk_key_snooper_install (snoop_key_press, data); /* Deprecated */
+  gtk_key_snooper_install (snoop_key_press, data);
 
   if (activate)
     acquire_grab (data, NULL); /* grab all */
@@ -1241,22 +1233,21 @@ int main (int argc, char **argv)
   /* 
      init basic stuff
   */
-  data->display = gdk_display_get_default();
+  data->display = gdk_display_get_default ();
   data->screen = gdk_display_get_default_screen (data->display);
   data->xinerama = gdk_display_get_n_monitors(data->display) > 1;
-  data->geometry = calloc(0, sizeof(GdkRectangle));
+
+  GdkRectangle geometry = (GdkRectangle) { .x = 0, .y = 1, .width = 0, .height = 0 };
+  GdkMonitor *monitor = NULL;
 
   int i = 0;
-  while (data->monitor == NULL)
-    data->monitor = gdk_display_get_monitor(data->display, i++);
+  while (monitor == NULL)
+    monitor = gdk_display_get_monitor(data->display, i++);
 
-  /*
-    get monitor geometry
-  */
-  gdk_monitor_get_geometry(data->monitor, data->geometry);
+  gdk_monitor_get_geometry(monitor, &geometry);
 
-  data->width = data->geometry->width;
-  data->height = data->geometry->height;
+  data->width = geometry.width;
+  data->height = geometry.height;
   data->opacity = DEFAULT_OPACITY;
   data->composited = gdk_screen_is_composited (data->screen);
   data->root = gdk_screen_get_root_window (data->screen);
