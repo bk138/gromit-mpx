@@ -630,8 +630,9 @@ void draw_arrow (GromitData *data,
       cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[3].x, arrowhead[3].y);
       cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[0].x, arrowhead[0].y);
       cairo_stroke(devdata->cur_context->paint_ctx);
+
       gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->paint_color);
-  
+ 
       data->modified = 1;
 
       gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
@@ -869,6 +870,7 @@ void setup_main_app (GromitData *data, gboolean activate)
   */
   data->devdatatable = g_hash_table_new(NULL, NULL);
   setup_input_devices (data);
+
 
 
   gtk_widget_show_all (data->win);
@@ -1255,7 +1257,6 @@ int main (int argc, char **argv)
     init our window
   */
   data->win = gtk_window_new (GTK_WINDOW_POPUP);
-
   // this trys to set an alpha channel
   on_screen_changed(data->win, NULL, data);
 
