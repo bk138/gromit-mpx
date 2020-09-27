@@ -355,7 +355,6 @@ void toggle_grab (GromitData *data,
 
 
 /* Key snooper */
-/* Deprecated  */
 gint snoop_key_press(GtkWidget   *grab_widget,
 		     GdkEventKey *event,
 		     gpointer     func_data)

@@ -337,7 +337,7 @@ void select_tool (GromitData *data,
       slave_name = (guchar*) g_strndup (gdk_device_get_name(slave_device), slave_len + 3);
       len = strlen (gdk_device_get_name(device));
       name = (guchar*) g_strndup (gdk_device_get_name(device), len + 3);
-      default_len = strlen (DEFAULT_DEVICE_NAME);
+      default_len = strlen(DEFAULT_DEVICE_NAME);
       default_name = (guchar*) g_strndup (DEFAULT_DEVICE_NAME, default_len + 3);
       
       
@@ -630,8 +630,7 @@ void draw_arrow (GromitData *data,
       cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[3].x, arrowhead[3].y);
       cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[0].x, arrowhead[0].y);
       cairo_stroke(devdata->cur_context->paint_ctx);
-
-      gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->paint_color); 
+      gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->paint_color);
   
       data->modified = 1;
 
@@ -1255,7 +1254,7 @@ int main (int argc, char **argv)
   /*
     init our window
   */
-  data->win = gtk_window_new(GTK_WINDOW_POPUP);
+  data->win = gtk_window_new (GTK_WINDOW_POPUP);
 
   // this trys to set an alpha channel
   on_screen_changed(data->win, NULL, data);
