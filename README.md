@@ -224,4 +224,4 @@ Like the original Gromit, this program is distributed under the Gnu
 General Public License.  See the file `COPYING` for details.  Thanks
 to Simon for the groundwork done!
 
----[Christian Beier](mailto:dontmind@freeshell.org)
+---[Christian Beier](mailto:gromit-mpx@christianbeier.net)
