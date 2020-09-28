@@ -218,6 +218,8 @@ quite expensive if you paint a complex pattern on screen. Especially
 terminal-programs tend to scroll incredibly slow if something is
 painted over their window.
 
+## License
+
 Like the original Gromit, this program is distributed under the Gnu
 General Public License.  See the file `COPYING` for details.  Thanks
 to Simon for the groundwork done!
