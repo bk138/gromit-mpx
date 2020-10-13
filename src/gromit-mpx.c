@@ -1121,6 +1121,12 @@ int app_parse_args (int argc, char **argv, GromitData *data)
                wrong_arg = TRUE;
              }
          }
+       else if (strcmp (arg, "-V") == 0 ||
+		strcmp (arg, "--version") == 0)
+         {
+	     g_print("Gromit-MPX " VERSION "\n");
+	     exit(0);
+         }
        else
          {
            g_printerr ("Unknown Option for Gromit-MPX startup: \"%s\"\n", arg);
