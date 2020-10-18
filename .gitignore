@@ -26,3 +26,4 @@ Makefile.in
 /Build_Release/
 /Build_Debug/
 .ccls-cache
+/compile_commands.json
