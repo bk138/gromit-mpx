@@ -20,7 +20,7 @@ configure_file(build-config.h_cmake_in build-config.h)
 
 find_package(PkgConfig)
 
-pkg_check_modules(gtk3 REQUIRED "gtk+-3.0 >= 3.2")
+pkg_check_modules(gtk3 REQUIRED "gtk+-3.0 >= 3.22")
 pkg_check_modules(appindicator3 REQUIRED "appindicator3-0.1 >= 0.4.92")
 pkg_check_modules(xinput REQUIRED "xi >= 1.3")
 pkg_check_modules(x11 REQUIRED x11)
