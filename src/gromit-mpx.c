@@ -927,6 +927,7 @@ void setup_main_app (GromitData *data, gboolean activate)
 
   GtkWidget* sep_item = gtk_separator_menu_item_new();
   GtkWidget* intro_item = gtk_menu_item_new_with_mnemonic("_Introduction");
+  GtkWidget* support_item = gtk_menu_item_new_with_mnemonic("_Support Gromit-MPX");
   GtkWidget* about_item = gtk_menu_item_new_with_mnemonic("_About");
   snprintf(labelBuf, sizeof(labelBuf), "_Quit (ALT-%s)", data->hot_keyval);
   GtkWidget* quit_item = gtk_menu_item_new_with_mnemonic(labelBuf);
@@ -945,6 +946,7 @@ void setup_main_app (GromitData *data, gboolean activate)
 
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), sep_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), intro_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), support_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), about_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), quit_item);
 
@@ -1002,11 +1004,41 @@ void setup_main_app (GromitData *data, gboolean activate)
 
   gtk_widget_show (sep_item);
   gtk_widget_show (intro_item);
+  gtk_widget_show (support_item);
   gtk_widget_show (about_item);
   gtk_widget_show (quit_item);
 
 
   app_indicator_set_menu (data->trayicon, GTK_MENU(menu));
+
+  /*
+    Build the support menu
+   */
+  GtkWidget *support_menu = gtk_menu_new ();
+  gtk_menu_item_set_submenu(GTK_MENU_ITEM(support_item), support_menu);
+
+  GtkWidget* support_liberapay_item = gtk_menu_item_new_with_label("Via LiberaPay");
+  GtkWidget* support_patreon_item = gtk_menu_item_new_with_label("Via Patreon");
+  GtkWidget* support_paypal_item = gtk_menu_item_new_with_label("Via PayPal");
+
+  gtk_menu_shell_append (GTK_MENU_SHELL (support_menu), support_liberapay_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (support_menu), support_patreon_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (support_menu), support_paypal_item);
+
+  g_signal_connect(G_OBJECT (support_liberapay_item), "activate",
+		   G_CALLBACK (on_support_liberapay),
+		   data);
+  g_signal_connect(G_OBJECT (support_patreon_item), "activate",
+		   G_CALLBACK (on_support_patreon),
+		   data);
+  g_signal_connect(G_OBJECT (support_paypal_item), "activate",
+		   G_CALLBACK (on_support_paypal),
+		   data);
+
+  gtk_widget_show(support_liberapay_item);
+  gtk_widget_show(support_patreon_item);
+  gtk_widget_show(support_paypal_item);
+
 
   if(data->show_intro_on_startup)
       on_intro(NULL, data);
