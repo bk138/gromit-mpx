@@ -197,6 +197,23 @@ The decision which tool to use follows a simple policy:
 For versions > 1.3, you can also change the [hotkeys from the config](data/gromit-mpx.cfg#L5)
 file by setting the respective `HOTKEY` and/or `UNDOKEY` values.
 
+### Autostart
+
+If you want to have Gromit-MPX autostarted for your desktop session, the
+safest way to do so is via the XDG autostart facility:
+
+Simply create a file `~/.config/autostart/gromit-mpx.desktop` with the
+following contents:
+
+```
+[Desktop Entry]
+Type=Application
+Exec=gromit-mpx
+```
+
+You can freely add command line arguments to the 'Exec' stanza, configuring
+the autostarted instance to your needs.
+
 ## Building it
 
 Gromit-MPX uses CMake as its build system. Thus, it's the usual:
