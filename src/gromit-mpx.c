@@ -807,6 +807,9 @@ void setup_main_app (GromitData *data, gboolean activate)
   */
   read_keyfile(data);
 
+  // might have been in key file
+  gtk_widget_set_opacity(data->win, data->opacity);
+
   /* 
      FIND HOTKEY KEYCODE 
   */

@@ -441,6 +441,10 @@ void read_keyfile(GromitData *data)
     }
 
     data->show_intro_on_startup = g_key_file_get_boolean (key_file, "General", "ShowIntroOnStartup", &error);
+    data->opacity = g_key_file_get_double (key_file, "Drawing", "Opacity", &error);
+    // 0.0 on not-found, but anyway, also don't use 0.0 when user-set
+    if(data->opacity == 0)
+	data->opacity = DEFAULT_OPACITY;
 
  cleanup:
     g_free(filename);
@@ -457,6 +461,7 @@ void write_keyfile(GromitData *data)
     GKeyFile *key_file = g_key_file_new ();
 
     g_key_file_set_boolean (key_file, "General", "ShowIntroOnStartup", data->show_intro_on_startup);
+    g_key_file_set_double (key_file, "Drawing", "Opacity", data->opacity);
 
     // Save as a file.
     if (!g_key_file_save_to_file (key_file, filename, &error)) {
