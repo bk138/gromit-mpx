@@ -93,6 +93,9 @@ gboolean on_toggle_paint(GtkWidget *widget,
 			 GdkEventButton  *ev,
 			 gpointer   user_data);
 
+void on_toggle_paint_all (GtkMenuItem *menuitem,
+			  gpointer     user_data);
+
 void on_clear (GtkMenuItem *menuitem,
 	       gpointer     user_data);
 

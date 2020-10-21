@@ -530,6 +530,14 @@ gboolean on_toggle_paint(GtkWidget *widget,
     return TRUE;
 }
 
+void on_toggle_paint_all (GtkMenuItem *menuitem,
+			  gpointer     user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+  toggle_grab(data, NULL);
+}
+
+
 void on_clear (GtkMenuItem *menuitem,
 	       gpointer     user_data)
 {
