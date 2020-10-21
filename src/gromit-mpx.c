@@ -955,9 +955,16 @@ void setup_main_app (GromitData *data, gboolean activate)
 
 
   /* Attach the callback functions to the respective activate signal */
-  g_signal_connect(toggle_paint_item, "button-press-event",
-		   G_CALLBACK(on_toggle_paint),
-		   data);
+  char *desktop = getenv("XDG_CURRENT_DESKTOP");
+  if (desktop && strcmp(desktop, "KDE") == 0) {
+      // KDE does not handle the device-specific "button-press-event" from a menu
+      g_signal_connect(G_OBJECT (toggle_paint_item), "activate",
+		       G_CALLBACK (on_toggle_paint_all),
+		       data);
+  } else {
+      g_signal_connect(toggle_paint_item, "button-press-event",
+		       G_CALLBACK(on_toggle_paint), data);
+  }
   g_signal_connect(G_OBJECT (clear_item), "activate",
 		   G_CALLBACK (on_clear),
 		   data);
