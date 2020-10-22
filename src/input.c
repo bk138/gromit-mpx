@@ -207,8 +207,6 @@ void release_grab (GromitData *data,
 	    devdata->motion_time = 0;
 	  }
         }
-      
-      data->all_grabbed = 0;
 
       if(data->debug)
         g_printerr ("DEBUG: Ungrabbed all Devices.\n");
@@ -281,8 +279,6 @@ void acquire_grab (GromitData *data,
           devdata->is_grabbed = 1;
         }
 
-      data->all_grabbed = 1;
-
       if(data->debug)
         g_printerr("DEBUG: Grabbed all Devices.\n");
       
@@ -331,7 +327,24 @@ void toggle_grab (GromitData *data,
 {
   if(dev == NULL) /* toggle all */
     {
-      if (data->all_grabbed)
+      // iterate over devices to get grab statuses
+      gboolean all_grabbed = FALSE;
+      GHashTableIter it;
+      gpointer value;
+      GromitDeviceData* devdata = NULL;
+      g_hash_table_iter_init (&it, data->devdatatable);
+      while (g_hash_table_iter_next(&it, NULL, &value)) {
+          devdata = value;
+          if (devdata->is_grabbed) {
+	      all_grabbed = TRUE; // one grabbed device, go on
+	      continue;
+          } else {
+	      all_grabbed = FALSE; // one ungrabbed device, can stop here
+	      break;
+	  }
+      }
+
+      if (all_grabbed)
 	release_grab (data, NULL);
       else
 	acquire_grab (data, NULL);
