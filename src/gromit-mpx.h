@@ -126,7 +126,6 @@ typedef struct
   cairo_surface_t *backbuffer;
 
   GHashTable  *devdatatable;
-  gboolean     all_grabbed;
 
   guint        timeout_id;
   guint        modified;
