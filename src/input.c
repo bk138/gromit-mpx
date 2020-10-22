@@ -16,6 +16,49 @@
 #include "input.h"
 
 
+static gboolean get_are_all_grabbed(GromitData *data)
+{
+    // iterate over devices to get grab statuses
+    gboolean all_grabbed = FALSE;
+    GHashTableIter it;
+    gpointer value;
+    GromitDeviceData* devdata = NULL;
+    g_hash_table_iter_init (&it, data->devdatatable);
+    while (g_hash_table_iter_next(&it, NULL, &value)) {
+	devdata = value;
+	if (devdata->is_grabbed) {
+	    all_grabbed = TRUE; // one grabbed device, go on
+	    continue;
+	} else {
+	    all_grabbed = FALSE; // one ungrabbed device, can stop here
+	    break;
+	}
+    }
+
+    return all_grabbed;
+}
+
+static gboolean get_are_some_grabbed(GromitData *data)
+{
+    // iterate over devices to get grab statuses
+    gboolean some_grabbed = FALSE;
+    GHashTableIter it;
+    gpointer value;
+    GromitDeviceData* devdata = NULL;
+    g_hash_table_iter_init (&it, data->devdatatable);
+    while (g_hash_table_iter_next(&it, NULL, &value)) {
+	devdata = value;
+	if (devdata->is_grabbed) {
+	    some_grabbed = TRUE; // one grabbed device, can stop here
+	    break;
+	}
+    }
+
+    return some_grabbed;
+}
+
+
+
 void setup_input_devices (GromitData *data)
 {
   /*
@@ -327,24 +370,7 @@ void toggle_grab (GromitData *data,
 {
   if(dev == NULL) /* toggle all */
     {
-      // iterate over devices to get grab statuses
-      gboolean all_grabbed = FALSE;
-      GHashTableIter it;
-      gpointer value;
-      GromitDeviceData* devdata = NULL;
-      g_hash_table_iter_init (&it, data->devdatatable);
-      while (g_hash_table_iter_next(&it, NULL, &value)) {
-          devdata = value;
-          if (devdata->is_grabbed) {
-	      all_grabbed = TRUE; // one grabbed device, go on
-	      continue;
-          } else {
-	      all_grabbed = FALSE; // one ungrabbed device, can stop here
-	      break;
-	  }
-      }
-
-      if (all_grabbed)
+      if (get_are_all_grabbed(data))
 	release_grab (data, NULL);
       else
 	acquire_grab (data, NULL);
