@@ -180,6 +180,6 @@ GromitPaintContext *paint_context_new (GromitData *data, GromitPaintType type,
                                        guint minwidth);
 void paint_context_free (GromitPaintContext *context);
 
-
+void indicate_active(GromitData *data, gboolean YESNO);
 
 #endif

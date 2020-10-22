@@ -1347,3 +1347,10 @@ int main (int argc, char **argv)
   return 0;
 }
 
+void indicate_active(GromitData *data, gboolean YESNO)
+{
+    if(YESNO)
+	app_indicator_set_icon(data->trayicon, "gromit-mpx_active");
+    else
+	app_indicator_set_icon(data->trayicon, PACKAGE_NAME);
+}

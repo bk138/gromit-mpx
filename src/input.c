@@ -254,6 +254,8 @@ void release_grab (GromitData *data,
       if(data->debug)
         g_printerr ("DEBUG: Ungrabbed all Devices.\n");
 
+      indicate_active(data, FALSE);
+
       return;
     }
 
@@ -271,6 +273,9 @@ void release_grab (GromitData *data,
 
       if(data->debug)
         g_printerr ("DEBUG: Ungrabbed Device '%s'.\n", gdk_device_get_name(devdata->device));
+
+      if(!get_are_some_grabbed(data))
+	  indicate_active(data, FALSE);
     }
 
   if (!data->painted)
@@ -324,7 +329,9 @@ void acquire_grab (GromitData *data,
 
       if(data->debug)
         g_printerr("DEBUG: Grabbed all Devices.\n");
-      
+
+      indicate_active(data, TRUE);
+
       return;
     }
 
@@ -360,6 +367,9 @@ void acquire_grab (GromitData *data,
       
       if(data->debug)
         g_printerr("DEBUG: Grabbed Device '%s'.\n", gdk_device_get_name(devdata->device));
+
+      indicate_active(data, TRUE);
+
     }
 
 }
