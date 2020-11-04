@@ -124,25 +124,40 @@ void parse_config (GromitData *data)
   GdkRGBA *fg_color=NULL;
   guint width, arrowsize, minwidth;
 
+  /* try user config location */
   filename = g_strjoin (G_DIR_SEPARATOR_S,
                         g_get_user_config_dir(), "gromit-mpx.cfg", NULL);
-  file = open (filename, O_RDONLY);
+  if ((file = open(filename, O_RDONLY)) < 0)
+      g_print("Could not open user config %s: %s\n", filename, g_strerror (errno));
+  else
+      g_print("Using user config %s\n", filename);
 
-  if (file < 0)
-    {
-      g_printerr ("Could not open %s: %s\n", filename, g_strerror (errno));
-      /* try global config file */
-      g_free (filename);
+  /* try Flatpak config location */
+  if (file < 0) {
+      g_free(filename);
+      filename = g_strdup ("/app/etc/gromit-mpx/gromit-mpx.cfg");
+      if ((file = open(filename, O_RDONLY)) < 0)
+	  g_print("Could not open Flatpak config %s: %s\n", filename, g_strerror (errno));
+      else
+	  g_print("Using Flatpak config %s\n", filename);
+  }
+
+  /* try global config file */
+  if (file < 0) {
+      g_free(filename);
       filename = g_strdup ("/etc/gromit-mpx/gromit-mpx.cfg");
-      file = open (filename, O_RDONLY);
+      if ((file = open(filename, O_RDONLY)) < 0)
+	  g_print("Could not open system config %s: %s\n", filename, g_strerror (errno));
+      else
+	  g_print("Using system config %s\n", filename);
+  }
 
-      if (file < 0)
-        {
-          g_printerr ("Could not open %s: %s\n", filename, g_strerror (errno));
-          g_free (filename);
-          return;
-        }
-    }
+  /* was the last possibility, no use to go on */
+  if (file < 0) {
+      g_printerr("No usable config found, leaving tools unconfigured!\n");
+      g_free(filename);
+      return;
+  }
 
   scanner = g_scanner_new (NULL);
   scanner->input_name = filename;
