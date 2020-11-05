@@ -1,6 +1,6 @@
 [Desktop Entry]
 Exec=gromit-mpx
-Icon=gromit-mpx
+Icon=net.christianbeier.Gromit-MPX
 Name=Gromit-MPX
 Type=Application
 Comment=GRaphics Over MIscellaneous Things, a multi pointer annotation tool
