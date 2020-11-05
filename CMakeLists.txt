@@ -72,6 +72,7 @@ install(FILES README.md AUTHORS ChangeLog NEWS.md DESTINATION ${CMAKE_INSTALL_DO
 install(FILES gromit-mpx.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
 install(FILES data/gromit-mpx.png data/gromit-mpx_active.png data/gromit-mpx.xpm DESTINATION ${CMAKE_INSTALL_DATADIR}/pixmaps)
 install(FILES data/net.christianbeier.Gromit-MPX.svg data/gromit-mpx.svg data/gromit-mpx_active.svg DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
+install(FILES data/net.christianbeier.Gromit-MPX.appdata.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
 
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"

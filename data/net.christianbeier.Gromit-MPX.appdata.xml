@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Christian Beier <info@christianbeier.net> -->
+<component type="desktop-application">
+  <id>net.christianbeier.Gromit-MPX</id>
+  
+  <name>Gromit-MPX</name>
+  <summary>Gromit-MPX (GRaphics Over MIscellaneous Things) is a tool to make annotations on the screen</summary>
+  
+  <metadata_license>CC-BY-4.0</metadata_license>
+  <project_license>GPL-2.0-only</project_license>
+  
+  <url type="homepage">https://github.com/bk138/gromit-mpx</url>
+
+  <developer_name>Christian Beier</developer_name>
+
+  <recommends>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </recommends>
+  
+  <description>
+    <p>
+      Gromit-MPX (GRaphics Over MIscellaneous Things) is a small tool to make annotations on the screen.
+    </p>
+    <p>
+      Its main use is for making presentations of some application. Normally, you would have to move the mouse pointer around the point of interest until hopefully everybody noticed it. With Gromit-MPX, you can draw everywhere onto the screen, highlighting some button or area.
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">net.christianbeier.Gromit-MPX.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://a.fsdn.com/con/app/proj/gromit-mpx/screenshots/330111.jpg</image>
+    </screenshot>
+  </screenshots>
+
+  <releases>
+    <release version="1.3.1" date="2020-08-01">
+      <description>
+        <ul>
+	  <li>Documented donation options.</li>
+	  <li>Added ability to configure the Hot key and Undo key in gromit-mpx.cfg.</li>
+	  <li>Added lotsa special-case config documentation.</li>
+	  <li>Added GUI error displays in case one of the hotkeys can't be grabbed.</li>
+	</ul>
+      </description>
+    </release>
+  </releases>
+</component>
