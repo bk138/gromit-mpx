@@ -1281,6 +1281,11 @@ int main (int argc, char **argv)
 {
   GromitData *data;
 
+  /*
+      we run okay under XWayland, but not native Wayland
+  */
+  gdk_set_allowed_backends ("x11");
+
   gtk_init (&argc, &argv);
   data = g_malloc0(sizeof (GromitData));
 
