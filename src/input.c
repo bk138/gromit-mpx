@@ -210,6 +210,18 @@ void setup_input_devices (GromitData *data)
 void release_grab (GromitData *data, 
 		   GdkDevice *dev)
 {
+  char *xdg_session_type = getenv("XDG_SESSION_TYPE");
+  if (xdg_session_type && strcmp(xdg_session_type, "wayland") == 0) {
+      /*
+	When running under Wayland (XWayland in our case),
+	make the whole transparent window transparent to input.
+      */
+      cairo_region_t *r = cairo_region_create();
+      gtk_widget_input_shape_combine_region(data->win, r);
+      cairo_region_destroy(r);
+  }
+
+
   if(!dev) /* this means release all grabs */
     {
       GHashTableIter it;
@@ -269,6 +281,18 @@ void acquire_grab (GromitData *data,
 		   GdkDevice *dev)
 {
   show_window (data);
+
+  char *xdg_session_type = getenv("XDG_SESSION_TYPE");
+  if (xdg_session_type && strcmp(xdg_session_type, "wayland") == 0) {
+      /*
+	When running under Wayland (XWayland in our case), make the whole transparent window react to input.
+	Otherwise, no draw-cursor is shown over Wayland-only windows.
+      */
+      cairo_rectangle_int_t rect = {0, 0, data->width, data->height};
+      cairo_region_t *r = cairo_region_create_rectangle(&rect);
+      gtk_widget_input_shape_combine_region(data->win, r);
+      cairo_region_destroy(r);
+  }
 
   if(!dev) /* this means grab all */
     {
