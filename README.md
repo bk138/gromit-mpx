@@ -232,6 +232,9 @@ painted over their window.
 
 ## Similar Tools
 
+In the Unix-world, similar but different tools are *Ardesia*, *Pylote*
+and *Draw On You Screen*.
+
 Similar tools for MS-Windows include *DemoHelper* (GPLv2 also), or
 proprietary tools like *ZoomIt*, *ScreenMarker* or *EpicPen*.
 
