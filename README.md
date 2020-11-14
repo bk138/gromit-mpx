@@ -233,9 +233,7 @@ painted over their window.
 ## Similar Tools
 
 Similar tools for MS-Windows include *DemoHelper* (GPLv2 also), or
-proprietary tools like *ZoomIt* and *ScreenMarker*.  For Compiz, there
-is also the *Annotate* plugin, and the much-flashier *Firepaint (paint
-fire on screen)* plugin.
+proprietary tools like *ZoomIt* and *ScreenMarker*.
 
 ## License
 
