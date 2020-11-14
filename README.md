@@ -27,11 +27,6 @@ Normally, you would have to move the mouse pointer around the point of
 interest until hopefully everybody noticed it.  With Gromit-MPX, you
 can draw everywhere onto the screen, highlighting some button or area.
 
-Similar tools for MS-Windows include *DemoHelper* (GPLv2 also), or
-proprietary tools like *ZoomIt* and *ScreenMarker*.  For Compiz, there
-is also the *Annotate* plugin, and the much-flashier *Firepaint (paint
-fire on screen)* plugin.
-
 ## How to use it
 
 You can operate Gromit-MPX using its tray icon (if your desktop environment
@@ -234,6 +229,13 @@ thin lines. It makes heavy use of the shape extension, which is
 quite expensive if you paint a complex pattern on screen. Especially
 terminal-programs tend to scroll incredibly slow if something is
 painted over their window.
+
+## Similar Tools
+
+Similar tools for MS-Windows include *DemoHelper* (GPLv2 also), or
+proprietary tools like *ZoomIt* and *ScreenMarker*.  For Compiz, there
+is also the *Annotate* plugin, and the much-flashier *Firepaint (paint
+fire on screen)* plugin.
 
 ## License
 
