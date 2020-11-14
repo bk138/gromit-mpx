@@ -233,7 +233,7 @@ painted over their window.
 ## Similar Tools
 
 Similar tools for MS-Windows include *DemoHelper* (GPLv2 also), or
-proprietary tools like *ZoomIt* and *ScreenMarker*.
+proprietary tools like *ZoomIt*, *ScreenMarker* or *EpicPen*.
 
 ## License
 
