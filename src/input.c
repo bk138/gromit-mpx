@@ -13,6 +13,8 @@
 #include <gdk/gdkwayland.h>
 #endif
 
+#define WAYLAND_HOTKEY_PREFIX "gromit-mpx-wayland-hotkey"
+
 #include "input.h"
 
 
@@ -57,7 +59,142 @@ static gboolean get_are_some_grabbed(GromitData *data)
     return some_grabbed;
 }
 
+static void remove_hotkeys_from_compositor(GromitData *data) {
+    char *xdg_current_desktop = getenv("XDG_CURRENT_DESKTOP");
+    if (xdg_current_desktop && strcmp(xdg_current_desktop, "GNOME") == 0) {
+	/*
+	  Get all custom key bindings and save back the ones that are not from us.
+	*/
+	if(data->debug)
+	    g_print("DEBUG: Detected GNOME under Wayland, removing our hotkeys from compositor\n");
 
+	GPtrArray *other_key_bindings_mutable_array = g_ptr_array_new();
+
+	GSettings *settings = g_settings_new("org.gnome.settings-daemon.plugins.media-keys");
+
+	gchar **key_bindings_array = g_settings_get_strv(settings, "custom-keybindings");
+	gchar **binding;
+	for (binding = key_bindings_array; *binding; binding++) {
+	    GSettings *settings = g_settings_new_with_path("org.gnome.settings-daemon.plugins.media-keys.custom-keybinding",
+							   *binding);
+	    gchar *name = g_settings_get_string(settings, "name");
+
+            if (!g_str_has_prefix(name, WAYLAND_HOTKEY_PREFIX)) {
+		g_ptr_array_add(other_key_bindings_mutable_array, strdup(*binding));
+            } else {
+		if (data->debug)
+		    g_print("DEBUG:   removing %s with name '%s'\n", *binding, name);
+            }
+
+            g_free(name);
+	    g_object_unref(settings);
+	}
+
+	g_ptr_array_add(other_key_bindings_mutable_array, NULL);
+	gchar **other_key_bindings_array = (gchar **)g_ptr_array_free(other_key_bindings_mutable_array, FALSE);
+	g_settings_set_strv(settings, "custom-keybindings", (const gchar**)other_key_bindings_array);
+
+	g_strfreev(other_key_bindings_array);
+	g_strfreev(key_bindings_array);
+	g_object_unref(settings);
+    }
+}
+
+static void add_hotkeys_to_compositor(GromitData *data) {
+    char *xdg_current_desktop = getenv("XDG_CURRENT_DESKTOP");
+    if (xdg_current_desktop && strcmp(xdg_current_desktop, "GNOME") == 0) {
+
+	if(data->debug)
+	    g_print("DEBUG: Detected GNOME under Wayland, adding our hotkeys to compositor\n");
+
+	/*
+	  Get highest custom keybinding index, collecting keybindings on the way.
+	*/
+	guint binding_index = 0;
+	GPtrArray *new_key_bindings_mutable_array = g_ptr_array_new();
+
+	GSettings *settings = g_settings_new("org.gnome.settings-daemon.plugins.media-keys");
+
+	gchar **old_key_bindings_array = g_settings_get_strv(settings, "custom-keybindings");
+	gchar **binding;
+	for (binding = old_key_bindings_array; *binding; binding++) {
+	    /* store existing bindings in mutable array */
+	    g_ptr_array_add(new_key_bindings_mutable_array, strdup(*binding));
+
+	    /* get the path components */
+	    gchar **components = g_strsplit (*binding, "/", 0);
+	    /* get the last component. -2 because g_strv_length() counts the trailing NULL as well */
+	    gchar *custom_numbered = components[g_strv_length(components)-2];
+	    guint custom_index = g_ascii_strtoull (custom_numbered+6, NULL, 10);
+	    if(custom_index >= binding_index)
+		binding_index = custom_index + 1;
+
+	    g_strfreev(components);
+	}
+
+	/*
+	  add our keybindings
+	 */
+	gchar *modifier_hotkey_option[18];
+	modifier_hotkey_option[0] = "";
+	modifier_hotkey_option[1] = data->hot_keyval;
+	modifier_hotkey_option[2] = "--toggle";
+	modifier_hotkey_option[3] = "<Shift>";
+	modifier_hotkey_option[4] = data->hot_keyval;
+	modifier_hotkey_option[5] = "--clear";
+	modifier_hotkey_option[6] = "<Ctrl>";
+	modifier_hotkey_option[7] = data->hot_keyval;
+	modifier_hotkey_option[8] = "--visibility";
+	modifier_hotkey_option[9] = "<Alt>";
+	modifier_hotkey_option[10] = data->hot_keyval;
+	modifier_hotkey_option[11] = "--quit";
+	modifier_hotkey_option[12] = "";
+	modifier_hotkey_option[13] = data->undo_keyval;
+	modifier_hotkey_option[14] = "--undo";
+	modifier_hotkey_option[15] = "<Shift>";
+	modifier_hotkey_option[16] = data->undo_keyval;
+	modifier_hotkey_option[17] = "--redo";
+
+	for(int i = 0; i < 18; i+=3) {
+	    gchar *new_binding = g_malloc(128);
+	    snprintf(new_binding,
+		     128,
+		     "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom%d/",
+		     binding_index++);
+	    g_ptr_array_add(new_key_bindings_mutable_array, new_binding);
+
+	    GSettings *settings = g_settings_new_with_path("org.gnome.settings-daemon.plugins.media-keys.custom-keybinding",
+							   new_binding);
+	    gchar name[64];
+	    snprintf(name, 64, "%s %s", WAYLAND_HOTKEY_PREFIX, modifier_hotkey_option[i+2]);
+	    g_settings_set_string(settings, "name", name);
+
+	    gchar command[64];
+	    if(getenv("FLATPAK_ID"))
+		snprintf(command, 64, "%s %s", "flatpak run net.christianbeier.Gromit-MPX", modifier_hotkey_option[i+2]);
+	    else
+		snprintf(command, 64, "%s %s", "gromit-mpx", modifier_hotkey_option[i+2]);
+	    g_settings_set_string(settings, "command", command);
+
+	    gchar binding[64];
+	    snprintf(binding, 64, "%s%s", modifier_hotkey_option[i], modifier_hotkey_option[i+1]);
+	    g_settings_set_string(settings, "binding", binding);
+
+	    g_object_unref(settings);
+	}
+
+	/*
+	  Convert the mutable bindings array into a static array and apply this to the setting.
+	 */
+	g_ptr_array_add(new_key_bindings_mutable_array, NULL);
+	gchar **new_key_bindings_array = (gchar **)g_ptr_array_free(new_key_bindings_mutable_array, FALSE);
+	g_settings_set_strv(settings, "custom-keybindings", (const gchar**)new_key_bindings_array);
+
+        g_strfreev(new_key_bindings_array);
+        g_strfreev(old_key_bindings_array);
+	g_object_unref(settings);
+    }
+}
 
 void setup_input_devices (GromitData *data)
 {
@@ -195,8 +332,18 @@ void setup_input_devices (GromitData *data)
 			  }
 		  }
 	  } // GDK_IS_X11_DISPLAY()
-	      
-	  g_hash_table_insert(data->devdatatable, device, devdata);
+
+	  /*
+	    When running under XWayland, hotkey grabbing does not work and we
+	    have to register shortcuts with the compositor.
+	   */
+	  char *xdg_session_type = getenv("XDG_SESSION_TYPE");
+	  if (xdg_session_type && strcmp(xdg_session_type, "wayland") == 0) {
+	      remove_hotkeys_from_compositor(data);
+	      add_hotkeys_to_compositor(data);
+          }
+
+          g_hash_table_insert(data->devdatatable, device, devdata);
           g_printerr ("Enabled Device %d: \"%s\", (Type: %d)\n", 
 		      i++, gdk_device_get_name(device), gdk_device_get_source(device));
         }
@@ -205,7 +352,13 @@ void setup_input_devices (GromitData *data)
   g_printerr ("Now %d enabled devices.\n", g_hash_table_size(data->devdatatable));
 }
 
-
+void shutdown_input_devices(GromitData *data)
+{
+    release_grab(data, NULL); /* ungrab all */
+    char *xdg_session_type = getenv("XDG_SESSION_TYPE");
+    if (xdg_session_type && strcmp(xdg_session_type, "wayland") == 0)
+	remove_hotkeys_from_compositor(data);
+}
 
 void release_grab (GromitData *data, 
 		   GdkDevice *dev)

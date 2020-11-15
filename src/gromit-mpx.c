@@ -1352,7 +1352,7 @@ int main (int argc, char **argv)
   /* Main application */
   setup_main_app (data, app_parse_args (argc, argv, data));
   gtk_main ();
-  release_grab(data, NULL); /* ungrab all */
+  shutdown_input_devices(data);
   write_keyfile(data); // save keyfile config
   g_free (data);
   return 0;
