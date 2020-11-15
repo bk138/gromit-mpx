@@ -239,8 +239,8 @@ gboolean on_buttonpress (GtkWidget *win,
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, ev->device);
 
   if(data->debug)
-    g_printerr("DEBUG: Device '%s': Button %i Down at (x,y)=(%.2f : %.2f)\n", 
-	       gdk_device_get_name(ev->device), ev->button, ev->x, ev->y);
+    g_printerr("DEBUG: Device '%s': Button %i Down State %d at (x,y)=(%.2f : %.2f)\n",
+	       gdk_device_get_name(ev->device), ev->button, ev->state, ev->x, ev->y);
 
   if (!devdata->is_grabbed)
     return FALSE;
