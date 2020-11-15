@@ -27,3 +27,5 @@ Makefile.in
 /Build_Debug/
 .ccls-cache
 /compile_commands.json
+/flatpak/.flatpak-builder/
+/flatpak/build-dir/
