@@ -234,8 +234,8 @@ from the root of the source tree.
 
 ## Potential Problems
 
-When there is no compositing manager such as Compiz or xcompmgr
-running, Gromit-MPX falls back to a legacy drawing mode. This may
+When there is no [compositing manager](https://en.wikipedia.org/wiki/Compositing_window_manager)
+such as Mutter or KWin running, Gromit-MPX falls back to a legacy drawing mode. This may
 drastically slow down your X-Server, especially when you draw very
 thin lines. It makes heavy use of the shape extension, which is
 quite expensive if you paint a complex pattern on screen. Especially
