@@ -6,26 +6,38 @@
 [![Donate](https://img.shields.io/badge/paypal-donate-yellow.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=N7GSSPRPUSTPU&source=url)
 [![Gitter](https://badges.gitter.im/gromit-mpx/community.svg)](https://gitter.im/gromit-mpx/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Gromit-MPX is a multi-pointer port of the original [Gromit annotation
-tool](http://www.home.unix-ag.org/simon/gromit) by [Simon
-Budig](mailto:simon@budig.de).
-
-It enables graphical annotations with several pointers at once and is
-A **lot** faster since it uses the XCOMPOSITE extension where
-available.  Also, it does not inhibit Drag-and-Drop like the original
-Gromit tool.
-
-If you already used Gromit-MPX, you probably want to read [NEWS](NEWS.md).
-
-## What it is
-
-Gromit-MPX (GRaphics Over MIscellaneous Things) is a small tool to
-make annotations on the screen.
+Gromit-MPX is an on-screen annotation tool that works with any Unix
+desktop environment under X11 as well as Wayland.
 
 Its main use is for making presentations of some application.
 Normally, you would have to move the mouse pointer around the point of
 interest until hopefully everybody noticed it.  With Gromit-MPX, you
 can draw everywhere onto the screen, highlighting some button or area.
+
+Key features include:
+
+  * **Desktop-independent**. Gromit-MPX works with GNOME, KDE, XFCE, ...
+	under X11 as well as with a Wayland session.
+  * **Hotkey-based**. The fundamental philosophy is that Gromit-MPX does not
+    get into your way of doing things by sticking some UI widget on your
+	desktop, potentially obscuring more important contents. It *does*
+	provide a UI, but only in form of a tray icon.
+  * **Configurable**. While Gromit-MPX comes with a default config, you are
+	free to change key bindings as well as drawing tool configuration.
+  * **Multi-Pointer**. Under X11, it enables graphical annotations with
+	several pointers at once or a dedicated annotation device setup where
+	you can use a second pair of input devices to annotate while
+	simultaneously continuing to work normally with the first pair.
+  * **Fast**. Where available, Gromit-MPX makes use of Compositing. This
+	should be the case on any contemporary desktop environment making use
+	of the XCOMPOSITE extension under X11 and with every Wayland-based session.
+
+The name stands for (*GR*aphics *O*ver *MI*scellaneous *T*hings -
+*M*ulti-*P*ointer-E*X*tension). It is a multi-pointer port of the original
+[Gromit annotation tool](http://www.home.unix-ag.org/simon/gromit) by [Simon
+Budig](mailto:simon@budig.de).
+
+If you already used Gromit-MPX, you probably want to read [NEWS](NEWS.md).
 
 ## How to use it
 
