@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 project(gromit-mpx LANGUAGES C)
+include(GNUInstallDirs)
 
 set(target_name gromit-mpx)
 set(version 1.4)
@@ -63,7 +64,6 @@ target_link_libraries(${target_name}
     -lm
 )
 
-include(GNUInstallDirs)
 
 install(TARGETS ${target_name} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(FILES data/net.christianbeier.Gromit-MPX.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)

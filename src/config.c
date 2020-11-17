@@ -30,6 +30,7 @@
 
 #include "config.h"
 #include "gromit-mpx.h"
+#include "build-config.h"
 
 #define KEY_DFLT_SHOW_INTRO_ON_STARTUP TRUE
 
@@ -132,20 +133,11 @@ void parse_config (GromitData *data)
   else
       g_print("Using user config %s\n", filename);
 
-  /* try Flatpak config location */
-  if (file < 0) {
-      g_free(filename);
-      filename = g_strdup ("/app/etc/gromit-mpx/gromit-mpx.cfg");
-      if ((file = open(filename, O_RDONLY)) < 0)
-	  g_print("Could not open Flatpak config %s: %s\n", filename, g_strerror (errno));
-      else
-	  g_print("Using Flatpak config %s\n", filename);
-  }
 
   /* try global config file */
   if (file < 0) {
       g_free(filename);
-      filename = g_strdup ("/etc/gromit-mpx/gromit-mpx.cfg");
+      filename = g_strdup (SYSCONFDIR "/gromit-mpx/gromit-mpx.cfg");
       if ((file = open(filename, O_RDONLY)) < 0)
 	  g_print("Could not open system config %s: %s\n", filename, g_strerror (errno));
       else
