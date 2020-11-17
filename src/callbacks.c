@@ -245,7 +245,15 @@ gboolean on_buttonpress (GtkWidget *win,
   if (!devdata->is_grabbed)
     return FALSE;
 
- 
+  if (gdk_device_get_source(gdk_event_get_source_device((GdkEvent *)ev)) == GDK_SOURCE_PEN) {
+      /* Do not drop unprocessed motion events. Smoother drawing for pens of tablets. */
+      gdk_window_set_event_compression(gtk_widget_get_window(data->win), FALSE);
+  } else {
+      /* For all other source types, set back to default. Otherwise, lines were only
+	 fully drawn to the end on button release. */
+      gdk_window_set_event_compression(gtk_widget_get_window(data->win), TRUE);
+  }
+
   /* See GdkModifierType. Am I fixing a Gtk misbehaviour???  */
   ev->state |= 1 << (ev->button + 7);
 
