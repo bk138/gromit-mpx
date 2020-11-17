@@ -234,6 +234,10 @@ from the root of the source tree.
 
 ## Potential Problems
 
+XFCE per default grabs Ctrl-F1 to Ctrl-F12 (switch to workspace 1-12) and Alt-F9 (minimize window)
+which renders Gromit-MPX's default hotkey mapping unusable. A workaround is to define other
+hotkeys/undo-keys for Gromit-MPX that are not function keys.
+
 When there is no [compositing manager](https://en.wikipedia.org/wiki/Compositing_window_manager)
 such as Mutter or KWin running, Gromit-MPX falls back to a legacy drawing mode. This may
 drastically slow down your X-Server, especially when you draw very
