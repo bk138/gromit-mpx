@@ -57,12 +57,13 @@ commands are:
     F8:       undo last stroke
     SHIFT-F8: redo last undone stroke
 
-You can specify the keys to grab via:
+You can specify the keys to grab as hotkeys via:
 
     gromit-mpx --key <keysym> --undo-key <keysym>
 
-Specifying an empty string or `none` for the keysym will prevent gromit
-from grabbing a key.
+Note that you can only specify single keysyms, not key combos. Specifying
+an empty string or `none` for the keysym will prevent Gromit-MPX from
+grabbing a key.
 
 You can specify the opacity simply via:
 
