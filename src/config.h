@@ -34,9 +34,11 @@ void parse_config (GromitData *data);
 /* fallback hot key, if not specified on command line or in config file */
 #ifndef DEFAULT_HOTKEY
 #define DEFAULT_HOTKEY "F9"
+#define DEFAULT_HOTKEY_XFCE "Home"
 #endif
 #ifndef DEFAULT_UNDOKEY
 #define DEFAULT_UNDOKEY "F8"
+#define DEFAULT_UNDOKEY_XFCE "End"
 #endif
 #ifndef DEFAULT_OPACITY
 #define DEFAULT_OPACITY 0.75
