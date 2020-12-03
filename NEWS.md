@@ -1,8 +1,21 @@
+# Gromit-MPX 1.4
+   * Added display of activation status to tray menu.
+   * Added Flatpak packaging.
+   * Added support options to tray menu.
+   * Added commandline switch for getting version.
+   * Added detection of `GDK_CORE_DEVICE_EVENTS`.
+   * Fixed activation via tray menu on KDE.
+   * Fixed running on Wayland.
+   * Fixed non-working default hotkeys on XFCE.
+   * Documented autostart, hotkey setting via config file, similar tools and XFCE pecularities. 
+
+
 # Gromit-MPX 1.3.1
    * Documented donation options.
    * Added ability to configure the Hot key and Undo key in gromit-mpx.cfg.
    * Added lotsa special-case config documentation.
    * Added GUI error displays in case one of the hotkeys can't be grabbed.
+
 
 # Gromit-MPX 1.3
    * Gromit-MPX now shows the hotkeys bound to some functionality directly in the menu.
