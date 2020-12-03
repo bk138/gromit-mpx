@@ -53,7 +53,7 @@
   </screenshots>
 
   <releases>
-    <release version="1.4">
+    <release version="1.4" date="2020-12-03">
       <description>
 	<p>
 	  Gromit-MPX 1.4 now runs on Wayland, displays activation status in the tray menu,
