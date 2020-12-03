@@ -636,11 +636,11 @@ void on_about(GtkMenuItem *menuitem,
 			   "program-name", "Gromit-MPX",
 			   "logo-icon-name", "gromit-mpx",
 			   "title", "About Gromit-MPX",
-			   "comments", "Gromit-MPX (GRaphics Over MIscellaneous Things) is a small tool to make annotations on the screen. Gromit-MPX is a multi-pointer port of the original Gromit annotation tool by Simon Budig.",
+			   "comments", "Gromit-MPX (GRaphics Over MIscellaneous Things - Multi-Pointer-EXtension) is an on-screen annotation tool that works with any Unix desktop environment under X11 as well as Wayland.",
 			   "version", VERSION,
 			   "website", "https://github.com/bk138/gromit-mpx",
 			   "authors", authors,
-			   "copyright", "Copyright 2000 Simon Budig, 2009-2020 Christian Beier",
+			   "copyright", "2009-2020 Christian Beier, Copyright 2000 Simon Budig",
 			   "license-type", GTK_LICENSE_GPL_2_0,
 			   NULL);
 }
