@@ -111,15 +111,19 @@ will redo the last undone drawing stroke.
 will undo the last drawing stroke.
 .SH ENVIRONMENT
 .TP
-.B GDK_BACKEND
-Set to force use of a particular backend, valid values are
-.I x11
-or
-.IR wayland .
+.B XDG_CURRENT_DESKTOP
+Gromit-MPX uses this to determine which desktop environment it is running on.
+.TP
+.B XDG_CURRENT_SESSION
+Gromit-MPX uses this to determine whether is is running under X11 or Wayland.
 .TP
 .B XDG_CONFIG_HOME
 Directory to search for user's custom configuration file, defaults to
 .BI ~ /.config/ .
+.TP
+.B GDK_CORE_DEVICE_EVENTS
+If set, GDK does not use the XInput extension and only reacts to core X input events.
+This renders Gromit-MPX unusable, it will detect this and bail out with an error message.
 .SH FILES
 .TP
 .I gromit\-mpx.cfg
