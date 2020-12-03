@@ -39,7 +39,16 @@
   <launchable type="desktop-id">net.christianbeier.Gromit-MPX.desktop</launchable>
   <screenshots>
     <screenshot type="default">
-      <image>https://a.fsdn.com/con/app/proj/gromit-mpx/screenshots/330111.jpg</image>
+      <image>https://raw.githubusercontent.com/bk138/gromit-mpx/master/data/on-gnome-wayland.png</image>
+      <caption>Gromit-MPX running on GNOME under Wayland</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/bk138/gromit-mpx/master/data/on-kde.png</image>
+      <caption>Gromit-MPX running on KDE</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/bk138/gromit-mpx/master/data/on-xfce4.png</image>
+      <caption>Gromit-MPX running on XFCE</caption>
     </screenshot>
   </screenshots>
 
