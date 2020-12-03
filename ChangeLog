@@ -1,3 +1,487 @@
+commit 39be16bec4cd9204862d42a8a0ccb8c19d7737ae
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 15:47:04 2020 +0100
+
+    AppStream: update release date
+
+commit 86d674a1c26769cd228962885117a49c209cecc5
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 15:46:29 2020 +0100
+
+    AppStream: update screenshots
+
+commit 711e4a32b91f1c5df375c9dce6516e07cfbd6b74
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 15:41:46 2020 +0100
+
+    Resize screenshots to 1600x900
+
+commit d075609b118197e241f29dd33448aaa4cb31332d
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 15:33:12 2020 +0100
+
+    Add screenshots
+
+commit 1f8460f4ca77a17dea1b9e6b07d0bb6fc872df89
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 14:35:03 2020 +0100
+
+    AppStream: fix main description linter issues
+
+commit 8df2159684380ae772422e7542165e0d86d3af33
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 14:21:22 2020 +0100
+
+    AppStream: shorten 1.3.1 release description
+
+commit 89f1f5bafea9799c5edf55f9ea3da16b07b218f0
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 14:19:22 2020 +0100
+
+    AppStream: add 1.4 release
+
+commit 8ca7a8d3acdc01e9f0d4b1d81b6bd2576c18e023
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 14:00:24 2020 +0100
+
+    AppStream: make linter a bit happier
+
+commit 561b3151cbdac19be9768d2f032894668be32052
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 12:06:06 2020 +0100
+
+    AppStream: update description texts
+
+commit b5a592f6fa03f6e88cbf0cf38b250e228ffd2d5e
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 11:36:49 2020 +0100
+
+    NEWS: update
+
+commit 3c3334fa7b3169d9ebebeb28eddf35f551f69b42
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 11:20:19 2020 +0100
+
+    README: update XFCE potential problem section
+
+commit 22d4fa8d1647c2a8ed516fa23de7902ec51c7b3a
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 11:19:02 2020 +0100
+
+    manpage: mention XFCE pecularities
+
+commit 136b8b41c9ee158f608b6d8b0b031391b096dc0e
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 11:15:04 2020 +0100
+
+    manpage: update email
+
+commit 2846a4e778dcea23f457814a4215009a94d1d4a6
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 11:13:19 2020 +0100
+
+    manpage: update Environment section
+
+commit 1577fa7e9f6a629ce625049a0742097f8bd017d7
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 10:54:24 2020 +0100
+
+    callbacks: update About section
+
+commit c464e47ce99fe9e911d357be39771c50452b527b
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 10:47:46 2020 +0100
+
+    Update AUTHORS
+
+commit b5204642b546f3785dd8290a90651dd32697a671
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 10:45:06 2020 +0100
+
+    Revert "Add menu item to display man page"
+    
+    This reverts commit d7133eeecc9de21247144fa5b46108a853633803.
+
+commit 767f9a82b5fd9d1aa357c910b0f3a2fc4e6e692c
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 10:30:33 2020 +0100
+
+    Fix tool selection for drawing tablet pens
+    
+    ...by changing the tool selection strategy from 'lower button wins
+    over higher button' to 'higher button wins over lower button'.
+    
+    Closes #16
+    
+    re #50
+
+commit 55ebf3d790e417b8b2add2818c80ff106d093bad
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Nov 20 09:51:59 2020 +0100
+
+    Provide a better out-of-the-box experience for XFCE users
+    
+    ...by using different default hot keys.
+    
+    re #77
+
+commit b4c18892fdddc3cedc542105246211b1db9ca475
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Nov 18 22:03:22 2020 +0100
+
+    TODO: remove
+    
+    We're using issue tracking and release grouping to plan ahead nowadays.
+
+commit f7a76980249ebd3fab98eabc48d5be0c6893f40b
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Nov 18 21:59:34 2020 +0100
+
+    Document that only single keysyms can be defined as hotkeys
+    
+    Closes #107
+
+commit d2ec1acf6789ae4cad386cd0a34703d3182189fa
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Nov 17 22:44:25 2020 +0100
+
+    callbacks: disable event compression when a tablet pen starts drawing
+    
+    ...to enable smoother lines. When another type of device starts
+    drawing again, we re-enable the default of dropping events, as
+    otherwise (at least for a Thinkpad touchpad), drawn lines were only
+    fully drawn to the end on button release.
+    
+    Closes #90
+
+commit 0bda6418ca0c54ac97f7256089f14e68c11659fd
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Nov 17 19:32:28 2020 +0100
+
+    config: don't use harcoded /etc/ locations
+    
+    Simply rely on what's defined by the build system instead.
+
+commit 5ea63fa60779065a3ce48eacead10b7d0dd5fad3
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Nov 17 11:23:44 2020 +0100
+
+    README: document XFCE hotkey conflict
+    
+    re #77
+
+commit 4b771355b471fcb009c334eb520c54a4ee711c4d
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Nov 15 19:39:26 2020 +0100
+
+    callbacks: log modifier state in buttonpress debug as well
+
+commit 3199dafb8d84177c093d5c5ad8c38ce88c466664
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Nov 15 13:49:27 2020 +0100
+
+    README: list Mutter and KWin instead of Compiz and xcompmgr
+    
+    We're not in the 2000's anymore.
+
+commit 3ad760681e1fa0acce333e12a400b48d3163e433
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Nov 15 13:39:10 2020 +0100
+
+    README: make intro more concise and list key features
+
+commit 64ca6e2c7e23741fdf763dfedbf0fcea94e87ea9
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Nov 15 12:49:02 2020 +0100
+
+    .gitignore: update
+
+commit d71d7a974ecff4c0e83aa82e29fe473594e3955c
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Nov 15 12:41:55 2020 +0100
+
+    CMake: increment minor version
+
+commit 1d62dc006a13421054a066a9cdb97982f2108451
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Nov 15 12:36:54 2020 +0100
+
+    flatpak: allow access to host dconf
+    
+    This allows setting global hotkeys for a GNOME host.
+    
+    re #27
+
+commit 6501486df975205eb202f06b7b1da3883d65e5f9
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Nov 15 12:31:59 2020 +0100
+
+    input: set hotkeys in compositor if running under (X)Wayland
+    
+    As Wayland has no other possibility to globally listen for hotkey
+    events than via the compositor, set the hotkeys there. This is not
+    device-specific anymore of course.
+    
+    Currently supports GNOME, more hopefully to follow.
+    
+    re #27
+
+commit b53b98d244d231e350691d42fff623c57fdc6890
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Nov 14 13:28:58 2020 +0100
+
+    README: mention similar Unix tools
+
+commit 539aafdd1576c680e3b54e772400cc6ce504940c
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Nov 14 13:23:10 2020 +0100
+
+    README: mention EpicPen for Windows
+
+commit c0febcbf86f3ef5a5042070a4a20d09054c67e3a
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Nov 14 13:22:13 2020 +0100
+
+    README: remove mention of Compiz-related tools
+    
+    I guess no-one is using Compiz nowadays...
+
+commit b8981c4d16199337f4fff350f2a42b10366eb222
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Nov 14 13:20:43 2020 +0100
+
+    README: move similar tools into own secton
+
+commit 56a6fb6e8530ca96def45c51d645900c3deee96d
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Nov 10 10:06:37 2020 +0100
+
+    input: fix draw-cursor not appearing over Wayland-only windows
+    
+    re #27
+
+commit c4c0ac62b8c4ff52ce5ad432a06eea5a05d9e2d6
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Nov 8 17:25:46 2020 +0100
+
+    input: remove GDK backend check
+    
+    We only support 'x11' for the time being.
+    
+    re #27
+
+commit 81c2bd289df64ed110598187a29ecade70b7ac16
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Nov 8 17:18:38 2020 +0100
+
+    Set GDK backend to x11 explicitly
+    
+    While this does not fix all issues when running on Wayland,
+    we at least get no hang when using GtkSelection and also can
+    get some basic drawing after the app was activated via the tray
+    icon. No keyboard shortcuts though.
+    
+    re #27
+
+commit d7133eeecc9de21247144fa5b46108a853633803
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Nov 7 13:02:06 2020 +0100
+
+    Add menu item to display man page
+
+commit 7ad3bbf7accad416092989f76cdb81769aa66545
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Nov 5 18:53:39 2020 +0100
+
+    Add (preliminary) AppStream metadata
+
+commit 0df21e1879e91d9cd75980c402408d8ea60c02c1
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Nov 5 17:52:26 2020 +0100
+
+    Add icon to be used/exported with the .desktop file
+
+commit 03a5a58f7b9864b3c5df9ad351bab66e7e28b948
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Nov 5 16:50:04 2020 +0100
+
+    Prefix .desktop file
+
+commit 7ae0682617b560326a22bbb9d6fe8132b1207344
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Nov 5 16:48:10 2020 +0100
+
+    Add Flatpak manifest
+
+commit d52c608240140f70d89ccfd73235b956df960d05
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Nov 4 22:53:56 2020 +0100
+
+    Add Flatpak shared-modules git submodule
+
+commit 4ea7a7a5eb9b908500d8d81104bf322156188fcc
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Nov 4 22:29:13 2020 +0100
+
+    config: look for Flatpak config location, rework fallback logic
+
+commit 8f696110b5a933f5a1ebba07de05a97753b0640a
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Oct 22 12:20:03 2020 +0200
+
+    Let system tray icon indicate grab/active status
+    
+    Closes #57
+
+commit 7ca9c353ea9d85d6f2f439ce4dc99951714cb615
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Oct 22 11:30:25 2020 +0200
+
+    input: factor grab status get over devices into separate functions
+
+commit fd334fdddedec9ce671885b3d0f1b13f3beab1f2
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Oct 22 10:09:33 2020 +0200
+
+    input: let toggle_grab for all get status from each device
+    
+    ...instead of tracking status based on toggle on/off.
+    
+    When using toggle_grab(NULL), all_grabbed would be set to TRUE, when
+    then using toggle_grab(some_device), not all devices would be grabbed
+    anymore, but the global all_grabbed would still say so.
+
+commit b95ee61f49fbf9c8083fd754d84f6c4e91d2fda1
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Oct 21 20:44:36 2020 +0200
+
+    Make Gromit-MPX fallback to non-device-specific paint toggle on KDE
+    
+    Closes #72
+
+commit 6da1b2dda8fe5c24357f8ff6f68dc116af259d1e
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Oct 21 18:04:54 2020 +0200
+
+    Make Gromit-MPX persist opacity setting
+    
+    Opacity is set from the UI and is thus OK to be persisted in the .ini
+    key file.
+    
+    re #96
+
+commit e7b9594b9ec7015ef019377c8fac7b2aea2b19bf
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Oct 21 13:00:42 2020 +0200
+
+    README: add autostart instructions
+    
+    Closes #96
+
+commit 7f906f5049d052d6e559e96e44be91b5f342dd12
+Author: Eshant Gupta <guptaeshant@gmail.com>
+Date:   Wed Oct 21 15:40:02 2020 +0530
+
+    TravisCI: add CI for PPC64LE
+
+commit c22f20205a37574836b6b98da5f7e6033598560c
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Oct 18 18:54:54 2020 +0200
+
+    TravisCI: use Bionic instead of Trusty
+
+commit 6ee7c6f09fd0b589be8f3c1bbf7a13db8ff37dc4
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Oct 18 18:54:17 2020 +0200
+
+    CMake: declare that we need GTK 3.22
+    
+    ...for gtk_show_uri_on_window ()
+
+commit bb8cb60b991a36114d70c9bbfc82c8cb1ea97222
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Oct 18 18:45:04 2020 +0200
+
+    Add support options to tray menu
+
+commit f37ca17b6e34907e841ae3b8cc1bfaf55150a8a7
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Oct 18 18:43:06 2020 +0200
+
+    FUNDING.yml: use existing PayPal button link
+
+commit 69b3de5e88d9ec963b6f8f0d000528be7f8ba76d
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Oct 18 17:11:13 2020 +0200
+
+    .gitignore: update
+
+commit 5bd3ad707d3c73104e2f96f995fb7dcb375ea50f
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Oct 18 17:07:47 2020 +0200
+
+    FUNDING.yml: add PayPal link
+
+commit cce9ba7e3274146d8943b2dc52ee890653c1b678
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Oct 13 20:56:26 2020 +0200
+
+    Add -V and --version cmdline args
+
+commit 6a3dd1596516d8ac4526218742386073b54f170c
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Oct 13 20:29:50 2020 +0200
+
+    README: mention needed version for hotkeys by cfg
+    
+    Closes #99
+
+commit 3d0e31c2b9011459c0ce1b144d81440dbacd2b5a
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Sep 28 20:19:59 2020 +0200
+
+    README: update email contact address
+
+commit 3ac0a74e3a95c9f2d117dc8c8782c5cc3b8a5d24
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Sep 28 20:19:25 2020 +0200
+
+    README: don't list license under Problems
+
+commit 4d6a357031f9968bd5c00a9c6310545921ff8c66
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Aug 4 17:08:14 2020 +0200
+
+    Detect GDK_CORE_DEVICE_EVENTS and act accordingly
+    
+    Closes #95
+
+commit a587772200cb02ce0d49473dd3903936367e868f
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Aug 4 14:02:59 2020 +0200
+
+    input: use accessor function instead of g_object_get()
+    
+    re #95 #49
+
+commit 8d552715663c45fefa851754d0b1b05eaaa57a07
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Aug 1 13:52:11 2020 +0200
+
+    callbacks: update Copyright year
+
+commit 40a734ab333bb27ecc30a3a185792f8c42284a7e
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Aug 1 13:51:38 2020 +0200
+
+    CMake: patchlevel up
+
+commit af1d87618667f8be5601308306de00e1c85d862b
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Aug 1 13:44:33 2020 +0200
+
+    ChangeLog: update
+
 commit b5a3eeb9ba40455aff354c07ee6d49849b9d32e5
 Author: Christian Beier <info@christianbeier.net>
 Date:   Sat Aug 1 13:43:55 2020 +0200
