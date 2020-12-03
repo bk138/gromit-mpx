@@ -948,7 +948,6 @@ void setup_main_app (GromitData *data, gboolean activate)
 
   GtkWidget* sep_item = gtk_separator_menu_item_new();
   GtkWidget* intro_item = gtk_menu_item_new_with_mnemonic("_Introduction");
-  GtkWidget* man_page_item = gtk_menu_item_new_with_mnemonic("_Manual Page");
   GtkWidget* support_item = gtk_menu_item_new_with_mnemonic("_Support Gromit-MPX");
   GtkWidget* about_item = gtk_menu_item_new_with_mnemonic("_About");
   snprintf(labelBuf, sizeof(labelBuf), "_Quit (ALT-%s)", data->hot_keyval);
@@ -968,7 +967,6 @@ void setup_main_app (GromitData *data, gboolean activate)
 
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), sep_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), intro_item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), man_page_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), support_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), about_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), quit_item);
@@ -1013,9 +1011,6 @@ void setup_main_app (GromitData *data, gboolean activate)
   g_signal_connect(G_OBJECT (intro_item), "activate",
 		   G_CALLBACK (on_intro),
 		   data);
-  g_signal_connect(G_OBJECT (man_page_item), "activate",
-		   G_CALLBACK (on_man_page),
-		   data);
   g_signal_connect(G_OBJECT (about_item), "activate",
 		   G_CALLBACK (on_about),
 		   NULL);
@@ -1037,7 +1032,6 @@ void setup_main_app (GromitData *data, gboolean activate)
 
   gtk_widget_show (sep_item);
   gtk_widget_show (intro_item);
-  gtk_widget_show (man_page_item);
   gtk_widget_show (support_item);
   gtk_widget_show (about_item);
   gtk_widget_show (quit_item);

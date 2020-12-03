@@ -722,22 +722,6 @@ void on_intro(GtkMenuItem *menuitem,
     gtk_widget_show_all (assistant);
 }
 
-void on_man_page(GtkMenuItem *menuitem, gpointer user_data)
-{
-    if(getenv("FLATPAK_ID")) {
-	/*
-	   FIXME This is more or less a stop-gap solution until someone implements
-	   rendering of the local man page inside Gromit-MPX. Background is that
-	   gtk_show_uri_on_window() called from within a flatpak always thinks we
-	   want to open some file on the host where gromit-mpx.1 is very unlikely to also
-	   be installed. Meh.
-	*/
-	gtk_show_uri_on_window(NULL, "https://man.cx/gromit-mpx", GDK_CURRENT_TIME, NULL);
-    } else {
-	gtk_show_uri_on_window(NULL, "man:gromit-mpx.1", GDK_CURRENT_TIME, NULL);
-    }
-}
-
 void on_support_liberapay(GtkMenuItem *menuitem, gpointer user_data)
 {
     gtk_show_uri_on_window (NULL,
