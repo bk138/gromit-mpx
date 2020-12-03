@@ -4,7 +4,7 @@
   <id>net.christianbeier.Gromit-MPX</id>
   
   <name>Gromit-MPX</name>
-  <summary>Gromit-MPX (GRaphics Over MIscellaneous Things) is a tool to make annotations on the screen</summary>
+  <summary>Gromit-MPX (GRaphics Over MIscellaneous Things - Multi-Pointer-EXtension) is a tool to make annotations on the screen.</summary>
   
   <metadata_license>CC-BY-4.0</metadata_license>
   <project_license>GPL-2.0-only</project_license>
@@ -21,11 +21,19 @@
   
   <description>
     <p>
-      Gromit-MPX (GRaphics Over MIscellaneous Things) is a small tool to make annotations on the screen.
+      Gromit-MPX is an on-screen annotation tool that works with any Unix desktop environment under X11 as well as Wayland.
     </p>
     <p>
       Its main use is for making presentations of some application. Normally, you would have to move the mouse pointer around the point of interest until hopefully everybody noticed it. With Gromit-MPX, you can draw everywhere onto the screen, highlighting some button or area.
     </p>
+    <p>Key features include:</p>
+    <ul>
+    <li><b>Desktop-independent</b>. Gromit-MPX works with GNOME, KDE, XFCE, ... under X11 as well as with a Wayland session.</li>
+    <li><b>Hotkey-based</b>. The fundamental philosophy is that Gromit-MPX does not get into your way of doing things by sticking some UI widget on your desktop, potentially obscuring more important contents. It does provide a UI, but only in form of a tray icon.</li>
+    <li><b>Configurable</b>. While Gromit-MPX comes with a default config, you are free to change key bindings as well as drawing tool configuration.</li>
+    <li><b>Multi-Pointer</b>. Under X11, it enables graphical annotations with several pointers at once or a dedicated annotation device setup where you can use a second pair of input devices to annotate while simultaneously continuing to work normally with the first pair.</li>
+    <li><b>Fast</b>. Where available, Gromit-MPX makes use of Compositing. This should be the case on any contemporary desktop environment making use of the XCOMPOSITE extension under X11 and with every Wayland-based session.</li>
+    </ul>
   </description>
   
   <launchable type="desktop-id">net.christianbeier.Gromit-MPX.desktop</launchable>
