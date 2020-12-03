@@ -8,7 +8,10 @@
   
   <metadata_license>CC-BY-4.0</metadata_license>
   <project_license>GPL-2.0-only</project_license>
-  
+
+  <content_rating type="oars-1.0">
+  </content_rating>
+
   <url type="homepage">https://github.com/bk138/gromit-mpx</url>
 
   <developer_name>Christian Beier</developer_name>
