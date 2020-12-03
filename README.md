@@ -192,7 +192,7 @@ drawing for all others by assigning a zero-width tool like this:
 The decision which tool to use follows a simple policy:
 
 1. Buttons are more important than Modifiers
-2. Low number Buttons are more important than higher ones
+2. High number Buttons are more important than lower ones
 3. Modifiers: `SHIFT` > `CONTROL` > `ALT`/`META`.
 4. Gromit-MPX tries partial matches:
       If you define `"Core Pointer"[]` and `"Core Pointer"[SHIFT, CONTROL]`

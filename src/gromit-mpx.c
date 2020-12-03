@@ -354,13 +354,28 @@ void select_tool (GromitData *data,
       default_name [default_len] = 124;
       default_name [default_len+3] = 0;
 
-      /*  0, 1, 3, 7, 15, 31 */
+      /*
+	Iterate i up until <= req_buttons.
+	For each i, find out if bits of i are _all_ in `req_buttons`.
+	- If yes, lookup if there is tool and select if there is.
+	- If no, try next i, no tool lookup.
+      */
       context = NULL;
       i=-1;
       do
         {
           i++;
-          buttons = req_buttons & ((1 << i)-1);
+
+	  /*
+	    For all i > 0, find out if _all_ bits representing the iterator 'i'
+	    are present in req_buttons as well. If not (none or only some are),
+	    then go on.
+	    The condition i==0 handles the config cases where no button is given.
+	  */
+	  buttons = i & req_buttons;
+	  if(i > 0 && (buttons == 0 || buttons != i))
+	      continue;
+
           j=-1;
           do
             {
@@ -403,7 +418,7 @@ void select_tool (GromitData *data,
             }
           while (j<=3 && req_modifier >= (1u << j));
         }
-      while (i<=5 && req_buttons >= (1u << i));
+      while (i < req_buttons);
 
       g_free (name);
       g_free (default_name);
@@ -414,6 +429,9 @@ void select_tool (GromitData *data,
             devdata->cur_context = data->default_eraser;
           else
             devdata->cur_context = data->default_pen;
+
+	  if(data->debug)
+	      g_printerr("DEBUG: select_tool set fallback context for '%s'\n", name);
         }
     }
   else
