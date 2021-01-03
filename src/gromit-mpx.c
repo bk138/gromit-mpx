@@ -689,8 +689,9 @@ void main_do_event (GdkEventAny *event,
 
 
 
-void setup_main_app (GromitData *data, gboolean activate)
+void setup_main_app (GromitData *data, int argc, char ** argv)
 {
+  gboolean activate;
 
   if(getenv("GDK_CORE_DEVICE_EVENTS")) {
       g_printerr("GDK is set to not use the XInput extension, Gromit-MPX can not work this way.\n"
@@ -845,6 +846,11 @@ void setup_main_app (GromitData *data, gboolean activate)
     parse key file
   */
   read_keyfile(data);
+
+  /*
+    parse cmdline
+  */
+  activate = app_parse_args (argc, argv, data);
 
   // might have been in key file
   gtk_widget_set_opacity(data->win, data->opacity);
@@ -1377,7 +1383,7 @@ int main (int argc, char **argv)
     return main_client (argc, argv, data);
 
   /* Main application */
-  setup_main_app (data, app_parse_args (argc, argv, data));
+  setup_main_app (data, argc, argv);
   gtk_main ();
   shutdown_input_devices(data);
   write_keyfile(data); // save keyfile config
