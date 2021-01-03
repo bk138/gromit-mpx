@@ -698,6 +698,27 @@ void setup_main_app (GromitData *data, gboolean activate)
       exit(1);
   }
 
+  /*
+    HOT KEYS
+  */
+  data->hot_keyval = DEFAULT_HOTKEY;
+  data->hot_keycode = 0;
+
+  data->undo_keyval = DEFAULT_UNDOKEY;
+  data->undo_keycode = 0;
+
+  char *xdg_current_desktop = getenv("XDG_CURRENT_DESKTOP");
+  if (xdg_current_desktop && strcmp(xdg_current_desktop, "XFCE") == 0) {
+      /*
+	XFCE per default grabs Ctrl-F1 to Ctrl-F12 (switch to workspace 1-12)
+	and Alt-F9 (minimize window) which renders Gromit-MPX's default hotkey
+	mapping unusable. Provide different defaults for that desktop environment.
+      */
+      data->hot_keyval = DEFAULT_HOTKEY_XFCE;
+      data->undo_keyval = DEFAULT_UNDOKEY_XFCE;
+      g_print("Detected XFCE, changing default hot keys to '" DEFAULT_HOTKEY_XFCE "' and '" DEFAULT_UNDOKEY_XFCE "'\n");
+  }
+
   /* COLOURS */
   g_free(data->white);
   g_free(data->black);
@@ -1085,24 +1106,6 @@ int app_parse_args (int argc, char **argv, GromitData *data)
    gchar    *arg;
    gboolean  wrong_arg = FALSE;
    gboolean  activate = FALSE;
-
-   data->hot_keyval = DEFAULT_HOTKEY;
-   data->hot_keycode = 0;
-
-   data->undo_keyval = DEFAULT_UNDOKEY;
-   data->undo_keycode = 0;
-
-   char *xdg_current_desktop = getenv("XDG_CURRENT_DESKTOP");
-   if (xdg_current_desktop && strcmp(xdg_current_desktop, "XFCE") == 0) {
-       /*
-	 XFCE per default grabs Ctrl-F1 to Ctrl-F12 (switch to workspace 1-12)
-	 and Alt-F9 (minimize window) which renders Gromit-MPX's default hotkey
-	 mapping unusable. Provide different defaults for that desktop environment.
-       */
-       data->hot_keyval = DEFAULT_HOTKEY_XFCE;
-       data->undo_keyval = DEFAULT_UNDOKEY_XFCE;
-       g_print("Detected XFCE, changing default hot keys to '" DEFAULT_HOTKEY_XFCE "' and '" DEFAULT_UNDOKEY_XFCE "'\n");
-   }
 
    for (i=1; i < argc ; i++)
      {
