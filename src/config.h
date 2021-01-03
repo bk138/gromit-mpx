@@ -30,6 +30,7 @@
 #define DEFAULT_DEVICE_NAME "default"
 
 void parse_config (GromitData *data);
+int parse_args (int argc, char **argv, GromitData *data);
 
 /* fallback hot key, if not specified on command line or in config file */
 #ifndef DEFAULT_HOTKEY

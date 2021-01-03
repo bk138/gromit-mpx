@@ -423,6 +423,125 @@ void parse_config (GromitData *data)
 }
 
 
+int parse_args (int argc, char **argv, GromitData *data)
+{
+   gint      i;
+   gchar    *arg;
+   gboolean  wrong_arg = FALSE;
+   gboolean  activate = FALSE;
+
+   for (i=1; i < argc ; i++)
+     {
+       arg = argv[i];
+       if (strcmp (arg, "-a") == 0 ||
+           strcmp (arg, "--active") == 0)
+         {
+           activate = TRUE;
+         }
+       else if (strcmp (arg, "-d") == 0 ||
+                strcmp (arg, "--debug") == 0)
+         {
+           data->debug = 1;
+         }
+       else if (strcmp (arg, "-k") == 0 ||
+                strcmp (arg, "--key") == 0)
+         {
+           if (i+1 < argc)
+             {
+               data->hot_keyval = argv[i+1];
+               data->hot_keycode = 0;
+               i++;
+             }
+           else
+             {
+               g_printerr ("-k requires an Key-Name as argument\n");
+               wrong_arg = TRUE;
+             }
+         }
+       else if (strcmp (arg, "-K") == 0 ||
+                strcmp (arg, "--keycode") == 0)
+         {
+           if (i+1 < argc && atoi (argv[i+1]) > 0)
+             {
+               data->hot_keyval = NULL;
+               data->hot_keycode = atoi (argv[i+1]);
+               i++;
+             }
+           else
+             {
+               g_printerr ("-K requires an keycode > 0 as argument\n");
+               wrong_arg = TRUE;
+             }
+         }
+      else if (strcmp (arg, "-o") == 0 ||
+                strcmp (arg, "--opacity") == 0)
+         {
+           if (i+1 < argc && strtod (argv[i+1], NULL) >= 0.0 && strtod (argv[i+1], NULL) <= 1.0)
+             {
+               data->opacity = strtod (argv[i+1], NULL);
+               g_printerr ("Opacity set to: %.2f\n", data->opacity);
+               gtk_widget_set_opacity(data->win, data->opacity);
+               i++;
+             }
+           else
+             {
+               g_printerr ("-o requires an opacity >=0 and <=1 as argument\n");
+               wrong_arg = TRUE;
+             }
+         }
+       else if (strcmp (arg, "-u") == 0 ||
+                strcmp (arg, "--undo-key") == 0)
+         {
+           if (i+1 < argc)
+             {
+               data->undo_keyval = argv[i+1];
+               data->undo_keycode = 0;
+               i++;
+             }
+           else
+             {
+               g_printerr ("-u requires an Key-Name as argument\n");
+               wrong_arg = TRUE;
+             }
+         }
+       else if (strcmp (arg, "-U") == 0 ||
+                strcmp (arg, "--undo-keycode") == 0)
+         {
+           if (i+1 < argc && atoi (argv[i+1]) > 0)
+             {
+               data->undo_keyval = NULL;
+               data->undo_keycode = atoi (argv[i+1]);
+               i++;
+             }
+           else
+             {
+               g_printerr ("-U requires an keycode > 0 as argument\n");
+               wrong_arg = TRUE;
+             }
+         }
+       else if (strcmp (arg, "-V") == 0 ||
+		strcmp (arg, "--version") == 0)
+         {
+	     g_print("Gromit-MPX " VERSION "\n");
+	     exit(0);
+         }
+       else
+         {
+           g_printerr ("Unknown Option for Gromit-MPX startup: \"%s\"\n", arg);
+           wrong_arg = TRUE;
+         }
+
+       if (wrong_arg)
+         {
+           g_printerr ("Please see the Gromit-MPX manpage for the correct usage\n");
+           exit (1);
+         }
+     }
+
+   return activate;
+}
+
+
 void read_keyfile(GromitData *data)
 {
     gchar *filename = g_strjoin (G_DIR_SEPARATOR_S,
