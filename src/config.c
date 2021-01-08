@@ -123,7 +123,7 @@ void parse_config (GromitData *data)
 
   GromitPaintType type;
   GdkRGBA *fg_color=NULL;
-  guint width, arrowsize, minwidth;
+  guint width, arrowsize, minwidth, maxsize;
 
   /* try user config location */
   filename = g_strjoin (G_DIR_SEPARATOR_S,
@@ -180,11 +180,20 @@ void parse_config (GromitData *data)
   g_scanner_scope_add_symbol (scanner, 2, "color",     (gpointer) 2);
   g_scanner_scope_add_symbol (scanner, 2, "arrowsize", (gpointer) 3);
   g_scanner_scope_add_symbol (scanner, 2, "minsize",   (gpointer) 4);
+  g_scanner_scope_add_symbol (scanner, 2, "maxsize",   (gpointer) 5);
 
   g_scanner_set_scope (scanner, 0);
   scanner->config->scope_0_fallback = 0;
 
   g_scanner_input_file (scanner, file);
+
+  /* defaults */
+  type = GROMIT_PEN;
+  width = 7;
+  arrowsize = 0;
+  minwidth = 1;
+  maxsize = 0;
+  fg_color = data->red;
 
   token = g_scanner_get_next_token (scanner);
   while (token != G_TOKEN_EOF)
@@ -206,14 +215,6 @@ void parse_config (GromitData *data)
             }
 
           token = g_scanner_get_next_token (scanner);
-
-          /* defaults */
-
-          type = GROMIT_PEN;
-          width = 7;
-          arrowsize = 0;
-          minwidth = 1;
-          fg_color = data->red;
 
           if (token == G_TOKEN_SYMBOL)
             {
@@ -337,6 +338,23 @@ void parse_config (GromitData *data)
                             }
                           minwidth = scanner->value.v_float;
                         }
+                      else if ((intptr_t) scanner->value.v_symbol == 5)
+                        {
+                          token = g_scanner_get_next_token (scanner);
+                          if (token != G_TOKEN_EQUAL_SIGN)
+                            {
+                              g_printerr ("Missing \"=\"... aborting\n");
+                              exit (1);
+                            }
+                          token = g_scanner_get_next_token (scanner);
+                          if (token != G_TOKEN_FLOAT)
+                            {
+                              g_printerr ("Missing Maxsize (float)... "
+                                          "aborting\n");
+                              exit (1);
+                            }
+                          maxsize = scanner->value.v_float;
+                        }
 		      else
                         {
                           g_printerr ("Unknown tool type?????\n");
@@ -362,7 +380,7 @@ void parse_config (GromitData *data)
               exit (1);
             }
 
-          context = paint_context_new (data, type, fg_color, width, arrowsize, minwidth);
+          context = paint_context_new (data, type, fg_color, width, arrowsize, minwidth, maxsize);
           g_hash_table_insert (data->tool_config, name, context);
         }
       else if (token == G_TOKEN_SYMBOL &&
