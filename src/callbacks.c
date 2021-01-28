@@ -269,12 +269,14 @@ gboolean on_buttonpress (GtkWidget *win,
   snap_undo_state (data);
 
   gdk_event_get_axis ((GdkEvent *) ev, GDK_AXIS_PRESSURE, &pressure);
-  data->maxwidth = CLAMP (pressure + line_thickener, 0, 1) *
-    (double) (devdata->cur_context->width -
-	      devdata->cur_context->minwidth) +
-    devdata->cur_context->minwidth;
-  if(data->maxwidth > devdata->cur_context->maxsize)
-    data->maxwidth = devdata->cur_context->maxsize;
+  data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
+		    (double) (devdata->cur_context->width -
+			      devdata->cur_context->minwidth) +
+		    devdata->cur_context->minwidth);
+
+  if(data->maxwidth > devdata->cur_context->maxwidth)
+    data->maxwidth = devdata->cur_context->maxwidth;
+
   if (ev->button <= 5)
     draw_line (data, ev->device, ev->x, ev->y, ev->x, ev->y);
 
@@ -320,12 +322,14 @@ gboolean on_motion (GtkWidget *win,
                                GDK_AXIS_PRESSURE, &pressure);
           if (pressure > 0)
             {
-	      data->maxwidth = CLAMP (pressure + line_thickener, 0, 1) *
-		(double) (devdata->cur_context->width -
-			  devdata->cur_context->minwidth) +
-		devdata->cur_context->minwidth;
-	      if(data->maxwidth > devdata->cur_context->maxsize)
-		data->maxwidth = devdata->cur_context->maxsize;
+	      data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
+				(double) (devdata->cur_context->width -
+					  devdata->cur_context->minwidth) +
+				devdata->cur_context->minwidth);
+
+	      if(data->maxwidth > devdata->cur_context->maxwidth)
+		data->maxwidth = devdata->cur_context->maxwidth;
+
               gdk_device_get_axis(ev->device, coords[i]->axes,
                                   GDK_AXIS_X, &x);
               gdk_device_get_axis(ev->device, coords[i]->axes,
@@ -348,12 +352,14 @@ gboolean on_motion (GtkWidget *win,
 
   if (pressure > 0)
     {
-      data->maxwidth = CLAMP (pressure + line_thickener, 0, 1) *
-	(double) (devdata->cur_context->width -
-		  devdata->cur_context->minwidth) +
-	devdata->cur_context->minwidth;
-      if(data->maxwidth > devdata->cur_context->maxsize)
-	data->maxwidth = devdata->cur_context->maxsize;
+      data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
+			(double) (devdata->cur_context->width -
+				  devdata->cur_context->minwidth) +
+			devdata->cur_context->minwidth);
+
+      if(data->maxwidth > devdata->cur_context->maxwidth)
+	data->maxwidth = devdata->cur_context->maxwidth;
+
       if(devdata->motion_time > 0)
 	{
 	  draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
