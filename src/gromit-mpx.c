@@ -42,7 +42,7 @@ GromitPaintContext *paint_context_new (GromitData *data,
 				       guint width,
 				       guint arrowsize,
 				       guint minwidth,
-				       guint maxsize)
+				       guint maxwidth)
 {
   GromitPaintContext *context;
 
@@ -52,8 +52,8 @@ GromitPaintContext *paint_context_new (GromitData *data,
   context->width = width;
   context->arrowsize = arrowsize;
   context->minwidth = minwidth;
+  context->maxwidth = maxwidth;
   context->paint_color = paint_color;
-  context->maxsize = maxsize;
 
   
   context->paint_ctx = cairo_create (data->backbuffer);
@@ -95,7 +95,7 @@ void paint_context_print (gchar *name,
 
   g_printerr ("width: %3d, ", context->width);
   g_printerr ("minwidth: %3d, ", context->minwidth);
-  g_printerr ("maxsize: %3d, ", context->maxsize);
+  g_printerr ("maxwidth: %3d, ", context->maxwidth);
   g_printerr ("arrowsize: %.2f, ", context->arrowsize);
   g_printerr ("color: %s\n", gdk_rgba_to_string(context->paint_color));
 }
