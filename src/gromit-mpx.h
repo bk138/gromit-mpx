@@ -67,7 +67,7 @@ typedef struct
   guint           width;
   gfloat          arrowsize;
   guint           minwidth;
-  guint           maxsize;
+  guint           maxwidth;
   GdkRGBA         *paint_color;
   cairo_t         *paint_ctx;
   gdouble         pressure;
@@ -178,7 +178,7 @@ void coord_list_free (GromitData *data, GdkDevice* dev);
 
 GromitPaintContext *paint_context_new (GromitData *data, GromitPaintType type,
 				       GdkRGBA *fg_color, guint width, guint arrowsize,
-                                       guint minwidth, guint maxsize);
+                                       guint minwidth, guint maxwidth);
 void paint_context_free (GromitPaintContext *context);
 
 void indicate_active(GromitData *data, gboolean YESNO);
