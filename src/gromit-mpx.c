@@ -93,9 +93,9 @@ void paint_context_print (gchar *name,
       g_printerr ("UNKNOWN, "); break;
   }
 
-  g_printerr ("width: %3d, ", context->width);
-  g_printerr ("minwidth: %3d, ", context->minwidth);
-  g_printerr ("maxwidth: %3d, ", context->maxwidth);
+  g_printerr ("width: %u, ", context->width);
+  g_printerr ("minwidth: %u, ", context->minwidth);
+  g_printerr ("maxwidth: %u, ", context->maxwidth);
   g_printerr ("arrowsize: %.2f, ", context->arrowsize);
   g_printerr ("color: %s\n", gdk_rgba_to_string(context->paint_color));
 }
