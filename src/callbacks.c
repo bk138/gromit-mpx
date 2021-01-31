@@ -128,9 +128,9 @@ void on_monitors_changed ( GdkScreen *screen,
 
 
   data->default_pen = paint_context_new (data, GROMIT_PEN,
-					 data->red, 7, 0, 1);
+					 data->red, 7, 0, 1, G_MAXUINT);
   data->default_eraser = paint_context_new (data, GROMIT_ERASER,
-					    data->red, 75, 0, 1);
+					    data->red, 75, 0, 1, G_MAXUINT);
 
   if(!data->composited) // set shape
     {
@@ -274,6 +274,9 @@ gboolean on_buttonpress (GtkWidget *win,
 			      devdata->cur_context->minwidth) +
 		    devdata->cur_context->minwidth);
 
+  if(data->maxwidth > devdata->cur_context->maxwidth)
+    data->maxwidth = devdata->cur_context->maxwidth;
+
   if (ev->button <= 5)
     draw_line (data, ev->device, ev->x, ev->y, ev->x, ev->y);
 
@@ -324,6 +327,9 @@ gboolean on_motion (GtkWidget *win,
 					  devdata->cur_context->minwidth) +
 				devdata->cur_context->minwidth);
 
+	      if(data->maxwidth > devdata->cur_context->maxwidth)
+		data->maxwidth = devdata->cur_context->maxwidth;
+
               gdk_device_get_axis(ev->device, coords[i]->axes,
                                   GDK_AXIS_X, &x);
               gdk_device_get_axis(ev->device, coords[i]->axes,
@@ -350,6 +356,9 @@ gboolean on_motion (GtkWidget *win,
 			(double) (devdata->cur_context->width -
 				  devdata->cur_context->minwidth) +
 			devdata->cur_context->minwidth);
+
+      if(data->maxwidth > devdata->cur_context->maxwidth)
+	data->maxwidth = devdata->cur_context->maxwidth;
 
       if(devdata->motion_time > 0)
 	{
