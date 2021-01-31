@@ -842,8 +842,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
    */
   data->tool_config = g_hash_table_new (g_str_hash, g_str_equal);
   parse_config (data);
-  if (data->debug)
-    g_hash_table_foreach (data->tool_config, parse_print_help, NULL);
+  g_hash_table_foreach (data->tool_config, parse_print_help, NULL);
 
   /*
     parse key file
