@@ -749,3 +749,34 @@ void on_support_paypal(GtkMenuItem *menuitem, gpointer user_data)
 			    NULL);
 
 }
+
+void on_notification_closed(NotifyNotification *notification, gpointer user_data)
+{
+    GromitData *data = (GromitData *) user_data;
+    if(data->debug)
+	g_printerr("DEBUG: notification closed\n");
+    
+    show_notification(data);
+}
+
+void on_notification_click(NotifyNotification *notification, char *action,
+                            gpointer user_data)
+{
+    GromitData *data = (GromitData *) user_data;
+    if(data->debug)
+	g_printerr("DEBUG: notification clicked\n");
+
+    gtk_widget_show (GTK_WIDGET (data->menu));
+    
+     //    gtk_menu_popup_at_pointer(data->menu, NULL);
+
+     // WORKS toggle_visibility(data);
+
+    /*
+     gtk_menu_popup_at_widget (data->menu,
+                          data->win,
+                         GDK_GRAVITY_CENTER,
+                          GDK_GRAVITY_CENTER,
+                          NULL);
+    */
+}

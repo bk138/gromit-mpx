@@ -955,6 +955,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
 
   /* create the menu */
   GtkWidget *menu = gtk_menu_new ();
+  data->menu = menu;
 
   char labelBuf[128];
   /* Create the menu items */
@@ -1097,6 +1098,10 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
 
   if(data->show_intro_on_startup)
       on_intro(NULL, data);
+
+  notify_init ("Hello world!");
+
+  show_notification(data);
 }
 
 
@@ -1279,4 +1284,30 @@ void indicate_active(GromitData *data, gboolean YESNO)
 	app_indicator_set_icon(data->trayicon, "gromit-mpx_active");
     else
 	app_indicator_set_icon(data->trayicon, PACKAGE_NAME);
+}
+
+void show_notification(GromitData *data)
+{
+    g_object_unref(G_OBJECT(data->notification));
+
+    data->notification = notify_notification_new ("Hello world", "This is an example notification.", "dialog-information");
+
+    notify_notification_set_hint(data->notification, "resident", g_variant_new_boolean (TRUE));
+
+    notify_notification_add_action (data->notification,
+				    "default",
+				    "Menu",
+				    on_notification_click,
+				    data,
+				    NULL);
+
+
+
+
+    g_signal_connect(G_OBJECT (data->notification), "closed",
+		     G_CALLBACK (on_notification_closed),
+		     data);
+
+    notify_notification_show (data->notification, NULL);
+
 }

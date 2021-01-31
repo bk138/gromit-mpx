@@ -27,7 +27,7 @@
 #include <glib.h>
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
-
+#include <libnotify/notify.h>
 
 gboolean on_expose (GtkWidget *widget,
 		    cairo_t* cr,
@@ -134,5 +134,12 @@ void on_support_patreon(GtkMenuItem *menuitem,
 
 void on_support_paypal(GtkMenuItem *menuitem,
 		       gpointer user_data);
+
+void on_notification_closed(NotifyNotification *notification,
+			    gpointer user_data);
+
+void on_notification_click(NotifyNotification *notification,
+			    char               *action,
+			    gpointer            user_data);
 
 #endif

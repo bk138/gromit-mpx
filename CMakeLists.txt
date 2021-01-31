@@ -23,6 +23,7 @@ find_package(PkgConfig)
 
 pkg_check_modules(gtk3 REQUIRED "gtk+-3.0 >= 3.22")
 pkg_check_modules(appindicator3 REQUIRED "appindicator3-0.1 >= 0.4.92")
+pkg_check_modules(notify REQUIRED "libnotify >= 0.7")
 pkg_check_modules(xinput REQUIRED "xi >= 1.3")
 pkg_check_modules(x11 REQUIRED x11)
 
@@ -30,6 +31,7 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${gtk3_INCLUDE_DIRS}
     ${appindicator3_INCLUDE_DIRS}
+    ${notify_INCLUDE_DIRS}
     ${xinput_INCLUDE_DIRS}
     ${x11_INCLUDE_DIRS}
 )
@@ -37,6 +39,7 @@ include_directories(
 link_directories(
     ${gtk3_LIBRARY_DIRS}
     ${appindicator3_LIBRARY_DIRS}
+    ${notify_LIBRARY_DIRS}
     ${xinput_LIBRARY_DIRS}
     ${x11_LIBRARY_DIRS}
 )
@@ -59,6 +62,7 @@ add_executable(${target_name} ${sources})
 target_link_libraries(${target_name}
     ${gtk3_LIBRARIES}
     ${appindicator3_LIBRARIES}
+    ${notify_LIBRARIES}
     ${xinput_LIBRARIES}
     ${x11_LIBRARIES}
     -lm

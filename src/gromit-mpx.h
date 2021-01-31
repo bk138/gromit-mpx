@@ -28,6 +28,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 #include <libappindicator/app-indicator.h>
+#include <libnotify/notify.h>
 
 
 #define GROMIT_MOUSE_EVENTS ( GDK_BUTTON_MOTION_MASK | \
@@ -98,7 +99,9 @@ typedef struct
 typedef struct
 {
   GtkWidget   *win;
+  GtkMenu *menu;
   AppIndicator *trayicon;
+  NotifyNotification *notification;
 
   GdkCursor   *paint_cursor;
   GdkCursor   *erase_cursor;
@@ -181,5 +184,7 @@ GromitPaintContext *paint_context_new (GromitData *data, GromitPaintType type,
 void paint_context_free (GromitPaintContext *context);
 
 void indicate_active(GromitData *data, gboolean YESNO);
+
+void show_notification(GromitData *data);
 
 #endif
