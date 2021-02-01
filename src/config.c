@@ -541,7 +541,7 @@ int parse_args (int argc, char **argv, GromitData *data)
        else if (strcmp (arg, "-V") == 0 ||
 		strcmp (arg, "--version") == 0)
          {
-	     g_print("Gromit-MPX " VERSION "\n");
+	     g_print("Gromit-MPX " PACKAGE_VERSION "\n");
 	     exit(0);
          }
        else
