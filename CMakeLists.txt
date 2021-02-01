@@ -4,6 +4,7 @@ include(GNUInstallDirs)
 
 set(target_name gromit-mpx)
 set(version 1.4)
+set(LOCALE_DOMAIN ${CMAKE_PROJECT_NAME})
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 if(CMAKE_GENERATOR MATCHES "Unix Makefiles|Ninja")
 # some LSP servers expect compile_commands.json in the project root
@@ -20,6 +21,7 @@ set(CMAKE_C_FLAGS  " ${CMAKE_C_FLAGS} -Wall -Wextra -Wno-unused-parameter")
 configure_file(build-config.h_cmake_in build-config.h)
 
 find_package(PkgConfig)
+find_package(Gettext)
 
 pkg_check_modules(gtk3 REQUIRED "gtk+-3.0 >= 3.22")
 pkg_check_modules(appindicator3 REQUIRED "appindicator3-0.1 >= 0.4.92")

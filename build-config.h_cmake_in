@@ -10,6 +10,12 @@
 /* Define to the version of this package. */
 #define PACKAGE_VERSION "${version}"
 
+/* The package's locale domain. */
+#define PACKAGE_LOCALE_DOMAIN "${LOCALE_DOMAIN}"
+
+/* The directory where the package's translations reside. */
+#define PACKAGE_LOCALE_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/locale"
+
 #define SYSCONFDIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}"
 
 #endif /* BUILD_CONFIG_H */
