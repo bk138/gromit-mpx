@@ -10,9 +10,6 @@
 /* Define to the version of this package. */
 #define PACKAGE_VERSION "${version}"
 
-/* Version number of package */
-#define VERSION "${version}"
-
 #define SYSCONFDIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}"
 
 #endif /* BUILD_CONFIG_H */
