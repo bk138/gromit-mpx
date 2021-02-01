@@ -24,6 +24,7 @@
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
+#include <glib/gi18n.h>
 
 #include "callbacks.h"
 #include "config.h"
@@ -701,6 +702,12 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
 		 "Probably the GDK_CORE_DEVICE_EVENTS environment variable is set, try to start Gromit-MPX with this variable unset.\n");
       exit(1);
   }
+
+  /*
+    l18n
+   */
+  bindtextdomain(PACKAGE_LOCALE_DOMAIN, PACKAGE_LOCALE_DIR);
+  textdomain(PACKAGE_LOCALE_DOMAIN);
 
   /*
     HOT KEYS
