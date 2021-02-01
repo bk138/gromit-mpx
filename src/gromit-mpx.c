@@ -24,7 +24,6 @@
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
-#include <glib/gi18n.h>
 
 #include "callbacks.h"
 #include "config.h"
@@ -967,26 +966,26 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
 
   char labelBuf[128];
   /* Create the menu items */
-  snprintf(labelBuf, sizeof(labelBuf), "Toggle Painting (%s)", data->hot_keyval);
+  snprintf(labelBuf, sizeof(labelBuf), _("Toggle Painting (%s)"), data->hot_keyval);
   GtkWidget* toggle_paint_item = gtk_menu_item_new_with_label (labelBuf);
-  snprintf(labelBuf, sizeof(labelBuf), "Clear Screen (SHIFT-%s)", data->hot_keyval);
+  snprintf(labelBuf, sizeof(labelBuf), _("Clear Screen (SHIFT-%s)"), data->hot_keyval);
   GtkWidget* clear_item = gtk_menu_item_new_with_label (labelBuf);
-  snprintf(labelBuf, sizeof(labelBuf), "Toggle Visibility (CTRL-%s)", data->hot_keyval);
+  snprintf(labelBuf, sizeof(labelBuf), _("Toggle Visibility (CTRL-%s)"), data->hot_keyval);
   GtkWidget* toggle_vis_item = gtk_menu_item_new_with_label (labelBuf);
-  GtkWidget* thicker_lines_item = gtk_menu_item_new_with_label ("Thicker Lines");
-  GtkWidget* thinner_lines_item = gtk_menu_item_new_with_label ("Thinner Lines");
-  GtkWidget* opacity_bigger_item = gtk_menu_item_new_with_label ("Bigger Opacity");
-  GtkWidget* opacity_lesser_item = gtk_menu_item_new_with_label ("Lesser Opacity");
-  snprintf(labelBuf, sizeof(labelBuf), "Undo (%s)", data->undo_keyval);
+  GtkWidget* thicker_lines_item = gtk_menu_item_new_with_label (_("Thicker Lines"));
+  GtkWidget* thinner_lines_item = gtk_menu_item_new_with_label (_("Thinner Lines"));
+  GtkWidget* opacity_bigger_item = gtk_menu_item_new_with_label (_("Bigger Opacity"));
+  GtkWidget* opacity_lesser_item = gtk_menu_item_new_with_label (_("Lesser Opacity"));
+  snprintf(labelBuf, sizeof(labelBuf), _("Undo (%s)"), data->undo_keyval);
   GtkWidget* undo_item = gtk_menu_item_new_with_label (labelBuf);
-  snprintf(labelBuf, sizeof(labelBuf), "Redo (SHIFT-%s)", data->undo_keyval);
+  snprintf(labelBuf, sizeof(labelBuf), _("Redo (SHIFT-%s)"), data->undo_keyval);
   GtkWidget* redo_item = gtk_menu_item_new_with_label (labelBuf);
 
   GtkWidget* sep_item = gtk_separator_menu_item_new();
-  GtkWidget* intro_item = gtk_menu_item_new_with_mnemonic("_Introduction");
-  GtkWidget* support_item = gtk_menu_item_new_with_mnemonic("_Support Gromit-MPX");
-  GtkWidget* about_item = gtk_menu_item_new_with_mnemonic("_About");
-  snprintf(labelBuf, sizeof(labelBuf), "_Quit (ALT-%s)", data->hot_keyval);
+  GtkWidget* intro_item = gtk_menu_item_new_with_mnemonic(_("_Introduction"));
+  GtkWidget* support_item = gtk_menu_item_new_with_mnemonic(_("_Support Gromit-MPX"));
+  GtkWidget* about_item = gtk_menu_item_new_with_mnemonic(_("_About"));
+  snprintf(labelBuf, sizeof(labelBuf), _("_Quit (ALT-%s)"), data->hot_keyval);
   GtkWidget* quit_item = gtk_menu_item_new_with_mnemonic(labelBuf);
 
 
@@ -1081,9 +1080,9 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   GtkWidget *support_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu(GTK_MENU_ITEM(support_item), support_menu);
 
-  GtkWidget* support_liberapay_item = gtk_menu_item_new_with_label("Via LiberaPay");
-  GtkWidget* support_patreon_item = gtk_menu_item_new_with_label("Via Patreon");
-  GtkWidget* support_paypal_item = gtk_menu_item_new_with_label("Via PayPal");
+  GtkWidget* support_liberapay_item = gtk_menu_item_new_with_label(_("Via LiberaPay"));
+  GtkWidget* support_patreon_item = gtk_menu_item_new_with_label(_("Via Patreon"));
+  GtkWidget* support_paypal_item = gtk_menu_item_new_with_label(_("Via PayPal"));
 
   gtk_menu_shell_append (GTK_MENU_SHELL (support_menu), support_liberapay_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (support_menu), support_patreon_item);
