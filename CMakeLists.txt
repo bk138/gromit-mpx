@@ -68,6 +68,7 @@ target_link_libraries(${target_name}
 
 
 GETTEXT_PROCESS_PO_FILES(de ALL PO_FILES po/de.po)
+GETTEXT_PROCESS_PO_FILES(es ALL PO_FILES po/es.po)
 
 
 install(TARGETS ${target_name} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -79,6 +80,7 @@ install(FILES data/gromit-mpx.png data/gromit-mpx_active.png data/gromit-mpx.xpm
 install(FILES data/net.christianbeier.Gromit-MPX.svg data/gromit-mpx.svg data/gromit-mpx_active.svg DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
 install(FILES data/net.christianbeier.Gromit-MPX.appdata.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/de.gmo DESTINATION ${CMAKE_INSTALL_DATADIR}/locale/de/LC_MESSAGES/ RENAME ${LOCALE_DOMAIN}.mo)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/es.gmo DESTINATION ${CMAKE_INSTALL_DATADIR}/locale/es/LC_MESSAGES/ RENAME ${LOCALE_DOMAIN}.mo)
 
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
