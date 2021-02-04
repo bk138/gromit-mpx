@@ -1,0 +1,189 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Gromit-MPX package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Gromit-MPX\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-02-01 22:08+0100\n"
+"PO-Revision-Date: 2021-02-04 19:31+0100\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.1\n"
+"Last-Translator: Christian Beier <info@christianbeier.net>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: es\n"
+
+#: ../src/callbacks.c:647
+msgid "About Gromit-MPX"
+msgstr "Sobre Gromit-MPX"
+
+#: ../src/gromit-mpx.c:977
+msgid "Bigger Opacity"
+msgstr "Aumentar opacidad"
+
+#: ../src/gromit-mpx.c:971
+#, c-format
+msgid "Clear Screen (SHIFT-%s)"
+msgstr "Borrar pantalla (SHIFT-%s)"
+
+#: ../src/callbacks.c:713
+msgid ""
+"Do you want to show this introduction again on the next start of Gromit-"
+"MPX?\n"
+"You can always access it again via the sys tray menu.\n"
+msgstr ""
+"¿Quiere mostrar esta introducción de nuevo en el próximo inicio de Gromit-"
+"MPX?\n"
+"Siempre puede acceder de nuevo a través del menú de la bandeja del sistema.\n"
+
+#: ../src/callbacks.c:648
+msgid ""
+"Gromit-MPX (GRaphics Over MIscellaneous Things - Multi-Pointer-EXtension) is "
+"an on-screen annotation tool that works with any Unix desktop environment "
+"under X11 as well as Wayland."
+msgstr ""
+"Gromit-MPX (GRaphics Over MIscellaneous Things - Multi-Pointer-EXtension) es "
+"una herramienta de anotación en pantalla que funciona con cualquier entorno "
+"de escritorio Unix bajo X11 así como con Wayland."
+
+#: ../src/callbacks.c:673
+msgid ""
+"Gromit-MPX (GRaphics Over MIscellaneous Things) is a small tool to make\n"
+"annotations on the screen.\n"
+"\n"
+"Its main use is for making presentations of some application. Normally,\n"
+"you would have to move the mouse pointer around the point of interest\n"
+"until hopefully everybody noticed it.  With Gromit-MPX, you can draw\n"
+"everywhere onto the screen, highlighting some button or area.\n"
+"\n"
+"If you happen to enjoy using Gromit-MPX, please consider supporting\n"
+"its development by using one of the donation options on the project's\n"
+"website or directly via the support options available from the tray menu.\n"
+msgstr ""
+"Gromit-MPX (GRaphics Over MIscellaneous Things) es una pequeña\n"
+"herramienta para hacer anotaciones en la pantalla.\n"
+"\n"
+"Su uso principal es para realizar presentaciones de alguna aplicación.\n"
+"Normalmente, tendría que mover el puntero del mouse alrededor del\n"
+"punto de interés hasta que, con suerte, todos lo noten. Con Gromit-MPX,\n"
+"puede dibujar en cualquier lugar de la pantalla, resaltando algún botón\n"
+"o área.\n"
+"\n"
+"Si disfruta usando Gromit-MPX, considere apoyar su desarrollo usando\n"
+"una de las opciones de donación en el sitio web del proyecto o\n"
+"directamente a través de las opciones de soporte disponibles en el menú\n"
+"de la bandeja.\n"
+
+#: ../src/callbacks.c:707
+msgid "Gromit-MPX - How to use it"
+msgstr "Gromit-MPX - Cómo usarlo"
+
+#: ../src/callbacks.c:683
+msgid "Gromit-MPX - What is it?"
+msgstr "Gromit-MPX - ¿Qué es?"
+
+#: ../src/gromit-mpx.c:978
+msgid "Lesser Opacity"
+msgstr "Disminuir opacidad"
+
+#: ../src/gromit-mpx.c:981
+#, c-format
+msgid "Redo (SHIFT-%s)"
+msgstr "Rehacer (SHIFT-%s)"
+
+#: ../src/callbacks.c:715
+msgid "Show again on startup"
+msgstr "Mostrar de nuevo al inicio"
+
+#: ../src/gromit-mpx.c:975
+msgid "Thicker Lines"
+msgstr "Líneas más gruesas"
+
+#: ../src/gromit-mpx.c:976
+msgid "Thinner Lines"
+msgstr "Líneas más finas"
+
+#: ../src/gromit-mpx.c:969
+#, c-format
+msgid "Toggle Painting (%s)"
+msgstr "Activar/desactivar anotación (%s)"
+
+#: ../src/gromit-mpx.c:973
+#, c-format
+msgid "Toggle Visibility (CTRL-%s)"
+msgstr "Activar/desactivar visibilidad (CTRL-%s)"
+
+#: ../src/gromit-mpx.c:979
+#, c-format
+msgid "Undo (%s)"
+msgstr "Deshacer (%s)"
+
+#: ../src/gromit-mpx.c:1083
+msgid "Via LiberaPay"
+msgstr "A través de LiberaPay"
+
+#: ../src/gromit-mpx.c:1084
+msgid "Via Patreon"
+msgstr "A través de Patreon"
+
+#: ../src/gromit-mpx.c:1085
+msgid "Via PayPal"
+msgstr "A través de PayPal"
+
+#: ../src/callbacks.c:691
+#, c-format
+msgid ""
+"You can operate Gromit-MPX using its tray icon (if your desktop environment\n"
+"provides a sys tray), but since you typically want to use the program you "
+"are\n"
+"demonstrating and highlighting something is a short interruption of your\n"
+"workflow, Gromit-MPX can be toggled on and off on the fly via a hotkey:\n"
+"\n"
+"It grabs the `%s` and `%s` keys, so that no other application can use them\n"
+"and they are available to Gromit-MPX only.  The available commands are:\n"
+"\n"
+"<tt><b>   toggle painting:         %s\n"
+"   clear screen:            SHIFT-%s\n"
+"   toggle visibility:       CTRL-%s\n"
+"   quit:                    ALT-%s\n"
+"   undo last stroke:        %s\n"
+"   redo last undone stroke: SHIFT-%s</b></tt>"
+msgstr ""
+"Puede operar Gromit-MPX usando su ícono de bandeja (si su entorno de\n"
+"escritorio proporciona una bandeja del sistema), pero como típicamente\n"
+"quiere usar el programa que está demostrando y resaltar algo es una corta\n"
+"interrupción de su flujo de trabajo, Gromit-MPX puede ser activado y\n"
+"desactivado al vuelo vía una tecla de acceso rápido:\n"
+"\n"
+"Toma las claves `%s` y `%s`, de modo que ninguna otra aplicación pueda\n"
+"usarlas y solo están disponibles para Gromit-MPX. Los comandos\n"
+"disponibles son:\n"
+"\n"
+"<tt><b>    Activar/desactivar anotación:   %s\n"
+"    Borrar pantalla:                SHIFT-%s\n"
+"    Activar/desactivar visibilidad: CTRL-%s\n"
+"    Salir:                          ALT-%s\n"
+"    Deshacer:                       %s\n"
+"    Rehacer:                        SHIFT-%s </b></tt>"
+
+#: ../src/gromit-mpx.c:987
+msgid "_About"
+msgstr "S_obre"
+
+#: ../src/gromit-mpx.c:985
+msgid "_Introduction"
+msgstr "_Introducción"
+
+#: ../src/gromit-mpx.c:988
+#, c-format
+msgid "_Quit (ALT-%s)"
+msgstr "_Salir (ALT-%s)"
+
+#: ../src/gromit-mpx.c:986
+msgid "_Support Gromit-MPX"
+msgstr "_Apoyar a Gromit-MPX"
