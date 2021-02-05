@@ -58,7 +58,7 @@ static gchar* parse_name (GScanner *scanner)
     {
       g_scanner_unexp_token (scanner, G_TOKEN_STRING, NULL,
                              NULL, NULL, "aborting", TRUE);
-      exit (1);
+      return NULL;
     }
 
   len = strlen (scanner->value.v_string);
@@ -110,8 +110,9 @@ static gchar* parse_name (GScanner *scanner)
   return name;
 }
 
-void parse_config (GromitData *data)
+gboolean parse_config (GromitData *data)
 {
+  gboolean status = FALSE;
   GromitPaintContext *context=NULL;
   GromitPaintContext *context_template=NULL;
   GScanner *scanner;
@@ -146,9 +147,15 @@ void parse_config (GromitData *data)
 
   /* was the last possibility, no use to go on */
   if (file < 0) {
-      g_printerr("No usable config found, leaving tools unconfigured!\n");
       g_free(filename);
-      return;
+      GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(data->win),
+						 GTK_DIALOG_DESTROY_WITH_PARENT,
+						 GTK_MESSAGE_WARNING,
+						 GTK_BUTTONS_CLOSE,
+						 _("No usable config file found, falling back to default tools."));
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+      return FALSE;
   }
 
   scanner = g_scanner_new (NULL);
@@ -197,13 +204,17 @@ void parse_config (GromitData *data)
            */
 
           name = parse_name (scanner);
+
+	  if(!name)
+	      goto cleanup;
+
           token = g_scanner_cur_token(scanner);
 
           if (token != G_TOKEN_EQUAL_SIGN)
             {
               g_scanner_unexp_token (scanner, G_TOKEN_EQUAL_SIGN, NULL,
                                      NULL, NULL, "aborting", TRUE);
-              exit (1);
+              goto cleanup;
             }
 
           token = g_scanner_get_next_token (scanner);
@@ -224,6 +235,8 @@ void parse_config (GromitData *data)
           else if (token == G_TOKEN_STRING)
             {
               copy = parse_name (scanner);
+	      if(!copy)
+		  goto cleanup;
               token = g_scanner_cur_token(scanner);
               context_template = g_hash_table_lookup (data->tool_config, copy);
               if (context_template)
@@ -245,7 +258,7 @@ void parse_config (GromitData *data)
             {
               g_printerr ("Expected Tool-definition "
                           "or name of template tool\n");
-              exit (1);
+              goto cleanup;
             }
 
           /* Are there any tool-options?
@@ -267,13 +280,13 @@ void parse_config (GromitData *data)
                           if (token != G_TOKEN_EQUAL_SIGN)
                             {
                               g_printerr ("Missing \"=\"... aborting\n");
-                              exit (1);
+                              goto cleanup;
                             }
                           token = g_scanner_get_next_token (scanner);
                           if (token != G_TOKEN_FLOAT)
                             {
                               g_printerr ("Missing Size (float)... aborting\n");
-                              exit (1);
+                              goto cleanup;
                             }
                           width = (guint) (scanner->value.v_float + 0.5);
                         }
@@ -283,14 +296,14 @@ void parse_config (GromitData *data)
                           if (token != G_TOKEN_EQUAL_SIGN)
                             {
                               g_printerr ("Missing \"=\"... aborting\n");
-                              exit (1);
+                              goto cleanup;
                             }
                           token = g_scanner_get_next_token (scanner);
                           if (token != G_TOKEN_STRING)
                             {
                               g_printerr ("Missing Color (string)... "
                                           "aborting\n");
-                              exit (1);
+                              goto cleanup;
                             }
                           color = g_malloc (sizeof (GdkRGBA));
                           if (gdk_rgba_parse (color, scanner->value.v_string))
@@ -311,14 +324,14 @@ void parse_config (GromitData *data)
                           if (token != G_TOKEN_EQUAL_SIGN)
                             {
                               g_printerr ("Missing \"=\"... aborting\n");
-                              exit (1);
+                              goto cleanup;
                             }
                           token = g_scanner_get_next_token (scanner);
                           if (token != G_TOKEN_FLOAT)
                             {
                               g_printerr ("Missing Arrowsize (float)... "
                                           "aborting\n");
-                              exit (1);
+                              goto cleanup;
                             }
                           arrowsize = scanner->value.v_float;
                         }
@@ -328,14 +341,14 @@ void parse_config (GromitData *data)
                           if (token != G_TOKEN_EQUAL_SIGN)
                             {
                               g_printerr ("Missing \"=\"... aborting\n");
-                              exit (1);
+                              goto cleanup;
                             }
                           token = g_scanner_get_next_token (scanner);
                           if (token != G_TOKEN_FLOAT)
                             {
                               g_printerr ("Missing Minsize (float)... "
                                           "aborting\n");
-                              exit (1);
+                              goto cleanup;
                             }
                           minwidth = scanner->value.v_float;
                         }
@@ -345,14 +358,14 @@ void parse_config (GromitData *data)
                           if (token != G_TOKEN_EQUAL_SIGN)
                             {
                               g_printerr ("Missing \"=\"... aborting\n");
-                              exit (1);
+                              goto cleanup;
                             }
                           token = g_scanner_get_next_token (scanner);
                           if (token != G_TOKEN_FLOAT)
                             {
                               g_printerr ("Missing Maxsize (float)... "
                                           "aborting\n");
-                              exit (1);
+                              goto cleanup;
                             }
                           maxwidth = scanner->value.v_float;
                         }
@@ -378,7 +391,7 @@ void parse_config (GromitData *data)
           if (token != ';')
             {
               g_printerr ("Expected \";\"\n");
-              exit (1);
+              goto cleanup;
             }
 
           context = paint_context_new (data, type, fg_color, width, arrowsize, minwidth, maxwidth);
@@ -399,7 +412,7 @@ void parse_config (GromitData *data)
             {
               g_scanner_unexp_token (scanner, G_TOKEN_EQUAL_SIGN, NULL,
                                      NULL, NULL, "aborting", TRUE);
-              exit (1);
+              goto cleanup;
             }
 
           token = g_scanner_get_next_token (scanner);
@@ -408,7 +421,7 @@ void parse_config (GromitData *data)
             {
               g_scanner_unexp_token (scanner, G_TOKEN_STRING, NULL,
                                      NULL, NULL, "aborting", TRUE);
-              exit (1);
+              goto cleanup;
             }
 
           if (key_type == HOTKEY_SYMBOL_VALUE)
@@ -425,20 +438,47 @@ void parse_config (GromitData *data)
           if (token != ';')
             {
               g_printerr ("Expected \";\"\n");
-              exit (1);
+              goto cleanup;
             }
         }
       else
         {
           g_printerr ("Expected name of Tool to define or Hot key definition\n");
-          exit(1);
+          goto cleanup;
         }
 
       token = g_scanner_get_next_token (scanner);
     }
+
+  status = TRUE;
+
+ cleanup:
+
+  if (!status) {
+      /* purge incomplete tool config */
+      GHashTableIter it;
+      gpointer value;
+      g_hash_table_iter_init (&it, data->tool_config);
+      while (g_hash_table_iter_next (&it, NULL, &value))
+	  paint_context_free(value);
+      g_hash_table_remove_all(data->tool_config);
+
+      /* alert user */
+      GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(data->win),
+						 GTK_DIALOG_DESTROY_WITH_PARENT,
+						 GTK_MESSAGE_WARNING,
+						 GTK_BUTTONS_CLOSE,
+						 _("Failed parsing config file %s, falling back to default tools."),
+						 filename);
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+  }
+
   g_scanner_destroy (scanner);
   close (file);
   g_free (filename);
+
+  return status;
 }
 
 
