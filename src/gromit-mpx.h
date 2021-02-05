@@ -76,13 +76,6 @@ typedef struct
 
 typedef struct
 {
-  gint x;
-  gint y;
-  gint width;
-} GromitStrokeCoordinate;
-
-typedef struct
-{
   gdouble      lastx;
   gdouble      lasty;
   guint32      motion_time;
@@ -164,18 +157,7 @@ void snap_undo_state (GromitData *data);
 void undo_drawing (GromitData *data);
 void redo_drawing (GromitData *data);
 
-void draw_line (GromitData *data, GdkDevice *dev, gint x1, gint y1, gint x2, gint y2);
-void draw_arrow (GromitData *data, GdkDevice *dev, gint x1, gint y1, gint width, gfloat direction);
 void clear_screen (GromitData *data);
-
-gboolean coord_list_get_arrow_param (GromitData *data,
-					    GdkDevice  *dev,
-					    gint        search_radius,
-					    gint       *ret_width,
-					    gfloat     *ret_direction);
-void coord_list_prepend (GromitData *data, GdkDevice* dev, gint x, gint y, gint width);
-void coord_list_free (GromitData *data, GdkDevice* dev);
-
 
 GromitPaintContext *paint_context_new (GromitData *data, GromitPaintType type,
 				       GdkRGBA *fg_color, guint width, guint arrowsize,

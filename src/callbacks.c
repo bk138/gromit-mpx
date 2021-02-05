@@ -28,6 +28,7 @@
 #include "input.h"
 #include "callbacks.h"
 #include "config.h"
+#include "drawing.h"
 #include "build-config.h"
 
 

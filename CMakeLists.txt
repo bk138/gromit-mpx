@@ -48,6 +48,8 @@ set(sources
     src/callbacks.h
     src/config.c
     src/config.h
+    src/drawing.c
+    src/drawing.h
     src/gromit-mpx.c
     src/gromit-mpx.h
     src/input.c
