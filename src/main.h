@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef GROMIT_MPX_H
-#define GROMIT_MPX_H
+#ifndef GROMIT_MPX_MAIN_H
+#define GROMIT_MPX_MAIN_H
 
 
 #include <glib.h>

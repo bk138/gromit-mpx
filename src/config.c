@@ -29,7 +29,7 @@
 #include <errno.h>
 
 #include "config.h"
-#include "gromit-mpx.h"
+#include "main.h"
 #include "build-config.h"
 
 #define KEY_DFLT_SHOW_INTRO_ON_STARTUP TRUE

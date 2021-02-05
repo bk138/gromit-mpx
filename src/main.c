@@ -27,7 +27,7 @@
 #include "callbacks.h"
 #include "config.h"
 #include "input.h"
-#include "gromit-mpx.h"
+#include "main.h"
 #include "build-config.h"
 
 #include "paint_cursor.xpm"

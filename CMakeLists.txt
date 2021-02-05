@@ -50,8 +50,8 @@ set(sources
     src/config.h
     src/drawing.c
     src/drawing.h
-    src/gromit-mpx.c
-    src/gromit-mpx.h
+    src/main.c
+    src/main.h
     src/input.c
     src/input.h
     src/paint_cursor.xpm

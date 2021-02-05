@@ -6,7 +6,7 @@
   Does not include functions that treat a surface like a buffer, like undo/redo etc.
 */
 
-#include "gromit-mpx.h"
+#include "main.h"
 
 void draw_line (GromitData *data, GdkDevice *dev, gint x1, gint y1, gint x2, gint y2);
 void draw_arrow (GromitData *data, GdkDevice *dev, gint x1, gint y1, gint width, gfloat direction);

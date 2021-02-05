@@ -3,7 +3,7 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include "gromit-mpx.h"
+#include "main.h"
 
 void setup_input_devices (GromitData *data);
 void shutdown_input_devices (GromitData *data);

@@ -24,7 +24,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "gromit-mpx.h"
+#include "main.h"
 
 /* fallback device name for config file */
 #define DEFAULT_DEVICE_NAME "default"
