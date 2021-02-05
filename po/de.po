@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gromit-MPX\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-01 22:08+0100\n"
-"PO-Revision-Date: 2021-02-01 22:57+0100\n"
+"POT-Creation-Date: 2021-02-05 11:36+0100\n"
+"PO-Revision-Date: 2021-02-05 11:39+0100\n"
+"Last-Translator: Christian Beier <info@christianbeier.net>\n"
 "Language-Team: \n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.1\n"
-"Last-Translator: Christian Beier <info@christianbeier.net>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: de\n"
 
 #: ../src/callbacks.c:647
 msgid "About Gromit-MPX"
@@ -40,6 +40,13 @@ msgstr ""
 "Möchten Sie diese Einleitung beim nächsten Start von Gromit-MPX wieder "
 "anzeigen?\n"
 "Sie können sie jederzeit wieder über das Tray-Menü aufrufen.\n"
+
+#: ../src/config.c:471
+#, c-format
+msgid "Failed parsing config file %s, falling back to default tools."
+msgstr ""
+"Das Parsen der Konfigurationsdatei %s ist fehlgeschlagen, es wird auf die "
+"Standardwerkzeuge zurückgegriffen."
 
 #: ../src/callbacks.c:648
 msgid ""
@@ -95,6 +102,11 @@ msgstr "Gromit-MPX - Was ist es?"
 #: ../src/gromit-mpx.c:978
 msgid "Lesser Opacity"
 msgstr "Geringere Deckkraft"
+
+#: ../src/config.c:155
+msgid "No usable config file found, falling back to default tools."
+msgstr ""
+"Keine brauchbare Konfigurationsdatei gefunden, Rückgriff auf Standard-Tools."
 
 #: ../src/gromit-mpx.c:981
 #, c-format
