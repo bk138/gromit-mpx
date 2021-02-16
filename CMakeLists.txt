@@ -18,15 +18,19 @@ endif(CMAKE_GENERATOR MATCHES "Unix Makefiles|Ninja")
 
 set(CMAKE_C_FLAGS  " ${CMAKE_C_FLAGS} -Wall -Wextra -Wno-unused-parameter")
 
-configure_file(build-config.h_cmake_in build-config.h)
-
 find_package(PkgConfig)
 find_package(Gettext)
 
 pkg_check_modules(gtk3 REQUIRED "gtk+-3.0 >= 3.22")
-pkg_check_modules(appindicator3 REQUIRED "appindicator3-0.1 >= 0.4.92")
 pkg_check_modules(xinput REQUIRED "xi >= 1.3")
 pkg_check_modules(x11 REQUIRED x11)
+pkg_check_modules(appindicator3 "ayatana-appindicator3-0.1 >= 0.5")
+if(NOT appindicator3_FOUND)
+  pkg_check_modules(appindicator3 REQUIRED "appindicator3-0.1 >= 0.4.92")
+  set(APPINDICATOR_IS_LEGACY 1)
+endif()
+
+configure_file(build-config.h_cmake_in build-config.h)
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}

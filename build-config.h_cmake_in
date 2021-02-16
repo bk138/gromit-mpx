@@ -18,4 +18,7 @@
 
 #define SYSCONFDIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}"
 
+/* This is defined when libappindicator is not libayatana-libappindicator. */
+#cmakedefine APPINDICATOR_IS_LEGACY 1
+
 #endif /* BUILD_CONFIG_H */
