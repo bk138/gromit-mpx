@@ -23,12 +23,16 @@
 #ifndef GROMIT_MPX_H
 #define GROMIT_MPX_H
 
+#include "build-config.h"
 
 #include <glib.h>
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
+#ifdef APPINDICATOR_IS_LEGACY
 #include <libappindicator/app-indicator.h>
-
+#else
+#include <libayatana-appindicator/app-indicator.h>
+#endif
 
 #define GROMIT_MOUSE_EVENTS ( GDK_BUTTON_MOTION_MASK | \
                               GDK_BUTTON_PRESS_MASK | \
