@@ -644,7 +644,7 @@ void on_about(GtkMenuItem *menuitem,
                                  NULL };
     gtk_show_about_dialog (NULL,
 			   "program-name", "Gromit-MPX",
-			   "logo-icon-name", "gromit-mpx",
+			   "logo-icon-name", "net.christianbeier.Gromit-MPX",
 			   "title", _("About Gromit-MPX"),
 			   "comments", _("Gromit-MPX (GRaphics Over MIscellaneous Things - Multi-Pointer-EXtension) is an on-screen annotation tool that works with any Unix desktop environment under X11 as well as Wayland."),
 			   "version", PACKAGE_VERSION,
