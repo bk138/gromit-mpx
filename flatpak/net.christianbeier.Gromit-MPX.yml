@@ -5,6 +5,8 @@ sdk: org.gnome.Sdk
 command: gromit-mpx
 finish-args:
   - --socket=x11
+  # needed to show appindicator in Ubuntu
+  - --talk-name=org.kde.StatusNotifierWatcher
   # this is the dconf hole for setting hotkeys under Wayland
   - --filesystem=xdg-run/dconf
   - --filesystem=~/.config/dconf:ro
