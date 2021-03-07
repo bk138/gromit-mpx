@@ -82,7 +82,7 @@ install(FILES data/net.christianbeier.Gromit-MPX.desktop DESTINATION ${CMAKE_INS
 install(FILES data/gromit-mpx.cfg DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/gromit-mpx)
 install(FILES README.md AUTHORS ChangeLog NEWS.md DESTINATION ${CMAKE_INSTALL_DOCDIR})
 install(FILES gromit-mpx.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
-install(FILES data/gromit-mpx.png data/gromit-mpx_active.png data/gromit-mpx.xpm DESTINATION ${CMAKE_INSTALL_DATADIR}/pixmaps)
+install(FILES data/gromit-mpx.png data/gromit-mpx_active.png DESTINATION ${CMAKE_INSTALL_DATADIR}/pixmaps)
 install(FILES data/net.christianbeier.Gromit-MPX.svg data/gromit-mpx.svg data/gromit-mpx_active.svg DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
 install(FILES data/net.christianbeier.Gromit-MPX.appdata.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/de.gmo DESTINATION ${CMAKE_INSTALL_DATADIR}/locale/de/LC_MESSAGES/ RENAME ${LOCALE_DOMAIN}.mo)
