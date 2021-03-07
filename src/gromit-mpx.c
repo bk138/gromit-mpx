@@ -945,7 +945,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
      TRAY ICON
   */
   data->trayicon = app_indicator_new (PACKAGE_NAME,
-				      PACKAGE_NAME,
+				      "net.christianbeier.Gromit-MPX",
 				      APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
 
   app_indicator_set_status (data->trayicon, APP_INDICATOR_STATUS_ACTIVE);
@@ -1393,7 +1393,7 @@ int main (int argc, char **argv)
 void indicate_active(GromitData *data, gboolean YESNO)
 {
     if(YESNO)
-	app_indicator_set_icon(data->trayicon, "gromit-mpx_active");
+	app_indicator_set_icon(data->trayicon, "net.christianbeier.Gromit-MPX.active");
     else
-	app_indicator_set_icon(data->trayicon, PACKAGE_NAME);
+	app_indicator_set_icon(data->trayicon, "net.christianbeier.Gromit-MPX");
 }
