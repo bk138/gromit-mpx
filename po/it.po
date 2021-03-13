@@ -54,7 +54,7 @@ msgid ""
 "an on-screen annotation tool that works with any Unix desktop environment "
 "under X11 as well as Wayland."
 msgstr ""
-""Gromit-MPX (GRaphics Over MIscellaneous Things - Multi-Pointer-EXtension) è "
+"Gromit-MPX (GRaphics Over MIscellaneous Things - Multi-Pointer-EXtension) è "
 "uno strumento di annotazione su schermo che funziona con qualsiasi ambiente desktop Unix "
 "sotto X11 così come Wayland."
 
