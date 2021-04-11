@@ -16,7 +16,7 @@ Normally, you would have to move the mouse pointer around the point of
 interest until hopefully everybody noticed it.  With Gromit-MPX, you
 can draw everywhere onto the screen, highlighting some button or area.
 
-[<img src="https://github.com/bk138/gromit-mpx/blob/master/data/on-gnome-wayland.png" width="75%" />]
+<img src="https://github.com/bk138/gromit-mpx/blob/master/data/on-gnome-wayland.png" width="75%" />
 
 Key features include:
 
