@@ -128,10 +128,11 @@ MPX setup.
 ### Configuration
 
 Gromit-MPX is configurable via the file `gromit-mpx.cfg` in the
-directory defined by `$XDG_CONFIG_HOME` (usually `~/.config`).  Here
-you can specify which Device/Button/Modifier combination invokes which
-tool.  See the copy of `gromit-mpx.cfg` distributed with this program
-for an example.  An overview on the syntax:
+directory defined by `$XDG_CONFIG_HOME` (usually `~/.config` or
+`~/.var/app/net.christianbeier.Gromit-MPX/config/` if you installed
+the Flatpak). Here you can specify which Device/Button/Modifier
+combination invokes which tool. See the copy of `gromit-mpx.cfg`
+distributed with this program for an example. An overview on the syntax:
 
     # Comments can be either # Shell-Style or
     /* C-Style. */
