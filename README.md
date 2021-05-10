@@ -223,8 +223,10 @@ Type=Application
 Exec=gromit-mpx
 ```
 
-You can freely add command line arguments to the 'Exec' stanza, configuring
-the autostarted instance to your needs.
+If you have the Flatpak installed, the last line needs to start with
+`Exec=flatpak run net.christianbeier.Gromit-MPX`. You can freely add
+command line arguments to the 'Exec' stanza, configuring the autostarted
+instance to your needs.
 
 ## Building it
 
