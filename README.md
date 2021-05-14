@@ -154,6 +154,15 @@ like this:
 
 	"red Marker" = "red Pen" (minsize=14);
 
+You can set a maximum size as well:
+
+	"red Marker" = "red Pen" (maxsize=20);
+
+Both `minsize` and `maxsize` can be combined to define a tool that's
+not allowed to change size:
+
+	"red fixed Marker" = "red Pen" (minsize=10 maxsize=10);
+
 You can also draw lines that end in an arrow head. For this you
 have to specify `arrowsize`. This is a factor relative to the width
 of the line. For reasonable arrowheads start with 1.
