@@ -21,7 +21,7 @@ can draw everywhere onto the screen, highlighting some button or area.
 Key features include:
 
   * **Desktop-independent**. Gromit-MPX works with GNOME, KDE, XFCE, ...
-	under X11 as well as with a Wayland session.
+	under X11 as well as with a Wayland session using XWayland.
   * **Hotkey-based**. The fundamental philosophy is that Gromit-MPX does not
     get into your way of doing things by sticking some UI widget on your
 	desktop, potentially obscuring more important contents. It *does*
@@ -263,6 +263,10 @@ thin lines. It makes heavy use of the shape extension, which is
 quite expensive if you paint a complex pattern on screen. Especially
 terminal-programs tend to scroll incredibly slow if something is
 painted over their window.
+
+If Gromit-MPX under Wayland complains about "cannot open display", make
+sure you have XWayland runnning or its autostart configured. Gromit-MPX
+needs XWayland when running in a Wayland session.
 
 ## Similar Tools
 
