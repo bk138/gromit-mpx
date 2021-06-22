@@ -12,6 +12,7 @@ finish-args:
   - --filesystem=~/.config/dconf:ro
   - --talk-name=ca.desrt.dconf
   - --env=DCONF_USER_CONFIG_DIR=.config/dconf
+  - --env=GIO_EXTRA_MODULES=/app/lib/gio/modules/
 modules:
   - shared-modules/libappindicator/libappindicator-gtk3-12.10.json
   # ship media-keys schema for settings hotkeys under Wayland
@@ -25,6 +26,22 @@ modules:
       - type: archive
         url: https://github.com/GNOME/gnome-settings-daemon/archive/GNOME_SETTINGS_DAEMON_3_38_1.tar.gz
         sha256: 736a961ccdb314b9a157e29710743563dc67652ebc3ca69c0f37df2776863523
+  - name: dconf
+    buildsystem: meson
+    config-opts:
+      - -Dbash_completion=false
+      - -Dman=false
+    cleanup:
+      - /include
+      - /lib/pkgconfig
+      - /libexec
+      - /share/dbus-1
+    sources:
+      - type: archive
+        url: https://download.gnome.org/sources/dconf/0.38/dconf-0.38.0.tar.xz
+        sha256: 45f60f41330d27715cce1315af123f94f1c2cdedb68b6bed3b309866eec44f58
+      - type: patch
+        path: dconf-override.patch
   - name: gromit-mpx
     buildsystem: cmake
     sources:
