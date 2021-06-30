@@ -73,6 +73,9 @@ You can specify the opacity simply via:
 
     gromit-mpx -o <opacity>
 
+As opacity is not a tool but a canvas property, it is not configured via
+`gromit-mpx.cfg` but remembered over restarts.
+
 Alternatively you can invoke Gromit-MPX with various arguments to
 control an already running Gromit-MPX .
 
