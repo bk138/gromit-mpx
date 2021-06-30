@@ -71,7 +71,7 @@ grabbing a key.
 
 You can specify the opacity simply via:
 
-    gromit-mpx -o <opacity>
+    gromit-mpx -o <opacity as real value in [0,1]>
 
 As opacity is not a tool but a canvas property, it is not configured via
 `gromit-mpx.cfg` but remembered over restarts.
