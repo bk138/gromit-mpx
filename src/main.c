@@ -216,6 +216,12 @@ gint reshape (gpointer user_data)
 	  gtk_widget_input_shape_combine_region(data->win, r);
 	  cairo_region_destroy(r);
 
+	  /*
+	    this is not needed when there is user input, i.e. when drawing,
+	    but needed when uing the undo functionality.
+	  */
+	  gtk_widget_queue_draw(data->win);
+
           data->modified = 0;
           data->delayed = 0;
         }
@@ -437,6 +443,8 @@ void undo_drawing (GromitData *data)
   GdkRectangle rect = {0, 0, data->width, data->height};
   gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
 
+  data->modified = 1;
+
   if(data->debug)
     g_printerr ("DEBUG: Undo drawing %d.\n", data->undo_head);
 }
@@ -458,6 +466,8 @@ void redo_drawing (GromitData *data)
   
   GdkRectangle rect = {0, 0, data->width, data->height};
   gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
+
+  data->modified = 1;
 
   if(data->debug)
     g_printerr("DEBUG: Redo drawing.\n");
