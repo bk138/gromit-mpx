@@ -257,7 +257,11 @@ from the root of the source tree.
 XFCE per default grabs Ctrl-F1 to Ctrl-F12 (switch to workspace 1-12)
 and Alt-F9 (minimize window) which renders Gromit-MPX's default hotkey
 mapping unusable. Gromit-MPX detects XFCE and changes the default hotkeys
-to Home and End. Those can can still be overridden by the user.
+to Home and End. Those can can still be overridden by the user. In case
+you're using XFCE 4.14 or newer, chances are that all 'special' keys are
+grabbed by XFCE itself, which means you'll have to modify XFCE's keybindings
+(Settings->Window Manager->Keyboard) manually in order to 'make room' for
+Gromit-MPX's ones.
 
 When there is no [compositing manager](https://en.wikipedia.org/wiki/Compositing_window_manager)
 such as Mutter or KWin running, Gromit-MPX falls back to a legacy drawing mode. This may
