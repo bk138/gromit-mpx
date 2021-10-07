@@ -1,4 +1,4 @@
-/* 
+/*
  * Gromit-MPX -- a program for painting on the screen
  *
  * Gromit Copyright (C) 2000 Simon Budig <Simon.Budig@unix-ag.org>
@@ -35,11 +35,12 @@
 
 
 
-GromitPaintContext *paint_context_new (GromitData *data, 
+GromitPaintContext *paint_context_new (GromitData *data,
 				       GromitPaintType type,
-				       GdkRGBA *paint_color, 
+				       GdkRGBA *paint_color,
 				       guint width,
 				       guint arrowsize,
+               GromitArrowPosition arrowposition,
 				       guint minwidth,
 				       guint maxwidth)
 {
@@ -50,11 +51,12 @@ GromitPaintContext *paint_context_new (GromitData *data,
   context->type = type;
   context->width = width;
   context->arrowsize = arrowsize;
+  context->arrowposition = arrowposition;
   context->minwidth = minwidth;
   context->maxwidth = maxwidth;
   context->paint_color = paint_color;
 
-  
+
   context->paint_ctx = cairo_create (data->backbuffer);
 
   gdk_cairo_set_source_rgba(context->paint_ctx, paint_color);
@@ -63,7 +65,7 @@ GromitPaintContext *paint_context_new (GromitData *data,
   cairo_set_line_width(context->paint_ctx, width);
   cairo_set_line_cap(context->paint_ctx, CAIRO_LINE_CAP_ROUND);
   cairo_set_line_join(context->paint_ctx, CAIRO_LINE_JOIN_ROUND);
-  
+
   if (type == GROMIT_ERASER)
     cairo_set_operator(context->paint_ctx, CAIRO_OPERATOR_CLEAR);
   else
@@ -76,7 +78,7 @@ GromitPaintContext *paint_context_new (GromitData *data,
 }
 
 
-void paint_context_print (gchar *name, 
+void paint_context_print (gchar *name,
 			  GromitPaintContext *context)
 {
   g_printerr ("Tool name: \"%-20s\": ", name);
@@ -96,6 +98,7 @@ void paint_context_print (gchar *name,
   g_printerr ("minwidth: %u, ", context->minwidth);
   g_printerr ("maxwidth: %u, ", context->maxwidth);
   g_printerr ("arrowsize: %.2f, ", context->arrowsize);
+  g_printerr ("arrowposition: %u, ", context->arrowposition);
   g_printerr ("color: %s\n", gdk_rgba_to_string(context->paint_color));
 }
 
@@ -114,9 +117,9 @@ void hide_window (GromitData *data)
       /* save grab state of each device */
       GHashTableIter it;
       gpointer value;
-      GromitDeviceData* devdata; 
+      GromitDeviceData* devdata;
       g_hash_table_iter_init (&it, data->devdatatable);
-      while (g_hash_table_iter_next (&it, NULL, &value)) 
+      while (g_hash_table_iter_next (&it, NULL, &value))
         {
           devdata = value;
           devdata->was_grabbed = devdata->is_grabbed;
@@ -124,7 +127,7 @@ void hide_window (GromitData *data)
       data->hidden = 1;
       release_grab (data, NULL); /* release all */
       gtk_widget_hide (data->win);
-      
+
       if(data->debug)
         g_printerr ("DEBUG: Hiding window.\n");
     }
@@ -141,9 +144,9 @@ void show_window (GromitData *data)
       /* restore grab state of each device */
       GHashTableIter it;
       gpointer value;
-      GromitDeviceData* devdata; 
+      GromitDeviceData* devdata;
       g_hash_table_iter_init (&it, data->devdatatable);
-      while (g_hash_table_iter_next (&it, NULL, &value)) 
+      while (g_hash_table_iter_next (&it, NULL, &value))
         {
           devdata = value;
           if(devdata->was_grabbed)
@@ -176,8 +179,8 @@ void clear_screen (GromitData *data)
   cairo_destroy(cr);
 
   GdkRectangle rect = {0, 0, data->width, data->height};
-  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
-  
+  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
+
   if(!data->composited)
     {
       cairo_region_t* r = gdk_cairo_region_create_from_surface(data->backbuffer);
@@ -230,8 +233,8 @@ gint reshape (gpointer user_data)
 }
 
 
-void select_tool (GromitData *data, 
-		  GdkDevice *device, 
+void select_tool (GromitData *data,
+		  GdkDevice *device,
 		  GdkDevice *slave_device,
 		  guint state)
 {
@@ -245,7 +248,7 @@ void select_tool (GromitData *data,
 
   /* get the data for this device */
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, device);
- 
+
   if (device)
     {
       slave_len = strlen (gdk_device_get_name(slave_device));
@@ -254,8 +257,8 @@ void select_tool (GromitData *data,
       name = (guchar*) g_strndup (gdk_device_get_name(device), len + 3);
       default_len = strlen(DEFAULT_DEVICE_NAME);
       default_name = (guchar*) g_strndup (DEFAULT_DEVICE_NAME, default_len + 3);
-      
-      
+
+
       /* Extract Button/Modifiers from state (see GdkModifierType) */
       req_buttons = (state >> 8) & 31;
 
@@ -329,7 +332,7 @@ void select_tool (GromitData *data,
                     devdata->cur_context = context;
                     success = 1;
                   }
-                
+
             }
           while (j<=3 && req_modifier >= (1u << j));
         }
@@ -354,7 +357,7 @@ void select_tool (GromitData *data,
 
   GdkCursor *cursor;
   if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
-    cursor = data->erase_cursor; 
+    cursor = data->erase_cursor;
   else
     cursor = data->paint_cursor;
 
@@ -441,7 +444,7 @@ void undo_drawing (GromitData *data)
   swap_surfaces(data->backbuffer, data->undobuffer[data->undo_head]);
 
   GdkRectangle rect = {0, 0, data->width, data->height};
-  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
+  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
 
   data->modified = 1;
 
@@ -463,9 +466,9 @@ void redo_drawing (GromitData *data)
   data->undo_head++;
   if(data->undo_head >= GROMIT_MAX_UNDO)
     data->undo_head -= GROMIT_MAX_UNDO;
-  
+
   GdkRectangle rect = {0, 0, data->width, data->height};
-  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
+  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
 
   data->modified = 1;
 
@@ -555,7 +558,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   gdk_rgba_parse(data->red, "#FF0000");
 
 
-  /* 
+  /*
      CURSORS
   */
   GdkPixbuf* paint_cursor_pixbuf = gdk_pixbuf_new_from_xpm_data(paint_cursor_xpm);
@@ -579,7 +582,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   /* SHAPE SURFACE*/
   cairo_surface_destroy(data->backbuffer);
   data->backbuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
-  
+
   /*
     UNDO STATE
   */
@@ -592,7 +595,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
       cairo_surface_destroy(data->undobuffer[i]);
       data->undobuffer[i] = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
     }
-  
+
 
 
   /* EVENTS */
@@ -613,15 +616,15 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
                     G_CALLBACK (on_device_removed), data);
   g_signal_connect (data->win, "motion_notify_event",
 		    G_CALLBACK (on_motion), data);
-  g_signal_connect (data->win, "button_press_event", 
+  g_signal_connect (data->win, "button_press_event",
 		    G_CALLBACK (on_buttonpress), data);
   g_signal_connect (data->win, "button_release_event",
 		    G_CALLBACK (on_buttonrelease), data);
   /* disconnect previously defined selection handlers */
-  g_signal_handlers_disconnect_by_func (data->win, 
+  g_signal_handlers_disconnect_by_func (data->win,
 					G_CALLBACK (on_clientapp_selection_get),
 					data);
-  g_signal_handlers_disconnect_by_func (data->win, 
+  g_signal_handlers_disconnect_by_func (data->win,
 					G_CALLBACK (on_clientapp_selection_received),
 					data);
   /* and re-connect them to mainapp functions */
@@ -637,7 +640,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
       gtk_widget_shape_combine_region(data->win, r);
       cairo_region_destroy(r);
     }
-  
+
 
   /* reset settings from client setup */
   gtk_selection_remove_all (data->win);
@@ -655,7 +658,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   gtk_selection_add_target (data->win, GA_CONTROL, GA_REDO, 9);
 
 
- 
+
 
   /*
    * Parse Config file
@@ -677,8 +680,8 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   // might have been in key file
   gtk_widget_set_opacity(data->win, data->opacity);
 
-  /* 
-     FIND HOTKEY KEYCODE 
+  /*
+     FIND HOTKEY KEYCODE
   */
   if (data->hot_keyval)
     {
@@ -706,7 +709,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
     }
 
   /*
-     FIND UNDOKEY KEYCODE 
+     FIND UNDOKEY KEYCODE
   */
   if (data->undo_keyval)
     {
@@ -734,7 +737,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
     }
 
 
-  /* 
+  /*
      INPUT DEVICES
   */
   data->devdatatable = g_hash_table_new(NULL, NULL);
@@ -748,15 +751,15 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   hide_window (data);
 
   data->timeout_id = g_timeout_add (20, reshape, data);
- 
+
   data->modified = 0;
 
   data->default_pen = paint_context_new (data, GROMIT_PEN,
-					 data->red, 7, 0, 1, G_MAXUINT);
+					 data->red, 7, 0, GROMIT_ARROW_AT_NONE, 1, G_MAXUINT);
   data->default_eraser = paint_context_new (data, GROMIT_ERASER,
-					    data->red, 75, 0, 1, G_MAXUINT);
+					    data->red, 75, 0, GROMIT_ARROW_AT_NONE, 1, G_MAXUINT);
 
-  
+
 
   gdk_event_handler_set ((GdkEventFunc) main_do_event, data, NULL);
   gtk_key_snooper_install (snoop_key_press, data);
@@ -764,7 +767,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   if (activate)
     acquire_grab (data, NULL); /* grab all */
 
-  /* 
+  /*
      TRAY ICON
   */
   data->trayicon = app_indicator_new (PACKAGE_NAME,
@@ -1026,7 +1029,7 @@ int main (int argc, char **argv)
   gtk_init (&argc, &argv);
   data = g_malloc0(sizeof (GromitData));
 
-  /* 
+  /*
      init basic stuff
   */
   data->display = gdk_display_get_default ();
@@ -1045,7 +1048,7 @@ int main (int argc, char **argv)
   // this trys to set an alpha channel
   on_screen_changed(data->win, NULL, data);
 
-  gtk_window_fullscreen(GTK_WINDOW(data->win)); 
+  gtk_window_fullscreen(GTK_WINDOW(data->win));
   gtk_window_set_skip_taskbar_hint(GTK_WINDOW(data->win), TRUE);
   gtk_widget_set_opacity(data->win, data->opacity);
   gtk_widget_set_app_paintable (data->win, TRUE);
@@ -1058,11 +1061,11 @@ int main (int argc, char **argv)
   g_signal_connect (data->win, "delete-event", gtk_main_quit, NULL);
   g_signal_connect (data->win, "destroy", gtk_main_quit, NULL);
   /* the selection event handlers will be overwritten if we become a mainapp */
-  g_signal_connect (data->win, "selection_received", 
+  g_signal_connect (data->win, "selection_received",
 		    G_CALLBACK (on_clientapp_selection_received), data);
   g_signal_connect (data->win, "selection_get",
 		    G_CALLBACK (on_clientapp_selection_get), data);
-  
+
   gtk_widget_realize (data->win);
 
   // try to set transparent for input

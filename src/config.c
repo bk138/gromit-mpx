@@ -1,4 +1,4 @@
-/* 
+/*
  * Gromit-MPX -- a program for painting on the screen
  *
  * Gromit Copyright (C) 2000 Simon Budig <Simon.Budig@unix-ag.org>
@@ -110,6 +110,30 @@ static gchar* parse_name (GScanner *scanner)
   return name;
 }
 
+static GromitArrowPosition parse_arrowposition (gchar *arroposition_str)
+{
+  GTokenType token;
+  gchar *name;
+  guint len = 0;
+
+  len = strlen (arroposition_str);
+  name = g_strndup (arroposition_str, len);
+
+  if (strcasecmp(arroposition_str, "none") == 0)
+    return GROMIT_ARROW_AT_NONE;
+
+  if (strcasecmp(arroposition_str, "start") == 0)
+    return GROMIT_ARROW_AT_START;
+
+  if (strcasecmp(arroposition_str, "end") == 0)
+    return GROMIT_ARROW_AT_END;
+
+  if (strcasecmp(arroposition_str, "both") == 0)
+    return GROMIT_ARROW_AT_BOTH;
+
+  return GROMIT_ARROW_AT_END;
+}
+
 gboolean parse_config (GromitData *data)
 {
   gboolean status = FALSE;
@@ -120,11 +144,12 @@ gboolean parse_config (GromitData *data)
   gchar *filename;
   int file;
 
-  gchar *name, *copy;
+  gchar *name, *copy, *arrowposition_str;
 
   GromitPaintType type;
   GdkRGBA *fg_color=NULL;
   guint width, arrowsize, minwidth, maxwidth;
+  GromitArrowPosition arrowposition;
 
   /* try user config location */
   filename = g_strjoin (G_DIR_SEPARATOR_S,
@@ -183,11 +208,12 @@ gboolean parse_config (GromitData *data)
   g_scanner_scope_add_symbol (scanner, 1, "META",    (gpointer) 13);
   g_scanner_scope_add_symbol (scanner, 1, "ALT",     (gpointer) 13);
 
-  g_scanner_scope_add_symbol (scanner, 2, "size",      (gpointer) 1);
-  g_scanner_scope_add_symbol (scanner, 2, "color",     (gpointer) 2);
-  g_scanner_scope_add_symbol (scanner, 2, "arrowsize", (gpointer) 3);
-  g_scanner_scope_add_symbol (scanner, 2, "minsize",   (gpointer) 4);
-  g_scanner_scope_add_symbol (scanner, 2, "maxsize",   (gpointer) 5);
+  g_scanner_scope_add_symbol (scanner, 2, "size",         (gpointer) 1);
+  g_scanner_scope_add_symbol (scanner, 2, "color",        (gpointer) 2);
+  g_scanner_scope_add_symbol (scanner, 2, "arrowsize",    (gpointer) 3);
+  g_scanner_scope_add_symbol (scanner, 2, "minsize",      (gpointer) 4);
+  g_scanner_scope_add_symbol (scanner, 2, "maxsize",      (gpointer) 5);
+  g_scanner_scope_add_symbol (scanner, 2, "arrowposition",(gpointer) 6);
 
   g_scanner_set_scope (scanner, 0);
   scanner->config->scope_0_fallback = 0;
@@ -223,6 +249,7 @@ gboolean parse_config (GromitData *data)
           type = GROMIT_PEN;
           width = 7;
           arrowsize = 0;
+          arrowposition = GROMIT_ARROW_AT_END;
           minwidth = 1;
           maxwidth = G_MAXUINT;
           fg_color = data->red;
@@ -244,8 +271,9 @@ gboolean parse_config (GromitData *data)
                   type = context_template->type;
                   width = context_template->width;
                   arrowsize = context_template->arrowsize;
+                  arrowposition = context_template->arrowposition;
                   minwidth = context_template->minwidth;
-		  maxwidth = context_template->maxwidth;
+		              maxwidth = context_template->maxwidth;
                   fg_color = context_template->paint_color;
                 }
               else
@@ -369,6 +397,30 @@ gboolean parse_config (GromitData *data)
                             }
                           maxwidth = scanner->value.v_float;
                         }
+                      else if ((intptr_t) scanner->value.v_symbol == 6)
+                        {
+                          token = g_scanner_get_next_token (scanner);
+                          if (token != G_TOKEN_EQUAL_SIGN)
+                            {
+                              g_printerr ("Missing \"=\"... aborting\n");
+                              goto cleanup;
+                            }
+                          token = g_scanner_get_next_token (scanner);
+                          if (token == G_TOKEN_FLOAT)
+                            {
+                              arrowposition = scanner->value.v_float;
+                            }
+                          else if (token == G_TOKEN_STRING)
+                            {
+                              arrowposition = parse_arrowposition(scanner->value.v_string);
+                            }
+                          else
+                            {
+                              g_printerr ("Missing arrowposition (float or string)... "
+                                          "aborting\n");
+                              goto cleanup;
+                            }
+                        }
 		      else
                         {
                           g_printerr ("Unknown tool type?????\n");
@@ -394,7 +446,7 @@ gboolean parse_config (GromitData *data)
               goto cleanup;
             }
 
-          context = paint_context_new (data, type, fg_color, width, arrowsize, minwidth, maxwidth);
+          context = paint_context_new (data, type, fg_color, width, arrowsize, arrowposition, minwidth, maxwidth);
           g_hash_table_insert (data->tool_config, name, context);
         }
       else if (token == G_TOKEN_SYMBOL &&

@@ -1,4 +1,4 @@
-/* 
+/*
  * Gromit -- a program for painting on the screen
  * Copyright (C) 2000 Simon Budig <Simon.Budig@unix-ag.org>
  *
@@ -66,16 +66,26 @@ typedef enum
   GROMIT_RECOLOR
 } GromitPaintType;
 
+typedef enum
+{
+  GROMIT_ARROW_AT_NONE = 0,
+  GROMIT_ARROW_AT_START = 1,
+  GROMIT_ARROW_AT_END = 2,
+  GROMIT_ARROW_AT_BOTH = GROMIT_ARROW_AT_START | GROMIT_ARROW_AT_END
+} GromitArrowPosition;
+
 typedef struct
 {
-  GromitPaintType type;
-  guint           width;
-  gfloat          arrowsize;
-  guint           minwidth;
-  guint           maxwidth;
-  GdkRGBA         *paint_color;
-  cairo_t         *paint_ctx;
-  gdouble         pressure;
+  GromitPaintType     type;
+  guint               width;
+  gfloat              arrowsize;
+  GromitArrowPosition arrowposition;
+  guint               minwidth;
+  guint               maxwidth;
+  GdkRGBA             *paint_color;
+  cairo_t             *paint_ctx;
+  gdouble             pressure;
+  gboolean            start_arrow_painted;
 } GromitPaintContext;
 
 typedef struct
@@ -119,7 +129,7 @@ typedef struct
 
   GromitPaintContext *default_pen;
   GromitPaintContext *default_eraser;
- 
+
   GHashTable  *tool_config;
 
   cairo_surface_t *backbuffer;
@@ -164,7 +174,7 @@ void redo_drawing (GromitData *data);
 void clear_screen (GromitData *data);
 
 GromitPaintContext *paint_context_new (GromitData *data, GromitPaintType type,
-				       GdkRGBA *fg_color, guint width, guint arrowsize,
+				       GdkRGBA *fg_color, guint width, guint arrowsize, GromitArrowPosition arrowposition,
                                        guint minwidth, guint maxwidth);
 void paint_context_free (GromitPaintContext *context);
 

@@ -2,14 +2,6 @@
 #include <math.h>
 #include "drawing.h"
 
-typedef struct
-{
-  gint x;
-  gint y;
-  gint width;
-} GromitStrokeCoordinate;
-
-
 void draw_line (GromitData *data,
 		GdkDevice *dev,
 		gint x1, gint y1,
@@ -31,21 +23,61 @@ void draw_line (GromitData *data,
       cairo_set_line_width(devdata->cur_context->paint_ctx, data->maxwidth);
       cairo_set_line_cap(devdata->cur_context->paint_ctx, CAIRO_LINE_CAP_ROUND);
       cairo_set_line_join(devdata->cur_context->paint_ctx, CAIRO_LINE_JOIN_ROUND);
- 
+
       cairo_move_to(devdata->cur_context->paint_ctx, x1, y1);
       cairo_line_to(devdata->cur_context->paint_ctx, x2, y2);
       cairo_stroke(devdata->cur_context->paint_ctx);
 
       data->modified = 1;
 
-      gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
+      gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
     }
 
   data->painted = 1;
 }
 
+void draw_arrow_when_applicable(GdkDevice *device, GromitDeviceData *devdata, GromitData *data, GromitArrowPosition position)
+{
+  gfloat direction = 0;
+  gint width = 0;
+  GromitStrokeCoordinate *arrow_point;
 
-void draw_arrow (GromitData *data, 
+  if(devdata->cur_context->arrowsize == 0)
+    return;
+
+  if(!(devdata->cur_context->arrowposition & position))
+    return;
+
+  if(devdata->cur_context)
+    width = devdata->cur_context->arrowsize * devdata->cur_context->width / 2;
+
+  if(!coord_list_get_arrow_param (data, device, width * 3, position, &width, &direction))
+    return;
+
+  switch (position)
+  {
+  case GROMIT_ARROW_AT_START:
+    if(devdata->cur_context->start_arrow_painted)
+      return;
+
+    arrow_point = g_list_last(devdata->coordlist)->data;
+    draw_arrow (data, device, arrow_point->x, arrow_point->y, width, direction);
+    devdata->cur_context->start_arrow_painted = TRUE;
+
+    break;
+  case GROMIT_ARROW_AT_END:
+    arrow_point = devdata->coordlist->data;
+    draw_arrow (data, device, arrow_point->x, arrow_point->y, width, direction);
+
+    break;
+  case GROMIT_ARROW_AT_BOTH:
+  case GROMIT_ARROW_AT_NONE:
+  default:
+    break;
+  }
+}
+
+void draw_arrow (GromitData *data,
 		 GdkDevice *dev,
 		 gint x1, gint y1,
 		 gint width,
@@ -86,7 +118,7 @@ void draw_arrow (GromitData *data,
       cairo_set_line_width(devdata->cur_context->paint_ctx, 1);
       cairo_set_line_cap(devdata->cur_context->paint_ctx, CAIRO_LINE_CAP_ROUND);
       cairo_set_line_join(devdata->cur_context->paint_ctx, CAIRO_LINE_JOIN_ROUND);
- 
+
       cairo_move_to(devdata->cur_context->paint_ctx, arrowhead[0].x, arrowhead[0].y);
       cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[1].x, arrowhead[1].y);
       cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[2].x, arrowhead[2].y);
@@ -103,20 +135,20 @@ void draw_arrow (GromitData *data,
       cairo_stroke(devdata->cur_context->paint_ctx);
 
       gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->paint_color);
-    
+
       data->modified = 1;
 
-      gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
+      gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
     }
 
   data->painted = 1;
 }
 
 
-void coord_list_prepend (GromitData *data, 
-			 GdkDevice* dev, 
-			 gint x, 
-			 gint y, 
+void coord_list_prepend (GromitData *data,
+			 GdkDevice* dev,
+			 gint x,
+			 gint y,
 			 gint width)
 {
   /* get the data for this device */
@@ -133,7 +165,7 @@ void coord_list_prepend (GromitData *data,
 }
 
 
-void coord_list_free (GromitData *data, 
+void coord_list_free (GromitData *data,
 		      GdkDevice* dev)
 {
   /* get the data for this device */
@@ -153,22 +185,32 @@ void coord_list_free (GromitData *data,
   devdata->coordlist = NULL;
 }
 
+void cleanup_context(GromitPaintContext *context)
+{
+  context->start_arrow_painted = FALSE;
+}
 
 gboolean coord_list_get_arrow_param (GromitData *data,
-				     GdkDevice  *dev,
-				     gint        search_radius,
-				     gint       *ret_width,
-				     gfloat     *ret_direction)
+				     GdkDevice           *dev,
+				     gint                search_radius,
+             GromitArrowPosition position,
+				     gint                *ret_width,
+				     gfloat              *ret_direction)
 {
   gint x0, y0, r2, dist;
   gboolean success = FALSE;
   GromitStrokeCoordinate  *cur_point, *valid_point;
   /* get the data for this device */
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
-  GList *ptr = devdata->coordlist;
+  GList *ptr;
   gfloat width;
 
   valid_point = NULL;
+
+  if(position == GROMIT_ARROW_AT_END)
+    ptr = devdata->coordlist;
+  else if(position == GROMIT_ARROW_AT_START)
+    ptr = g_list_last(devdata->coordlist);
 
   if (ptr)
     {
@@ -180,7 +222,11 @@ gboolean coord_list_get_arrow_param (GromitData *data,
 
       while (ptr && dist < r2)
         {
-          ptr = ptr->next;
+          if(position == GROMIT_ARROW_AT_END)
+            ptr = ptr->next;
+          else if(position == GROMIT_ARROW_AT_START)
+            ptr = ptr->prev;
+
           if (ptr)
             {
               cur_point = ptr->data;
@@ -198,7 +244,7 @@ gboolean coord_list_get_arrow_param (GromitData *data,
           *ret_width = MAX (valid_point->width * devdata->cur_context->arrowsize,
                             2);
           *ret_direction = atan2 (y0 - valid_point->y, x0 - valid_point->x);
-          success = TRUE;
+           success = TRUE;
         }
     }
 

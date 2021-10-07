@@ -166,11 +166,19 @@ not allowed to change size:
 
 	"red fixed Marker" = "red Pen" (minsize=10 maxsize=10);
 
-You can also draw lines that end in an arrow head. For this you
+You can also draw lines that start/end in an arrow head. For this you
 have to specify `arrowsize`. This is a factor relative to the width
 of the line. For reasonable arrowheads start with 1.
 
     "blue Pen" = "blue Arrow" (arrowsize=2);
+
+Arrows can also be positioned at the start, end or both sides of
+a line. Specify `arrowposition` with one of possible values (`start`, `end`, `both`, `none`)
+
+    "blue Pen" = "blue Arrow" (arrowsize=1 arrowposition="start");
+    "blue Pen" = "blue Arrow" (arrowsize=1 arrowposition="end");
+    "blue Pen" = "blue Arrow" (arrowsize=1 arrowposition="both");
+    "blue Pen" = "blue Arrow" (arrowsize=1 arrowposition="none");
 
 An `ERASER` is a tool that erases the drawings on screen.
 The color parameter is not important.
@@ -218,7 +226,7 @@ The decision which tool to use follows a simple policy:
       The same logic holds for the buttons.
 5. Slave device config takes precedence over master device config, which
    in turn takes precedence over the fallback default config.
-   
+
 For versions > 1.3, you can also change the [hotkeys from the config](data/gromit-mpx.cfg#L5)
 file by setting the respective `HOTKEY` and/or `UNDOKEY` values.
 

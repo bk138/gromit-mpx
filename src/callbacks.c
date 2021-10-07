@@ -1,4 +1,4 @@
-/* 
+/*
  * Gromit-MPX -- a program for painting on the screen
  *
  * Gromit Copyright (C) 2000 Simon Budig <Simon.Budig@unix-ag.org>
@@ -87,7 +87,7 @@ void on_screen_changed(GtkWidget *widget,
 
 
 void on_monitors_changed ( GdkScreen *screen,
-			   gpointer   user_data) 
+			   gpointer   user_data)
 {
   GromitData *data = (GromitData *) user_data;
 
@@ -113,14 +113,14 @@ void on_monitors_changed ( GdkScreen *screen,
   cairo_destroy (cr);
   cairo_surface_destroy(data->backbuffer);
   data->backbuffer = new_shape;
- 
+
   /*
      these depend on the shape surface
   */
   GHashTableIter it;
   gpointer value;
   g_hash_table_iter_init (&it, data->tool_config);
-  while (g_hash_table_iter_next (&it, NULL, &value)) 
+  while (g_hash_table_iter_next (&it, NULL, &value))
     paint_context_free(value);
   g_hash_table_remove_all(data->tool_config);
 
@@ -129,9 +129,9 @@ void on_monitors_changed ( GdkScreen *screen,
 
 
   data->default_pen = paint_context_new (data, GROMIT_PEN,
-					 data->red, 7, 0, 1, G_MAXUINT);
+					 data->red, 7, 0, GROMIT_ARROW_AT_NONE, 1, G_MAXUINT);
   data->default_eraser = paint_context_new (data, GROMIT_ERASER,
-					    data->red, 75, 0, 1, G_MAXUINT);
+					    data->red, 75, 0, GROMIT_ARROW_AT_NONE, 1, G_MAXUINT);
 
   if(!data->composited) // set shape
     {
@@ -170,15 +170,15 @@ void on_composited_changed ( GdkScreen *screen,
   GHashTableIter it;
   gpointer value;
   g_hash_table_iter_init (&it, data->tool_config);
-  while (g_hash_table_iter_next (&it, NULL, &value)) 
+  while (g_hash_table_iter_next (&it, NULL, &value))
     {
       GromitPaintContext *context = value;
       cairo_set_antialias(context->paint_ctx, data->composited ? CAIRO_ANTIALIAS_DEFAULT : CAIRO_ANTIALIAS_NONE);
     }
-      
+
 
   GdkRectangle rect = {0, 0, data->width, data->height};
-  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
+  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
 }
 
 
@@ -190,17 +190,17 @@ void on_clientapp_selection_get (GtkWidget          *widget,
 				 gpointer            user_data)
 {
   GromitData *data = (GromitData *) user_data;
-  
+
   gchar *ans = "";
 
   if(data->debug)
-    g_printerr("DEBUG: clientapp received request.\n");  
+    g_printerr("DEBUG: clientapp received request.\n");
 
   if (gtk_selection_data_get_target(selection_data) == GA_TOGGLEDATA)
     {
       ans = data->clientdata;
     }
-    
+
   gtk_selection_data_set (selection_data,
                           gtk_selection_data_get_target(selection_data),
                           8, (guchar*)ans, strlen (ans));
@@ -229,7 +229,7 @@ void on_clientapp_selection_received (GtkWidget *widget,
 static float line_thickener = 0;
 
 
-gboolean on_buttonpress (GtkWidget *win, 
+gboolean on_buttonpress (GtkWidget *win,
 			 GdkEventButton *ev,
 			 gpointer user_data)
 {
@@ -372,23 +372,19 @@ gboolean on_motion (GtkWidget *win,
   devdata->lasty = ev->y;
   devdata->motion_time = ev->time;
 
+  draw_arrow_when_applicable(ev->device, devdata, data, GROMIT_ARROW_AT_START);
+
   return TRUE;
 }
 
 
-gboolean on_buttonrelease (GtkWidget *win, 
-			   GdkEventButton *ev, 
+gboolean on_buttonrelease (GtkWidget *win,
+			   GdkEventButton *ev,
 			   gpointer user_data)
 {
   GromitData *data = (GromitData *) user_data;
   /* get the device data for this event */
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, ev->device);
-
-  gfloat direction = 0;
-  gint width = 0;
-  if(devdata->cur_context)
-    width = devdata->cur_context->arrowsize * devdata->cur_context->width / 2;
-   
 
   if ((ev->x != devdata->lastx) ||
       (ev->y != devdata->lasty))
@@ -396,11 +392,10 @@ gboolean on_buttonrelease (GtkWidget *win,
 
   if (!devdata->is_grabbed)
     return FALSE;
-  
-  if (devdata->cur_context->arrowsize != 0 &&
-      coord_list_get_arrow_param (data, ev->device, width * 3,
-				  &width, &direction))
-    draw_arrow (data, ev->device, ev->x, ev->y, width, direction);
+
+  draw_arrow_when_applicable(ev->device, devdata, data, GROMIT_ARROW_AT_END);
+
+  cleanup_context(devdata->cur_context);
 
   coord_list_free (data, ev->device);
 
@@ -415,7 +410,7 @@ void on_mainapp_selection_get (GtkWidget          *widget,
 			       gpointer            user_data)
 {
   GromitData *data = (GromitData *) user_data;
-  
+
   gchar *uri = "OK";
   GdkAtom action = gtk_selection_data_get_target(selection_data);
 
@@ -441,7 +436,7 @@ void on_mainapp_selection_get (GtkWidget          *widget,
   else
     uri = "NOK";
 
-   
+
   gtk_selection_data_set (selection_data,
                           gtk_selection_data_get_target(selection_data),
                           8, (guchar*)uri, strlen (uri));
@@ -465,20 +460,20 @@ void on_mainapp_selection_received (GtkWidget *widget,
       if(gtk_selection_data_get_target(selection_data) == GA_TOGGLEDATA )
         {
 	  intptr_t dev_nr = strtoull((gchar*)gtk_selection_data_get_data(selection_data), NULL, 10);
-	  
+
           if(data->debug)
 	    g_printerr("DEBUG: mainapp got toggle id '%ld' back from client.\n", (long)dev_nr);
 
 	  if(dev_nr < 0)
 	    toggle_grab(data, NULL); /* toggle all */
-	  else 
+	  else
 	    {
 	      /* find dev numbered dev_nr */
 	      GHashTableIter it;
 	      gpointer value;
-	      GromitDeviceData* devdata = NULL; 
+	      GromitDeviceData* devdata = NULL;
 	      g_hash_table_iter_init (&it, data->devdatatable);
-	      while (g_hash_table_iter_next (&it, NULL, &value)) 
+	      while (g_hash_table_iter_next (&it, NULL, &value))
 		{
 		  devdata = value;
 		  if(devdata->index == dev_nr)
@@ -486,7 +481,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
 		  else
 		    devdata = NULL;
 		}
-	      
+
 	      if(devdata)
 		toggle_grab(data, devdata->device);
 	      else
@@ -494,7 +489,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
 	    }
         }
     }
- 
+
   gtk_main_quit ();
 }
 
@@ -504,11 +499,11 @@ void on_device_removed (GdkDeviceManager *device_manager,
 			gpointer          user_data)
 {
   GromitData *data = (GromitData *) user_data;
-    
+
   if(!gdk_device_get_device_type(device) == GDK_DEVICE_TYPE_MASTER
      || gdk_device_get_n_axes(device) < 2)
     return;
-  
+
   if(data->debug)
     g_printerr("DEBUG: device '%s' removed\n", gdk_device_get_name(device));
 
@@ -641,6 +636,7 @@ void on_about(GtkMenuItem *menuitem,
                                 "Yuri D'Elia <yuri.delia@eurac.edu>",
 				"Julián Unrrein <junrrein@gmail.com>",
 				"Eshant Gupta <guptaeshant@gmail.com>",
+        "Renato Lima <natenho@gmail.com>",
                                  NULL };
     gtk_show_about_dialog (NULL,
 			   "program-name", "Gromit-MPX",
