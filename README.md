@@ -83,8 +83,10 @@ Usage:
 
     gromit-mpx --quit
         will cause the main Gromit-Mpx-MPX process to quit (or "-q")
-    gromit-mpx --toggle
-        will toggle the grabbing of the cursor (or "-t")
+    gromit-mpx --toggle <device-number>
+        will toggle the grabbing of all cursors (or "-t"). Optionally,
+        it toggles for the given internal device number (not XInput ID)
+        only.
     gromit-mpx --visibility
         will toggle the visibility of the window (or "-v")
     gromit-mpx --clear
@@ -122,7 +124,10 @@ You can create a simple MPX setup via the `xinput` utility:
 If you attach a keyboard slave device to the newly created second master,
 its hotkey will activate annotation mode for the associated pointer only.
 This way, can use a second pair of input devices to annotate while
-continuing to work normally with the first pair.
+continuing to work normally with the first pair. If you don't have a
+second keyboard at hand, you can also toggle a specific pointer via
+`--toggle <device-number>`, where device-number is Gromit-MPX's internal
+device number, not the XInput ID.
 
 Alternatively, you can also use the graphical tool [gnome-device-
 manager](https://github.com/bk138/gnome-device-manager) to arrange your
