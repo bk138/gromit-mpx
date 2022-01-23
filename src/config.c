@@ -38,6 +38,7 @@
 
 static gpointer HOTKEY_SYMBOL_VALUE  = (gpointer) 3;
 static gpointer UNDOKEY_SYMBOL_VALUE = (gpointer) 4;
+static gpointer HISTORY_SYMBOL_VALUE = (gpointer) 5;
 
 /*
  * Functions for parsing the Configuration-file
@@ -172,6 +173,7 @@ gboolean parse_config (GromitData *data)
   g_scanner_scope_add_symbol (scanner, 0, "RECOLOR",(gpointer) GROMIT_RECOLOR);
   g_scanner_scope_add_symbol (scanner, 0, "HOTKEY",            HOTKEY_SYMBOL_VALUE);
   g_scanner_scope_add_symbol (scanner, 0, "UNDOKEY",           UNDOKEY_SYMBOL_VALUE);
+  g_scanner_scope_add_symbol (scanner, 0, "HISTORY",           HISTORY_SYMBOL_VALUE);
 
   g_scanner_scope_add_symbol (scanner, 1, "BUTTON1", (gpointer) 1);
   g_scanner_scope_add_symbol (scanner, 1, "BUTTON2", (gpointer) 2);
@@ -369,7 +371,7 @@ gboolean parse_config (GromitData *data)
                             }
                           maxwidth = scanner->value.v_float;
                         }
-		      else
+		                    else
                         {
                           g_printerr ("Unknown tool type?????\n");
                         }
@@ -434,6 +436,47 @@ gboolean parse_config (GromitData *data)
             }
 
           token = g_scanner_get_next_token(scanner);
+
+          if (token != ';')
+            {
+              g_printerr ("Expected \";\"\n");
+              goto cleanup;
+            }
+        }
+      else if (token == G_TOKEN_SYMBOL && scanner->value.v_symbol == HISTORY_SYMBOL_VALUE)
+        {
+          /*
+           * History steps definition
+           */
+          gpointer key_type = scanner->value.v_symbol;
+          token = g_scanner_get_next_token(scanner);
+
+          if (token != G_TOKEN_EQUAL_SIGN)
+          {
+            g_scanner_unexp_token (scanner, G_TOKEN_EQUAL_SIGN, NULL,
+                                   NULL, NULL, "aborting", TRUE);
+            goto cleanup;
+          }
+
+          token = g_scanner_get_next_token (scanner);
+
+          if (token != G_TOKEN_FLOAT)
+          {
+            g_scanner_unexp_token (scanner, G_TOKEN_FLOAT, NULL,
+                                   NULL, NULL, "aborting", TRUE);
+            goto cleanup;
+          }
+
+          data->undo_steps = (gint) scanner->value.v_float;
+          data->undobuffer = calloc(data->undo_steps, sizeof(cairo_surface_t*));
+
+          for (int i = 0; i < data->undo_steps; i++)
+          {
+            cairo_surface_destroy(data->undobuffer[i]);
+            data->undobuffer[i] = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
+          }
+
+          token = g_scanner_get_next_token (scanner);
 
           if (token != ';')
             {
@@ -578,6 +621,27 @@ int parse_args (int argc, char **argv, GromitData *data)
                wrong_arg = TRUE;
              }
          }
+       else if (strcmp (arg, "-H") == 0 ||
+                strcmp (arg, "--history-steps") == 0)
+       {
+         if (i+1 < argc && atoi (argv[i+1]) > 0)
+         {
+           data->undo_steps = atoi (argv[i+1]);
+           data->undobuffer = calloc(data->undo_steps, sizeof(cairo_surface_t*));
+
+           for (int i = 0; i < data->undo_steps; i++)
+           {
+             cairo_surface_destroy(data->undobuffer[i]);
+             data->undobuffer[i] = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
+           }
+           i++;
+         }
+         else
+         {
+           g_printerr ("-H requires an int > 0 as argument\n");
+           wrong_arg = TRUE;
+         }
+       }
        else if (strcmp (arg, "-V") == 0 ||
 		strcmp (arg, "--version") == 0)
          {

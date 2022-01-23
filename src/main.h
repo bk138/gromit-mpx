@@ -57,7 +57,6 @@
 #define GA_DATA       gdk_atom_intern ("Gromit/data", FALSE)
 #define GA_TOGGLEDATA gdk_atom_intern ("Gromit/toggledata", FALSE)
 
-#define GROMIT_MAX_UNDO 4
 
 typedef enum
 {
@@ -139,8 +138,9 @@ typedef struct
 
   gchar       *clientdata;
 
-  cairo_surface_t *undobuffer[GROMIT_MAX_UNDO];
+  cairo_surface_t **undobuffer;
   gint            undo_head, undo_depth, redo_depth;
+  gint            undo_steps;
 
   gboolean show_intro_on_startup;
 

@@ -1,5 +1,5 @@
 .\"                                      Hey, vim: ft=nroff
-.TH GROMIT-MPX 1 "November 3, 2018"
+.TH GROMIT-MPX 1 "January 23, 2022"
 .\" Please adjust this date whenever revising the manpage.
 .\"
 .\" Some roff macros, for reference:
@@ -85,6 +85,10 @@ will change the key used to undo/redo strokes. Under rare circumstances
 identifying the key with the keysym can fail. You can then use the keycode
 to specify the key uniquely. To determine the keycode for different keys you
 can use the \fBxev\fP(1) command.
+.TP
+.B \-H <value>, \-\-history\-steps <value>
+will change the available undo history depth (default = 4).
+Increasing it will also increase the ram usage.
 .TP
 .B \-V, \-\-version
 will show the Gromit-MPX version.
