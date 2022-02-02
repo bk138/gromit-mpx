@@ -26,10 +26,11 @@ If you'd like to put out an incentive for fixing this bug, you can do so at http
 **Screenshots**
 <!-- If applicable, add screenshots to help explain your problem. -->
 
-**Desktop (please complete the following information):**
+**Environment (please complete the following information):**
+ - Gromit-MPX version:
  - OS and version:
- - Xorg version used:
- - Wayland version used:
+ - Desktop Environment and version:
+ - X11 or Wayland session:
  
 
 **Additional context**
