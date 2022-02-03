@@ -1,3 +1,142 @@
+commit 448a426ce4d7de87e7ba94076f555479f369ec8f
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Feb 3 21:14:33 2022 +0100
+
+    AppStream: add 1.4.1 release notes
+
+commit 05cbcca5b97bbb9c5df15a47089f1215e08c2a7a
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Feb 3 21:06:54 2022 +0100
+
+    callbacks: update Copyright year
+
+commit 97ef6b6dff2b55589ea71cc00317ef2d8511dff0
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Feb 3 21:06:03 2022 +0100
+
+    CMake: patchlevel up
+
+commit 6c32cb8d7051927f9032cee5530d1c473631bdd5
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Feb 3 20:56:23 2022 +0100
+
+    NEWS: update
+
+commit a36b9c23b52efd10eac799080b2a7261a46cd276
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Feb 3 19:40:21 2022 +0100
+
+    NEWS: add release dates
+
+commit c0348a6967e99b60cbcf1d968c17ee3bcd6f4b2c
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Jul 1 12:43:21 2021 +0200
+
+    main: set 'modified' after undo/redo, add explicit draw in reshape()
+    
+    Closes #122
+
+commit 6b18f6f827e0d7492b0219333c23c26cd60fc76f
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Jun 22 21:59:00 2021 +0200
+
+    flatpak: build dconf and hint gsettings at its install location
+    
+    * dconf-override.patch and dconf build config: from https://github.com/flathub/ca.desrt.dconf-editor
+    * GIO_EXTRA_MODULES hint from: https://src.fedoraproject.org/flatpaks/dconf-editor/c/9a91b41133369cfbc5424bc7e3cb1e2df86d7dae?branch=stable
+    
+    Closes #135
+
+commit 997640589143447f8f001acdaed2f9ae12de1c14
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Feb 3 20:32:18 2022 +0100
+
+    callbacks: update icon name for About dialog
+
+commit 2d6687962025194a86951b6553ca12cd52f58b02
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Mar 7 22:02:10 2021 +0100
+
+    Prefix all icons
+    
+    Fixes tray icon display when running in flatpak on Ubuntu.
+
+commit 6abcdd8d0c6b662d3a9ba67f0abebf218b5d6de7
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Mar 7 21:54:46 2021 +0100
+
+    Remove XPM icon
+
+commit 8520bf81c24c48d985a6f152c9844760bf0b8052
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Feb 16 22:29:46 2021 +0100
+
+    CMake,main: prefer ayatana-appindicator, fallback to appindicator
+    
+    Closes #111
+
+commit 3a1b2298347e5a148428fbff793e6314cf590348
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Mar 7 20:24:57 2021 +0100
+
+    flatpak: fix appindicator not showing up in Ubuntu
+    
+    Fixes https://github.com/bk138/gromit-mpx/issues/123#issuecomment-792043568
+    
+    https://github.com/ubuntu/gnome-shell-extension-appindicator/issues/74
+    has some background.
+
+commit 70d16568940263966133ce736c1267727c7f0b3a
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Jan 31 16:57:39 2021 +0100
+
+    Fix tool display upon startup
+    
+    After 2ce8725553631c0cd7d4f0d52e64ca94a84cdab9, this was always false.
+    Simply set it to always display.
+
+commit a7869d928858730f34013653097d106ec87be73f
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Jan 3 19:02:24 2021 +0100
+
+    Parse cmdline args after config and key file
+    
+    Really closes #113 #79
+
+commit 22a9f66a83da3398f42c6faeefe66b3e586613d6
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Jan 3 18:55:11 2021 +0100
+
+    Move default hotkey init from app_parse_args() to setup_main_app()
+    
+    re #113 #79
+
+commit 8bee924e7345366a4242f4031d409b59a7c26ec7
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Jan 3 18:50:01 2021 +0100
+
+    config: make parse_config not check for default hotkeys
+    
+    re #113 #79
+
+commit 414051c481db453c61d2b5bff2ccf3dc24e5e014
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Dec 4 10:23:16 2020 +0100
+
+    flatpak: update GNOME runtime dep to 3.38
+
+commit bed32e00b395ea7171ff6934357a5bd7784ebea2
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 19:47:14 2020 +0100
+
+    AppStream: add OARS content rating
+
+commit f5a4a20c04b793704472da60b757ca646bab4b10
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 15:48:53 2020 +0100
+
+    ChangeLog: update
+
 commit 39be16bec4cd9204862d42a8a0ccb8c19d7737ae
 Author: Christian Beier <info@christianbeier.net>
 Date:   Thu Dec 3 15:47:04 2020 +0100
