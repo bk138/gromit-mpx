@@ -1,4 +1,4 @@
-# Gromit-MPX 1.4
+# Gromit-MPX 1.4 - 2020-12-03
    * Added display of activation status to tray menu.
    * Added Flatpak packaging.
    * Added support options to tray menu.
@@ -10,14 +10,14 @@
    * Documented autostart, hotkey setting via config file, similar tools and XFCE pecularities. 
 
 
-# Gromit-MPX 1.3.1
+# Gromit-MPX 1.3.1 - 2020-08-01
    * Documented donation options.
    * Added ability to configure the Hot key and Undo key in gromit-mpx.cfg.
    * Added lotsa special-case config documentation.
    * Added GUI error displays in case one of the hotkeys can't be grabbed.
 
 
-# Gromit-MPX 1.3
+# Gromit-MPX 1.3 - 2018-12-28
    * Gromit-MPX now shows the hotkeys bound to some functionality directly in the menu.
    * Replaced the help menu with an introduction to Gromit-MPX that shows on startup.
    * Reworked slave device handling so that per-slave configuration is now done The Right
@@ -25,7 +25,7 @@
    * Build system switched to CMake, removed Autotools.
 
 
-# Gromit-MPX 1.2
+# Gromit-MPX 1.2 - 2016-11-16
    * Added undo/redo functionality thanks to Nathan Whitehead.
    * Added opacity-set functionality thanks to Lukas Hermann.
    * Added a tray icon.
@@ -34,13 +34,13 @@
    * Replaced GTK3 deprecated functions with newer counterparts.
 
 
-# Gromit-MPX 1.1
+# Gromit-MPX 1.1 - 2013-08-19
    * Added reasonably complete support for slave devices thanks to Monty Montgomery.
    * Tweaked build system, packaging, icon thanks to Barak A. Pearlmutter.
    * Fixed some crashes.
 
 
-# Gromit-MPX 1.0
+# Gromit-MPX 1.0 - 2011-02-10
    * Concurrent multi-user operation using GTK3 with Multi-Pointer-X.
    * Drawn annotations do not intercept mouse clicks.
    * Makes use of the Composite extension where available to allow for
