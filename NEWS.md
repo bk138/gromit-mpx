@@ -1,3 +1,13 @@
+# Gromit-MPX 1.4.1 - 2022-02-03
+
+### 🛠  Fixes
+
+* Fixed hotkey setting from config file for XFCE.
+* Fixed erase tool not working properly when not using a composited display.
+* Fixed tray icon not showing up in Ubuntu when using the Flatpak.
+* Fixed tray icon not showing on KDE when using the Flatpak.
+* Fixed Wayland hotkey setting not working on GNOME when using the Flatpak.
+
 # Gromit-MPX 1.4 - 2020-12-03
    * Added display of activation status to tray menu.
    * Added Flatpak packaging.
