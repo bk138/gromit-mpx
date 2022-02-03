@@ -56,6 +56,16 @@
   </screenshots>
 
   <releases>
+    <release version="1.4.1" date="2022-02-03">
+      <description>
+	<p>
+	  Fixed hotkey setting from config file for XFCE, the erase tool is now working properly
+	  when not using a composited display and the Flatpak now displays the tray icon correctly
+	  on more platforms. Also fixed some Flatpak hotkey issues.
+	</p>
+      </description>
+    </release>
+
     <release version="1.4" date="2020-12-03">
       <description>
 	<p>
