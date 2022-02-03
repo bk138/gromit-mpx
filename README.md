@@ -257,6 +257,16 @@ Gromit-MPX uses CMake as its build system. Thus, it's the usual:
 
 from the root of the source tree.
 
+### Release Checklist
+
+* [ ] Update NEWS.
+* [ ] Increment version in CMakeLists.txt
+* [ ] Update Copyright year in About dialog.
+* [ ] Update authors in About dialog.
+* [ ] Update AppStream.
+* [ ] Update ChangeLog.
+
+
 ## Potential Problems
 
 XFCE per default grabs Ctrl-F1 to Ctrl-F12 (switch to workspace 1-12)
