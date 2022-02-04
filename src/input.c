@@ -403,6 +403,9 @@ void release_grab (GromitData *data,
 
       indicate_active(data, FALSE);
 
+      if (!data->painted)
+	  hide_window (data);
+
       return;
     }
 
