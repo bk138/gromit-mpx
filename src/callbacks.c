@@ -47,6 +47,15 @@ gboolean on_expose (GtkWidget *widget,
   cairo_paint (cr);
   cairo_restore (cr);
 
+  if (data->debug) {
+      // draw a pink background to know where the window is
+      cairo_save (cr);
+      cairo_set_source_rgba(cr, 64, 0, 64, 32);
+      cairo_set_operator (cr, CAIRO_OPERATOR_DEST_OVER);
+      cairo_paint (cr);
+      cairo_restore (cr);
+  }
+
   return TRUE;
 }
 
