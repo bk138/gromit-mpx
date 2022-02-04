@@ -269,26 +269,30 @@ from the root of the source tree.
 
 ## Potential Problems
 
-XFCE per default grabs Ctrl-F1 to Ctrl-F12 (switch to workspace 1-12)
-and Alt-F9 (minimize window) which renders Gromit-MPX's default hotkey
-mapping unusable. Gromit-MPX detects XFCE and changes the default hotkeys
-to Home and End. Those can can still be overridden by the user. In case
-you're using XFCE 4.14 or newer, chances are that all 'special' keys are
-grabbed by XFCE itself, which means you'll have to modify XFCE's keybindings
-(Settings->Window Manager->Keyboard) manually in order to 'make room' for
-Gromit-MPX's ones.
+* XFCE per default grabs Ctrl-F1 to Ctrl-F12 (switch to workspace 1-12)
+  and Alt-F9 (minimize window) which renders Gromit-MPX's default hotkey
+  mapping unusable. Gromit-MPX detects XFCE and changes the default hotkeys
+  to Home and End. Those can can still be overridden by the user. In case
+  you're using XFCE 4.14 or newer, chances are that all 'special' keys are
+  grabbed by XFCE itself, which means you'll have to modify XFCE's keybindings
+  (Settings->Window Manager->Keyboard) manually in order to 'make room' for
+  Gromit-MPX's ones.
 
-When there is no [compositing manager](https://en.wikipedia.org/wiki/Compositing_window_manager)
-such as Mutter or KWin running, Gromit-MPX falls back to a legacy drawing mode. This may
-drastically slow down your X-Server, especially when you draw very
-thin lines. It makes heavy use of the shape extension, which is
-quite expensive if you paint a complex pattern on screen. Especially
-terminal-programs tend to scroll incredibly slow if something is
-painted over their window.
+* When there is no [compositing manager](https://en.wikipedia.org/wiki/Compositing_window_manager)
+  such as Mutter or KWin running, Gromit-MPX falls back to a legacy drawing mode. This may
+  drastically slow down your X-Server, especially when you draw very
+  thin lines. It makes heavy use of the shape extension, which is
+  quite expensive if you paint a complex pattern on screen. Especially
+  terminal-programs tend to scroll incredibly slow if something is
+  painted over their window.
 
-If Gromit-MPX under Wayland complains about "cannot open display", make
-sure you have XWayland runnning or its autostart configured. Gromit-MPX
-needs XWayland when running in a Wayland session.
+* If Gromit-MPX under Wayland complains about "cannot open display", make
+  sure you have XWayland runnning or its autostart configured. Gromit-MPX
+  needs XWayland when running in a Wayland session.
+
+* In case you encounter any other kind of problem, please check if it's in
+  the [list of known bugs](https://github.com/bk138/gromit-mpx/issues?q=is%3Aissue+is%3Aopen+label%3Abug).
+  You can help by reporting a new one or adding info to an existing one.
 
 ## Similar Tools
 
