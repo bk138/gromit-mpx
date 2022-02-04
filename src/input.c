@@ -100,6 +100,14 @@ static void remove_hotkeys_from_compositor(GromitData *data) {
     }
 }
 
+/**
+   Add hotkeys bound to gromit-mpx remote control commands.
+   Under (X)Wayland, it is per design not possible to listen for a certain
+   hotkey press. While gtk_key_snooper_install() works when an XWayland window
+   has keyboard focus, that does not help very much.
+   Thus, we have to register hotkeys using each compositor's own API until
+   there's maybe a cross-platform way of doing this.
+ */
 static void add_hotkeys_to_compositor(GromitData *data) {
     char *xdg_current_desktop = getenv("XDG_CURRENT_DESKTOP");
     if (xdg_current_desktop && strcmp(xdg_current_desktop, "GNOME") == 0) {
@@ -333,15 +341,6 @@ void setup_input_devices (GromitData *data)
 		  }
 	  } // GDK_IS_X11_DISPLAY()
 
-	  /*
-	    When running under XWayland, hotkey grabbing does not work and we
-	    have to register shortcuts with the compositor.
-	   */
-	  char *xdg_session_type = getenv("XDG_SESSION_TYPE");
-	  if (xdg_session_type && strcmp(xdg_session_type, "wayland") == 0) {
-	      remove_hotkeys_from_compositor(data);
-	      add_hotkeys_to_compositor(data);
-          }
 
           g_hash_table_insert(data->devdatatable, device, devdata);
           g_printerr ("Enabled Device %d: \"%s\", (Type: %d)\n", 
