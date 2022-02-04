@@ -1008,10 +1008,25 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), quit_item);
 
 
+  /* Find out if the D-Bus name org.kde.StatusNotifierWatcher is owned. */
+  GDBusConnection *dbus_conn = g_bus_get_sync(G_BUS_TYPE_SESSION, NULL, NULL);
+  GVariant *is_status_notifier_watcher_owned = g_dbus_connection_call_sync(dbus_conn,
+						 "org.freedesktop.DBus",
+						 "/org/freedesktop/DBus",
+						 "org.freedesktop.DBus",
+						 "GetConnectionUnixProcessID",
+						 g_variant_new("(s)", "org.kde.StatusNotifierWatcher"),
+						 G_VARIANT_TYPE("(u)"),
+						 G_DBUS_CALL_FLAGS_NONE,
+						 -1,
+						 NULL,
+						 NULL);
+  if(data->debug)
+      g_printerr("DEBUG: org.kde.StatusNotifierWatcher is %s\n", is_status_notifier_watcher_owned ? "owned" : "not owned");
+
   /* Attach the callback functions to the respective activate signal */
-  char *desktop = getenv("XDG_CURRENT_DESKTOP");
-  if (desktop && strcmp(desktop, "KDE") == 0) {
-      // KDE does not handle the device-specific "button-press-event" from a menu
+  if (is_status_notifier_watcher_owned) {
+      // KStatusNotifier does not handle the device-specific "button-press-event" from a menu
       g_signal_connect(G_OBJECT (toggle_paint_item), "activate",
 		       G_CALLBACK (on_toggle_paint_all),
 		       data);
