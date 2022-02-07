@@ -795,10 +795,12 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   snprintf(labelBuf, sizeof(labelBuf), _("Redo (SHIFT-%s)"), data->undo_keyval);
   GtkWidget* redo_item = gtk_menu_item_new_with_label (labelBuf);
 
-  GtkWidget* sep_item = gtk_separator_menu_item_new();
+  GtkWidget* sep1_item = gtk_separator_menu_item_new();
   GtkWidget* intro_item = gtk_menu_item_new_with_mnemonic(_("_Introduction"));
   GtkWidget* support_item = gtk_menu_item_new_with_mnemonic(_("_Support Gromit-MPX"));
   GtkWidget* about_item = gtk_menu_item_new_with_mnemonic(_("_About"));
+
+  GtkWidget* sep2_item = gtk_separator_menu_item_new();
   snprintf(labelBuf, sizeof(labelBuf), _("_Quit (ALT-%s)"), data->hot_keyval);
   GtkWidget* quit_item = gtk_menu_item_new_with_mnemonic(labelBuf);
 
@@ -814,10 +816,12 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), undo_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), redo_item);
 
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), sep_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), sep1_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), intro_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), support_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), about_item);
+
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), sep2_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), quit_item);
 
 
@@ -894,10 +898,12 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   gtk_widget_show (undo_item);
   gtk_widget_show (redo_item);
 
-  gtk_widget_show (sep_item);
+  gtk_widget_show (sep1_item);
   gtk_widget_show (intro_item);
   gtk_widget_show (support_item);
   gtk_widget_show (about_item);
+
+  gtk_widget_show (sep2_item);
   gtk_widget_show (quit_item);
 
 
