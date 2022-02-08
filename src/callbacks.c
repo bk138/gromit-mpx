@@ -542,6 +542,18 @@ void on_toggle_paint_all (GtkMenuItem *menuitem,
 			  gpointer     user_data)
 {
   GromitData *data = (GromitData *) user_data;
+
+  /*
+    on_toggle_paint_all() is called when toggle_paint_item in the menu
+    is clicked on KDE-like platforms. Under X11, at least
+    https://github.com/ubuntu/gnome-shell-extension-appindicator seems to
+    grab the pointer, preventing grabbing by Gromit-MPX.
+    Simply work around this by waiting :-/
+   */
+  char *xdg_session_type = getenv("XDG_SESSION_TYPE");
+  if (xdg_session_type && strcmp(xdg_session_type, "x11") == 0)
+      g_usleep(333*1000);
+
   toggle_grab(data, NULL);
 }
 
