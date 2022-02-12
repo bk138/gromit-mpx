@@ -3,7 +3,7 @@ project(gromit-mpx LANGUAGES C)
 include(GNUInstallDirs)
 
 set(target_name gromit-mpx)
-set(version 1.4.1)
+set(version 1.4.2)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 if(CMAKE_GENERATOR MATCHES "Unix Makefiles|Ninja")
 # some LSP servers expect compile_commands.json in the project root
