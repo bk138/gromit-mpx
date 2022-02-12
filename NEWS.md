@@ -1,3 +1,10 @@
+# Gromit-MPX 1.4.2 - 2022-02-12
+
+### 🛠  Fixes
+
+* Fixed Gromit-MPX blocking mouse clicks to other apps on Wayland in certain conditions.
+* Fixed toggling from GNOME systray with gnome-shell-extension-appindicator under X11.
+
 # Gromit-MPX 1.4.1 - 2022-02-03
 
 ### 🛠  Fixes
