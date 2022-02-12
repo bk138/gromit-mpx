@@ -1,3 +1,59 @@
+commit d17f112bb660e4445a6972ea5eb11f4260747764
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Feb 12 16:24:10 2022 +0100
+
+    AppStream: add 1.4.2 release notes
+
+commit 81965c11a86a80d935e9eeeb9f7fe51baabe612b
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Feb 12 16:20:59 2022 +0100
+
+    CMake: patchlevel up
+
+commit db1062ad23d0b02b47008c8f8356c6fca564a14f
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Feb 12 16:20:32 2022 +0100
+
+    NEWS: update
+
+commit acec6c8f04a532ad373d7ab6703fac7d93df3ffe
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Feb 8 21:36:08 2022 +0100
+
+    callbacks: let on_toggle_paint_all wait a bit under X11
+    
+    Closes #149
+
+commit 8aa79feaa70a48d8161f1e5b6f741224373908f0
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Feb 4 13:20:50 2022 +0100
+
+    input: force redraw when changing input shape under Wayland
+    
+    Closes #136
+
+commit 82ac4d7c4d44b830b121317745af190dd9b269f4
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Feb 4 12:53:32 2022 +0100
+
+    input: hide unpainted window in ungrab-all case, too
+
+commit c1910bc47fe2dda39b0a808de0e41cb2da583dce
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Feb 4 11:04:23 2022 +0100
+
+    main: check for org.kde.StatusNotifierWatcher dbus name
+    
+    ...instead of XDG_CURRENT_DESKTOP=KDE
+    
+    Closes #149
+
+commit 99cd6bf0ae98c1694c89fc85eb62f74834acbc28
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Feb 3 21:16:46 2022 +0100
+
+    ChangeLog: update
+
 commit 448a426ce4d7de87e7ba94076f555479f369ec8f
 Author: Christian Beier <info@christianbeier.net>
 Date:   Thu Feb 3 21:14:33 2022 +0100
