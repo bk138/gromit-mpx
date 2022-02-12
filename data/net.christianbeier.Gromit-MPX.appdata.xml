@@ -56,6 +56,15 @@
   </screenshots>
 
   <releases>
+    <release version="1.4.2" date="2022-02-12">
+      <description>
+	<p>
+	  Fixed Gromit-MPX blocking mouse clicks to other apps on Wayland in certain conditions.
+	  Also fixed toggling from GNOME systray with gnome-shell-extension-appindicator under X11.
+	</p>
+      </description>
+    </release>
+
     <release version="1.4.1" date="2022-02-03">
       <description>
 	<p>
