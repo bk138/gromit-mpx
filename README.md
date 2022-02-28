@@ -146,8 +146,9 @@ distributed with this program for an example. An overview on the syntax:
     /* C-Style. */
 
 This entry defines the tool `red Pen`, a pen with size 7 and color red.
-You can specify the color in X-Style: e.g. `#FF0033` or
-colors from `rgb.txt`.
+You can specify an RGB color in X-Style: e.g. `#FF0033`, specify an
+RGBA color like so: `rgba(0, 0, 255, 0.6)` or use color names from
+[`rgb.txt`](https://en.wikipedia.org/wiki/X11_color_names).
 
     "red Pen" = PEN (size=7 color="red");
 
