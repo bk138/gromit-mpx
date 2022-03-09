@@ -28,6 +28,7 @@ If you'd like to put out an incentive for fixing this bug, you can do so at http
 
 **Environment (please complete the following information):**
  - Gromit-MPX version:
+ - Flatpak or Distribution-package or Built-from-source:
  - OS and version:
  - Desktop Environment and version:
  - X11 or Wayland session:
