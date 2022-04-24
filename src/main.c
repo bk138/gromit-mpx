@@ -335,9 +335,6 @@ void select_tool (GromitData *data,
         }
       while (i < req_buttons);
 
-      g_free (name);
-      g_free (default_name);
-
       if (!success)
         {
           if (gdk_device_get_source(device) == GDK_SOURCE_ERASER)
@@ -348,6 +345,9 @@ void select_tool (GromitData *data,
 	  if(data->debug)
 	      g_printerr("DEBUG: select_tool set fallback context for '%s'\n", name);
         }
+
+      g_free (name);
+      g_free (default_name);
     }
   else
     g_printerr ("ERROR: select_tool attempted to select nonexistent device!\n");
