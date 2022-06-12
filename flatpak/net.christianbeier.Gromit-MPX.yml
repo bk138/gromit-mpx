@@ -1,10 +1,10 @@
 id: net.christianbeier.Gromit-MPX
 runtime: org.gnome.Platform # using GNOME for the time being as we need dconf for setting hotkeys under Wayland
-runtime-version: '3.38'
+runtime-version: '42'
 sdk: org.gnome.Sdk
 command: gromit-mpx
 finish-args:
-  - --socket=x11
+  - --socket=fallback-x11
   # needed to show appindicator in Ubuntu
   - --talk-name=org.kde.StatusNotifierWatcher
   # this is the dconf hole for setting hotkeys under Wayland
@@ -24,8 +24,8 @@ modules:
       - glib-compile-schemas /app/share/glib-2.0/schemas
     sources:
       - type: archive
-        url: https://github.com/GNOME/gnome-settings-daemon/archive/GNOME_SETTINGS_DAEMON_3_38_1.tar.gz
-        sha256: 736a961ccdb314b9a157e29710743563dc67652ebc3ca69c0f37df2776863523
+        url: https://github.com/GNOME/gnome-settings-daemon/archive/refs/tags/42.2.tar.gz
+        sha256: 11449dfb57e20a7a455e85ab0805ad13cf9cdc6b3670c9b166bd563447e0a207
   - name: dconf
     buildsystem: meson
     config-opts:
@@ -38,8 +38,8 @@ modules:
       - /share/dbus-1
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/dconf/0.38/dconf-0.38.0.tar.xz
-        sha256: 45f60f41330d27715cce1315af123f94f1c2cdedb68b6bed3b309866eec44f58
+        url: https://download.gnome.org/sources/dconf/0.40/dconf-0.40.0.tar.xz
+        sha256: cf7f22a4c9200421d8d3325c5c1b8b93a36843650c9f95d6451e20f0bcb24533
       - type: patch
         path: dconf-override.patch
   - name: gromit-mpx
