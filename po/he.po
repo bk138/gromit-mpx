@@ -5,12 +5,12 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Gromit-MPX\n"
+"Project-Id-Version: Gromit-MPX v1.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-06 18:04+0300\n"
-"PO-Revision-Date: 2022-06-29 17:20+0300\n"
+"POT-Creation-Date: 2022-06-30 19:45+0300\n"
+"PO-Revision-Date: 2022-06-30 20:18+0300\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
-"Language-Team: \n"
+"Language-Team: avi.markovitz@gmail.com\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -70,22 +70,26 @@ msgid ""
 "its development by using one of the donation options on the project's\n"
 "website or directly via the support options available from the tray menu.\n"
 msgstr ""
-"Gromit-MPX (GRAphics Over Miscellaneous Things) הוא כלי־עזר זעיר ליצירת\n"
-"הערות_הסבר על המסך.\n"
+"Gromit-MPX (GRAphics Over Miscellaneous Things)\n"
 "\n"
-"השימוש העיקרי בכלי הוא להכנת מצגות על־גבי צלמי מסך של יישומון כלשהו. בכלים "
-"אחרים, בדרך כלל,\n"
-"תידרש הזזת מצביע־העכבר סביב נקודת העניין\n"
-"בתקווה שכולם ישימו אליה לב. עם Gromit-MPX, ניתן לצייר\n"
-"בכול אזור במסך, תוך הדגשת קטע או לחצן כלשהו.\n"
 "\n"
-"אם במקרה השימוש ב־Gromit-MPX היה מהנה, נא לשקול לתמוך\n"
-"בהמשך פיתוחו באחת מאפשרויות התרומה למייזם\n"
-"אתר מרשתת או ישירות דרך אפשרויות התמיכה הזמינות מתפריט המגש.\n"
+"הוא כלי־עזר זעיר ליצירת הערות־הסבר על פני מסך של יישום כלשהו.\n"
+"\n"
+"השימוש העיקרי בכלי, הוא להדגמות תכנות ויישומים, תוך כדי השימוש בהם.\n"
+"בכלים אחרים, תידרש בדרך כלל, הזזת מצביע־העכבר סביב נקודת העניין אותה "
+"מעוניינים להדגיש\n"
+"זאת בתקווה שכול הנוכחים ישימו אליה לב.\n"
+"עם Gromit-MPX, ניתן לצייר בכול אזור במסך היישום, נושא ההדגמה, תוך הדגשת קטע "
+"או לחצן מסוימים.\n"
+"\n"
+"אם במקרה השימוש ב־Gromit-MPX היה מהנה, \n"
+"נא לשקול לתמוך בהמשך פיתוחו, באחת מאפשרויות התרומה למיזם\n"
+"באתר המרשתת של המיזם, או, ישירות מתפריט המגש, באמצעות אחת מאפשרויות התמיכה "
+"הזמינות.\n"
 
 #: ../src/callbacks.c:729
 msgid "Gromit-MPX - How to use it"
-msgstr "Gromit-MPX – כיצד להשתמש בו"
+msgstr "Gromit-MPXכיצד להשתמש ב־"
 
 #: ../src/callbacks.c:705
 msgid "Gromit-MPX - What is it?"
@@ -97,7 +101,7 @@ msgstr "אטימות פחותה"
 
 #: ../src/config.c:155
 msgid "No usable config file found, falling back to default tools."
-msgstr "לא נמצא קובץ תצור (config), נסיגה לכלים ברירת מחדל."
+msgstr "לא נמצא קובץ תצור (config), נסיגה לכלי ברירת מחדל."
 
 #: ../src/main.c:795
 #, c-format
@@ -106,7 +110,7 @@ msgstr "החזרה (SHIFT-%s)"
 
 #: ../src/callbacks.c:737
 msgid "Show again on startup"
-msgstr "להציג שנית באתחול"
+msgstr "להציג שוב באתחול"
 
 #: ../src/main.c:789
 msgid "Thicker Lines"
@@ -119,12 +123,12 @@ msgstr "קווים דקים יותר"
 #: ../src/main.c:783
 #, c-format
 msgid "Toggle Painting (%s)"
-msgstr "מיתוג ציור (%s)"
+msgstr "מחלף ציור (%s)"
 
 #: ../src/main.c:787
 #, c-format
 msgid "Toggle Visibility (CTRL-%s)"
-msgstr "מיתוג נראות (CTRL-%s)"
+msgstr "מחלף נראות (CTRL-%s)"
 
 #: ../src/main.c:793
 #, c-format
@@ -133,7 +137,7 @@ msgstr "הסגה (%s)"
 
 #: ../src/main.c:918
 msgid "Via LiberaPay"
-msgstr "באמצעות  LiberaPay"
+msgstr "באמצעות LiberaPay"
 
 #: ../src/main.c:919
 msgid "Via Patreon"
@@ -168,16 +172,20 @@ msgstr ""
 "הדגשת דבר מה מהווה הפרעה בזרם העבודה,\n"
 "לכן, ניתן להפעיל ולכבות את Gromit-MPX תוך כדי תנועה באמצעות מקש קיצור:\n"
 "\n"
-"Gromit-MPX משריינת את המקשים `%s` ו־`%s`, כך שיישומים אחרים לא יוכל להשתמש "
-"בהם\n"
-"והם זמינים ל־Gromit-MPX בלבד. הפקודות הזמינות הן:\n"
+"מאחר ש־Gromit- MPX משרינת את המקשים `%s` ו־`%s`, יישומים אחרים לא יוכל "
+"להשתמש במקשים אלו כמקשי קיצור־דרך\n"
+"הם יהיו זמינים ל־Gromit-MPX בלבד.\n"
 "\n"
-"<tt><b> מחלף ציור: %s\n"
-"    נקוי מסך: SHIFT-%s\n"
-"    מחלף נראות: CTRL-%s\n"
-"    יציאה: ALT-%s\n"
-"    בטול מהלך אחרון: %s\n"
-"    בצוע מהלך אחרון שבוטל מחדש: SHIFT-%s</b></tt>"
+"הפקודות הזמינות הן:\n"
+"\n"
+"<tt><b>\n"
+"    מחלף ציור  –   %s\n"
+"    מחלף נראות  –   CTRL-%s\n"
+"    ניקוי מסך  –  SHIFT-%s\n"
+"    יציאה  –  ALT-%s\n"
+"    ביטול מהלך אחרון – %s\n"
+"    החזרת מהלך אחרון שבוטל  –  SHIFT-%s\n"
+"</b></tt>"
 
 #: ../src/main.c:801
 msgid "_About"
