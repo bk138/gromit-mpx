@@ -1,0 +1,205 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Gromit-MPX package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Gromit-MPX v1.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-30 19:45+0300\n"
+"PO-Revision-Date: 2022-06-30 20:18+0300\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"Language-Team: avi.markovitz@gmail.com\n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
+"2 : 3);\n"
+"X-Generator: Poedit 3.1\n"
+
+#: ../src/callbacks.c:669
+msgid "About Gromit-MPX"
+msgstr "על אודות Gromit-MPX"
+
+#: ../src/main.c:791
+msgid "Bigger Opacity"
+msgstr "אטימות מוגברת"
+
+#: ../src/main.c:785
+#, c-format
+msgid "Clear Screen (SHIFT-%s)"
+msgstr "ניקוי חלון (SHIFT-%s)"
+
+#: ../src/callbacks.c:735
+msgid ""
+"Do you want to show this introduction again on the next start of Gromit-"
+"MPX?\n"
+"You can always access it again via the sys tray menu.\n"
+msgstr ""
+"האם להציג הקדמה זו שוב באתחול הבא של Gromit-MPX?\n"
+"ניתן בכל עת לחזור להקדמה שוב מתפריט מגש המערכת.\n"
+
+#: ../src/config.c:471
+#, c-format
+msgid "Failed parsing config file %s, falling back to default tools."
+msgstr "ניתוח קובץ תצור %s כשל, נסיגה לכלים ברירת מחדל."
+
+#: ../src/callbacks.c:670
+msgid ""
+"Gromit-MPX (GRaphics Over MIscellaneous Things - Multi-Pointer-EXtension) is "
+"an on-screen annotation tool that works with any Unix desktop environment "
+"under X11 as well as Wayland."
+msgstr ""
+"Gromit-MPX (GRAphics Over Miscellaneous Things - Multi-Pointer-EXtension) "
+"הוא כלי הערות־הסבר שפעול בכול סביבת שולחן עבודה דמוי יוניקס, מבוסס X11 וגם "
+"Wayland."
+
+#: ../src/callbacks.c:695
+msgid ""
+"Gromit-MPX (GRaphics Over MIscellaneous Things) is a small tool to make\n"
+"annotations on the screen.\n"
+"\n"
+"Its main use is for making presentations of some application. Normally,\n"
+"you would have to move the mouse pointer around the point of interest\n"
+"until hopefully everybody noticed it.  With Gromit-MPX, you can draw\n"
+"everywhere onto the screen, highlighting some button or area.\n"
+"\n"
+"If you happen to enjoy using Gromit-MPX, please consider supporting\n"
+"its development by using one of the donation options on the project's\n"
+"website or directly via the support options available from the tray menu.\n"
+msgstr ""
+"Gromit-MPX (GRAphics Over Miscellaneous Things)\n"
+"\n"
+"\n"
+"הוא כלי־עזר זעיר ליצירת הערות־הסבר על פני מסך של יישום כלשהו.\n"
+"\n"
+"השימוש העיקרי בכלי, הוא להדגמות תכנות ויישומים, תוך כדי השימוש בהם.\n"
+"בכלים אחרים, תידרש בדרך כלל, הזזת מצביע־העכבר סביב נקודת העניין אותה "
+"מעוניינים להדגיש\n"
+"זאת בתקווה שכול הנוכחים ישימו אליה לב.\n"
+"עם Gromit-MPX, ניתן לצייר בכול אזור במסך היישום, נושא ההדגמה, תוך הדגשת קטע "
+"או לחצן מסוימים.\n"
+"\n"
+"אם במקרה השימוש ב־Gromit-MPX היה מהנה, \n"
+"נא לשקול לתמוך בהמשך פיתוחו, באחת מאפשרויות התרומה למיזם\n"
+"באתר המרשתת של המיזם, או, ישירות מתפריט המגש, באמצעות אחת מאפשרויות התמיכה "
+"הזמינות.\n"
+
+#: ../src/callbacks.c:729
+msgid "Gromit-MPX - How to use it"
+msgstr "Gromit-MPXכיצד להשתמש ב־"
+
+#: ../src/callbacks.c:705
+msgid "Gromit-MPX - What is it?"
+msgstr "?Gromit-MPX מה זה"
+
+#: ../src/main.c:792
+msgid "Lesser Opacity"
+msgstr "אטימות פחותה"
+
+#: ../src/config.c:155
+msgid "No usable config file found, falling back to default tools."
+msgstr "לא נמצא קובץ תצור (config), נסיגה לכלי ברירת מחדל."
+
+#: ../src/main.c:795
+#, c-format
+msgid "Redo (SHIFT-%s)"
+msgstr "החזרה (SHIFT-%s)"
+
+#: ../src/callbacks.c:737
+msgid "Show again on startup"
+msgstr "להציג שוב באתחול"
+
+#: ../src/main.c:789
+msgid "Thicker Lines"
+msgstr "קווים עבים יותר"
+
+#: ../src/main.c:790
+msgid "Thinner Lines"
+msgstr "קווים דקים יותר"
+
+#: ../src/main.c:783
+#, c-format
+msgid "Toggle Painting (%s)"
+msgstr "מחלף ציור (%s)"
+
+#: ../src/main.c:787
+#, c-format
+msgid "Toggle Visibility (CTRL-%s)"
+msgstr "מחלף נראות (CTRL-%s)"
+
+#: ../src/main.c:793
+#, c-format
+msgid "Undo (%s)"
+msgstr "הסגה (%s)"
+
+#: ../src/main.c:918
+msgid "Via LiberaPay"
+msgstr "באמצעות LiberaPay"
+
+#: ../src/main.c:919
+msgid "Via Patreon"
+msgstr "באמצעות פטראון"
+
+#: ../src/main.c:920
+msgid "Via PayPal"
+msgstr "באמצאות PayPal"
+
+#: ../src/callbacks.c:713
+#, c-format
+msgid ""
+"You can operate Gromit-MPX using its tray icon (if your desktop environment\n"
+"provides a sys tray), but since you typically want to use the program you "
+"are\n"
+"demonstrating and highlighting something is a short interruption of your\n"
+"workflow, Gromit-MPX can be toggled on and off on the fly via a hotkey:\n"
+"\n"
+"It grabs the `%s` and `%s` keys, so that no other application can use them\n"
+"and they are available to Gromit-MPX only.  The available commands are:\n"
+"\n"
+"<tt><b>   toggle painting:         %s\n"
+"   clear screen:            SHIFT-%s\n"
+"   toggle visibility:       CTRL-%s\n"
+"   quit:                    ALT-%s\n"
+"   undo last stroke:        %s\n"
+"   redo last undone stroke: SHIFT-%s</b></tt>"
+msgstr ""
+"ניתן להפעיל את Gromit-MPX מסמל המגש (ככול שסביבת שולחן העבודה מספקת מגש "
+"מערכת),\n"
+"אך כיוון שהמטרה היא להשתמש בתוכנהתוך כדי הדגמתה,\n"
+"הדגשת דבר מה מהווה הפרעה בזרם העבודה,\n"
+"לכן, ניתן להפעיל ולכבות את Gromit-MPX תוך כדי תנועה באמצעות מקש קיצור:\n"
+"\n"
+"מאחר ש־Gromit- MPX משרינת את המקשים `%s` ו־`%s`, יישומים אחרים לא יוכל "
+"להשתמש במקשים אלו כמקשי קיצור־דרך\n"
+"הם יהיו זמינים ל־Gromit-MPX בלבד.\n"
+"\n"
+"הפקודות הזמינות הן:\n"
+"\n"
+"<tt><b>\n"
+"    מחלף ציור  –   %s\n"
+"    מחלף נראות  –   CTRL-%s\n"
+"    ניקוי מסך  –  SHIFT-%s\n"
+"    יציאה  –  ALT-%s\n"
+"    ביטול מהלך אחרון – %s\n"
+"    החזרת מהלך אחרון שבוטל  –  SHIFT-%s\n"
+"</b></tt>"
+
+#: ../src/main.c:801
+msgid "_About"
+msgstr "_על אודות"
+
+#: ../src/main.c:799
+msgid "_Introduction"
+msgstr "_הקדמה"
+
+#: ../src/main.c:804
+#, c-format
+msgid "_Quit (ALT-%s)"
+msgstr "_יצאה (ALT-%s)"
+
+#: ../src/main.c:800
+msgid "_Support Gromit-MPX"
+msgstr "תמיכה ב־Gromit-MPX"
