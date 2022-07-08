@@ -42,6 +42,7 @@ The name stands for (*GR*aphics *O*ver *MI*scellaneous *T*hings -
 Budig](mailto:simon@budig.de).
 
 If you already used Gromit-MPX, you probably want to read [NEWS](NEWS.md).
+The roadmap for future developments can be found [here](https://github.com/bk138/gromit-mpx/milestones?state=open).
 
 ## How to use it
 
