@@ -240,15 +240,6 @@ void setup_input_devices (GromitData *data)
           devdata->index = i;
 
 	  /* get attached keyboard and grab the hotkey */
-	  if (!data->hot_keycode && !data->undo_keycode)
-	    {
-	      g_printerr("ERROR: Grabbing keys from attached keyboard of '%s' failed, hotkey or undo key not defined.\n",
-			 gdk_device_get_name(device));
-	      g_free(devdata);
-	      continue;
-	    }
-
-
 	  if (GDK_IS_X11_DISPLAY(data->display)) {
 	      gint dev_id = gdk_x11_device_get_id(device);
 
