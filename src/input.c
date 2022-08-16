@@ -248,9 +248,6 @@ void setup_input_devices (GromitData *data)
  
 	      if(kbd_dev_id != -1)
 		  {
-		      if(data->debug)
-			  g_printerr("DEBUG: Grabbing hotkeys '%s' and '%s' from keyboard '%d' .\n", data->hot_keyval, data->undo_keyval, kbd_dev_id);
-
 		      XIEventMask mask;
 		      unsigned char bits[4] = {0,0,0,0};
 		      mask.mask = bits;
@@ -265,6 +262,9 @@ void setup_input_devices (GromitData *data)
 		      gdk_x11_display_error_trap_push(data->display);
 	      
 		      if (data->hot_keycode) {
+			  if(data->debug)
+			      g_printerr("DEBUG: Grabbing hot key '%s' from keyboard '%d' .\n", data->hot_keyval, kbd_dev_id);
+
 			  if(XIGrabKeycode(GDK_DISPLAY_XDISPLAY(data->display),
 					   kbd_dev_id,
 					   data->hot_keycode,
@@ -290,6 +290,9 @@ void setup_input_devices (GromitData *data)
 		      }
 
 		      if (data->undo_keycode) {
+			  if(data->debug)
+			      g_printerr("DEBUG: Grabbing undo key '%s' from keyboard '%d' .\n", data->undo_keyval, kbd_dev_id);
+
 			  if(XIGrabKeycode(GDK_DISPLAY_XDISPLAY(data->display),
 					   kbd_dev_id,
 					   data->undo_keycode,
