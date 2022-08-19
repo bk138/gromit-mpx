@@ -66,7 +66,7 @@ static void remove_hotkeys_from_compositor(GromitData *data) {
     if (!data->hot_keycode && !data->undo_keycode)
 	return;
 
-    if (xdg_current_desktop && strcmp(xdg_current_desktop, "GNOME") == 0) {
+    if (xdg_current_desktop && strstr(xdg_current_desktop, "GNOME") != 0) {
 	/*
 	  Get all custom key bindings and save back the ones that are not from us.
 	*/
@@ -120,7 +120,7 @@ static void add_hotkeys_to_compositor(GromitData *data) {
     if (!data->hot_keycode && !data->undo_keycode)
 	return;
 
-    if (xdg_current_desktop && strcmp(xdg_current_desktop, "GNOME") == 0) {
+    if (xdg_current_desktop && strstr(xdg_current_desktop, "GNOME") != 0) {
 
 	if(data->debug)
 	    g_print("DEBUG: Detected GNOME under Wayland, adding our hotkeys to compositor\n");
