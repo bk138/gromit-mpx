@@ -691,7 +691,12 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
           strcasecmp (data->hot_keyval, "none") != 0)
         {
           keymap = gdk_keymap_get_for_display (data->display);
-          keyval = gdk_keyval_from_name (data->hot_keyval);
+          // strip modifiers such as <Super> before looking up keycode
+          gchar    *hot_keyval = data->hot_keyval;
+          if (hot_keyval[0] == '<' && strrchr(hot_keyval, '>'))
+            hot_keyval = strchr(hot_keyval, '>') + 1;
+
+          keyval = gdk_keyval_from_name (hot_keyval);
 
           if (!keyval || !gdk_keymap_get_entries_for_keyval (keymap, keyval,
                                                              &keys, &n_keys))
