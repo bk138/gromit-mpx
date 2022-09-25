@@ -1,3 +1,10 @@
+# Gromit-MPX 1.4.3 - 2022-09-25
+
+### 🛠  Fixes
+
+* Fixed operation with hotkeys set to none.
+* Fixed hotkey binding on Ubuntu 22/GNOME.
+
 # Gromit-MPX 1.4.2 - 2022-02-12
 
 ### 🛠  Fixes
