@@ -1,3 +1,67 @@
+commit 0ae26c1c52da868c3c14634af4ce3142c2e0625c
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Sep 25 14:42:56 2022 +0200
+
+    AppStream: add 1.4.3 release notes
+
+commit 1f376a8e2095cbb2ea667c1967fe3a195a4ddcec
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Sep 25 14:40:19 2022 +0200
+
+    callbacks: update authors
+
+commit c6af8d4d0be05cfd69148b3cff286069ad27b4da
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Sep 25 14:38:13 2022 +0200
+
+    CMake: bump patchlevel version
+
+commit 243ca4e1fa19dd3c9926119f8133f3b82695ff50
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Sep 25 14:37:33 2022 +0200
+
+    NEWS: add v1.4.3 entry
+
+commit 2f7a8edda8d085aec5966d983755fe220801847a
+Author: godmar <godmar@gmail.com>
+Date:   Fri Aug 19 15:01:42 2022 -0400
+
+    input: look for 'GNOME' as substring of XDG_CURRENT_DESKTOP
+    
+    ...instead of checking whether XDG_CURRENT_DESKTOP equals `GNOME` when installing hotkeys into the compositor under Wayland. This will support both `GNOME` and `ubuntu:GNOME` for instance, the latter is the setting on Ubuntu 22.
+    
+    Closes #164
+
+commit 1c31eb0a544afd54185091cb5b781a9959ea136a
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Aug 16 21:21:38 2022 +0200
+
+    input: don't mess with compositor when no keys are set at all
+    
+    re #162
+
+commit 1627dd6c1d0ac68637e489445d1f44ee0dfa84fc
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Aug 16 21:10:19 2022 +0200
+
+    input: adapt debug logs to no-hotkeys-set case
+    
+    re #162
+
+commit 6181dcf960a34b3d266a6a16b96c6adcca52c230
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Aug 16 21:07:45 2022 +0200
+
+    input: fill device table also when no hotkeys are defined
+    
+    Closes #162
+
+commit a64b41a0899d2851707e8b56332a5df771de0bed
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Feb 12 16:26:31 2022 +0100
+
+    ChangeLog: update
+
 commit d17f112bb660e4445a6972ea5eb11f4260747764
 Author: Christian Beier <info@christianbeier.net>
 Date:   Sat Feb 12 16:24:10 2022 +0100
