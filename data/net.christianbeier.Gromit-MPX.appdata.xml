@@ -56,6 +56,14 @@
   </screenshots>
 
   <releases>
+    <release version="1.4.3" date="2022-09-25">
+      <description>
+	<p>
+	  Fixed operation with hotkeys set to none. Also fixed hotkey binding on Ubuntu 22/GNOME.
+	</p>
+      </description>
+    </release>
+
     <release version="1.4.2" date="2022-02-12">
       <description>
 	<p>
