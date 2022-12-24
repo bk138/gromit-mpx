@@ -696,7 +696,7 @@ void main_do_event (GdkEventAny *event,
 }
 
 
-
+int app_parse_args (int argc, char **argv, GromitData *data);
 
 
 void setup_main_app (GromitData *data, int argc, char ** argv)
