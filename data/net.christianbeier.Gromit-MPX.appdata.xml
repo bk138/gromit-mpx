@@ -31,11 +31,11 @@
     </p>
     <p>Key features include:</p>
     <ul>
-    <li><em>Desktop-independent.</em> Gromit-MPX works with GNOME, KDE, XFCE, ... under X11 as well as with a Wayland session</li>
-    <li><em>Hotkey-based.</em>Does not get into your way of doing things by sticking some UI widget on your desktop</li>
-    <li><em>Configurable.</em>You are free to change key bindings as well as drawing tool configuration</li>
-    <li><em>Multi-Pointer.</em>Under X11, it enables graphical annotations with several pointers at once</li>
-    <li><em>Fast.</em>Where available, Gromit-MPX makes use of Compositing</li>
+    <li>Desktop-independent. Gromit-MPX works with GNOME, KDE, XFCE, ... under X11 as well as with a Wayland session</li>
+    <li>Hotkey-based. Does not get into your way of doing things by sticking some UI widget on your desktop</li>
+    <li>Configurable. You are free to change key bindings as well as drawing tool configuration</li>
+    <li>Multi-Pointer. Under X11, it enables graphical annotations with several pointers at once</li>
+    <li>Fast. Where available, Gromit-MPX makes use of Compositing</li>
     </ul>
   </description>
   
