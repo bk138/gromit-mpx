@@ -249,6 +249,7 @@ void setup_input_devices (GromitData *data)
           devdata->device = device;
           devdata->index = i;
 
+#ifdef GDK_WINDOWING_X11
 	  /* get attached keyboard and grab the hotkey */
 	  if (GDK_IS_X11_DISPLAY(data->display)) {
 	      gint dev_id = gdk_x11_device_get_id(device);
@@ -344,6 +345,7 @@ void setup_input_devices (GromitData *data)
 			  }
 		  }
 	  } // GDK_IS_X11_DISPLAY()
+#endif // GDK_WINDOWING_X11
 
 	  /*
 	    When running under XWayland, hotkey grabbing does not work and we
@@ -402,11 +404,15 @@ void release_grab (GromitData *data,
           devdata = value;
           if(devdata->is_grabbed)
 	  {
+#ifdef GDK_WINDOWING_X11
 	    gdk_x11_display_error_trap_push(data->display);
+#endif
 	    gdk_device_ungrab(devdata->device, GDK_CURRENT_TIME);
+#ifdef GDK_WINDOWING_X11
 	    XSync(GDK_DISPLAY_XDISPLAY(data->display), False);
 	    if(gdk_x11_display_error_trap_pop(data->display))
 	      g_printerr("WARNING: Ungrabbing device '%s' failed.\n", gdk_device_get_name(devdata->device));
+#endif
 
 	    devdata->is_grabbed = 0;
             /* workaround buggy GTK3 ? */
