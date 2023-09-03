@@ -63,7 +63,7 @@ static void remove_hotkeys_from_compositor(GromitData *data) {
     char *xdg_current_desktop = getenv("XDG_CURRENT_DESKTOP");
 
     /* don't do anything when no keys are set at all */
-    if (!data->hot_keycode && !data->undo_keycode)
+    if (!data->hot_keycode && !data->undo_keycode && !data->save_keycode)
 	return;
 
     if (xdg_current_desktop && strstr(xdg_current_desktop, "GNOME") != 0) {
@@ -153,7 +153,7 @@ static void add_hotkeys_to_compositor(GromitData *data) {
 	/*
 	  add our keybindings
 	 */
-	gchar *modifier_hotkey_option[18];
+	gchar *modifier_hotkey_option[21];
 	modifier_hotkey_option[0] = "";
 	modifier_hotkey_option[1] = data->hot_keyval;
 	modifier_hotkey_option[2] = "--toggle";
@@ -172,8 +172,11 @@ static void add_hotkeys_to_compositor(GromitData *data) {
 	modifier_hotkey_option[15] = "<Shift>";
 	modifier_hotkey_option[16] = data->undo_keyval;
 	modifier_hotkey_option[17] = "--redo";
+	modifier_hotkey_option[18] = "";
+	modifier_hotkey_option[19] = data->save_keyval;
+	modifier_hotkey_option[20] = "--save";
 
-	for(int i = 0; i < 18; i+=3) {
+	for(int i = 0; i < 21; i+=3) {
 	    gchar *new_binding = g_malloc(128);
 	    snprintf(new_binding,
 		     128,
@@ -328,6 +331,33 @@ void setup_input_devices (GromitData *data)
 									  GTK_BUTTONS_CLOSE,
 									 "Grabbing undo key %s from keyboard %d failed. The undo hotkey function will not work unless configured to use another key.",
 									 data->undo_keyval,
+									 kbd_dev_id);
+			      gtk_dialog_run (GTK_DIALOG (dialog));
+			      gtk_widget_destroy (dialog);
+			  }
+		      }
+
+		      if (data->save_keycode) {
+			  if(data->debug)
+			      g_printerr("DEBUG: Grabbing save key '%s' from keyboard '%d' .\n", data->save_keyval, kbd_dev_id);
+
+			  if(XIGrabKeycode(GDK_DISPLAY_XDISPLAY(data->display),
+					   kbd_dev_id,
+					   data->save_keycode,
+					   GDK_WINDOW_XID(data->root),
+					   GrabModeAsync,
+					   GrabModeAsync,
+					   True,
+					   &mask,
+					   nmods,
+					   modifiers) != 0) {
+			      g_printerr("ERROR: Grabbing save key from keyboard device %d failed.\n", kbd_dev_id);
+			      GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(data->win),
+									 GTK_DIALOG_DESTROY_WITH_PARENT,
+									 GTK_MESSAGE_ERROR,
+									  GTK_BUTTONS_CLOSE,
+									 "Grabbing save key %s from keyboard %d failed. The save hotkey function will not work unless configured to use another key.",
+									 data->save_keyval,
 									 kbd_dev_id);
 			      gtk_dialog_run (GTK_DIALOG (dialog));
 			      gtk_widget_destroy (dialog);
@@ -621,6 +651,18 @@ gint snoop_key_press(GtkWidget   *grab_widget,
         redo_drawing (data);
       else
         undo_drawing (data);
+
+      return TRUE;
+    }
+
+  if (event->type == GDK_KEY_PRESS &&
+      event->hardware_keycode == data->save_keycode)
+    {
+      if(data->debug)
+	g_printerr("DEBUG: Received savekey press from device '%s'\n", gdk_device_get_name(dev));
+
+      save_drawing(data);
+
 
       return TRUE;
     }

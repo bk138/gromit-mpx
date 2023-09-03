@@ -48,6 +48,9 @@ int parse_args (int argc, char **argv, GromitData *data);
 #ifndef DEFAULT_OPACITY
 #define DEFAULT_OPACITY 0.75
 #endif
+#ifndef DEFAULT_SAVEKEY
+#define DEFAULT_SAVEKEY "F10"
+#endif
 
 void read_keyfile(GromitData *data);
 

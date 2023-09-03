@@ -23,6 +23,8 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <libnotify/notify.h>
 
 #include "callbacks.h"
 #include "config.h"
@@ -449,6 +451,22 @@ void undo_drawing (GromitData *data)
     g_printerr ("DEBUG: Undo drawing %d.\n", data->undo_head);
 }
 
+void save_drawing(GromitData *data)
+{
+
+  //TODO: move this into user data or somethign
+  gchar *save_file;
+  save_file = g_strjoin (G_DIR_SEPARATOR_S,
+                        g_get_user_config_dir(), "gromit.png", NULL);
+
+  cairo_surface_write_to_png(data->backbuffer, save_file);
+
+  NotifyNotification *save_notif; 
+  notify_init("gromit-mpx");
+  
+  save_notif = notify_notification_new("Notes Saved", "", NULL);
+  notify_notification_show(save_notif, NULL);
+}
 
 
 void redo_drawing (GromitData *data)
@@ -490,7 +508,7 @@ void main_do_event (GdkEventAny *event,
   if ((event->type == GDK_KEY_PRESS ||
        event->type == GDK_KEY_RELEASE) &&
       event->window == data->root &&
-      (keycode == data->hot_keycode || keycode == data->undo_keycode))
+      (keycode == data->hot_keycode || keycode == data->undo_keycode || keycode == data->save_keycode))
     {
       /* redirect the event to our main window, so that GTK+ doesn't
        * throw it away (there is no GtkWidget for the root window...)
@@ -530,6 +548,9 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
 
   data->undo_keyval = DEFAULT_UNDOKEY;
   data->undo_keycode = 0;
+
+  data->save_keyval = DEFAULT_SAVEKEY;
+  //data->undo_keycode = 0;
 
   char *xdg_current_desktop = getenv("XDG_CURRENT_DESKTOP");
   if (xdg_current_desktop && strcmp(xdg_current_desktop, "XFCE") == 0) {
@@ -578,7 +599,15 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   */
   /* SHAPE SURFACE*/
   cairo_surface_destroy(data->backbuffer);
-  data->backbuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
+  gchar *save_file;
+  save_file = g_strjoin (G_DIR_SEPARATOR_S,
+                        g_get_user_config_dir(), "gromit.png", NULL);
+
+  if (access(save_file, F_OK) == 0) {
+    data->backbuffer = cairo_image_surface_create_from_png(save_file);
+  } else {
+    data->backbuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
+  }
   
   /*
     UNDO STATE
@@ -653,6 +682,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   gtk_selection_add_target (data->win, GA_CONTROL, GA_RELOAD, 7);
   gtk_selection_add_target (data->win, GA_CONTROL, GA_UNDO, 8);
   gtk_selection_add_target (data->win, GA_CONTROL, GA_REDO, 9);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_SAVE, 10);
 
 
  
@@ -733,6 +763,33 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
         }
     }
 
+  /*
+     FIND SAVEKEY KEYCODE 
+  */
+  if (data->save_keyval)
+    {
+      GdkKeymap    *keymap;
+      GdkKeymapKey *keys;
+      gint          n_keys;
+      guint         keyval;
+
+      if (strlen (data->save_keyval) > 0 &&
+          strcasecmp (data->save_keyval, "none") != 0)
+        {
+          keymap = gdk_keymap_get_for_display (data->display);
+          keyval = gdk_keyval_from_name (data->save_keyval);
+
+          if (!keyval || !gdk_keymap_get_entries_for_keyval (keymap, keyval,
+                                                             &keys, &n_keys))
+            {
+              g_printerr ("cannot find the key \"%s\"\n", data->save_keyval);
+              exit (1);
+            }
+
+          data->save_keycode = keys[0].keycode;
+          g_free (keys);
+        }
+    }
 
   /* 
      INPUT DEVICES
@@ -790,6 +847,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   GtkWidget* thinner_lines_item = gtk_menu_item_new_with_label (_("Thinner Lines"));
   GtkWidget* opacity_bigger_item = gtk_menu_item_new_with_label (_("Bigger Opacity"));
   GtkWidget* opacity_lesser_item = gtk_menu_item_new_with_label (_("Lesser Opacity"));
+  GtkWidget* save_item = gtk_menu_item_new_with_label (_("Save"));
   snprintf(labelBuf, sizeof(labelBuf), _("Undo (%s)"), data->undo_keyval);
   GtkWidget* undo_item = gtk_menu_item_new_with_label (labelBuf);
   snprintf(labelBuf, sizeof(labelBuf), _("Redo (SHIFT-%s)"), data->undo_keyval);
@@ -813,6 +871,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), thinner_lines_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), opacity_bigger_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), opacity_lesser_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), save_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), undo_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), redo_item);
 
@@ -869,6 +928,9 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   g_signal_connect(G_OBJECT (opacity_lesser_item), "activate",
 		   G_CALLBACK (on_opacity_lesser),
 		   data);
+  g_signal_connect(G_OBJECT (save_item), "activate",
+		   G_CALLBACK (on_save),
+		   data);
   g_signal_connect(G_OBJECT (undo_item), "activate",
 		   G_CALLBACK (on_undo),
 		   data);
@@ -895,6 +957,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   gtk_widget_show (thinner_lines_item);
   gtk_widget_show (opacity_bigger_item);
   gtk_widget_show (opacity_lesser_item);
+  gtk_widget_show (save_item);
   gtk_widget_show (undo_item);
   gtk_widget_show (redo_item);
 
@@ -1012,6 +1075,11 @@ int main_client (int argc, char **argv, GromitData *data)
          {
            action = GA_REDO;
          }
+       else if (strcmp (arg, "-s") == 0 ||
+                strcmp (arg, "--save") == 0)
+         {
+           action = GA_SAVE;
+         }
        else
          {
            g_printerr ("Unknown Option to control a running Gromit-MPX process: \"%s\"\n", arg);
@@ -1057,16 +1125,17 @@ int main (int argc, char **argv)
   data->root = gdk_screen_get_root_window (data->screen);
   data->width = gdk_screen_get_width (data->screen);
   data->height = gdk_screen_get_height (data->screen);
+  printf("%d %d", data->width, data->height);
   data->opacity = DEFAULT_OPACITY;
 
   /*
     init our window
   */
-  data->win = gtk_window_new (GTK_WINDOW_POPUP);
+  data->win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   // this trys to set an alpha channel
   on_screen_changed(data->win, NULL, data);
 
-  gtk_window_fullscreen(GTK_WINDOW(data->win)); 
+  //gtk_window_fullscreen(GTK_WINDOW(data->win)); 
   gtk_window_set_skip_taskbar_hint(GTK_WINDOW(data->win), TRUE);
   gtk_widget_set_opacity(data->win, data->opacity);
   gtk_widget_set_app_paintable (data->win, TRUE);

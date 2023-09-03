@@ -53,6 +53,7 @@
 #define GA_RELOAD     gdk_atom_intern ("Gromit/reload", FALSE)
 #define GA_UNDO       gdk_atom_intern ("Gromit/undo", FALSE)
 #define GA_REDO       gdk_atom_intern ("Gromit/redo", FALSE)
+#define GA_SAVE       gdk_atom_intern ("Gromit/save", FALSE)
 
 #define GA_DATA       gdk_atom_intern ("Gromit/data", FALSE)
 #define GA_TOGGLEDATA gdk_atom_intern ("Gromit/toggledata", FALSE)
@@ -107,6 +108,8 @@ typedef struct
   gboolean     xinerama;
   gboolean     composited;
   GdkWindow   *root;
+  gchar       *save_keyval;
+  guint        save_keycode;
   gchar       *hot_keyval;
   guint        hot_keycode;
   gchar       *undo_keyval;
@@ -160,6 +163,7 @@ void swap_surfaces (cairo_surface_t *a, cairo_surface_t *b);
 void snap_undo_state (GromitData *data);
 void undo_drawing (GromitData *data);
 void redo_drawing (GromitData *data);
+void save_drawing (GromitData *data);
 
 void clear_screen (GromitData *data);
 

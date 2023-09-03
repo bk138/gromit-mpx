@@ -114,6 +114,9 @@ void on_opacity_bigger(GtkMenuItem *menuitem,
 void on_opacity_lesser(GtkMenuItem *menuitem,
 		       gpointer     user_data);
 
+void on_save(GtkMenuItem *menuitem,
+		       gpointer     user_data);
+
 void on_undo(GtkMenuItem *menuitem,
 	     gpointer     user_data);
 

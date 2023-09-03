@@ -16,7 +16,7 @@ add_custom_target(
     )
 endif(CMAKE_GENERATOR MATCHES "Unix Makefiles|Ninja")
 
-set(CMAKE_C_FLAGS  " ${CMAKE_C_FLAGS} -Wall -Wextra -Wno-unused-parameter")
+set(CMAKE_C_FLAGS  " ${CMAKE_C_FLAGS} -Wall -Wextra -Wno-unused-parameter -lnotify")
 
 find_package(PkgConfig)
 find_package(Gettext)

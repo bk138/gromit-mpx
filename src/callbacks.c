@@ -447,6 +447,8 @@ void on_mainapp_selection_get (GtkWidget          *widget,
     undo_drawing (data);
   else if (action == GA_REDO)
     redo_drawing (data);
+  else if (action == GA_SAVE)
+    save_drawing (data);
   else
     uri = "NOK";
 
@@ -626,6 +628,14 @@ void on_opacity_lesser(GtkMenuItem *menuitem,
   if(data->opacity<0.0)
     data->opacity = 0.0;
   gtk_widget_set_opacity(data->win, data->opacity);
+}
+
+void on_save(GtkMenuItem *menuitem,
+	     gpointer user_data)
+{
+  GromitData *data = (GromitData *) user_data;
+  save_drawing(data);
+  
 }
 
 
