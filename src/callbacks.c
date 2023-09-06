@@ -561,6 +561,8 @@ void on_mainapp_selection_received (GtkWidget *widget,
 	  data->modified = 1;
 	  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
 	  data->painted = 1;
+
+	  g_free(line_ctx);
 	}
     }
  
