@@ -982,6 +982,22 @@ int main_client (int argc, char **argv, GromitData *data)
            else
              data->clientdata = "-1"; /* default to grab all */
          }
+       else if (strcmp (arg, "-l") == 0 ||
+           strcmp (arg, "--line") == 0)
+         {
+           if (argc - (i+1) == 7) 
+             {
+
+               data->clientdata = g_strjoin(" ", argv[i+1], argv[i+2], argv[i+3], argv[i+4], argv[i+5], argv[i+6], argv[i+7], NULL);
+               action = GA_LINE;
+               i += 7;
+             }
+           else 
+             {
+               g_printerr ("-l requires 7 parameters: startX, startY, endX, endY, color, thickness, opacity\n");
+               wrong_arg = TRUE;
+             }
+         }
        else if (strcmp (arg, "-v") == 0 ||
                 strcmp (arg, "--visibility") == 0)
          {
