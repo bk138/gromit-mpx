@@ -510,18 +510,58 @@ void on_mainapp_selection_received (GtkWidget *widget,
 		g_printerr("ERROR: No device at index %ld.\n", (long)dev_nr);
 	    }
         }
-      else if (gtk_selection_data_get_target(selection_data) == GA_LINEDATA) {
+      else if (gtk_selection_data_get_target(selection_data) == GA_LINEDATA) 
+	{
 
-	gchar** line_args = g_strsplit((gchar*)gtk_selection_data_get_data(selection_data), " ", 7);
-          if(data->debug) {
-	    g_printerr("DEBUG: mainapp got line data back from client:\n");
-	    g_printerr("startX startY endX endY: %s %s %s %s\n", line_args[0], line_args[1], line_args[2], line_args[3]);
-	    g_printerr("color: %s\n", line_args[4]);
-	    g_printerr("thickness: %s\n", line_args[5]);
-	    g_printerr("opacity: %s\n", line_args[6]);
-	  }
+	  gchar** line_args = g_strsplit((gchar*)gtk_selection_data_get_data(selection_data), " ", 6);
+	  int startX = atoi(line_args[0]);
+	  int startY = atoi(line_args[1]);
+	  int endX = atoi(line_args[2]);
+	  int endY = atoi(line_args[3]);
+	  gchar* hex_code = line_args[4];
+	  int thickness = atoi(line_args[5]);
 
-      }
+          if(data->debug) 
+	    {
+	      g_printerr("DEBUG: mainapp got line data back from client:\n");
+	      g_printerr("startX startY endX endY: %d %d %d %d\n", startX, startY, endX, endY);
+	      g_printerr("color: %s\n", hex_code);
+	      g_printerr("thickness: %d\n", thickness);
+	    }
+
+	  GdkRGBA* color = g_malloc (sizeof (GdkRGBA));
+	  GdkRGBA *fg_color=data->red;
+	  if (gdk_rgba_parse (color, hex_code))
+	    {
+	      fg_color = color;
+	    }
+	  else
+	    {
+	      g_printerr ("Unable to parse color. "
+	      "Keeping default.\n");
+	      g_free (color);
+	    }
+	  color = NULL;
+	  GromitPaintContext* line_ctx = paint_context_new(data, GROMIT_PEN, fg_color, thickness, 0, thickness, thickness);
+
+	  GdkRectangle rect;
+	  rect.x = MIN (startX,endX) - thickness / 2;
+	  rect.y = MIN (startY,endY) - thickness / 2;
+	  rect.width = ABS (startX-endX) + thickness;
+	  rect.height = ABS (startY-endY) + thickness;
+
+	  if(data->debug)
+	    g_printerr("DEBUG: draw line from %d %d to %d %d\n", startX, startY, endX, endY);
+
+	  cairo_set_line_width(line_ctx->paint_ctx, thickness);
+	  cairo_move_to(line_ctx->paint_ctx, startX, startY);
+	  cairo_line_to(line_ctx->paint_ctx, endX, endY);
+	  cairo_stroke(line_ctx->paint_ctx);
+
+	  data->modified = 1;
+	  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
+	  data->painted = 1;
+	}
     }
  
   gtk_main_quit ();

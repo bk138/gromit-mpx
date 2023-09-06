@@ -986,16 +986,16 @@ int main_client (int argc, char **argv, GromitData *data)
        else if (strcmp (arg, "-l") == 0 ||
            strcmp (arg, "--line") == 0)
          {
-           if (argc - (i+1) == 7) 
+           if (argc - (i+1) == 6) /* this command must have exactly 6 params */
              {
 
-               data->clientdata = g_strjoin(" ", argv[i+1], argv[i+2], argv[i+3], argv[i+4], argv[i+5], argv[i+6], argv[i+7], NULL);
+               data->clientdata = g_strjoin(" ", argv[i+1], argv[i+2], argv[i+3], argv[i+4], argv[i+5], argv[i+6], NULL);
                action = GA_LINE;
-               i += 7;
+               i += 6;
              }
            else 
              {
-               g_printerr ("-l requires 7 parameters: startX, startY, endX, endY, color, thickness, opacity\n");
+               g_printerr ("-l requires 6 parameters: startX, startY, endX, endY, color, thickness\n");
                wrong_arg = TRUE;
              }
          }
