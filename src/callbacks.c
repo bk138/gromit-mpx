@@ -205,12 +205,10 @@ void on_clientapp_selection_get (GtkWidget          *widget,
   if(data->debug)
     g_printerr("DEBUG: clientapp received request.\n");  
 
-  printf("%s\n", gdk_atom_name(gtk_selection_data_get_target(selection_data)));
 
   if (gtk_selection_data_get_target(selection_data) == GA_TOGGLEDATA || gtk_selection_data_get_target(selection_data) == GA_LINEDATA)
     {
       ans = data->clientdata;
-      printf("%s", ans);
     }
     
   gtk_selection_data_set (selection_data,
@@ -431,8 +429,6 @@ void on_mainapp_selection_get (GtkWidget          *widget,
   gchar *uri = "OK";
   GdkAtom action = gtk_selection_data_get_target(selection_data);
 
-  printf("action: %s", gdk_atom_name(action));
-  printf("?");
   if(action == GA_TOGGLE)
     {
       /* ask back client for device id */
@@ -443,7 +439,6 @@ void on_mainapp_selection_get (GtkWidget          *widget,
   else if(action == GA_LINE)
     {
       /* ask back client for device id */
-      printf("aaa");
       gtk_selection_convert (data->win, GA_DATA,
                              GA_LINEDATA, time);
       gtk_main(); /* Wait for the response */
@@ -484,7 +479,6 @@ void on_mainapp_selection_received (GtkWidget *widget,
     }
   else
     {
-      printf("callback action: %s", gdk_atom_name(gtk_selection_data_get_target(selection_data)));
       if(gtk_selection_data_get_target(selection_data) == GA_TOGGLEDATA )
         {
 	  intptr_t dev_nr = strtoull((gchar*)gtk_selection_data_get_data(selection_data), NULL, 10);
