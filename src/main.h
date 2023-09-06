@@ -57,6 +57,7 @@
 
 #define GA_DATA       gdk_atom_intern ("Gromit/data", FALSE)
 #define GA_TOGGLEDATA gdk_atom_intern ("Gromit/toggledata", FALSE)
+#define GA_LINEDATA gdk_atom_intern ("Gromit/linedata", FALSE)
 
 #define GROMIT_MAX_UNDO 4
 

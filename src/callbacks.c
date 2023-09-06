@@ -205,9 +205,12 @@ void on_clientapp_selection_get (GtkWidget          *widget,
   if(data->debug)
     g_printerr("DEBUG: clientapp received request.\n");  
 
-  if (gtk_selection_data_get_target(selection_data) == GA_TOGGLEDATA)
+  printf("%s\n", gdk_atom_name(gtk_selection_data_get_target(selection_data)));
+
+  if (gtk_selection_data_get_target(selection_data) == GA_TOGGLEDATA || gtk_selection_data_get_target(selection_data) == GA_LINEDATA)
     {
       ans = data->clientdata;
+      printf("%s", ans);
     }
     
   gtk_selection_data_set (selection_data,
@@ -428,11 +431,21 @@ void on_mainapp_selection_get (GtkWidget          *widget,
   gchar *uri = "OK";
   GdkAtom action = gtk_selection_data_get_target(selection_data);
 
+  printf("action: %s", gdk_atom_name(action));
+  printf("?");
   if(action == GA_TOGGLE)
     {
       /* ask back client for device id */
       gtk_selection_convert (data->win, GA_DATA,
                              GA_TOGGLEDATA, time);
+      gtk_main(); /* Wait for the response */
+    }
+  else if(action == GA_LINE)
+    {
+      /* ask back client for device id */
+      printf("aaa");
+      gtk_selection_convert (data->win, GA_DATA,
+                             GA_LINEDATA, time);
       gtk_main(); /* Wait for the response */
     }
   else if (action == GA_VISIBILITY)
@@ -471,6 +484,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
     }
   else
     {
+      printf("callback action: %s", gdk_atom_name(gtk_selection_data_get_target(selection_data)));
       if(gtk_selection_data_get_target(selection_data) == GA_TOGGLEDATA )
         {
 	  intptr_t dev_nr = strtoull((gchar*)gtk_selection_data_get_data(selection_data), NULL, 10);
@@ -502,6 +516,18 @@ void on_mainapp_selection_received (GtkWidget *widget,
 		g_printerr("ERROR: No device at index %ld.\n", (long)dev_nr);
 	    }
         }
+      else if (gtk_selection_data_get_target(selection_data) == GA_LINEDATA) {
+
+	gchar** line_args = g_strsplit((gchar*)gtk_selection_data_get_data(selection_data), " ", 7);
+          if(data->debug) {
+	    g_printerr("DEBUG: mainapp got line data back from client:\n");
+	    g_printerr("startX startY endX endY: %s %s %s %s\n", line_args[0], line_args[1], line_args[2], line_args[3]);
+	    g_printerr("color: %s\n", line_args[4]);
+	    g_printerr("thickness: %s\n", line_args[5]);
+	    g_printerr("opacity: %s\n", line_args[6]);
+	  }
+
+      }
     }
  
   gtk_main_quit ();

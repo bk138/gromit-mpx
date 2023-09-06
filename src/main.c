@@ -653,6 +653,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   gtk_selection_add_target (data->win, GA_CONTROL, GA_RELOAD, 7);
   gtk_selection_add_target (data->win, GA_CONTROL, GA_UNDO, 8);
   gtk_selection_add_target (data->win, GA_CONTROL, GA_REDO, 9);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_LINE, 10);
 
 
  
@@ -1109,6 +1110,7 @@ int main (int argc, char **argv)
 
   gtk_selection_owner_set (data->win, GA_DATA, GDK_CURRENT_TIME);
   gtk_selection_add_target (data->win, GA_DATA, GA_TOGGLEDATA, 1007);
+  gtk_selection_add_target (data->win, GA_DATA, GA_LINEDATA, 1008);
 
 
 
