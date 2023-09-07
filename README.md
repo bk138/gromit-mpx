@@ -256,6 +256,7 @@ Gromit-MPX uses CMake as its build system. Thus, it's the usual:
     cd build
     cmake ..
     make
+    make install
 
 from the root of the source tree.
 
