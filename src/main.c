@@ -988,8 +988,26 @@ int main_client (int argc, char **argv, GromitData *data)
          {
            if (argc - (i+1) == 6) /* this command must have exactly 6 params */
              {
-
-               data->clientdata = g_strjoin(" ", argv[i+1], argv[i+2], argv[i+3], argv[i+4], argv[i+5], argv[i+6], NULL);
+              
+                // check if provided values are valid coords on the screen
+               if (atoi(argv[i+1]) < 0 || atoi(argv[i+1]) > (int)data->width || 
+                   atoi(argv[i+2]) < 0 || atoi(argv[i+2]) > (int)data->height ||
+                   atoi(argv[i+3]) < 0 || atoi(argv[i+3]) > (int)data->width ||
+                   atoi(argv[i+4]) < 0 || atoi(argv[i+4]) > (int)data->height)
+                    {
+                      g_printerr ("Invalid coordinates\n");
+                      wrong_arg = TRUE;
+                    }
+               else if (atoi(argv[i+6]) < 0)
+                    {
+                      g_printerr ("Thickness cannot be 0\n");
+                      wrong_arg = TRUE;
+                    }
+               else 
+                    {
+                      data->clientdata = g_strjoin(" ", argv[i+1], argv[i+2], argv[i+3], argv[i+4], argv[i+5], argv[i+6], NULL);
+                    }
+              
                action = GA_LINE;
                i += 6;
              }
