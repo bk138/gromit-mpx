@@ -998,9 +998,9 @@ int main_client (int argc, char **argv, GromitData *data)
                       g_printerr ("Invalid coordinates\n");
                       wrong_arg = TRUE;
                     }
-               else if (atoi(argv[i+6]) < 0)
+               else if (atoi(argv[i+6]) < 1)
                     {
-                      g_printerr ("Thickness cannot be 0\n");
+                      g_printerr ("Thickness must be atleast 1\n");
                       wrong_arg = TRUE;
                     }
                else 
