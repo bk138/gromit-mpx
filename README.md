@@ -96,6 +96,8 @@ Usage:
         will undo the last drawing stroke (or "-z")
     gromit-mpx --redo
         will redo the last undone drawing stroke (or "-y")
+    gromit-mpx --line <startX> <startY> <endX> <endY> <color> <thickness>
+        will draw a straight line with characteristics specified by the arguments (or "-l")
 
 If activated Gromit-MPX prevents you from using other programs with the
 mouse. You can press the button and paint on the screen. Key presses
