@@ -539,9 +539,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
 	    {
 	      g_printerr ("Unable to parse color. "
 	      "Keeping default.\n");
-	      g_free (color);
 	    }
-	  color = NULL;
 	  GromitPaintContext* line_ctx = paint_context_new(data, GROMIT_PEN, fg_color, thickness, 0, thickness, thickness);
 
 	  GdkRectangle rect;
@@ -563,6 +561,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
 	  data->painted = 1;
 
 	  g_free(line_ctx);
+	  g_free (color);
 	}
     }
  
