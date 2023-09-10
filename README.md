@@ -98,7 +98,7 @@ Usage:
         will redo the last undone drawing stroke (or "-y")
     gromit-mpx --line <startX> <startY> <endX> <endY> <color> <thickness>
         will draw a straight line with characteristics specified by the arguments (or "-l")
-	eg: `gromit-mpx -l 200 200 400 400 #C4A7E7 6` 
+        eg: gromit-mpx -l 200 200 400 400 #C4A7E7 6	
 
 If activated Gromit-MPX prevents you from using other programs with the
 mouse. You can press the button and paint on the screen. Key presses
