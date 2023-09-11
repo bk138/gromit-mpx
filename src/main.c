@@ -653,6 +653,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   gtk_selection_add_target (data->win, GA_CONTROL, GA_RELOAD, 7);
   gtk_selection_add_target (data->win, GA_CONTROL, GA_UNDO, 8);
   gtk_selection_add_target (data->win, GA_CONTROL, GA_REDO, 9);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_LINE, 10);
 
 
  
@@ -982,6 +983,40 @@ int main_client (int argc, char **argv, GromitData *data)
            else
              data->clientdata = "-1"; /* default to grab all */
          }
+       else if (strcmp (arg, "-l") == 0 ||
+           strcmp (arg, "--line") == 0)
+         {
+           if (argc - (i+1) == 6) /* this command must have exactly 6 params */
+             {
+              
+                // check if provided values are valid coords on the screen
+               if (atoi(argv[i+1]) < 0 || atoi(argv[i+1]) > (int)data->width || 
+                   atoi(argv[i+2]) < 0 || atoi(argv[i+2]) > (int)data->height ||
+                   atoi(argv[i+3]) < 0 || atoi(argv[i+3]) > (int)data->width ||
+                   atoi(argv[i+4]) < 0 || atoi(argv[i+4]) > (int)data->height)
+                    {
+                      g_printerr ("Invalid coordinates\n");
+                      wrong_arg = TRUE;
+                    }
+               else if (atoi(argv[i+6]) < 1)
+                    {
+                      g_printerr ("Thickness must be atleast 1\n");
+                      wrong_arg = TRUE;
+                    }
+               else 
+                    {
+                      data->clientdata = g_strjoin(" ", argv[i+1], argv[i+2], argv[i+3], argv[i+4], argv[i+5], argv[i+6], NULL);
+                    }
+              
+               action = GA_LINE;
+               i += 6;
+             }
+           else 
+             {
+               g_printerr ("-l requires 6 parameters: startX, startY, endX, endY, color, thickness\n");
+               wrong_arg = TRUE;
+             }
+         }
        else if (strcmp (arg, "-v") == 0 ||
                 strcmp (arg, "--visibility") == 0)
          {
@@ -1093,6 +1128,7 @@ int main (int argc, char **argv)
 
   gtk_selection_owner_set (data->win, GA_DATA, GDK_CURRENT_TIME);
   gtk_selection_add_target (data->win, GA_DATA, GA_TOGGLEDATA, 1007);
+  gtk_selection_add_target (data->win, GA_DATA, GA_LINEDATA, 1008);
 
 
 

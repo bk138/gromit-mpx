@@ -48,6 +48,7 @@
 #define GA_ACTIVATE   gdk_atom_intern ("Gromit/activate", FALSE)
 #define GA_DEACTIVATE gdk_atom_intern ("Gromit/deactivate", FALSE)
 #define GA_TOGGLE     gdk_atom_intern ("Gromit/toggle", FALSE)
+#define GA_LINE       gdk_atom_intern ("Gromit/line", FALSE)
 #define GA_VISIBILITY gdk_atom_intern ("Gromit/visibility", FALSE)
 #define GA_CLEAR      gdk_atom_intern ("Gromit/clear", FALSE)
 #define GA_RELOAD     gdk_atom_intern ("Gromit/reload", FALSE)
@@ -56,6 +57,7 @@
 
 #define GA_DATA       gdk_atom_intern ("Gromit/data", FALSE)
 #define GA_TOGGLEDATA gdk_atom_intern ("Gromit/toggledata", FALSE)
+#define GA_LINEDATA   gdk_atom_intern ("Gromit/linedata", FALSE)
 
 #define GROMIT_MAX_UNDO 4
 
