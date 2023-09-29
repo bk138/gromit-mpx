@@ -268,7 +268,7 @@ from the root of the source tree.
 * [ ] Update NEWS.
 * [ ] Increment version in CMakeLists.txt
 * [ ] Update Copyright year in About dialog.
-* [ ] Update authors in About dialog.
+* [ ] Update authors in About dialog and AUTHORS file.
 * [ ] Update AppStream.
 * [ ] Update ChangeLog.
 
