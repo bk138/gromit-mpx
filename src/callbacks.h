@@ -86,6 +86,8 @@ void on_device_added (GdkDeviceManager *device_manager,
 		      GdkDevice        *device,
 		      gpointer          user_data);
 
+void on_signal(int signum);
+
 /*
   menu callbacks
  */

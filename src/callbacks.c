@@ -850,3 +850,9 @@ void on_support_paypal(GtkMenuItem *menuitem, gpointer user_data)
 			    NULL);
 
 }
+
+void on_signal(int signum) {
+    // for now only SIGINT and SIGTERM
+    gtk_main_quit();
+}
+

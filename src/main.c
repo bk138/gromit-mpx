@@ -1144,6 +1144,8 @@ int main (int argc, char **argv)
     return main_client (argc, argv, data);
 
   /* Main application */
+  signal(SIGINT, on_signal);
+  signal(SIGTERM, on_signal);
   setup_main_app (data, argc, argv);
   gtk_main ();
   shutdown_input_devices(data);
