@@ -1,3 +1,769 @@
+commit c19df113b2b400a6753fcad8bf680a16a2b1018d
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Oct 11 22:04:18 2023 +0200
+
+    CMake: set full triplet version
+    
+    re #181
+
+commit 07aabaf44443b07f107eb4802f82268ecc20a494
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Oct 11 22:02:55 2023 +0200
+
+    AppStream: add 1.5.0 release notes
+    
+    re #181
+
+commit c3a4295fbb9fcf8d081ef7fcbd3b928ab645e89c
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Oct 11 21:53:17 2023 +0200
+
+    NEWS: update
+    
+    re #181
+
+commit 88ad45f14dffe41fff037664c115f92b3696ac11
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Oct 11 21:37:54 2023 +0200
+
+    NEWS: fix headline indent
+
+commit 9f2c27ad803e4805261278327a92a9a2d0b7143e
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Oct 11 21:32:17 2023 +0200
+
+    main,callbacks: handle SIGINT, SIGTERM
+    
+    Closes #114
+
+commit ef56fd1f2589720efeb39c6ff5b0f1a0b09d6ad9
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Oct 11 19:47:30 2023 +0200
+
+    config: don't overwrite read-only .ini file
+    
+    Closes #182
+
+commit 806baf6aa5d33ea1bbfbcda5d0ffa05acab5b669
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Sep 29 12:05:30 2023 +0200
+
+    README: update release instructions
+
+commit 2c11b9f869c20b29f6a7bc9a3851fdf17bde1849
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Sep 29 12:05:00 2023 +0200
+
+    AUTHORS: update
+
+commit ec99424bc6c68fd020665a11b94a22652eea5351
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Sep 29 12:03:15 2023 +0200
+
+    callbacks: update authors in About dialog
+
+commit 00eed7608e37dfba00f177b9216ee49f0fa36919
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Sep 29 11:54:57 2023 +0200
+
+    callbacks: update copyright year in About dialog
+
+commit d30f9b83e681e72ce1ee54de3ac81088fb0bdf9b
+Author: Ashwin Rajesh <46510831+VanillaViking@users.noreply.github.com>
+Date:   Mon Sep 11 19:07:46 2023 +1000
+
+    Add functionality to draw lines via command
+    
+    * action: add a --line command line option for drawing lines
+    
+    * targets: add GA_LINE and GA_LINEDATA targets to allow cli to send
+    parameters to the main app
+    
+    * chore: remove debug logs
+    
+    * chore: formatting fixes
+    
+    * callbacks: free line_ctx, might prevent potential memory leak
+    
+    * README: add docs for --line command
+    
+    * callbacks: fix memory leak
+    
+    * main: indentation fixes
+    
+    * cmdline: failsafe checks
+    
+    * cmdline: fix minor failsafe check bug
+    
+    * README: add line example
+    
+    * README: indentation error
+    
+    * README: add quotes around color argument
+
+commit e47c6c8a81b3045c43906052c62c9e586d0f90df
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Sep 7 15:08:50 2023 +0200
+
+    README: add make install to build instructions
+
+commit cff41ddc8724fef93652136a3fcede0295422916
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed May 17 08:50:13 2023 +0200
+
+    flatpak: update GNOME runtime to v43
+
+commit e3c3c85a18bba4aefe8f3329f26289d49e91b30e
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Apr 26 20:30:30 2023 +0200
+
+    AppStream: remove <em> tags
+    
+    Although
+    https://freedesktop.org/software/appstream/docs/chap-Metadata.html#tag-description
+    says this works, the flathub website does not display them correctly,
+    at least currently.
+    
+    Closes https://github.com/flathub/net.christianbeier.Gromit-MPX/issues/3
+
+commit db0c147a36d7c70c4f964d4fa26daa2b2fad77d4
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Sep 25 14:42:56 2022 +0200
+
+    AppStream: add 1.4.3 release notes
+
+commit e2c747cf0955b83feaed3a7592e3a0573426bbec
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Sep 25 14:40:19 2022 +0200
+
+    callbacks: update authors
+
+commit 036557fb02d8b986ebf14cb6232bc6656908cb8c
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Sep 25 14:37:33 2022 +0200
+
+    NEWS: add v1.4.3 entry
+
+commit 2f9c6d2b9ff25f4038330d04faf4919a269bde94
+Author: godmar <godmar@gmail.com>
+Date:   Fri Aug 19 15:01:42 2022 -0400
+
+    input: look for 'GNOME' as substring of XDG_CURRENT_DESKTOP
+    
+    ...instead of checking whether XDG_CURRENT_DESKTOP equals `GNOME` when installing hotkeys into the compositor under Wayland. This will support both `GNOME` and `ubuntu:GNOME` for instance, the latter is the setting on Ubuntu 22.
+    
+    Closes #164
+
+commit a8e5ce4668fe7bb3d025360611b1719be1039817
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Aug 16 21:21:38 2022 +0200
+
+    input: don't mess with compositor when no keys are set at all
+    
+    re #162
+
+commit 794b7306ba3e4aeef1040885a4202b5e0fa04bbd
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Aug 16 21:10:19 2022 +0200
+
+    input: adapt debug logs to no-hotkeys-set case
+    
+    re #162
+
+commit f94531cdc72623c8370c4d296759e0858c1336ce
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Aug 16 21:07:45 2022 +0200
+
+    input: fill device table also when no hotkeys are defined
+    
+    Closes #162
+
+commit aeac571d7ad48f5364b67423cdfa1501e1d8ec74
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Jul 8 14:33:08 2022 +0200
+
+    README: link future milestones as roadmap
+
+commit 90acdda9717a3c34f5e0db4ec61129e8d1cc5317
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Jul 4 12:38:56 2022 +0200
+
+    TravisCI: delete .travis.yml
+
+commit 9b4327d109698d74f99feabe0dd50acfa7f9d10c
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Jul 4 12:38:23 2022 +0200
+
+    README: use GitHub CI status badge instead of TravisCI one
+
+commit 77e747950af7bce4fd3c1adcaff03b99535b19b6
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Jul 4 12:36:09 2022 +0200
+
+    Add GitHub CI workflow
+
+commit 43628bce90fd41897c6e6ad8d79997b5f3fc4c83
+Author: avma <avi.markovitz@gmail.com>
+Date:   Sat Jul 2 18:26:58 2022 +0300
+
+    po: add Hebrew translation
+    
+    * Add Hebrew translation
+    
+    Add he.po file
+    
+    * po:add Hebrew translation
+    
+    Add 'he' language code to CMakeLists.txt
+    
+    * po: add hebrew translation
+    
+    add he.po
+    
+    * po:add Hebrew Translation (fix)
+    
+    Fix empty lines (Missing / surplus) in file CMakeLists.txt.
+
+commit 3773ead60c9cbccc46db24f3281ab263931d9317
+Author: bbhtt <62639087+bbhtt@users.noreply.github.com>
+Date:   Sun Jun 12 14:03:13 2022 +0530
+
+    flatpak: bump runtime to 42
+    
+    - Switch to fallback-x11. This is a GTK3 application.
+    - Update gnome-settings-daemon to 42.2
+    - Update dconf to 0.40.0
+    
+    Closes #141
+
+commit 87f96df64f0bdfeeba3903b2ef3075ba8d4bb372
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Jun 13 20:51:52 2022 +0200
+
+    flatpak: update shared-modules
+    
+    re #141
+
+commit 30a566424f5025fe26f655c8ccbffb96266c09dc
+Author: Adam Chyła <adam@chyla.org>
+Date:   Mon Apr 25 09:44:51 2022 +0200
+
+    main: fix use after free
+
+commit 2ae017a54efa01acb0af9d4672c973dc0c08254c
+Author: komeil Parseh <ahmdparsh129@gmail.com>
+Date:   Wed Mar 16 11:10:12 2022 +0330
+
+    po:add Farsi (Persian) translation
+
+commit 5e1d965a86ed2fecdd4867bca7232e4f590a776f
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Mar 9 10:10:22 2022 +0100
+
+    Update bug issue template
+
+commit 5e9bf6afdccf206f259d57ed9e173dce75c82a68
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Feb 28 10:44:24 2022 +0100
+
+    README: document that RGBA colours can be set for tools as well
+    
+    re #87
+
+commit 367d78426077aa8c3c429ac95e70e2a857eec8e3
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Feb 12 16:24:10 2022 +0100
+
+    AppStream: add 1.4.2 release notes
+
+commit 558b2f2c57fb8f55e2ccb3b8ae2fcbb9a34bfac8
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Feb 12 16:20:32 2022 +0100
+
+    NEWS: update
+
+commit 721d8cd70d5ffb70553a893ac497d1dc31ccfce8
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Feb 8 21:36:08 2022 +0100
+
+    callbacks: let on_toggle_paint_all wait a bit under X11
+    
+    Closes #149
+
+commit 2536b9a90acec280ded5e574d8fe32c22d93d6e2
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Feb 7 13:36:58 2022 +0100
+
+    main: add separator above Quit menu item
+
+commit 88e448d306fd8ec2835d3afbb9502c776582445f
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Feb 7 13:30:35 2022 +0100
+
+    CMake: minor up
+
+commit 03619070a234faed96441ee1183af3f752d137a0
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Feb 4 14:40:16 2022 +0100
+
+    input: correctly document add_hotkeys_for_compositor
+
+commit 23596f02a556da89a74c548412f95748aa259657
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Feb 4 14:39:54 2022 +0100
+
+    Revert "input: document add_hotkeys_for_compositor"
+    
+    This reverts commit 4f3ed369e1aeb2c2e5275fe04897e82d0690e0fd.
+
+commit 9efe01d9ee2b47c03c682ee34bc01753424cb46c
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Feb 4 14:24:43 2022 +0100
+
+    README: format problems section, link to open bugs
+
+commit 4f3ed369e1aeb2c2e5275fe04897e82d0690e0fd
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Feb 4 14:11:57 2022 +0100
+
+    input: document add_hotkeys_for_compositor
+    
+    re #121 #127
+
+commit b7bb607e5789fa5a10416d5e9937428c48f68647
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Feb 4 13:20:50 2022 +0100
+
+    input: force redraw when changing input shape under Wayland
+    
+    Closes #136
+
+commit 570b8832e282b6694eddc1dde80ddbaae0d56d61
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Feb 4 12:53:32 2022 +0100
+
+    input: hide unpainted window in ungrab-all case, too
+
+commit 9228e716922fbcde25ed9e32b0bca9217e6bf0cd
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Feb 4 12:06:44 2022 +0100
+
+    callbacks: add a faint pink background in DEBUG mode
+    
+    re #106 #121 #127 #136
+
+commit de31837c0af97c3dd9f1f891ccd2dfa4265e0094
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Feb 4 11:04:23 2022 +0100
+
+    main: check for org.kde.StatusNotifierWatcher dbus name
+    
+    ...instead of XDG_CURRENT_DESKTOP=KDE
+    
+    Closes #149
+
+commit 837f93aae8d987907965fdd4e14d5f23376360eb
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Feb 3 21:14:33 2022 +0100
+
+    AppStream: add 1.4.1 release notes
+
+commit 2c2165ab8c987e692b4b8c5c6c51bdd30058b963
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Feb 3 21:06:54 2022 +0100
+
+    callbacks: update Copyright year
+
+commit 92b52b51d1516fc984d01815c5e13a1e5f92fc9e
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Feb 3 20:56:23 2022 +0100
+
+    NEWS: update
+
+commit 95496afbf98236868a07acb858a00f283daca9c6
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Feb 3 21:19:26 2022 +0100
+
+    README: add release checklist
+
+commit b255c3d206ca3241e8bcd1067e6eaca492a33bcb
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Feb 3 19:40:21 2022 +0100
+
+    NEWS: add release dates
+
+commit 804819fe08346e7a4721efe88bb977df8a06368b
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Feb 2 21:29:37 2022 +0100
+
+    Update bug issue template
+
+commit c2ef92691f434b307e979bd24ad33b1eadbdd166
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Jan 14 11:45:31 2022 +0100
+
+    README: document device-specific cmdline toggling
+    
+    Closes #145
+
+commit 6820b206fc3fdefc51cb39d9c87e4236b6be4de8
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Sep 21 14:16:28 2021 +0200
+
+    README: mention XFCE 4.14 pecularities
+    
+    Closes #142
+
+commit 2592af4866098ffe56022cf8994e9a1146ec7c78
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Jul 1 12:43:21 2021 +0200
+
+    main: set 'modified' after undo/redo, add explicit draw in reshape()
+    
+    Closes #122
+
+commit 65bb19958fc763457437fbcce7c3958ef36b03fd
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Jun 30 17:36:29 2021 +0200
+
+    README: document valid opacity values
+    
+    re #139
+
+commit a100b4a42fbf65e140c5d9fbdb11d977b0293c02
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Jun 30 12:16:19 2021 +0200
+
+    README: explain in more detail how opacity is set
+    
+    Closes #139
+
+commit 32661b66ed62477b21a06bd90e5cfd4eef898d16
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Jun 22 21:59:00 2021 +0200
+
+    flatpak: build dconf and hint gsettings at its install location
+    
+    * dconf-override.patch and dconf build config: from https://github.com/flathub/ca.desrt.dconf-editor
+    * GIO_EXTRA_MODULES hint from: https://src.fedoraproject.org/flatpaks/dconf-editor/c/9a91b41133369cfbc5424bc7e3cb1e2df86d7dae?branch=stable
+    
+    Closes #135
+
+commit 6e02425275896e2a0a7c95808f79567740b3070a
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed May 26 09:46:17 2021 +0200
+
+    README: mention that XWayland is required for the time being
+    
+    Closes #132
+
+commit 2c7589da3f0e8108335295fca65859fe8c63a0e1
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri May 14 13:10:08 2021 +0200
+
+    README: document maxsize config parameter
+    
+    re #129, #115
+
+commit dc5900395f9b0ef61b6b6c145bcdda01e51c0a13
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon May 10 09:54:17 2021 +0200
+
+    README: mention Flatpak config location
+
+commit d2fa774f26e022737259731945838022bcef6219
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon May 10 09:39:01 2021 +0200
+
+    README: document Flatpak autostart
+
+commit 444b1fdbaed9287a1ef347f59bde69f16d1d4cd1
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Apr 11 07:11:08 2021 +0200
+
+    README: remove stray square brackets
+
+commit 9f02e7d588192f9f8f288beb4671760aefc714eb
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Apr 11 07:08:25 2021 +0200
+
+    README: link one screenshot
+
+commit 1920bc1e4c7742b4b368544d25e99a0117916578
+Author: Renato Candido <renatocan@gmail.com>
+Date:   Sat Mar 13 09:22:32 2021 -0300
+
+    po: fix Italian translation
+    
+    I tried to compile the project and got an error in this line.
+    Fixed it by removing one of the quotation marks.
+
+commit 922b934679aea6bcf0367287466a4134fc6742b1
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Mar 9 21:40:54 2021 +0100
+
+    CMake: use Italian translation
+
+commit 05004fc8a87dca18391b8d1bd88ac6a5e7302a30
+Author: albanobattistella <34811668+albanobattistella@users.noreply.github.com>
+Date:   Mon Mar 8 22:00:21 2021 +0100
+
+    po: add Italian translation
+
+commit becd840e46a6955dbc44b9bec6f1bc3356e35e6e
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Mar 7 22:12:09 2021 +0100
+
+    callbacks: update icon name for About dialog
+
+commit 65aa3c9589969513f2e3066bfc3eca3e4c409210
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Mar 7 22:02:10 2021 +0100
+
+    Prefix all icons
+    
+    Fixes tray icon display when running in flatpak on Ubuntu.
+
+commit fe5aa8bd0548b2aab97021c06ebccd6b53f10dba
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Mar 7 21:54:46 2021 +0100
+
+    Remove XPM icon
+
+commit c5714a6de7bf6b54e64f2badf23f3f07929dafa7
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Mar 7 20:24:57 2021 +0100
+
+    flatpak: fix appindicator not showing up in Ubuntu
+    
+    Fixes https://github.com/bk138/gromit-mpx/issues/123#issuecomment-792043568
+    
+    https://github.com/ubuntu/gnome-shell-extension-appindicator/issues/74
+    has some background.
+
+commit 631ee675c3abd10c398e8c9f2d7cd026a497363c
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Mar 7 19:24:51 2021 +0100
+
+    flatpak: update README
+
+commit 2a838303154df4a90495c4f93741846cbd63d37f
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Feb 16 22:29:46 2021 +0100
+
+    CMake,main: prefer ayatana-appindicator, fallback to appindicator
+    
+    Closes #111
+
+commit b8ed91cfca25e14338d980e12cd73fd37eefbc85
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Feb 5 13:53:09 2021 +0100
+
+    Rename gromit-mpx.[c|h] to main.[c|h]
+
+commit da6b7d42d176d4e25f442ff6f6cbd105893ee94c
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Feb 5 13:46:47 2021 +0100
+
+    Factor out pixel drawing functions into drawing.[c|h]
+
+commit 9e5280553be6714f27cf5e72311718176c249b4d
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Feb 5 11:40:09 2021 +0100
+
+    po: update German translation
+
+commit 9c8804d5831e18c343293530620cfded8aa3b470
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Feb 5 11:39:39 2021 +0100
+
+    po: update Spanish translation
+
+commit a3777d1e0c378ec2a55c3ed04c471c20d361e6d3
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Feb 5 11:33:19 2021 +0100
+
+    config: let .cfg parse return and alert instead of exit()ing on fail
+    
+    Closes #118
+
+commit 176469f5d1d1365f2772370ef2cfb03be59b1fb2
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Feb 4 19:32:42 2021 +0100
+
+    CMake: use spanish translation
+    
+    Closes #116
+
+commit 0036f47fce1769a793b64728c0f20889a84a5179
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Feb 4 19:32:18 2021 +0100
+
+    po: add Spanish translation
+
+commit 696865ef5aba2a266d3eb5c484ece7b42aa337ba
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Feb 1 23:01:47 2021 +0100
+
+    CMake: use German translation
+    
+    re #116
+
+commit fc41027356120a54e573fe01c9dba8105a5fb21a
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Feb 1 23:01:23 2021 +0100
+
+    po: add German translation
+    
+    re #116
+
+commit f09aa2ee1693658ff355449dc618a57745fb99ac
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Feb 1 22:06:34 2021 +0100
+
+    po: add README and xgettext helper script
+    
+    re #116
+
+commit d818ce50afb186ffef8e1e345e6f6ee8ad2fe783
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Feb 1 21:54:52 2021 +0100
+
+    Mark all UI-related strings for translation
+    
+    re #116
+
+commit 0760a6a75c695257c72fc800825697593b8005f8
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Feb 1 21:36:07 2021 +0100
+
+    Bind and use gettext textdomain
+    
+    re #116
+
+commit dd37b0b95a52b6e1618b4e55b7fcf9d188c879da
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Feb 1 21:29:39 2021 +0100
+
+    CMake: prepare gettext usage
+    
+    re #116
+
+commit d231016317e64c5033d1984728c7480b993668f1
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Feb 1 21:04:54 2021 +0100
+
+    CMake: remove unused #define from build-config.h
+
+commit f2e7cd51bebf0c4a6a10a419e4a393c89240c8e6
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Feb 1 21:04:26 2021 +0100
+
+    config: use PACKAGE_VERSION from build-config.h
+
+commit 5f10acc07845bd77ff0cc5c866bc7f6e5df8b725
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Feb 1 21:03:50 2021 +0100
+
+    callbacks: use PACKAGE_VERSION and PACKAGE_URL from build-config.h
+
+commit a46bc0348fefc12590d8667a964386368d54c694
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Feb 1 20:59:30 2021 +0100
+
+    CMake: remove unused #define's from build-config.h template
+
+commit c55b0f7a5b707db0cb6acae72adbd8334965fe9d
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Jan 31 20:00:33 2021 +0100
+
+    flatpak: add a README
+
+commit b0d1f37873fef8705a7e8494fef5b38bbbea6fb6
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Jan 31 16:59:38 2021 +0100
+
+    Fix tool display by using correct type formats
+
+commit 726203c32d46585a8ba17f7aad6a3cfb69e36454
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Jan 31 16:57:39 2021 +0100
+
+    Fix tool display upon startup
+    
+    After 2ce8725553631c0cd7d4f0d52e64ca94a84cdab9, this was always false.
+    Simply set it to always display.
+
+commit 7adf741a1db131140c1155077d13c507560d16aa
+Author: marput <frayedultrasonicaligator@disroot.org>
+Date:   Sun Jan 31 16:45:17 2021 +0100
+
+    Add a maxsize config parameter
+    
+    Closes #115 #92
+
+commit 6a3025e12fa739327a9a9e904f90b0c4b0ab1f1d
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Jan 9 13:16:32 2021 +0100
+
+    CONTRIBUTING: first version
+
+commit a0328c896e29effc4715a13203fb63f0b1f88bf2
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Jan 3 19:08:05 2021 +0100
+
+    Move cmdline parsing into config.[c|h]
+    
+    re #113 #79
+
+commit 2ce8725553631c0cd7d4f0d52e64ca94a84cdab9
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Jan 3 19:02:24 2021 +0100
+
+    Parse cmdline args after config and key file
+    
+    Really closes #113 #79
+
+commit 1c3bcad363aeb7b69277c9699e265bbcd3bd470d
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Jan 3 18:55:11 2021 +0100
+
+    Move default hotkey init from app_parse_args() to setup_main_app()
+    
+    re #113 #79
+
+commit 8830362435acb7ed394d0acb78433fe360d97bef
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Jan 3 18:50:01 2021 +0100
+
+    config: make parse_config not check for default hotkeys
+    
+    re #113 #79
+
+commit 68053a4d120eb01cba4b1bb1949bab7fd8f871b1
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 10 22:04:30 2020 +0100
+
+    README: add Flathub badge
+
+commit 9476f51aca5397a3684676e19b898da047b117ec
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Dec 4 10:23:16 2020 +0100
+
+    flatpak: update GNOME runtime dep to 3.38
+
+commit bbbf33682507f52c6c87e369cb11dc5ecf964e41
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 19:47:14 2020 +0100
+
+    AppStream: add OARS content rating
+
+commit f5a4a20c04b793704472da60b757ca646bab4b10
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 3 15:48:53 2020 +0100
+
+    ChangeLog: update
+
 commit 39be16bec4cd9204862d42a8a0ccb8c19d7737ae
 Author: Christian Beier <info@christianbeier.net>
 Date:   Thu Dec 3 15:47:04 2020 +0100
