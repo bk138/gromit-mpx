@@ -56,6 +56,17 @@
   </screenshots>
 
   <releases>
+    <release version="1.5.0" date="2023-10-11">
+      <description>
+	<p>
+	  Added translations into German, Spanish, Italian, Farsi and Hebrew.
+ 	  Introduced new functionality to draw lines using the command line helper.
+	  Debug mode is now indicated by faint pink background and
+	  Gromit-MPX now does a proper shutdown on SIGINT (Ctrl-C) and SIGTERM (kill).
+	</p>
+      </description>
+    </release>
+
     <release version="1.4.3" date="2022-09-25">
       <description>
 	<p>
