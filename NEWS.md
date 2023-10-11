@@ -1,20 +1,20 @@
 # Gromit-MPX 1.4.3 - 2022-09-25
 
-### 🛠  Fixes
+## 🛠  Fixes
 
 * Fixed operation with hotkeys set to none.
 * Fixed hotkey binding on Ubuntu 22/GNOME.
 
 # Gromit-MPX 1.4.2 - 2022-02-12
 
-### 🛠  Fixes
+## 🛠  Fixes
 
 * Fixed Gromit-MPX blocking mouse clicks to other apps on Wayland in certain conditions.
 * Fixed toggling from GNOME systray with gnome-shell-extension-appindicator under X11.
 
 # Gromit-MPX 1.4.1 - 2022-02-03
 
-### 🛠  Fixes
+## 🛠  Fixes
 
 * Fixed hotkey setting from config file for XFCE.
 * Fixed erase tool not working properly when not using a composited display.
