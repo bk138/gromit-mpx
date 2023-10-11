@@ -1,3 +1,18 @@
+# Gromit-MPX 1.5.0 - 2023-10-11
+
+## 🌅 New Features
+
+* Added a maxsize config parameter.
+* Added translations into German, Spanish, Italian, Farsi and Hebrew.
+* Added error dialog that's shown on encountering invalid config.
+* Added a faint pink background indicating debug mode.
+* Added functionality to draw lines via command.
+
+## 🛠  Fixes
+
+* Removed AppStream `<em>` tags which seem unsupported by Flathub.
+* Gromit-MPX now does a proper shutdown on SIGINT (Ctrl-C) and SIGTERM (kill).
+
 # Gromit-MPX 1.4.3 - 2022-09-25
 
 ## 🛠  Fixes
