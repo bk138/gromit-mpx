@@ -4,7 +4,7 @@ runtime-version: '43'
 sdk: org.gnome.Sdk
 command: gromit-mpx
 finish-args:
-  - --socket=fallback-x11
+  - --socket=x11
   # needed to show appindicator in Ubuntu
   - --talk-name=org.kde.StatusNotifierWatcher
   # this is the dconf hole for setting hotkeys under Wayland
