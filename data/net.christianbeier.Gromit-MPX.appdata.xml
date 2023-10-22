@@ -56,6 +56,14 @@
   </screenshots>
 
   <releases>
+    <release version="1.5.1" date="2023-10-22">
+      <description>
+	<p>
+	  Fixed intro dialog always showing up on new installations.
+	</p>
+      </description>
+    </release>
+
     <release version="1.5.0" date="2023-10-11">
       <description>
 	<p>
