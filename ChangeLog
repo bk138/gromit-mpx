@@ -1,3 +1,51 @@
+commit 59605e513beb58445019ddb0cdcaf3f8c7ab60e8
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Oct 22 20:49:53 2023 +0200
+
+    AppStream: add 1.5.1 release notes
+
+commit d6a33160db888edac0c29dceb9278da9f8596b9c
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Oct 22 20:48:45 2023 +0200
+
+    CMake: patchlevel up
+
+commit a8c1ca3aa27fa0f2baea0e96138a7f7c7ca37575
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Oct 22 20:48:26 2023 +0200
+
+    NEWS: update
+
+commit 1242a929a01ba4f2a7ed41eda12d3c15fd18643d
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Oct 22 20:18:48 2023 +0200
+
+    config: fix .ini file read-only check
+    
+    Needs to be tested for existence as well.
+    
+    Follow-up to ef56fd1f2589720efeb39c6ff5b0f1a0b09d6ad9.
+    
+    re #182
+    
+    Closes #114
+
+commit 3b6731d03d33382c9ac2ebd66abe0b0c3db7fdfd
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Oct 11 22:32:36 2023 +0200
+
+    flatpak: switch back to --socket=x11
+    
+    To make flatpak-builder-lint happy.
+
+commit b7c548396955654cb4a40e1703298418c7313aeb
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Oct 11 22:09:00 2023 +0200
+
+    ChangeLog: update
+    
+    re #181
+
 commit c19df113b2b400a6753fcad8bf680a16a2b1018d
 Author: Christian Beier <info@christianbeier.net>
 Date:   Wed Oct 11 22:04:18 2023 +0200
