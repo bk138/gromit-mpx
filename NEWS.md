@@ -1,3 +1,9 @@
+# Gromit-MPX 1.5.1 - 2023-10-22
+
+## 🛠  Fixes
+
+* Fixed intro dialog always showing up on new installations.
+
 # Gromit-MPX 1.5.0 - 2023-10-11
 
 ## 🌅 New Features
