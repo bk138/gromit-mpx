@@ -648,8 +648,8 @@ void write_keyfile(GromitData *data)
     g_key_file_set_boolean (key_file, "General", "ShowIntroOnStartup", data->show_intro_on_startup);
     g_key_file_set_double (key_file, "Drawing", "Opacity", data->opacity);
 
-    // Check file permissions, if read-only, bail out
-    if (access(filename, W_OK) != 0) {
+    // if file exists but is read-only, bail out
+    if (access(filename, F_OK) == 0 && access(filename, W_OK) != 0) {
 	g_warning ("Not overwriting read-only key file");
 	goto cleanup;
     }
