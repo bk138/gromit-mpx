@@ -271,7 +271,9 @@ from the root of the source tree.
 * [ ] Update authors in About dialog and AUTHORS file.
 * [ ] Update AppStream.
 * [ ] Update ChangeLog.
-
+* [ ] Fill out GitHub release.
+* [ ] Make Flathub release.
+* [ ] Announce on social.
 
 ## Potential Problems
 
