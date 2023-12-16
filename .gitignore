@@ -29,3 +29,4 @@ Makefile.in
 /compile_commands.json
 /flatpak/.flatpak-builder/
 /flatpak/build-dir/
+/.cache/
