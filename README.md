@@ -133,8 +133,8 @@ second keyboard at hand, you can also toggle a specific pointer via
 `--toggle <device-number>`, where device-number is Gromit-MPX's internal
 device number, not the XInput ID.
 
-Alternatively, you can also use the graphical tool [gnome-device-
-manager](https://github.com/bk138/gnome-device-manager) to arrange your
+Alternatively, you can also use the graphical tool [input-device-
+manager](https://github.com/bk138/input-device-manager) to arrange your
 MPX setup.
 
 ### Configuration
