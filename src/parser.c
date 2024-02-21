@@ -137,3 +137,156 @@ gchar* parse_name (GScanner *scanner)
 
   return name;
 }
+
+
+gboolean parse_tool(GromitData *data, GScanner *scanner, GromitStyleDef *style) {
+    GTokenType token = g_scanner_cur_token(scanner);
+
+    if (token != G_TOKEN_EQUAL_SIGN) {
+        g_scanner_unexp_token(
+            scanner, G_TOKEN_EQUAL_SIGN, NULL, NULL, NULL, "aborting", TRUE);
+        return FALSE;
+    }
+
+    token = g_scanner_get_next_token(scanner);
+
+    /* defaults */
+    style->type = GROMIT_PEN;
+    style->width = 7;
+    style->arrowsize = 0;
+    style->minwidth = 1;
+    style->maxwidth = G_MAXUINT;
+    style->paint_color = data->red;
+
+    if (token == G_TOKEN_SYMBOL) {
+        style->type = (GromitPaintType)scanner->value.v_symbol;
+        token = g_scanner_get_next_token(scanner);
+    } else if (token == G_TOKEN_STRING) {
+        gchar *copy = parse_name(scanner);
+        if (!copy)
+          return FALSE;
+        token = g_scanner_cur_token(scanner);
+        GromitPaintContext *context = g_hash_table_lookup(data->tool_config, copy);
+        if (context) {
+            style->type = context->type;
+            style->width = context->width;
+            style->arrowsize = context->arrowsize;
+            style->minwidth = context->minwidth;
+            style->maxwidth = context->maxwidth;
+            style->paint_color = context->paint_color;
+        } else {
+            g_printerr(
+                "WARNING: Unable to copy \"%s\": "
+                "not yet defined!\n",
+                copy);
+        }
+    } else {
+        g_printerr(
+            "Expected Tool-definition "
+            "or name of template tool\n");
+        return FALSE;
+    }
+    return TRUE;
+}
+
+/*
+ * parses a pen style definition and stores fields found in GromitStyleDef
+ * returns FALSE upon any error
+ */
+
+gboolean parse_style(GScanner *scanner, GromitStyleDef *style) {
+    GdkRGBA *color = NULL;
+    g_scanner_set_scope(scanner, 2);
+    scanner->config->int_2_float = 1;
+    GTokenType token = g_scanner_get_next_token(scanner);
+    while (token != G_TOKEN_RIGHT_PAREN) {
+        if (token == G_TOKEN_SYMBOL) {
+            if ((intptr_t)scanner->value.v_symbol == 1) {
+                token = g_scanner_get_next_token(scanner);
+                if (token != G_TOKEN_EQUAL_SIGN) {
+                    g_printerr("Missing \"=\"... aborting\n");
+                    return FALSE;
+                }
+                token = g_scanner_get_next_token(scanner);
+                if (token != G_TOKEN_FLOAT) {
+                    g_printerr("Missing Size (float)... aborting\n");
+                    return FALSE;
+                }
+                style->width = (guint)(scanner->value.v_float + 0.5);
+            } else if ((intptr_t)scanner->value.v_symbol == 2) {
+                token = g_scanner_get_next_token(scanner);
+                if (token != G_TOKEN_EQUAL_SIGN) {
+                    g_printerr("Missing \"=\"... aborting\n");
+                    return FALSE;
+                }
+                token = g_scanner_get_next_token(scanner);
+                if (token != G_TOKEN_STRING) {
+                    g_printerr(
+                        "Missing Color (string)... "
+                        "aborting\n");
+                    return FALSE;
+                }
+                color = g_malloc(sizeof(GdkRGBA));
+                if (gdk_rgba_parse(color, scanner->value.v_string)) {
+                    style->paint_color = color;
+                } else {
+                    g_printerr(
+                        "Unable to parse color. "
+                        "Keeping default.\n");
+                    g_free(color);
+                }
+                color = NULL;
+            } else if ((intptr_t)scanner->value.v_symbol == 3) {
+                token = g_scanner_get_next_token(scanner);
+                if (token != G_TOKEN_EQUAL_SIGN) {
+                    g_printerr("Missing \"=\"... aborting\n");
+                    return FALSE;
+                }
+                token = g_scanner_get_next_token(scanner);
+                if (token != G_TOKEN_FLOAT) {
+                    g_printerr(
+                        "Missing Arrowsize (float)... "
+                        "aborting\n");
+                    return FALSE;
+                }
+                style->arrowsize = scanner->value.v_float;
+            } else if ((intptr_t)scanner->value.v_symbol == 4) {
+                token = g_scanner_get_next_token(scanner);
+                if (token != G_TOKEN_EQUAL_SIGN) {
+                    g_printerr("Missing \"=\"... aborting\n");
+                    return FALSE;
+                }
+                token = g_scanner_get_next_token(scanner);
+                if (token != G_TOKEN_FLOAT) {
+                    g_printerr(
+                        "Missing Minsize (float)... "
+                        "aborting\n");
+                    return FALSE;
+                }
+                style->minwidth = scanner->value.v_float;
+            } else if ((intptr_t)scanner->value.v_symbol == 5) {
+                token = g_scanner_get_next_token(scanner);
+                if (token != G_TOKEN_EQUAL_SIGN) {
+                    g_printerr("Missing \"=\"... aborting\n");
+                    return FALSE;
+                }
+                token = g_scanner_get_next_token(scanner);
+                if (token != G_TOKEN_FLOAT) {
+                    g_printerr(
+                        "Missing Maxsize (float)... "
+                        "aborting\n");
+                    return FALSE;
+                }
+                style->maxwidth = scanner->value.v_float;
+            } else {
+                g_printerr("Unknown tool type ???\n");
+            }
+        } else {
+            g_printerr("skipped unknown token: %d !!!\n", token);
+        }
+        token = g_scanner_get_next_token(scanner);
+    }  // while (token != G_TOKEN_RIGHT_PAREN)
+    g_scanner_set_scope(scanner, 0);
+    g_scanner_get_next_token(scanner);
+    return TRUE;
+}

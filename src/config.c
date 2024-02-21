@@ -495,13 +495,13 @@ gboolean parse_config (GromitData *data)
 	      goto cleanup;
 
           if (!parse_tool(data, scanner, &style))
-            {
-              g_printerr("parse tool failed\n");
-              goto cleanup;
-            }
+            goto cleanup;
 
-          //  are there any tool-options?
           token = g_scanner_cur_token(scanner);
+          //
+          /* Are there any tool-options?
+           */
+
           if (token == G_TOKEN_LEFT_PAREN)
             {
               if (! parse_style(scanner, &style))
