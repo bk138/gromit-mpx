@@ -29,6 +29,7 @@
 #include "input.h"
 #include "callbacks.h"
 #include "config.h"
+#include "parser.h"
 #include "drawing.h"
 #include "build-config.h"
 #include "coordlist_ops.h"
@@ -211,7 +212,9 @@ void on_clientapp_selection_get (GtkWidget          *widget,
     g_printerr("DEBUG: clientapp received request.\n");  
 
 
-  if (gtk_selection_data_get_target(selection_data) == GA_TOGGLEDATA || gtk_selection_data_get_target(selection_data) == GA_LINEDATA)
+  if (gtk_selection_data_get_target(selection_data) == GA_TOGGLEDATA ||
+      gtk_selection_data_get_target(selection_data) == GA_LINEDATA ||
+      gtk_selection_data_get_target(selection_data) == GA_CHGTOOLDATA)
     {
       ans = data->clientdata;
     }
@@ -558,6 +561,11 @@ void on_mainapp_selection_get (GtkWidget          *widget,
     undo_drawing (data);
   else if (action == GA_REDO)
     redo_drawing (data);
+  else if (action == GA_CHGTOOL)
+    {
+      gtk_selection_convert(data->win, GA_DATA, GA_CHGTOOLDATA, time);
+      gtk_main();
+    }
   else
     uri = "NOK";
 
@@ -634,6 +642,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
 
 	  GdkRGBA* color = g_malloc (sizeof (GdkRGBA));
 	  GdkRGBA *fg_color=data->red;
+
 	  if (gdk_rgba_parse (color, hex_code))
 	    {
 	      fg_color = color;
@@ -667,7 +676,235 @@ void on_mainapp_selection_received (GtkWidget *widget,
 
 	  g_free(line_ctx);
 	  g_free (color);
-	}
+        }
+      else if (gtk_selection_data_get_target(selection_data) == GA_CHGTOOLDATA)
+        {
+          gchar *a = (gchar *)gtk_selection_data_get_data(selection_data);
+          g_printerr("DEFTOOL argument: %s\n", a);
+
+          GScanner *scanner;
+          scanner = g_scanner_new(NULL);
+          scanner_init(scanner);
+          g_scanner_input_text(scanner, a, strlen(a));
+
+          GTokenType token;
+          token = g_scanner_get_next_token (scanner);
+
+          gchar *name, *copy;
+          GromitPaintContext *context_template=NULL;
+
+          GromitPaintType type;
+          GdkRGBA *fg_color=NULL;
+          guint width, arrowsize, minwidth, maxwidth;
+
+          if (token != G_TOKEN_EOF)
+            {
+              if (token == G_TOKEN_STRING)
+                {
+                  name = parse_name (scanner);
+
+                  if(!name)
+                      goto cleanup;
+
+                  token = g_scanner_cur_token(scanner);
+
+                  if (token != G_TOKEN_EQUAL_SIGN)
+                    {
+                      g_scanner_unexp_token (scanner, G_TOKEN_EQUAL_SIGN, NULL,
+                                             NULL, NULL, "aborting", TRUE);
+                      goto cleanup;
+                    }
+
+                  token = g_scanner_get_next_token (scanner);
+
+                  /* defaults */
+                  type = GROMIT_PEN;
+                  width = 7;
+                  arrowsize = 0;
+                  minwidth = 1;
+                  maxwidth = G_MAXUINT;
+                  fg_color = data->red;
+
+                  if (token == G_TOKEN_SYMBOL)
+                    {
+                      type = (GromitPaintType) scanner->value.v_symbol;
+                      token = g_scanner_get_next_token (scanner);
+                    }
+                  else if (token == G_TOKEN_STRING)
+                    {
+                      copy = parse_name (scanner);
+                      if(!copy)
+                          goto cleanup;
+                      token = g_scanner_cur_token(scanner);
+                      context_template = g_hash_table_lookup (data->tool_config, copy);
+                      if (context_template)
+                        {
+                          type = context_template->type;
+                          width = context_template->width;
+                          arrowsize = context_template->arrowsize;
+                          minwidth = context_template->minwidth;
+                          maxwidth = context_template->maxwidth;
+                          fg_color = context_template->paint_color;
+                        }
+                      else
+                        {
+                          g_printerr ("WARNING: Unable to copy \"%s\": "
+                                      "not yet defined!\n", copy);
+                        }
+                    }
+                  else
+                    {
+                      g_printerr ("Expected Tool-definition "
+                                  "or name of template tool\n");
+                      goto cleanup;
+                    }
+
+                  /* Are there any tool-options?
+                   */
+
+                  if (token == G_TOKEN_LEFT_PAREN)
+                    {
+                      GdkRGBA *color = NULL;
+                      g_scanner_set_scope (scanner, 2);
+                      scanner->config->int_2_float = 1;
+                      token = g_scanner_get_next_token (scanner);
+                      while (token != G_TOKEN_RIGHT_PAREN)
+                        {
+                          if (token == G_TOKEN_SYMBOL)
+                            {
+                              if ((intptr_t) scanner->value.v_symbol == 1)
+                                {
+                                  token = g_scanner_get_next_token (scanner);
+                                  if (token != G_TOKEN_EQUAL_SIGN)
+                                    {
+                                      g_printerr ("Missing \"=\"... aborting\n");
+                                      goto cleanup;
+                                    }
+                                  token = g_scanner_get_next_token (scanner);
+                                  if (token != G_TOKEN_FLOAT)
+                                    {
+                                      g_printerr ("Missing Size (float)... aborting\n");
+                                      goto cleanup;
+                                    }
+                                  width = (guint) (scanner->value.v_float + 0.5);
+                                }
+                              else if ((intptr_t) scanner->value.v_symbol == 2)
+                                {
+                                  token = g_scanner_get_next_token (scanner);
+                                  if (token != G_TOKEN_EQUAL_SIGN)
+                                    {
+                                      g_printerr ("Missing \"=\"... aborting\n");
+                                      goto cleanup;
+                                    }
+                                  token = g_scanner_get_next_token (scanner);
+                                  if (token != G_TOKEN_STRING)
+                                    {
+                                      g_printerr ("Missing Color (string)... "
+                                                  "aborting\n");
+                                      goto cleanup;
+                                    }
+                                  color = g_malloc (sizeof (GdkRGBA));
+                                  if (gdk_rgba_parse (color, scanner->value.v_string))
+                                    {
+                                      fg_color = color;
+                                    }
+                                  else
+                                    {
+                                      g_printerr ("Unable to parse color. "
+                                                  "Keeping default.\n");
+                                      g_free (color);
+                                    }
+                                  color = NULL;
+                                }
+                              else if ((intptr_t) scanner->value.v_symbol == 3)
+                                {
+                                  token = g_scanner_get_next_token (scanner);
+                                  if (token != G_TOKEN_EQUAL_SIGN)
+                                    {
+                                      g_printerr ("Missing \"=\"... aborting\n");
+                                      goto cleanup;
+                                    }
+                                  token = g_scanner_get_next_token (scanner);
+                                  if (token != G_TOKEN_FLOAT)
+                                    {
+                                      g_printerr ("Missing Arrowsize (float)... "
+                                                  "aborting\n");
+                                      goto cleanup;
+                                    }
+                                  arrowsize = scanner->value.v_float;
+                                 }
+                              else if ((intptr_t) scanner->value.v_symbol == 4)
+                                {
+                                  token = g_scanner_get_next_token (scanner);
+                                  if (token != G_TOKEN_EQUAL_SIGN)
+                                    {
+                                      g_printerr ("Missing \"=\"... aborting\n");
+                                      goto cleanup;
+                                    }
+                                  token = g_scanner_get_next_token (scanner);
+                                  if (token != G_TOKEN_FLOAT)
+                                    {
+                                      g_printerr ("Missing Minsize (float)... "
+                                                  "aborting\n");
+                                      goto cleanup;
+                                    }
+                                  minwidth = scanner->value.v_float;
+                                 }
+                              else if ((intptr_t) scanner->value.v_symbol == 5)
+                                {
+                                  token = g_scanner_get_next_token (scanner);
+                                  if (token != G_TOKEN_EQUAL_SIGN)
+                                    {
+                                      g_printerr ("Missing \"=\"... aborting\n");
+                                      goto cleanup;
+                                    }
+                                  token = g_scanner_get_next_token (scanner);
+                                  if (token != G_TOKEN_FLOAT)
+                                    {
+                                      g_printerr ("Missing Maxsize (float)... "
+                                                  "aborting\n");
+                                      goto cleanup;
+                                    }
+                                  maxwidth = scanner->value.v_float;
+                                 }
+                              else
+                                {
+                                  g_printerr ("Unknown tool type ???\n");
+                                }
+                            }
+                          else
+                            {
+                                g_printerr("skipped unknown token: %d !!!\n", token);
+                            }
+                          token = g_scanner_get_next_token (scanner);
+                        } // while (token != G_TOKEN_RIGHT_PAREN)
+                      g_scanner_set_scope (scanner, 0);
+                      token = g_scanner_get_next_token (scanner);
+                    } // if (token == G_TOKEN_LEFT_PAREN)
+
+                  // by now nothing should follow
+                  if (token != G_TOKEN_EOF)
+                    {
+                      g_printerr ("End of tool definition expected !\n");
+                      goto cleanup;
+                    }
+
+                  GromitPaintContext *context =
+                      g_hash_table_lookup(data->tool_config, name);
+                  GromitPaintContext *new_context =
+                      paint_context_new (data, type, fg_color, width, arrowsize, minwidth, maxwidth);
+                  *context = *new_context;
+
+                  g_free(new_context);
+                } // if (token == G_TOKEN_STRING)
+
+              token = g_scanner_get_next_token (scanner);
+            } // if (token != G_TOKEN_EOF)
+
+        cleanup:
+
+          g_scanner_destroy (scanner);
+        }
     }
  
   gtk_main_quit ();

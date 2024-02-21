@@ -42,22 +42,25 @@
 #define GROMIT_WINDOW_EVENTS ( GROMIT_MOUSE_EVENTS | GDK_EXPOSURE_MASK)
 
 /* Atoms used to control Gromit */
-#define GA_CONTROL    gdk_atom_intern ("Gromit/control", FALSE)
-#define GA_STATUS     gdk_atom_intern ("Gromit/status", FALSE)
-#define GA_QUIT       gdk_atom_intern ("Gromit/quit", FALSE)
-#define GA_ACTIVATE   gdk_atom_intern ("Gromit/activate", FALSE)
-#define GA_DEACTIVATE gdk_atom_intern ("Gromit/deactivate", FALSE)
-#define GA_TOGGLE     gdk_atom_intern ("Gromit/toggle", FALSE)
-#define GA_LINE       gdk_atom_intern ("Gromit/line", FALSE)
-#define GA_VISIBILITY gdk_atom_intern ("Gromit/visibility", FALSE)
-#define GA_CLEAR      gdk_atom_intern ("Gromit/clear", FALSE)
-#define GA_RELOAD     gdk_atom_intern ("Gromit/reload", FALSE)
-#define GA_UNDO       gdk_atom_intern ("Gromit/undo", FALSE)
-#define GA_REDO       gdk_atom_intern ("Gromit/redo", FALSE)
+#define GA_CONTROL     gdk_atom_intern ("Gromit/control", FALSE)
+#define GA_STATUS      gdk_atom_intern ("Gromit/status", FALSE)
+#define GA_QUIT        gdk_atom_intern ("Gromit/quit", FALSE)
+#define GA_ACTIVATE    gdk_atom_intern ("Gromit/activate", FALSE)
+#define GA_DEACTIVATE  gdk_atom_intern ("Gromit/deactivate", FALSE)
+#define GA_TOGGLE      gdk_atom_intern ("Gromit/toggle", FALSE)
+#define GA_LINE        gdk_atom_intern ("Gromit/line", FALSE)
+#define GA_VISIBILITY  gdk_atom_intern ("Gromit/visibility", FALSE)
+#define GA_CLEAR       gdk_atom_intern ("Gromit/clear", FALSE)
+#define GA_RELOAD      gdk_atom_intern ("Gromit/reload", FALSE)
+#define GA_UNDO        gdk_atom_intern ("Gromit/undo", FALSE)
+#define GA_REDO        gdk_atom_intern ("Gromit/redo", FALSE)
+#define GA_CHGTOOL     gdk_atom_intern ("Gromit/chgtool", FALSE)
 
-#define GA_DATA       gdk_atom_intern ("Gromit/data", FALSE)
-#define GA_TOGGLEDATA gdk_atom_intern ("Gromit/toggledata", FALSE)
-#define GA_LINEDATA   gdk_atom_intern ("Gromit/linedata", FALSE)
+#define GA_DATA        gdk_atom_intern ("Gromit/data", FALSE)
+#define GA_TOGGLEDATA  gdk_atom_intern ("Gromit/toggledata", FALSE)
+#define GA_LINEDATA    gdk_atom_intern ("Gromit/linedata", FALSE)
+#define GA_CHGTOOLDATA gdk_atom_intern ("Gromit/chgtooldata", FALSE)
+
 
 #define GROMIT_MAX_UNDO 100
 

@@ -754,8 +754,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   gtk_selection_add_target (data->win, GA_CONTROL, GA_REDO, 9);
   gtk_selection_add_target (data->win, GA_CONTROL, GA_LINE, 10);
 
-
-
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_CHGTOOL, 11);
 
   /*
    * Parse Config file
@@ -1158,6 +1157,21 @@ int main_client (int argc, char **argv, GromitData *data)
          {
            action = GA_REDO;
          }
+       else if (strcmp (arg, "--deftool") == 0)
+         {
+           g_printerr("argc=%d i=%d\n",argc,i);
+           if (argc <= i+1)
+             {
+               wrong_arg = TRUE;
+               g_printerr("--deftool requires an argument\n");
+             }
+           else
+             {
+               i++;
+               action = GA_CHGTOOL;
+               data->clientdata = argv[i];
+             }
+         }
        else
          {
            g_printerr ("Unknown Option to control a running Gromit-MPX process: \"%s\"\n", arg);
@@ -1240,7 +1254,7 @@ int main (int argc, char **argv)
   gtk_selection_owner_set (data->win, GA_DATA, GDK_CURRENT_TIME);
   gtk_selection_add_target (data->win, GA_DATA, GA_TOGGLEDATA, 1007);
   gtk_selection_add_target (data->win, GA_DATA, GA_LINEDATA, 1008);
-
+  gtk_selection_add_target (data->win, GA_DATA, GA_CHGTOOLDATA, 1009);
 
 
   /* Try to get a status message. If there is a response gromit
