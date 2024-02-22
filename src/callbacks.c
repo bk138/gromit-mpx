@@ -575,7 +575,7 @@ void on_device_removed (GdkDeviceManager *device_manager,
 {
   GromitData *data = (GromitData *) user_data;
     
-  if(!gdk_device_get_device_type(device) == GDK_DEVICE_TYPE_MASTER
+  if(gdk_device_get_device_type(device) != GDK_DEVICE_TYPE_MASTER
      || gdk_device_get_n_axes(device) < 2)
     return;
   
@@ -591,7 +591,7 @@ void on_device_added (GdkDeviceManager *device_manager,
 {
   GromitData *data = (GromitData *) user_data;
 
-  if(!gdk_device_get_device_type(device) == GDK_DEVICE_TYPE_MASTER
+  if(gdk_device_get_device_type(device) != GDK_DEVICE_TYPE_MASTER
      || gdk_device_get_n_axes(device) < 2)
     return;
 
