@@ -95,11 +95,18 @@ running Gromit-MPX process, see above for the options available to start Gromit-
 .B \-c, \-\-clear
 will clear the screen.
 .TP
+.B \-l <x1> <y1> <x2> <y2> <color> <width>, \-\-line <x1> <y1> <x2> <y2> <color> <width>
+will draw a line from (x1,y1) to (x2,y2) with color <color> and width <width>.
+.TP
 .B \-q, \-\-quit
 will cause the main Gromit-MPX process to quit.
 .TP
 .B \-t, \-\-toggle
 will toggle the grabbing of the cursor.
+.TP
+.B \-T <definition>, \-\-change-tool <definition>
+will change the definition of a tool. The syntax is as in the .cfg file
+read at startup, except for the trailing semicolon.
 .TP
 .B \-v, \-\-visibility
 will toggle the visibility of the window.

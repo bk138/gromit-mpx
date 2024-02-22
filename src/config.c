@@ -730,7 +730,6 @@ void read_keyfile(GromitData *data)
 {
     gchar *filename = g_strjoin (G_DIR_SEPARATOR_S,
 				 g_get_user_config_dir(), "gromit-mpx.ini", NULL);
-
     /*
       set defaults
     */
@@ -756,7 +755,7 @@ void read_keyfile(GromitData *data)
     if(data->opacity == 0)
 	data->opacity = DEFAULT_OPACITY;
 
- cleanup:
+  cleanup:
     g_free(filename);
     g_key_file_free(key_file);
 }

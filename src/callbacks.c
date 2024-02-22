@@ -680,7 +680,8 @@ void on_mainapp_selection_received (GtkWidget *widget,
       else if (gtk_selection_data_get_target(selection_data) == GA_CHGTOOLDATA)
         {
           gchar *a = (gchar *)gtk_selection_data_get_data(selection_data);
-          g_printerr("DEFTOOL argument: %s\n", a);
+          if(data->debug)
+            g_printerr("DEBUG: define tool: %s\n", a);
 
           GScanner *scanner;
           scanner = g_scanner_new(NULL);
@@ -690,8 +691,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
           GTokenType token;
           token = g_scanner_get_next_token (scanner);
 
-          gchar *name, *copy;
-          GromitPaintContext *context_template=NULL;
+          gchar *name;
 
           GromitStyleDef style;
 
@@ -702,7 +702,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
                   name = parse_name (scanner);
 
                   if(!name)
-                      goto cleanup;
+                    goto cleanup;
 
                   if (!parse_tool(data, scanner, &style))
                     goto cleanup;
@@ -716,7 +716,6 @@ void on_mainapp_selection_received (GtkWidget *widget,
                       token = g_scanner_cur_token(scanner);
                     }
 
-                  // by now nothing should follow
                   if (token != G_TOKEN_EOF)
                     {
                       g_printerr ("End of tool definition expected !\n");
@@ -729,20 +728,18 @@ void on_mainapp_selection_received (GtkWidget *widget,
                     paint_context_new (data, style.type, style.paint_color,
                                        style.width, style.arrowsize,
                                        style.minwidth, style.maxwidth);
-                  *context = *new_context;
 
+                  g_free(context->paint_color);
+                  *context = *new_context;
                   g_free(new_context);
                 }
-
               token = g_scanner_get_next_token (scanner);
             }
 
         cleanup:
-
           g_scanner_destroy (scanner);
         }
     }
- 
   gtk_main_quit ();
 }
 

@@ -599,8 +599,6 @@ void main_do_event (GdkEventAny *event,
 
 
 
-
-
 void setup_main_app (GromitData *data, int argc, char ** argv)
 {
   gboolean activate;
@@ -1060,7 +1058,6 @@ void parse_print_help (gpointer key, gpointer value, gpointer user_data)
 }
 
 
-
 /*
  * Main programs
  */
@@ -1157,13 +1154,13 @@ int main_client (int argc, char **argv, GromitData *data)
          {
            action = GA_REDO;
          }
-       else if (strcmp (arg, "--deftool") == 0)
+       else if (strcmp (arg, "--change-tool") == 0 ||
+                strcmp(arg, "-T") == 0)
          {
-           g_printerr("argc=%d i=%d\n",argc,i);
            if (argc <= i+1)
              {
                wrong_arg = TRUE;
-               g_printerr("--deftool requires an argument\n");
+               g_printerr("--change-tool requires an argument\n");
              }
            else
              {

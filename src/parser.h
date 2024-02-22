@@ -42,8 +42,7 @@ extern gpointer UNDOKEY_SYMBOL_VALUE;
 
 void scanner_init(GScanner* scanner);
 gchar* parse_name (GScanner *scanner);
-gboolean parse_style(GScanner *scanner, GromitStyleDef *style);
 gboolean parse_tool(GromitData *data, GScanner *scanner, GromitStyleDef *style);
-
+gboolean parse_style(GScanner *scanner, GromitStyleDef *style);
 
 #endif // PARSER_H
