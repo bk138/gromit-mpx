@@ -84,6 +84,10 @@ void paint_context_print (gchar *name,
   {
     case GROMIT_PEN:
       g_printerr ("Pen,     "); break;
+    case GROMIT_LINE:
+      g_printerr ("Line,    "); break;
+    case GROMIT_RECT:
+      g_printerr ("Rect,    "); break;
     case GROMIT_ERASER:
       g_printerr ("Eraser,  "); break;
     case GROMIT_RECOLOR:
@@ -592,8 +596,10 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
       cairo_surface_destroy(data->undobuffer[i]);
       data->undobuffer[i] = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
     }
-  
 
+  // original state for LINE and RECT tool
+  cairo_surface_destroy(data->temp_buffer);
+  data->temp_buffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
 
   /* EVENTS */
   gtk_widget_add_events (data->win, GROMIT_WINDOW_EVENTS);
