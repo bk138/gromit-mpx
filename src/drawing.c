@@ -136,6 +136,7 @@ void coord_list_prepend (GromitData *data,
 void coord_list_free (GromitData *data, 
 		      GdkDevice* dev)
 {
+
   /* get the data for this device */
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
 

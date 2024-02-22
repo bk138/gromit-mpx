@@ -24,6 +24,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <math.h>
 #include "main.h"
 #include "input.h"
 #include "callbacks.h"
@@ -60,8 +61,6 @@ gboolean on_expose (GtkWidget *widget,
 }
 
 
-
-
 gboolean on_configure (GtkWidget *widget,
 		       GdkEventExpose *event,
 		       gpointer user_data)
@@ -73,7 +72,6 @@ gboolean on_configure (GtkWidget *widget,
 
   return TRUE;
 }
-
 
 
 void on_screen_changed(GtkWidget *widget,
@@ -122,7 +120,11 @@ void on_monitors_changed ( GdkScreen *screen,
   cairo_destroy (cr);
   cairo_surface_destroy(data->backbuffer);
   data->backbuffer = new_shape;
- 
+
+  // recreate temp_buffer
+  cairo_surface_destroy(data->temp_buffer);
+  data->temp_buffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
+
   /*
      these depend on the shape surface
   */
@@ -133,15 +135,12 @@ void on_monitors_changed ( GdkScreen *screen,
     paint_context_free(value);
   g_hash_table_remove_all(data->tool_config);
 
-
   parse_config(data); // also calls paint_context_new() :-(
-
 
   data->default_pen = paint_context_new (data, GROMIT_PEN,
 					 data->red, 7, 0, 1, G_MAXUINT);
   data->default_eraser = paint_context_new (data, GROMIT_ERASER,
 					    data->red, 75, 0, 1, G_MAXUINT);
-
   if(!data->composited) // set shape
     {
       cairo_region_t* r = gdk_cairo_region_create_from_surface(data->backbuffer);
@@ -150,7 +149,6 @@ void on_monitors_changed ( GdkScreen *screen,
     }
 
   setup_input_devices(data);
-
 
   gtk_widget_show_all (data->win);
 }
@@ -268,10 +266,17 @@ gboolean on_buttonpress (GtkWidget *win,
   /* See GdkModifierType. Am I fixing a Gtk misbehaviour???  */
   ev->state |= 1 << (ev->button + 7);
 
-
   if (ev->state != devdata->state ||
       devdata->lastslave != gdk_event_get_source_device ((GdkEvent *) ev))
     select_tool (data, ev->device, gdk_event_get_source_device ((GdkEvent *) ev), ev->state);
+
+  GromitPaintType type = devdata->cur_context->type;
+
+  // store original state to have dynamic update of line and rect
+  if (type == GROMIT_LINE || type == GROMIT_RECT)
+    {
+      copy_surface(data->temp_buffer, data->backbuffer);
+    }
 
   devdata->lastx = ev->x;
   devdata->lasty = ev->y;
@@ -319,41 +324,45 @@ gboolean on_motion (GtkWidget *win,
       devdata->lastslave != gdk_event_get_source_device ((GdkEvent *) ev))
     select_tool (data, ev->device, gdk_event_get_source_device ((GdkEvent *) ev), ev->state);
 
+  GromitPaintType type = devdata->cur_context->type;
+
   gdk_device_get_history (ev->device, ev->window,
 			  devdata->motion_time, ev->time,
 			  &coords, &nevents);
 
   if(!data->xinerama && nevents > 0)
     {
-      for (i=0; i < nevents; i++)
+      if (type != GROMIT_LINE && type != GROMIT_RECT)
         {
-          gdouble x, y;
-
-          gdk_device_get_axis (ev->device, coords[i]->axes,
-                               GDK_AXIS_PRESSURE, &pressure);
-          if (pressure > 0)
+          for (i=0; i < nevents; i++)
             {
-	      data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
-				(double) (devdata->cur_context->width -
-					  devdata->cur_context->minwidth) +
-				devdata->cur_context->minwidth);
+              gdouble x, y;
 
-	      if(data->maxwidth > devdata->cur_context->maxwidth)
-		data->maxwidth = devdata->cur_context->maxwidth;
+              gdk_device_get_axis (ev->device, coords[i]->axes,
+                                   GDK_AXIS_PRESSURE, &pressure);
+              if (pressure > 0)
+                {
+                  data->maxwidth = (CLAMP (pressure + line_thickener, 0, 1) *
+                                    (double) (devdata->cur_context->width -
+                                              devdata->cur_context->minwidth) +
+                                    devdata->cur_context->minwidth);
 
-              gdk_device_get_axis(ev->device, coords[i]->axes,
-                                  GDK_AXIS_X, &x);
-              gdk_device_get_axis(ev->device, coords[i]->axes,
-                                  GDK_AXIS_Y, &y);
+                  if(data->maxwidth > devdata->cur_context->maxwidth)
+                    data->maxwidth = devdata->cur_context->maxwidth;
 
-	      draw_line (data, ev->device, devdata->lastx, devdata->lasty, x, y);
+                  gdk_device_get_axis(ev->device, coords[i]->axes,
+                                      GDK_AXIS_X, &x);
+                  gdk_device_get_axis(ev->device, coords[i]->axes,
+                                      GDK_AXIS_Y, &y);
 
-              coord_list_prepend (data, ev->device, x, y, data->maxwidth);
-              devdata->lastx = x;
-              devdata->lasty = y;
+                  draw_line (data, ev->device, devdata->lastx, devdata->lasty, x, y);
+
+                  coord_list_prepend (data, ev->device, x, y, data->maxwidth);
+                  devdata->lastx = x;
+                  devdata->lasty = y;
+                }
             }
         }
-
       devdata->motion_time = coords[nevents-1]->time;
       g_free (coords);
     }
@@ -373,13 +382,35 @@ gboolean on_motion (GtkWidget *win,
 
       if(devdata->motion_time > 0)
 	{
-	  draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
-	  coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
+          if (type == GROMIT_LINE || type == GROMIT_RECT) {
+            copy_surface(data->backbuffer, data->temp_buffer);
+            GdkRectangle rect = {0, 0, data->width, data->height};
+            gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
+          }
+          if (type == GROMIT_LINE)
+            {
+	      draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
+            }
+          else if (type == GROMIT_RECT)
+            {
+              draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, devdata->lasty);
+              draw_line (data, ev->device, ev->x, devdata->lasty, ev->x, ev->y);
+              draw_line (data, ev->device, ev->x, ev->y, devdata->lastx, ev->y);
+              draw_line (data, ev->device, devdata->lastx, ev->y, devdata->lastx, devdata->lasty);
+            }
+          else
+            {
+              draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
+	      coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
+            }
 	}
     }
 
-  devdata->lastx = ev->x;
-  devdata->lasty = ev->y;
+  if (type != GROMIT_LINE && type != GROMIT_RECT)
+    {
+      devdata->lastx = ev->x;
+      devdata->lasty = ev->y;
+    }
   devdata->motion_time = ev->time;
 
   return TRUE;
@@ -406,11 +437,22 @@ gboolean on_buttonrelease (GtkWidget *win,
 
   if (!devdata->is_grabbed)
     return FALSE;
-  
-  if (devdata->cur_context->arrowsize != 0 &&
-      coord_list_get_arrow_param (data, ev->device, width * 3,
-				  &width, &direction))
-    draw_arrow (data, ev->device, ev->x, ev->y, width, direction);
+
+  GromitPaintType type = devdata->cur_context->type;
+
+  if (devdata->cur_context->arrowsize != 0)
+    {
+      if (type == GROMIT_LINE)
+        {
+          direction = atan2 (ev->y - devdata->lasty, ev->x - devdata->lastx);
+          draw_arrow(data, ev->device, ev->x, ev->y, width * 2, direction);
+        }
+      else if (coord_list_get_arrow_param (data, ev->device, width * 3,
+                                           &width, &direction))
+        {
+          draw_arrow (data, ev->device, ev->x, ev->y, width, direction);
+        }
+    }
 
   coord_list_free (data, ev->device);
 
