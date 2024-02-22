@@ -168,6 +168,8 @@ gboolean parse_config (GromitData *data)
   scanner->config->int_2_float = 1;
 
   g_scanner_scope_add_symbol (scanner, 0, "PEN",    (gpointer) GROMIT_PEN);
+  g_scanner_scope_add_symbol (scanner, 0, "LINE",   (gpointer) GROMIT_LINE);
+  g_scanner_scope_add_symbol (scanner, 0, "RECT",   (gpointer) GROMIT_RECT);
   g_scanner_scope_add_symbol (scanner, 0, "ERASER", (gpointer) GROMIT_ERASER);
   g_scanner_scope_add_symbol (scanner, 0, "RECOLOR",(gpointer) GROMIT_RECOLOR);
   g_scanner_scope_add_symbol (scanner, 0, "HOTKEY",            HOTKEY_SYMBOL_VALUE);
