@@ -258,7 +258,8 @@ void select_tool (GromitData *data,
       name = (guchar*) g_strndup (gdk_device_get_name(device), len + 3);
       default_len = strlen(DEFAULT_DEVICE_NAME);
       default_name = (guchar*) g_strndup (DEFAULT_DEVICE_NAME, default_len + 3);
-
+      
+      
       /* Extract Button/Modifiers from state (see GdkModifierType) */
       req_buttons = (state >> 8) & 31;
 
@@ -361,11 +362,13 @@ void select_tool (GromitData *data,
   else
     cursor = data->paint_cursor;
 
-  if(data->debug)
-    g_printerr("DEBUG: select_tool setting cursor %p\n", cursor);
 
-  // FIXME!  Should be:
-  // gdk_window_set_cursor(gtk_widget_get_window(data->win), cursor);
+  if(data->debug)
+    g_printerr("DEBUG: select_tool setting cursor %p\n",cursor);
+
+
+  //FIXME!  Should be:
+  //gdk_window_set_cursor(gtk_widget_get_window(data->win), cursor);
   // doesn't work during a grab?
   gdk_device_grab(device,
   		  gtk_widget_get_window(data->win),
@@ -616,15 +619,15 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
                     G_CALLBACK (on_device_removed), data);
   g_signal_connect (data->win, "motion_notify_event",
 		    G_CALLBACK (on_motion), data);
-  g_signal_connect (data->win, "button_press_event",
+  g_signal_connect (data->win, "button_press_event", 
 		    G_CALLBACK (on_buttonpress), data);
   g_signal_connect (data->win, "button_release_event",
 		    G_CALLBACK (on_buttonrelease), data);
   /* disconnect previously defined selection handlers */
-  g_signal_handlers_disconnect_by_func (data->win,
+  g_signal_handlers_disconnect_by_func (data->win, 
 					G_CALLBACK (on_clientapp_selection_get),
 					data);
-  g_signal_handlers_disconnect_by_func (data->win,
+  g_signal_handlers_disconnect_by_func (data->win, 
 					G_CALLBACK (on_clientapp_selection_received),
 					data);
   /* and re-connect them to mainapp functions */

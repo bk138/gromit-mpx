@@ -61,6 +61,8 @@ gboolean on_expose (GtkWidget *widget,
 }
 
 
+
+
 gboolean on_configure (GtkWidget *widget,
 		       GdkEventExpose *event,
 		       gpointer user_data)
@@ -72,6 +74,7 @@ gboolean on_configure (GtkWidget *widget,
 
   return TRUE;
 }
+
 
 
 void on_screen_changed(GtkWidget *widget,
@@ -135,12 +138,15 @@ void on_monitors_changed ( GdkScreen *screen,
     paint_context_free(value);
   g_hash_table_remove_all(data->tool_config);
 
+
   parse_config(data); // also calls paint_context_new() :-(
+
 
   data->default_pen = paint_context_new (data, GROMIT_PEN,
 					 data->red, 7, 0, 1, G_MAXUINT);
   data->default_eraser = paint_context_new (data, GROMIT_ERASER,
 					    data->red, 75, 0, 1, G_MAXUINT);
+
   if(!data->composited) // set shape
     {
       cairo_region_t* r = gdk_cairo_region_create_from_surface(data->backbuffer);
@@ -149,6 +155,7 @@ void on_monitors_changed ( GdkScreen *screen,
     }
 
   setup_input_devices(data);
+
 
   gtk_widget_show_all (data->win);
 }
@@ -266,6 +273,7 @@ gboolean on_buttonpress (GtkWidget *win,
   /* See GdkModifierType. Am I fixing a Gtk misbehaviour???  */
   ev->state |= 1 << (ev->button + 7);
 
+
   if (ev->state != devdata->state ||
       devdata->lastslave != gdk_event_get_source_device ((GdkEvent *) ev))
     select_tool (data, ev->device, gdk_event_get_source_device ((GdkEvent *) ev), ev->state);
@@ -363,6 +371,7 @@ gboolean on_motion (GtkWidget *win,
                 }
             }
         }
+
       devdata->motion_time = coords[nevents-1]->time;
       g_free (coords);
     }

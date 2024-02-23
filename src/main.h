@@ -97,6 +97,7 @@ typedef struct
   GdkDevice*   lastslave;
 } GromitDeviceData;
 
+
 typedef struct
 {
   GtkWidget   *win;
