@@ -40,6 +40,7 @@ GromitPaintContext *paint_context_new (GromitData *data,
 				       GdkRGBA *paint_color, 
 				       guint width,
 				       guint arrowsize,
+                                       GromitArrowType arrowtype,
 				       guint minwidth,
 				       guint maxwidth)
 {
@@ -50,11 +51,12 @@ GromitPaintContext *paint_context_new (GromitData *data,
   context->type = type;
   context->width = width;
   context->arrowsize = arrowsize;
+  context->arrow_type = arrowtype;
   context->minwidth = minwidth;
   context->maxwidth = maxwidth;
   context->paint_color = paint_color;
 
-  
+
   context->paint_ctx = cairo_create (data->backbuffer);
 
   gdk_cairo_set_source_rgba(context->paint_ctx, paint_color);
@@ -100,6 +102,22 @@ void paint_context_print (gchar *name,
   g_printerr ("minwidth: %u, ", context->minwidth);
   g_printerr ("maxwidth: %u, ", context->maxwidth);
   g_printerr ("arrowsize: %.2f, ", context->arrowsize);
+  if (context->arrowsize > 0)
+    {
+      switch (context->arrow_type) {
+      case GROMIT_ARROW_START:
+        g_printerr(" arrowtype: <- , ");
+        break;
+      case GROMIT_ARROW_END:
+        g_printerr(" arrowtype:  ->, ");
+        break;
+      case GROMIT_ARROW_DOUBLE:
+        g_printerr(" arrowtype: <->, ");
+        break;
+      case GROMIT_ARROW_NONE:
+        break;
+      }
+    }
   g_printerr ("color: %s\n", gdk_rgba_to_string(context->paint_color));
 }
 
@@ -758,12 +776,12 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
  
   data->modified = 0;
 
-  data->default_pen = paint_context_new (data, GROMIT_PEN,
-					 data->red, 7, 0, 1, G_MAXUINT);
-  data->default_eraser = paint_context_new (data, GROMIT_ERASER,
-					    data->red, 75, 0, 1, G_MAXUINT);
-
-  
+  data->default_pen =
+    paint_context_new (data, GROMIT_PEN, data->red, 7,
+                       0, GROMIT_ARROW_NONE, 1, G_MAXUINT);
+  data->default_eraser =
+    paint_context_new (data, GROMIT_ERASER, data->red, 75,
+                       0, GROMIT_ARROW_NONE, 1, G_MAXUINT);
 
   gdk_event_handler_set ((GdkEventFunc) main_do_event, data, NULL);
   gtk_key_snooper_install (snoop_key_press, data);

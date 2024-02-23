@@ -1,6 +1,7 @@
 
 #include <math.h>
 #include "drawing.h"
+#include "main.h"
 
 typedef struct
 {
@@ -153,14 +154,20 @@ void coord_list_free (GromitData *data,
   devdata->coordlist = NULL;
 }
 
+/*
+ * for double-ended arrows, two separate calls are required
+ */
 
-gboolean coord_list_get_arrow_param (GromitData *data,
-				     GdkDevice  *dev,
-				     gint        search_radius,
-				     gint       *ret_width,
-				     gfloat     *ret_direction)
+gboolean coord_list_get_arrow_param (GromitData      *data,
+				     GdkDevice       *dev,
+				     gint            search_radius,
+                                     GromitArrowType arrow_end,
+                                     gint            *x0,
+                                     gint            *y0,
+				     gint            *ret_width,
+				     gfloat          *ret_direction)
 {
-  gint x0, y0, r2, dist;
+  gint r2, dist;
   gboolean success = FALSE;
   GromitStrokeCoordinate  *cur_point, *valid_point;
   /* get the data for this device */
@@ -172,20 +179,25 @@ gboolean coord_list_get_arrow_param (GromitData *data,
 
   if (ptr)
     {
+      if (arrow_end == GROMIT_ARROW_START)
+          ptr = g_list_last(ptr);
       cur_point = ptr->data;
-      x0 = cur_point->x;
-      y0 = cur_point->y;
+      *x0 = cur_point->x;
+      *y0 = cur_point->y;
       r2 = search_radius * search_radius;
       dist = 0;
 
       while (ptr && dist < r2)
         {
-          ptr = ptr->next;
+          if (arrow_end == GROMIT_ARROW_END)
+            ptr = ptr->next;
+          else
+            ptr = ptr->prev;
           if (ptr)
             {
               cur_point = ptr->data;
-              dist = (cur_point->x - x0) * (cur_point->x - x0) +
-                     (cur_point->y - y0) * (cur_point->y - y0);
+              dist = (cur_point->x - *x0) * (cur_point->x - *x0) +
+                     (cur_point->y - *y0) * (cur_point->y - *y0);
               width = cur_point->width * devdata->cur_context->arrowsize;
               if (width * 2 <= dist &&
                   (!valid_point || valid_point->width < cur_point->width))
@@ -197,7 +209,7 @@ gboolean coord_list_get_arrow_param (GromitData *data,
         {
           *ret_width = MAX (valid_point->width * devdata->cur_context->arrowsize,
                             2);
-          *ret_direction = atan2 (y0 - valid_point->y, x0 - valid_point->x);
+          *ret_direction = atan2 (*y0 - valid_point->y, *x0 - valid_point->x);
           success = TRUE;
         }
     }
