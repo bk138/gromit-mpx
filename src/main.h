@@ -64,15 +64,26 @@
 typedef enum
 {
   GROMIT_PEN,
+  GROMIT_LINE,
+  GROMIT_RECT,
   GROMIT_ERASER,
   GROMIT_RECOLOR
 } GromitPaintType;
+
+typedef enum
+{
+  GROMIT_ARROW_NONE = 0,
+  GROMIT_ARROW_START = 1,
+  GROMIT_ARROW_END = 2,
+  GROMIT_ARROW_DOUBLE = 3
+} GromitArrowType;
 
 typedef struct
 {
   GromitPaintType type;
   guint           width;
   gfloat          arrowsize;
+  GromitArrowType arrow_type;
   guint           minwidth;
   guint           maxwidth;
   GdkRGBA         *paint_color;
@@ -144,6 +155,8 @@ typedef struct
   cairo_surface_t *undobuffer[GROMIT_MAX_UNDO];
   gint            undo_head, undo_depth, redo_depth;
 
+  cairo_surface_t *temp_buffer;
+
   gboolean show_intro_on_startup;
 
 } GromitData;
@@ -166,7 +179,8 @@ void redo_drawing (GromitData *data);
 void clear_screen (GromitData *data);
 
 GromitPaintContext *paint_context_new (GromitData *data, GromitPaintType type,
-				       GdkRGBA *fg_color, guint width, guint arrowsize,
+				       GdkRGBA *fg_color, guint width,
+                                       guint arrowsize, GromitArrowType arrowtype,
                                        guint minwidth, guint maxwidth);
 void paint_context_free (GromitPaintContext *context);
 
