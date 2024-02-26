@@ -824,6 +824,16 @@ void on_intro(GtkMenuItem *menuitem,
     gtk_widget_show_all (assistant);
 }
 
+void on_issues(GtkMenuItem *menuitem,
+               gpointer user_data)
+{
+    gtk_show_uri_on_window (NULL,
+			    "https://github.com/bk138/gromit-mpx/issues",
+			    GDK_CURRENT_TIME,
+			    NULL);
+}
+
+
 void on_support_liberapay(GtkMenuItem *menuitem, gpointer user_data)
 {
     gtk_show_uri_on_window (NULL,

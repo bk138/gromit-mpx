@@ -128,6 +128,9 @@ void on_about(GtkMenuItem *menuitem,
 void on_intro(GtkMenuItem *menuitem,
 	      gpointer user_data);
 
+void on_issues(GtkMenuItem *menuitem,
+               gpointer user_data);
+
 void on_support_liberapay(GtkMenuItem *menuitem,
 			  gpointer user_data);
 
