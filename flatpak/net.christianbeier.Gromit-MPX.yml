@@ -1,6 +1,6 @@
 id: net.christianbeier.Gromit-MPX
 runtime: org.gnome.Platform # using GNOME for the time being as we need dconf for setting hotkeys under Wayland
-runtime-version: '43'
+runtime-version: '44'
 sdk: org.gnome.Sdk
 command: gromit-mpx
 finish-args:
@@ -24,8 +24,8 @@ modules:
       - glib-compile-schemas /app/share/glib-2.0/schemas
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/gnome-settings-daemon/43/gnome-settings-daemon-43.0.tar.xz
-        sha256: 3513bb24fc6f8181667223a64a067534fdccf3bf66326a9403d38b0f0d6013d0
+        url: https://download.gnome.org/sources/gnome-settings-daemon/44/gnome-settings-daemon-44.0.tar.xz
+        sha256: b417ada1c1342a8cf29837ecf2dec9bdcdb754235b1a161b6435c3d11f210999
   - name: dconf
     buildsystem: meson
     config-opts:
