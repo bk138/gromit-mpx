@@ -192,6 +192,14 @@ the shape. Try it out to see the effect.
 
     "green Marker" = RECOLOR (color = "Limegreen");
 
+A `LINE`-tool draws straight lines.
+
+    "green Line" = LINE (color = "green");
+
+A `RECT`-tool draws rectangles.
+
+    "red Rectangle" = LINE (color = "red");
+
 If you define a tool with the same name as an input-device
 (see the output of `xinput --list`) this input-device uses this tool:
 
