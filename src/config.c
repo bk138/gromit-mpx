@@ -125,6 +125,7 @@ gboolean parse_config (GromitData *data)
   GromitPaintType type;
   GdkRGBA *fg_color=NULL;
   guint width, arrowsize, minwidth, maxwidth;
+  GromitArrowType arrowtype;
 
   /* try user config location */
   filename = g_strjoin (G_DIR_SEPARATOR_S,
@@ -188,8 +189,9 @@ gboolean parse_config (GromitData *data)
   g_scanner_scope_add_symbol (scanner, 2, "size",      (gpointer) 1);
   g_scanner_scope_add_symbol (scanner, 2, "color",     (gpointer) 2);
   g_scanner_scope_add_symbol (scanner, 2, "arrowsize", (gpointer) 3);
-  g_scanner_scope_add_symbol (scanner, 2, "minsize",   (gpointer) 4);
-  g_scanner_scope_add_symbol (scanner, 2, "maxsize",   (gpointer) 5);
+  g_scanner_scope_add_symbol (scanner, 2, "arrowtype", (gpointer) 4);
+  g_scanner_scope_add_symbol (scanner, 2, "minsize",   (gpointer) 5);
+  g_scanner_scope_add_symbol (scanner, 2, "maxsize",   (gpointer) 6);
 
   g_scanner_set_scope (scanner, 0);
   scanner->config->scope_0_fallback = 0;
@@ -225,6 +227,7 @@ gboolean parse_config (GromitData *data)
           type = GROMIT_PEN;
           width = 7;
           arrowsize = 0;
+          arrowtype = GROMIT_ARROW_NONE;
           minwidth = 1;
           maxwidth = G_MAXUINT;
           fg_color = data->red;
@@ -246,6 +249,7 @@ gboolean parse_config (GromitData *data)
                   type = context_template->type;
                   width = context_template->width;
                   arrowsize = context_template->arrowsize;
+                  arrowtype = context_template->arrow_type;
                   minwidth = context_template->minwidth;
 		  maxwidth = context_template->maxwidth;
                   fg_color = context_template->paint_color;
@@ -336,8 +340,37 @@ gboolean parse_config (GromitData *data)
                               goto cleanup;
                             }
                           arrowsize = scanner->value.v_float;
+                          arrowtype = GROMIT_ARROW_END;
                         }
                       else if ((intptr_t) scanner->value.v_symbol == 4)
+                        {
+                          token = g_scanner_get_next_token (scanner);
+                          if (token != G_TOKEN_EQUAL_SIGN)
+                            {
+                              g_printerr ("Missing \"=\"... aborting\n");
+                              goto cleanup;
+                            }
+                          token = g_scanner_get_next_token (scanner);
+                          if (token != G_TOKEN_STRING)
+                            {
+                              g_printerr ("Missing Arrowsize (string)... "
+                                          "aborting\n");
+                              goto cleanup;
+                            }
+                          if (! strcmp(scanner->value.v_string, "->"))
+                            arrowtype = GROMIT_ARROW_END;
+                          else if (! strcmp(scanner->value.v_string, "<-"))
+                            arrowtype = GROMIT_ARROW_START;
+                          else if (! strcmp(scanner->value.v_string, "<->"))
+                            arrowtype = GROMIT_ARROW_DOUBLE;
+                          else
+                            {
+                              g_printerr ("Arrow type must be one of -> <- <-> ... "
+                                          "aborting\n");
+                              goto cleanup;
+                            }
+                        }
+                      else if ((intptr_t) scanner->value.v_symbol == 5)
                         {
                           token = g_scanner_get_next_token (scanner);
                           if (token != G_TOKEN_EQUAL_SIGN)
@@ -354,7 +387,7 @@ gboolean parse_config (GromitData *data)
                             }
                           minwidth = scanner->value.v_float;
                         }
-                      else if ((intptr_t) scanner->value.v_symbol == 5)
+                      else if ((intptr_t) scanner->value.v_symbol == 6)
                         {
                           token = g_scanner_get_next_token (scanner);
                           if (token != G_TOKEN_EQUAL_SIGN)
@@ -396,7 +429,8 @@ gboolean parse_config (GromitData *data)
               goto cleanup;
             }
 
-          context = paint_context_new (data, type, fg_color, width, arrowsize, minwidth, maxwidth);
+          context = paint_context_new (data, type, fg_color, width,
+                                       arrowsize, arrowtype, minwidth, maxwidth);
           g_hash_table_insert (data->tool_config, name, context);
         }
       else if (token == G_TOKEN_SYMBOL &&
