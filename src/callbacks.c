@@ -793,7 +793,7 @@ void on_about(GtkMenuItem *menuitem,
 			   "version", PACKAGE_VERSION,
 			   "website", PACKAGE_URL,
 			   "authors", authors,
-			   "copyright", "2009-2023 Christian Beier, Copyright 2000 Simon Budig",
+			   "copyright", "2009-2024 Christian Beier, Copyright 2000 Simon Budig",
 			   "license-type", GTK_LICENSE_GPL_2_0,
 			   NULL);
 }
