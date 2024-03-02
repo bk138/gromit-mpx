@@ -127,6 +127,8 @@ typedef struct
   GHashTable  *tool_config;
 
   cairo_surface_t *backbuffer;
+  /* Auxiliary backbuffer for tools like LINE or RECT */
+  cairo_surface_t *aux_backbuffer;
 
   GHashTable  *devdatatable;
 
@@ -146,7 +148,6 @@ typedef struct
   cairo_surface_t *undobuffer[GROMIT_MAX_UNDO];
   gint            undo_head, undo_depth, redo_depth;
 
-  cairo_surface_t *temp_buffer;
 
   gboolean show_intro_on_startup;
 

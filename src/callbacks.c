@@ -124,9 +124,9 @@ void on_monitors_changed ( GdkScreen *screen,
   cairo_surface_destroy(data->backbuffer);
   data->backbuffer = new_shape;
 
-  // recreate temp_buffer
-  cairo_surface_destroy(data->temp_buffer);
-  data->temp_buffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
+  // recreate auxiliary backbuffer
+  cairo_surface_destroy(data->aux_backbuffer);
+  data->aux_backbuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
 
   /*
      these depend on the shape surface
@@ -283,7 +283,7 @@ gboolean on_buttonpress (GtkWidget *win,
   // store original state to have dynamic update of line and rect
   if (type == GROMIT_LINE || type == GROMIT_RECT)
     {
-      copy_surface(data->temp_buffer, data->backbuffer);
+      copy_surface(data->aux_backbuffer, data->backbuffer);
     }
 
   devdata->lastx = ev->x;
@@ -392,7 +392,7 @@ gboolean on_motion (GtkWidget *win,
       if(devdata->motion_time > 0)
 	{
           if (type == GROMIT_LINE || type == GROMIT_RECT) {
-            copy_surface(data->backbuffer, data->temp_buffer);
+            copy_surface(data->backbuffer, data->aux_backbuffer);
             GdkRectangle rect = {0, 0, data->width, data->height};
             gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
           }

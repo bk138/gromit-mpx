@@ -598,8 +598,8 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
     }
 
   // original state for LINE and RECT tool
-  cairo_surface_destroy(data->temp_buffer);
-  data->temp_buffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
+  cairo_surface_destroy(data->aux_backbuffer);
+  data->aux_backbuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
 
   /* EVENTS */
   gtk_widget_add_events (data->win, GROMIT_WINDOW_EVENTS);
