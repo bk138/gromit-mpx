@@ -106,13 +106,13 @@ void paint_context_print (gchar *name,
     {
       switch (context->arrow_type) {
       case GROMIT_ARROW_START:
-        g_printerr(" arrowtype: <- , ");
+        g_printerr(" arrowtype: start,  ");
         break;
       case GROMIT_ARROW_END:
-        g_printerr(" arrowtype:  ->, ");
+        g_printerr(" arrowtype: end,    ");
         break;
       case GROMIT_ARROW_DOUBLE:
-        g_printerr(" arrowtype: <->, ");
+        g_printerr(" arrowtype: double, ");
         break;
       case GROMIT_ARROW_NONE:
         break;

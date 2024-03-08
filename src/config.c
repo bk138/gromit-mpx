@@ -357,15 +357,15 @@ gboolean parse_config (GromitData *data)
                                           "aborting\n");
                               goto cleanup;
                             }
-                          if (! strcmp(scanner->value.v_string, "->"))
+                          if (! strcasecmp(scanner->value.v_string, "end"))
                             arrowtype = GROMIT_ARROW_END;
-                          else if (! strcmp(scanner->value.v_string, "<-"))
+                          else if (! strcasecmp(scanner->value.v_string, "start"))
                             arrowtype = GROMIT_ARROW_START;
-                          else if (! strcmp(scanner->value.v_string, "<->"))
+                          else if (! strcasecmp(scanner->value.v_string, "double"))
                             arrowtype = GROMIT_ARROW_DOUBLE;
                           else
                             {
-                              g_printerr ("Arrow type must be one of -> <- <-> ... "
+                              g_printerr ("Arrow type must be \"start\", \"end\", or \"double\"... "
                                           "aborting\n");
                               goto cleanup;
                             }
