@@ -143,9 +143,9 @@ void on_monitors_changed ( GdkScreen *screen,
 
 
   data->default_pen = paint_context_new (data, GROMIT_PEN, data->red, 7,
-                                         0, GROMIT_ARROW_NONE, 1, G_MAXUINT);
+                                         0, GROMIT_ARROW_END, 1, G_MAXUINT);
   data->default_eraser = paint_context_new (data, GROMIT_ERASER, data->red, 75,
-                                            0, GROMIT_ARROW_NONE, 1, G_MAXUINT);
+                                            0, GROMIT_ARROW_END, 1, G_MAXUINT);
 
   if(!data->composited) // set shape
     {
@@ -398,10 +398,10 @@ gboolean on_motion (GtkWidget *win,
           }
           if (type == GROMIT_LINE)
             {
-              GromitArrowType atype = devdata->cur_context->arrow_type;
 	      draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
-              if (atype != GROMIT_ARROW_NONE)
+              if (devdata->cur_context->arrowsize > 0)
                 {
+                  GromitArrowType atype = devdata->cur_context->arrow_type;
                   gint width = devdata->cur_context->arrowsize * devdata->cur_context->width / 2;
                   gfloat direction =
                       atan2(ev->y - devdata->lasty, ev->x - devdata->lastx);
@@ -616,7 +616,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
 	    }
 	  GromitPaintContext* line_ctx =
             paint_context_new(data, GROMIT_PEN, fg_color, thickness,
-                              0, GROMIT_ARROW_NONE, thickness, thickness);
+                              0, GROMIT_ARROW_END, thickness, thickness);
 
 	  GdkRectangle rect;
 	  rect.x = MIN (startX,endX) - thickness / 2;

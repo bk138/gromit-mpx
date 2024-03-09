@@ -227,7 +227,7 @@ gboolean parse_config (GromitData *data)
           type = GROMIT_PEN;
           width = 7;
           arrowsize = 0;
-          arrowtype = GROMIT_ARROW_NONE;
+          arrowtype = GROMIT_ARROW_END;
           minwidth = 1;
           maxwidth = G_MAXUINT;
           fg_color = data->red;
@@ -340,7 +340,6 @@ gboolean parse_config (GromitData *data)
                               goto cleanup;
                             }
                           arrowsize = scanner->value.v_float;
-                          arrowtype = GROMIT_ARROW_END;
                         }
                       else if ((intptr_t) scanner->value.v_symbol == 4)
                         {
