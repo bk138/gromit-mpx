@@ -176,9 +176,12 @@ not allowed to change size:
 
 	"red fixed Marker" = "red Pen" (minsize=10 maxsize=10);
 
-You can also draw lines that end in an arrow head. For this you
-have to specify `arrowsize`. This is a factor relative to the width
-of the line. For reasonable arrowheads start with 1.
+You can also draw lines that start and/or end in an arrow head. For
+this you have to specify `arrowsize` and optionally `arrowtype`.
+`arrowsize` is a factor relative to the width of the line. For
+reasonable arrowheads start with 1.
+`arrowtype` can take `start`, `end` or `double` and defaults to `end`
+when `arrowsize` is specified and no `arrowtype` given. 
 
     "blue Pen" = "blue Arrow" (arrowsize=2);
 
