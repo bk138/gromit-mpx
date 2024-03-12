@@ -56,6 +56,16 @@
   </screenshots>
 
   <releases>
+    <release version="1.6.0" date="2024-03-12">
+      <description>
+	<p>
+          Added a report-bug/request-feature menu item and new RECT and LINE tools as well
+          as an arrowtype option that allows to set arrow position. Furthermore, a translation to
+          Portuguese (Brazil) was added.
+	</p>
+      </description>
+    </release>
+
     <release version="1.5.1" date="2023-10-22">
       <description>
 	<p>
