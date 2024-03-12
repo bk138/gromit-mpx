@@ -186,4 +186,5 @@ void paint_context_free (GromitPaintContext *context);
 
 void indicate_active(GromitData *data, gboolean YESNO);
 
+void LZ4_test(cairo_surface_t *surface);
 #endif

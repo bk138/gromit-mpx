@@ -29,6 +29,7 @@ if(NOT appindicator3_FOUND)
   pkg_check_modules(appindicator3 REQUIRED "appindicator3-0.1 >= 0.4.92")
   set(APPINDICATOR_IS_LEGACY 1)
 endif()
+pkg_check_modules(lz4 REQUIRED liblz4)
 
 configure_file(build-config.h_cmake_in build-config.h)
 
@@ -38,6 +39,7 @@ include_directories(
     ${appindicator3_INCLUDE_DIRS}
     ${xinput_INCLUDE_DIRS}
     ${x11_INCLUDE_DIRS}
+    ${lz4_INCLUDE_DIRS}
 )
 
 link_directories(
@@ -45,6 +47,8 @@ link_directories(
     ${appindicator3_LIBRARY_DIRS}
     ${xinput_LIBRARY_DIRS}
     ${x11_LIBRARY_DIRS}
+    ${lz4_INCLUDE_DIRS}
+
 )
 
 set(sources
@@ -69,9 +73,9 @@ target_link_libraries(${target_name}
     ${appindicator3_LIBRARIES}
     ${xinput_LIBRARIES}
     ${x11_LIBRARIES}
+    ${lz4_LIBRARIES}
     -lm
 )
-
 
 GETTEXT_PROCESS_PO_FILES(de ALL PO_FILES po/de.po)
 GETTEXT_PROCESS_PO_FILES(es ALL PO_FILES po/es.po)

@@ -24,8 +24,15 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <lz4.h>
+#include <unistd.h>
+
+
+
+#include "cairo.h"
 #include "callbacks.h"
 #include "config.h"
+#include "glibconfig.h"
 #include "input.h"
 #include "main.h"
 #include "build-config.h"
@@ -405,6 +412,9 @@ void snap_undo_state (GromitData *data)
   if(data->debug)
     g_printerr ("DEBUG: Snapping undo buffer %d.\n", data->undo_head);
 
+  LZ4_test(data->backbuffer);
+
+
   copy_surface(data->undobuffer[data->undo_head], data->backbuffer);
 
   // Increment head position
@@ -494,6 +504,71 @@ void redo_drawing (GromitData *data)
 }
 
 
+
+void LZ4_test(cairo_surface_t *surface) {
+  g_printerr("LZ4_MEMORY_USAGE: %d\n", LZ4_MEMORY_USAGE);
+  guchar *raw_data = cairo_image_surface_get_data(surface);
+  gint bytes_per_row = cairo_image_surface_get_stride(surface);
+  gint rows = cairo_image_surface_get_height(surface);
+  guint32 total_bytes = rows * bytes_per_row;
+  guint32 max_bytes = LZ4_compressBound(total_bytes);
+  g_printerr("compress_bounds = %d\n", max_bytes);
+
+  guchar *dst_data = g_malloc(max_bytes);
+  guchar *chk_data = g_malloc(max_bytes);
+
+  guint32 dest_bytes = LZ4_compress_default((char *)raw_data, (char *)dst_data, total_bytes, max_bytes);
+  g_printerr("compressed size = %d (%.1f%%)\n", dest_bytes, dest_bytes*100.0/total_bytes);
+
+  guint32 chk_bytes = LZ4_decompress_safe(dst_data, chk_data, dest_bytes, max_bytes);
+  g_printerr("decompressed size = %d\n", chk_bytes);
+
+  if (memcmp(chk_data, raw_data, total_bytes) == 0)
+    g_printerr("Identical!\n");
+  else
+    g_printerr("Error!\n");
+
+  g_free(dst_data);
+  g_free(chk_data);
+
+}
+
+/*
+
+int LZ4_compress_default(const char* src, char* dst, int srcSize, int dstCapacity);
+
+  Compresses 'srcSize' bytes from buffer 'src'
+  into already allocated 'dst' buffer of size 'dstCapacity'.
+  Compression is guaranteed to succeed if 'dstCapacity' >= LZ4_compressBound(srcSize).
+  It also runs faster, so it's a recommended setting.
+  If the function cannot compress 'src' into a more limited 'dst' budget,
+  compression stops *immediately*, and the function result is zero.
+  In which case, 'dst' content is undefined (invalid).
+      srcSize : max supported value is LZ4_MAX_INPUT_SIZE.
+      dstCapacity : size of buffer 'dst' (which must be already allocated)
+     @return  : the number of bytes written into buffer 'dst' (necessarily <= dstCapacity)
+                or 0 if compression fails
+ Note : This function is protected against buffer overflow scenarios (never writes outside 'dst' buffer, nor read outside 'source' buffer).
+
+
+
+int LZ4_decompress_safe (const char* src, char* dst, int compressedSize, int dstCapacity);
+
+  compressedSize : is the exact complete size of the compressed block.
+  dstCapacity : is the size of destination buffer (which must be already allocated), presumed an upper bound of decompressed size.
+ @return : the number of bytes decompressed into destination buffer (necessarily <= dstCapacity)
+           If destination buffer is not large enough, decoding will stop and output an error code (negative value).
+           If the source stream is detected malformed, the function will stop decoding and return a negative result.
+ Note 1 : This function is protected against malicious data packets :
+          it will never writes outside 'dst' buffer, nor read outside 'source' buffer,
+          even if the compressed block is maliciously modified to order the decoder to do these actions.
+          In such case, the decoder stops immediately, and considers the compressed block malformed.
+ Note 2 : compressedSize and dstCapacity must be provided to the function, the compressed block does not contain them.
+          The implementation is free to send / store / derive this information in whichever way is most beneficial.
+          If there is a need for a different format which bundles together both compressed data and its metadata, consider looking at lz4frame.h instead.
+
+
+ */
 
 
 
