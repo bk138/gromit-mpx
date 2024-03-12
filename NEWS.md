@@ -1,3 +1,12 @@
+# Gromit-MPX 1.6.0 - 2024-03-12
+
+## 🌅 New Features
+
+* Added a report-bug/request-feature menu item.
+* Added RECT and LINE tools.
+* Added Portuguese (Brazil) translation.
+* Added arrowtype option that allows to set arrow position.
+
 # Gromit-MPX 1.5.1 - 2023-10-22
 
 ## 🛠  Fixes
