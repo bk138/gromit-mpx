@@ -70,11 +70,19 @@ typedef enum
   GROMIT_RECOLOR
 } GromitPaintType;
 
+typedef enum
+{
+  GROMIT_ARROW_START = 1,
+  GROMIT_ARROW_END = 2,
+  GROMIT_ARROW_DOUBLE = (GROMIT_ARROW_START | GROMIT_ARROW_END )
+} GromitArrowType;
+
 typedef struct
 {
   GromitPaintType type;
   guint           width;
   gfloat          arrowsize;
+  GromitArrowType arrow_type;
   guint           minwidth;
   guint           maxwidth;
   GdkRGBA         *paint_color;
@@ -171,7 +179,8 @@ void redo_drawing (GromitData *data);
 void clear_screen (GromitData *data);
 
 GromitPaintContext *paint_context_new (GromitData *data, GromitPaintType type,
-				       GdkRGBA *fg_color, guint width, guint arrowsize,
+				       GdkRGBA *fg_color, guint width,
+                                       guint arrowsize, GromitArrowType arrowtype,
                                        guint minwidth, guint maxwidth);
 void paint_context_free (GromitPaintContext *context);
 
