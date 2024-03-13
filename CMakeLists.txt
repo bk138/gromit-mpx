@@ -54,6 +54,8 @@ set(sources
     src/config.h
     src/drawing.c
     src/drawing.h
+    src/smooth.c
+    src/smooth.h
     src/main.c
     src/main.h
     src/input.c
