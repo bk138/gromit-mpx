@@ -171,6 +171,7 @@ gboolean parse_config (GromitData *data)
   g_scanner_scope_add_symbol (scanner, 0, "PEN",    (gpointer) GROMIT_PEN);
   g_scanner_scope_add_symbol (scanner, 0, "LINE",   (gpointer) GROMIT_LINE);
   g_scanner_scope_add_symbol (scanner, 0, "RECT",   (gpointer) GROMIT_RECT);
+  g_scanner_scope_add_symbol (scanner, 0, "SMOOTH", (gpointer) GROMIT_SMOOTH);
   g_scanner_scope_add_symbol (scanner, 0, "ERASER", (gpointer) GROMIT_ERASER);
   g_scanner_scope_add_symbol (scanner, 0, "RECOLOR",(gpointer) GROMIT_RECOLOR);
   g_scanner_scope_add_symbol (scanner, 0, "HOTKEY",            HOTKEY_SYMBOL_VALUE);
@@ -340,6 +341,7 @@ gboolean parse_config (GromitData *data)
                               goto cleanup;
                             }
                           arrowsize = scanner->value.v_float;
+                          arrowtype = GROMIT_ARROW_END;
                         }
                       else if ((intptr_t) scanner->value.v_symbol == 4)
                         {
@@ -567,7 +569,7 @@ int parse_args (int argc, char **argv, GromitData *data)
                wrong_arg = TRUE;
              }
          }
-      else if (strcmp (arg, "-o") == 0 ||
+       else if (strcmp (arg, "-o") == 0 ||
                 strcmp (arg, "--opacity") == 0)
          {
            if (i+1 < argc && strtod (argv[i+1], NULL) >= 0.0 && strtod (argv[i+1], NULL) <= 1.0)

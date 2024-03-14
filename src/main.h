@@ -66,6 +66,7 @@ typedef enum
   GROMIT_PEN,
   GROMIT_LINE,
   GROMIT_RECT,
+  GROMIT_SMOOTH,
   GROMIT_ERASER,
   GROMIT_RECOLOR
 } GromitPaintType;
@@ -155,7 +156,6 @@ typedef struct
 
   cairo_surface_t *undobuffer[GROMIT_MAX_UNDO];
   gint            undo_head, undo_depth, redo_depth;
-
 
   gboolean show_intro_on_startup;
 

@@ -31,7 +31,7 @@
 #include "config.h"
 #include "drawing.h"
 #include "build-config.h"
-
+#include "smooth.h"
 
 gboolean on_expose (GtkWidget *widget,
 		    cairo_t* cr,
@@ -281,7 +281,7 @@ gboolean on_buttonpress (GtkWidget *win,
   GromitPaintType type = devdata->cur_context->type;
 
   // store original state to have dynamic update of line and rect
-  if (type == GROMIT_LINE || type == GROMIT_RECT)
+  if (type == GROMIT_LINE || type == GROMIT_RECT || type == GROMIT_SMOOTH)
     {
       copy_surface(data->aux_backbuffer, data->backbuffer);
     }
@@ -398,6 +398,7 @@ gboolean on_motion (GtkWidget *win,
           }
           if (type == GROMIT_LINE)
             {
+              GromitArrowType atype = devdata->cur_context->arrow_type;
 	      draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
               if (devdata->cur_context->arrowsize > 0)
                 {
@@ -459,6 +460,36 @@ gboolean on_buttonrelease (GtkWidget *win,
     return FALSE;
 
   GromitPaintType type = devdata->cur_context->type;
+
+  if (type == GROMIT_SMOOTH)
+    {
+      if (1) {
+          // smooth pen
+          GList *coords = devdata->coordlist;
+          gboolean joined = snap_ends(coords, 20);
+          douglas_peucker(coords, 10);  // was 15
+          add_points(coords, 200);
+          devdata->coordlist = catmull_rom(coords, 5, joined);
+      } else {
+          // smart rect pen
+          douglas_peucker(devdata->coordlist, 15);  // was 15
+          orthogonalize(devdata->coordlist, 20, 40);
+          round_corners(devdata->coordlist, 20, 6);
+      }
+
+      copy_surface(data->backbuffer, data->aux_backbuffer);
+      GdkRectangle rect = {0, 0, data->width, data->height};
+      gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
+
+      GList *ptr = devdata->coordlist;
+      while (ptr->next)
+        {
+          GromitStrokeCoordinate *c1 = ptr->data;
+          GromitStrokeCoordinate *c2 = ptr->next->data;
+          ptr = ptr->next;
+          draw_line (data, ev->device, c1->x, c1->y, c2->x, c2->y);
+        }
+    }
 
   if (devdata->cur_context->arrowsize != 0)
     {
