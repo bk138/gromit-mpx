@@ -29,7 +29,7 @@
 gboolean snap_ends(GList *coords, gint max_distance);
 void orthogonalize(GList *coords, gint max_angular_deviation, gint min_ortho_len);
 void add_points(GList *coords, gfloat max_distance);
-void round_corners(GList *coords, gint radius, gint steps);
+void round_corners(GList *coords, gint radius, gint steps, gboolean circular);
 void douglas_peucker(GList *coords, gfloat epsilon);
 GList *catmull_rom(GList *coords, gint steps, gboolean circular);
 

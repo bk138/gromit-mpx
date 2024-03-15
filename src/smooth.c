@@ -549,49 +549,58 @@ void add_points(GList *coords, gfloat max_distance) {
 /*
  * add rounded corners between sections
  */
-void round_corners(GList *coords, gint radius, gint steps) {
+void round_corners(GList *coords, gint radius, gint steps, gboolean circular) {
     GList *ptr = coords;
-
-    gfloat prev_len, next_len;
-    if (ptr) {
+    if (ptr && g_list_length(ptr) > 2) {
+        gfloat prev_len, next_len;
         const gint width = ((GromitStrokeCoordinate *)ptr->data)->width;
-        while (ptr->next) {
-            prev_len = next_len;
-            next_len = coord_distance(ptr, ptr->next);
-            if (ptr != coords && next_len > 2 * radius && prev_len > 2 * radius) {
-                const gfloat rot =
-                    find_coord_vec_rotation(ptr->prev, ptr, ptr, ptr->next);
-                const gfloat beta = rot / steps;
-                const gfloat a = 2 * radius * tan((M_PI - rot) / 2) * sin(rot / (2 * steps));
+        for (;;) {
+            gboolean is_last = (ptr->next == NULL);
+            GList *next_pt = is_last ? coords->next : ptr->next;
+            if (circular || !is_last) {
+                prev_len = next_len;
+                next_len = coord_distance(ptr, next_pt);
+                if (ptr != coords && next_len > 2 * radius && prev_len > 2 * radius) {
+                    const gfloat rot =
+                        find_coord_vec_rotation(ptr->prev, ptr, ptr, next_pt);
+                    const gfloat beta = rot / steps;
+                    const gfloat a = 2 * radius * tan((M_PI - rot) / 2) * sin(rot / (2 * steps));
 
-                xy vec = xy_vec_from_coords(ptr->prev, ptr);
-                // move back point by radius
-                xy point = get_xy_from_coord(ptr);
-                gfloat k = radius / xy_length(&vec);
-                point.x -= (vec.x * k);
-                point.y -= (vec.y * k);
-                set_coord_from_xy(&point, ptr);
-                // initial step with length a
-                k *= (a / radius);
-                vec.x *= k;
-                vec.y *= k;
-                trans2D m;
-                rotate2D(beta / 2.0, &m);
-
-                vec = apply2D_xy(&vec, &m);
-                rotate2D(-beta, &m);
-
-                for (gint i = 0; i < steps; i++) {
-                    vec = apply2D_xy(&vec, &m);
-                    point = xy_add(&point, &vec);
-                    GromitStrokeCoordinate *new_coord = g_malloc(sizeof(GromitStrokeCoordinate));
-                    GList *tmp = g_list_insert_before(coords, ptr->next, new_coord);
-                    assert(tmp == coords);
-                    new_coord->width = width;
-                    ptr = ptr->next;
+                    xy vec = xy_vec_from_coords(ptr->prev, ptr);
+                    // move back point by radius
+                    xy point = get_xy_from_coord(ptr);
+                    gfloat k = radius / xy_length(&vec);
+                    point.x -= (vec.x * k);
+                    point.y -= (vec.y * k);
                     set_coord_from_xy(&point, ptr);
+
+                    // initial step with length a
+                    k *= (a / radius);
+                    vec.x *= k;
+                    vec.y *= k;
+                    trans2D m;
+                    rotate2D(beta / 2.0, &m);
+
+                    vec = apply2D_xy(&vec, &m);
+                    rotate2D(-beta, &m);
+
+                    for (gint i = 0; i < steps; i++) {
+                        vec = apply2D_xy(&vec, &m);
+                        point = xy_add(&point, &vec);
+                        GromitStrokeCoordinate *new_coord = g_malloc(sizeof(GromitStrokeCoordinate));
+                        GList *tmp = g_list_insert_before(coords, ptr->next, new_coord);
+                        assert(tmp == coords);
+                        new_coord->width = width;
+                        ptr = ptr->next;
+                        set_coord_from_xy(&point, ptr);
+                    }
+                    if (is_last && circular) {
+                        set_coord_from_xy(&point, coords);
+                    }
                 }
             }
+            if (is_last)
+                break;
             ptr = ptr->next;
         }
     }
@@ -599,11 +608,18 @@ void round_corners(GList *coords, gint radius, gint steps) {
 
 /*
  * join ends of coordinates if their distance does not exceed max_distance
+ * and if the initial segments are long enough
  */
 gboolean snap_ends(GList *coords, gint max_distance) {
+  if (g_list_length(coords)< 3) return FALSE;
   GList *last = g_list_last(coords);
+  gfloat start_end_dist = coord_distance(coords, last);
+  gfloat start_seg_len = coord_distance(coords, coords->next);
+  gfloat end_seg_len = coord_distance(last, last->prev);
 
-  if (coord_distance(coords, last) <= max_distance) {
+  if (start_end_dist <= max_distance
+      && start_seg_len > 0.7 * start_end_dist
+      && end_seg_len > 0.7 * start_end_dist) {
     xy p0 = get_xy_from_coord(coords);
     xy p1 = get_xy_from_coord(last);
     p0.x = 0.5 * (p0.x + p1.x);
@@ -614,7 +630,6 @@ gboolean snap_ends(GList *coords, gint max_distance) {
   }
   return FALSE;
 }
-
 
 // ----------------- douglas-peucker point reduction -----------------
 
