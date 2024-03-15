@@ -463,26 +463,25 @@ gboolean on_buttonrelease (GtkWidget *win,
 
   if (type == GROMIT_SMOOTH)
     {
-      GList *coords = devdata->coordlist;
-      if (0) {
+      if (1) {
           // smooth pen
-          douglas_peucker(coords, 10);  // was 15
-          gboolean joined = snap_ends(coords, 20);
-          add_points(coords, 200);
-          devdata->coordlist = catmull_rom(coords, 5, joined);
+          douglas_peucker(devdata->coordlist, 10);  // was 15
+          gboolean joined = snap_ends(devdata->coordlist, 20);
+          add_points(devdata->coordlist, 200);
+          devdata->coordlist = catmull_rom(devdata->coordlist, 5, joined);
       } else {
           // smart rect pen
-          douglas_peucker(coords, 15);  // was 15
-          gboolean joined = snap_ends(coords, 20);
-          orthogonalize(coords, 20, 40);
-          round_corners(coords, 20, 6, joined);
+          douglas_peucker(devdata->coordlist, 15);  // was 15
+          gboolean joined = snap_ends(devdata->coordlist, 20);
+          orthogonalize(devdata->coordlist, 20, 40);
+          round_corners(devdata->coordlist, 20, 6, joined);
       }
 
       copy_surface(data->backbuffer, data->aux_backbuffer);
       GdkRectangle rect = {0, 0, data->width, data->height};
       gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
 
-      GList *ptr = coords;
+      GList *ptr = devdata->coordlist;
       while (ptr->next)
         {
           GromitStrokeCoordinate *c1 = ptr->data;
