@@ -611,24 +611,24 @@ void round_corners(GList *coords, gint radius, gint steps, gboolean circular) {
  * and if the initial segments are long enough
  */
 gboolean snap_ends(GList *coords, gint max_distance) {
-  if (g_list_length(coords)< 3) return FALSE;
-  GList *last = g_list_last(coords);
-  gfloat start_end_dist = coord_distance(coords, last);
-  gfloat start_seg_len = coord_distance(coords, coords->next);
-  gfloat end_seg_len = coord_distance(last, last->prev);
+    if (g_list_length(coords) < 3) return FALSE;
+    GList *last = g_list_last(coords);
+    gfloat start_end_dist = coord_distance(coords, last);
+    gfloat start_seg_len = coord_distance(coords, coords->next);
+    gfloat end_seg_len = coord_distance(last, last->prev);
 
-  if (start_end_dist <= max_distance
-      && start_seg_len > 0.7 * start_end_dist
-      && end_seg_len > 0.7 * start_end_dist) {
-    xy p0 = get_xy_from_coord(coords);
-    xy p1 = get_xy_from_coord(last);
-    p0.x = 0.5 * (p0.x + p1.x);
-    p0.y = 0.5 * (p0.y + p1.y);
-    set_coord_from_xy(&p0, coords);
-    set_coord_from_xy(&p0, last);
-    return TRUE;
-  }
-  return FALSE;
+    if (start_end_dist <= max_distance &&
+        start_seg_len > 0.7 * start_end_dist &&
+        end_seg_len > 0.7 * start_end_dist) {
+        xy p0 = get_xy_from_coord(coords);
+        xy p1 = get_xy_from_coord(last);
+        p0.x = 0.5 * (p0.x + p1.x);
+        p0.y = 0.5 * (p0.y + p1.y);
+        set_coord_from_xy(&p0, coords);
+        set_coord_from_xy(&p0, last);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 // ----------------- douglas-peucker point reduction -----------------
