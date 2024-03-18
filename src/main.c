@@ -42,6 +42,11 @@ GromitPaintContext *paint_context_new (GromitData *data,
 				       guint width,
 				       guint arrowsize,
                                        GromitArrowType arrowtype,
+                                       guint simpilfy,
+                                       guint radius,
+                                       guint maxangle,
+                                       guint minlen,
+                                       guint snapdist,
 				       guint minwidth,
 				       guint maxwidth)
 {
@@ -56,7 +61,11 @@ GromitPaintContext *paint_context_new (GromitData *data,
   context->minwidth = minwidth;
   context->maxwidth = maxwidth;
   context->paint_color = paint_color;
-
+  context->radius = radius;
+  context->maxangle = maxangle;
+  context->simplify = simpilfy;
+  context->minlen = minlen;
+  context->snapdist = snapdist;
 
   context->paint_ctx = cairo_create (data->backbuffer);
 
@@ -86,19 +95,21 @@ void paint_context_print (gchar *name,
   switch (context->type)
   {
     case GROMIT_PEN:
-      g_printerr ("Pen,     "); break;
+      g_printerr ("Pen,        "); break;
     case GROMIT_LINE:
-      g_printerr ("Line,    "); break;
+      g_printerr ("Line,       "); break;
     case GROMIT_RECT:
-      g_printerr ("Rect,    "); break;
+      g_printerr ("Rect,       "); break;
     case GROMIT_SMOOTH:
-      g_printerr ("Smooth,  "); break;
+      g_printerr ("Smooth,     "); break;
+    case GROMIT_ORTHOGONAL:
+      g_printerr ("Orthogonal, "); break;
     case GROMIT_ERASER:
-      g_printerr ("Eraser,  "); break;
+      g_printerr ("Eraser,     "); break;
     case GROMIT_RECOLOR:
-      g_printerr ("Recolor, "); break;
+      g_printerr ("Recolor,    "); break;
     default:
-      g_printerr ("UNKNOWN, "); break;
+      g_printerr ("UNKNOWN,    "); break;
   }
 
   g_printerr ("width: %u, ", context->width);
@@ -118,6 +129,17 @@ void paint_context_print (gchar *name,
         g_printerr(" arrowtype: double, ");
         break;
       }
+    }
+  if (context->type == GROMIT_SMOOTH || context->type == GROMIT_ORTHOGONAL)
+    {
+      g_printerr(" simplify: %u, ", context->simplify);
+      if (context->snapdist > 0)
+        g_printerr(" snap: %u, ", context->snapdist);
+    }
+  if (context->type == GROMIT_ORTHOGONAL)
+    {
+      g_printerr(" radius: %u, minlen: %u, maxangle: %u ",
+                 context->radius, context->minlen, context->maxangle);
     }
   g_printerr ("color: %s\n", gdk_rgba_to_string(context->paint_color));
 }
@@ -778,11 +800,11 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   data->modified = 0;
 
   data->default_pen =
-    paint_context_new (data, GROMIT_PEN, data->red, 7,
-                       0, GROMIT_ARROW_END, 1, G_MAXUINT);
+    paint_context_new (data, GROMIT_PEN, data->red, 7, 0, GROMIT_ARROW_END,
+                       5, 10, 15, 25, 0, 1, G_MAXUINT);
   data->default_eraser =
-    paint_context_new (data, GROMIT_ERASER, data->red, 75,
-                       0, GROMIT_ARROW_END, 1, G_MAXUINT);
+    paint_context_new (data, GROMIT_ERASER, data->red, 75, 0, GROMIT_ARROW_END,
+                       5, 10, 15, 25, 0, 1, G_MAXUINT);
 
   gdk_event_handler_set ((GdkEventFunc) main_do_event, data, NULL);
   gtk_key_snooper_install (snoop_key_press, data);
