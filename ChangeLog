@@ -1,3 +1,167 @@
+commit 7db82a00a236f9b5f2dcfa2f660ce1c9b336d0c2
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Mar 12 08:51:33 2024 +0100
+
+    AppStream: add 1.6.0 release notes
+
+commit b2b7fe7a7e687db4322c5367600f58ccad1c23d9
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Mar 12 08:47:44 2024 +0100
+
+    CMake: bump minor version
+
+commit e54b9ba4bc155781a70ccfbb22d2b913c19e007c
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Mar 12 08:47:12 2024 +0100
+
+    NEWS: update
+
+commit 502c1a55d1c0cd62ce8869bd8ed1437a8d7a8b59
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Mar 11 11:40:14 2024 +0100
+
+    README: document arrowtype config
+
+commit aa1c807f80f485f18102598f10b41f22fa1e3058
+Author: pascal-niklaus <pascal.niklaus@ieu.uzh.ch>
+Date:   Mon Mar 11 08:54:38 2024 +0100
+
+    drawing,config,callbacks: add arrowtype option that allows to set arrow position
+    
+    * drawing, config, callbacks: add arrowtype option allowing arrow heads at both line ends
+    
+    re #67
+    
+    * main.h: enum names changed for arrow types
+    
+    * config: don't set arrow type to none when size is defined
+    
+    ---------
+    
+    Co-authored-by: Christian Beier <info@christianbeier.net>
+
+commit c0886ec86a61e0ef9c3db6119a5d536507bb7ec2
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Mar 11 08:49:50 2024 +0100
+
+    README: fix typo
+
+commit ed1456349e9e13a9ade584514a33b17823c4406b
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Mar 2 22:47:42 2024 +0100
+
+    po: update Portuguese (Brazil) translation
+
+commit 0dd37bd0b1978a8baae2968f99467f07358737b4
+Author: Renato Lima <natenho@gmail.com>
+Date:   Fri Oct 15 02:44:46 2021 -0300
+
+    po: add Portuguese (Brazil) translation
+
+commit 4cec82eb984ad7bd94ec5339f4ec5222b1743150
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Mar 2 13:27:55 2024 +0100
+
+    README: document LINE and RECT tools
+    
+    re #67
+
+commit e914dc0bc829077bfdfc4cac7190da81dea78856
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Mar 2 13:18:04 2024 +0100
+
+    callbacks: update copyright year
+
+commit 42c9e30e1f938ac1a278257f28e79dccab6da1f1
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Mar 2 13:17:24 2024 +0100
+
+    callbacks: update authors in About dialog
+
+commit ec726f438e2a81dd02414427cd87ccc1f54c16d7
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Mar 2 12:37:33 2024 +0100
+
+    AUTHORS: update
+
+commit 3cf1116bbbfabce635f196f1c7c98b77c3a04567
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Mar 2 12:24:34 2024 +0100
+
+    main,callbacks: rename temp_buffer to aux_backbuffer
+
+commit 53db4941588a9dfa8764d16270d8e8f2b62172ca
+Author: pascal-niklaus <pascal.niklaus@ieu.uzh.ch>
+Date:   Thu Feb 22 20:51:04 2024 +0100
+
+    config, callbacks: add RECT and LINE tools
+
+commit 1ac43435b222f13c2c7d6221abb5ac97996f1aed
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Feb 26 10:44:20 2024 +0100
+
+    po: add original translator to Persian language team
+
+commit c99df3452f8818487c9bcf8d18313b92afdb7007
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Feb 26 10:41:29 2024 +0100
+
+    po: update all translations w/ report-bug/feature-request string
+    
+    Closes #138
+
+commit f076166b2c47276749f99de4ec15f65e910e745e
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Feb 26 10:31:08 2024 +0100
+
+    main,callbacks: add a report-bug/request-feature menu item
+    
+    Re #138
+
+commit 6d4c7f37ab656b758b031e01f81b722fc3241862
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Feb 26 09:46:17 2024 +0100
+
+    flatpak: update GNOME runtime to v44
+
+commit 39994f2e0b1fc78c50ffcd17b81e04d905a833fb
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Feb 25 20:27:07 2024 +0100
+
+    .github: add an apt update step to CI
+
+commit 2446a4f7b7ddefc83c4c68ec0eb0d5a8b5b087c3
+Author: pascal-niklaus <pascal.niklaus@ieu.uzh.ch>
+Date:   Sun Feb 25 20:22:23 2024 +0100
+
+    callbacks: change '!' in comparison to '!='
+    
+    Closes #188
+
+commit c5d17947d22c4f903bfa3365549d96bc2c0c7430
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Dec 17 13:09:17 2023 +0100
+
+    README: update link to input device manager
+
+commit c88af5ed8baa29107d90b614781025a65b0f5b35
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Dec 16 09:09:35 2023 +0100
+
+    .gitignore: add .cache
+
+commit 6084ce88681ba826b36761dc8574dfaab709a065
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Nov 5 09:08:27 2023 +0100
+
+    README: update release checklist
+
+commit 8da79062a7e1ce7eae06da2daa631e4b5e60bdf4
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Oct 22 20:51:02 2023 +0200
+
+    ChangeLog: update
+
 commit 59605e513beb58445019ddb0cdcaf3f8c7ab60e8
 Author: Christian Beier <info@christianbeier.net>
 Date:   Sun Oct 22 20:49:53 2023 +0200

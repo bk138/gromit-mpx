@@ -4,7 +4,7 @@
   <id>net.christianbeier.Gromit-MPX</id>
   
   <name>Gromit-MPX</name>
-  <summary>Gromit-MPX is a tool to make annotations on the screen</summary>
+  <summary>Make annotations on the screen</summary>
   
   <metadata_license>CC-BY-4.0</metadata_license>
   <project_license>GPL-2.0-only</project_license>
@@ -56,6 +56,16 @@
   </screenshots>
 
   <releases>
+    <release version="1.6.0" date="2024-03-12">
+      <description>
+	<p>
+          Added a report-bug/request-feature menu item and new RECT and LINE tools as well
+          as an arrowtype option that allows to set arrow position. Furthermore, a translation to
+          Portuguese (Brazil) was added.
+	</p>
+      </description>
+    </release>
+
     <release version="1.5.1" date="2023-10-22">
       <description>
 	<p>

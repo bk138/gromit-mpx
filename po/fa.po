@@ -7,31 +7,31 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gromit-MPX\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-14 19:02+0330\n"
-"PO-Revision-Date: 2022-01-15 14:15+0330\n"
-"Language-Team: \n"
+"POT-Creation-Date: 2024-02-26 10:32+0100\n"
+"PO-Revision-Date: 2024-02-26 10:36+0100\n"
+"Last-Translator: Christian Beier <info@christianbeier.net>\n"
+"Language-Team: Mohamad Balkhi <ahmdparsh129@gmail.com>\n"
+"Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
-"Last-Translator:  Mohamad Balkhi  <ahmdparsh129@gmail.com>\n"
 "Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
-"Language: fa\n"
+"X-Generator: Poedit 3.2.2\n"
 
-#: ../src/callbacks.c:648
+#: ../src/callbacks.c:739
 msgid "About Gromit-MPX"
 msgstr "درباره Gromit-MPX"
 
-#: ../src/main.c:791
+#: ../src/main.c:792
 msgid "Bigger Opacity"
 msgstr "شفافیت بیشتر"
 
-#: ../src/main.c:785
+#: ../src/main.c:786
 #, c-format
 msgid "Clear Screen (SHIFT-%s)"
 msgstr "پاک کردن صفحه (SHIFT-%s)"
 
-#: ../src/callbacks.c:714
+#: ../src/callbacks.c:805
 msgid ""
 "Do you want to show this introduction again on the next start of Gromit-MPX?\n"
 "You can always access it again via the sys tray menu.\n"
@@ -45,7 +45,7 @@ msgstr ""
 msgid "Failed parsing config file %s, falling back to default tools."
 msgstr "تجزیه فایل پیکربندی %s انجام نشد، به ابزارهای پیش‌فرض بازگشت."
 
-#: ../src/callbacks.c:649
+#: ../src/callbacks.c:740
 msgid ""
 "Gromit-MPX (GRaphics Over MIscellaneous Things - Multi-Pointer-EXtension) is "
 "an on-screen annotation tool that works with any Unix desktop environment "
@@ -55,7 +55,7 @@ msgstr ""
 "نویسی روی صفحه است که با هر محیط دسکتاپ یونیکس تحت X11 و همچنین Wayland کار "
 "می کند."
 
-#: ../src/callbacks.c:674
+#: ../src/callbacks.c:765
 msgid ""
 "Gromit-MPX (GRaphics Over MIscellaneous Things) is a small tool to make\n"
 "annotations on the screen.\n"
@@ -81,15 +81,15 @@ msgstr ""
 "توسعه آن با استفاده از یکی از گزینه های کمک مالی در پروژه\n"
 "وب سایت یا مستقیماً از طریق گزینه های پشتیبانی موجود از منوی tray.\n"
 
-#: ../src/callbacks.c:708
+#: ../src/callbacks.c:799
 msgid "Gromit-MPX - How to use it"
 msgstr "نحوره استفاده از Grimit-MPX"
 
-#: ../src/callbacks.c:684
+#: ../src/callbacks.c:775
 msgid "Gromit-MPX - What is it?"
 msgstr "Gromit-MPX چیه؟"
 
-#: ../src/main.c:792
+#: ../src/main.c:793
 msgid "Lesser Opacity"
 msgstr "شفافیت کمتر"
 
@@ -98,51 +98,51 @@ msgid "No usable config file found, falling back to default tools."
 msgstr ""
 "هیچ فایل پیکربندی قابل استفاده ای یافت نشد، به ابزارهای پیش فرض باز می گردد."
 
-#: ../src/main.c:795
+#: ../src/main.c:796
 #, c-format
 msgid "Redo (SHIFT-%s)"
 msgstr "انجام مجدد (SHIFT-%s)"
 
-#: ../src/callbacks.c:716
+#: ../src/callbacks.c:807
 msgid "Show again on startup"
 msgstr "نمایش مجدد در هنگام راه اندازی"
 
-#: ../src/main.c:789
+#: ../src/main.c:790
 msgid "Thicker Lines"
 msgstr "خطوط ضخیم تر"
 
-#: ../src/main.c:790
+#: ../src/main.c:791
 msgid "Thinner Lines"
 msgstr "خطوط نازک تر"
 
-#: ../src/main.c:783
+#: ../src/main.c:784
 #, c-format
 msgid "Toggle Painting (%s)"
 msgstr "تغییر رنگ ( %s )"
 
-#: ../src/main.c:787
+#: ../src/main.c:788
 #, c-format
 msgid "Toggle Visibility (CTRL-%s)"
 msgstr "تغییر حالت دید (CTRL-%s )"
 
-#: ../src/main.c:793
+#: ../src/main.c:794
 #, c-format
 msgid "Undo (%s)"
 msgstr "واگرد (%s)"
 
-#: ../src/main.c:897
+#: ../src/main.c:925
 msgid "Via LiberaPay"
 msgstr "از طریق LiberaPay"
 
-#: ../src/main.c:898
+#: ../src/main.c:926
 msgid "Via Patreon"
 msgstr "از طریق Patreon"
 
-#: ../src/main.c:899
+#: ../src/main.c:927
 msgid "Via PayPal"
 msgstr "از طریق PayPal"
 
-#: ../src/callbacks.c:692
+#: ../src/callbacks.c:783
 #, c-format
 msgid ""
 "You can operate Gromit-MPX using its tray icon (if your desktop environment\n"
@@ -180,19 +180,23 @@ msgstr ""
 "    لغو آخرین کار:\t\t\t  %s\n"
 "   برگشت به آخرین کار: SHIFT-%s</b></tt>"
 
-#: ../src/main.c:801
+#: ../src/main.c:803
 msgid "_About"
 msgstr "_درباره"
 
-#: ../src/main.c:799
+#: ../src/main.c:800
 msgid "_Introduction"
 msgstr "_معرفی"
 
-#: ../src/main.c:802
+#: ../src/main.c:806
 #, c-format
 msgid "_Quit (ALT-%s)"
 msgstr "_خروج ( ALT-%s )"
 
-#: ../src/main.c:800
+#: ../src/main.c:801
+msgid "_Report Bug / Request Feature"
+msgstr "_گزارش اشکال/ویژگی درخواست"
+
+#: ../src/main.c:802
 msgid "_Support Gromit-MPX"
 msgstr "_پشتیبانی از Gromit-MPX"

@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gromit-MPX v1.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-30 19:45+0300\n"
-"PO-Revision-Date: 2022-06-30 20:18+0300\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"POT-Creation-Date: 2024-02-26 10:32+0100\n"
+"PO-Revision-Date: 2024-02-26 10:38+0100\n"
+"Last-Translator: Christian Beier <info@christianbeier.net>\n"
 "Language-Team: avi.markovitz@gmail.com\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -17,22 +17,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
 "2 : 3);\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
-#: ../src/callbacks.c:669
+#: ../src/callbacks.c:739
 msgid "About Gromit-MPX"
 msgstr "על אודות Gromit-MPX"
 
-#: ../src/main.c:791
+#: ../src/main.c:792
 msgid "Bigger Opacity"
 msgstr "אטימות מוגברת"
 
-#: ../src/main.c:785
+#: ../src/main.c:786
 #, c-format
 msgid "Clear Screen (SHIFT-%s)"
 msgstr "ניקוי חלון (SHIFT-%s)"
 
-#: ../src/callbacks.c:735
+#: ../src/callbacks.c:805
 msgid ""
 "Do you want to show this introduction again on the next start of Gromit-"
 "MPX?\n"
@@ -46,7 +46,7 @@ msgstr ""
 msgid "Failed parsing config file %s, falling back to default tools."
 msgstr "ניתוח קובץ תצור %s כשל, נסיגה לכלים ברירת מחדל."
 
-#: ../src/callbacks.c:670
+#: ../src/callbacks.c:740
 msgid ""
 "Gromit-MPX (GRaphics Over MIscellaneous Things - Multi-Pointer-EXtension) is "
 "an on-screen annotation tool that works with any Unix desktop environment "
@@ -56,7 +56,7 @@ msgstr ""
 "הוא כלי הערות־הסבר שפעול בכול סביבת שולחן עבודה דמוי יוניקס, מבוסס X11 וגם "
 "Wayland."
 
-#: ../src/callbacks.c:695
+#: ../src/callbacks.c:765
 msgid ""
 "Gromit-MPX (GRaphics Over MIscellaneous Things) is a small tool to make\n"
 "annotations on the screen.\n"
@@ -87,15 +87,15 @@ msgstr ""
 "באתר המרשתת של המיזם, או, ישירות מתפריט המגש, באמצעות אחת מאפשרויות התמיכה "
 "הזמינות.\n"
 
-#: ../src/callbacks.c:729
+#: ../src/callbacks.c:799
 msgid "Gromit-MPX - How to use it"
 msgstr "Gromit-MPXכיצד להשתמש ב־"
 
-#: ../src/callbacks.c:705
+#: ../src/callbacks.c:775
 msgid "Gromit-MPX - What is it?"
 msgstr "?Gromit-MPX מה זה"
 
-#: ../src/main.c:792
+#: ../src/main.c:793
 msgid "Lesser Opacity"
 msgstr "אטימות פחותה"
 
@@ -103,51 +103,51 @@ msgstr "אטימות פחותה"
 msgid "No usable config file found, falling back to default tools."
 msgstr "לא נמצא קובץ תצור (config), נסיגה לכלי ברירת מחדל."
 
-#: ../src/main.c:795
+#: ../src/main.c:796
 #, c-format
 msgid "Redo (SHIFT-%s)"
 msgstr "החזרה (SHIFT-%s)"
 
-#: ../src/callbacks.c:737
+#: ../src/callbacks.c:807
 msgid "Show again on startup"
 msgstr "להציג שוב באתחול"
 
-#: ../src/main.c:789
+#: ../src/main.c:790
 msgid "Thicker Lines"
 msgstr "קווים עבים יותר"
 
-#: ../src/main.c:790
+#: ../src/main.c:791
 msgid "Thinner Lines"
 msgstr "קווים דקים יותר"
 
-#: ../src/main.c:783
+#: ../src/main.c:784
 #, c-format
 msgid "Toggle Painting (%s)"
 msgstr "מחלף ציור (%s)"
 
-#: ../src/main.c:787
+#: ../src/main.c:788
 #, c-format
 msgid "Toggle Visibility (CTRL-%s)"
 msgstr "מחלף נראות (CTRL-%s)"
 
-#: ../src/main.c:793
+#: ../src/main.c:794
 #, c-format
 msgid "Undo (%s)"
 msgstr "הסגה (%s)"
 
-#: ../src/main.c:918
+#: ../src/main.c:925
 msgid "Via LiberaPay"
 msgstr "באמצעות LiberaPay"
 
-#: ../src/main.c:919
+#: ../src/main.c:926
 msgid "Via Patreon"
 msgstr "באמצעות פטראון"
 
-#: ../src/main.c:920
+#: ../src/main.c:927
 msgid "Via PayPal"
 msgstr "באמצאות PayPal"
 
-#: ../src/callbacks.c:713
+#: ../src/callbacks.c:783
 #, c-format
 msgid ""
 "You can operate Gromit-MPX using its tray icon (if your desktop environment\n"
@@ -187,19 +187,23 @@ msgstr ""
 "    החזרת מהלך אחרון שבוטל  –  SHIFT-%s\n"
 "</b></tt>"
 
-#: ../src/main.c:801
+#: ../src/main.c:803
 msgid "_About"
 msgstr "_על אודות"
 
-#: ../src/main.c:799
+#: ../src/main.c:800
 msgid "_Introduction"
 msgstr "_הקדמה"
 
-#: ../src/main.c:804
+#: ../src/main.c:806
 #, c-format
 msgid "_Quit (ALT-%s)"
 msgstr "_יצאה (ALT-%s)"
 
-#: ../src/main.c:800
+#: ../src/main.c:801
+msgid "_Report Bug / Request Feature"
+msgstr "_דיווח על באג/תכונה בקשה"
+
+#: ../src/main.c:802
 msgid "_Support Gromit-MPX"
 msgstr "תמיכה ב־Gromit-MPX"
