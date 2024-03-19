@@ -52,8 +52,6 @@ set(sources
     src/callbacks.h
     src/config.c
     src/config.h
-    src/parser.c
-    src/parser.h
     src/drawing.c
     src/drawing.h
     src/main.c

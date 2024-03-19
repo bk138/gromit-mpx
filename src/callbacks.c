@@ -403,7 +403,7 @@ gboolean on_motion (GtkWidget *win,
           if (type == GROMIT_LINE)
             {
 	      draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
-              if (devdata->cur_context->arrowsize > 0)
+              if (devdata->cur_context->arrowsize > 0.0)
                 {
                   GromitArrowType atype = devdata->cur_context->arrow_type;
                   gint width = devdata->cur_context->arrowsize * devdata->cur_context->width / 2;

@@ -226,7 +226,7 @@ gboolean parse_tool(GromitData *data, GScanner *scanner, GromitPaintContext *sty
     }
   else
     {
-      g_printerr ("Expected Tool-definition or name of template tool\n");
+      g_printerr ("Expected tool definition or name of template tool\n");
       goto cleanup;
     }
   return TRUE;
@@ -235,7 +235,6 @@ gboolean parse_tool(GromitData *data, GScanner *scanner, GromitPaintContext *sty
   if (color_allocated)
     {
       g_free(style->paint_color);
-      g_printerr("parse_tool: free color @ %p\n", style->paint_color);
       style->paint_color = NULL;
     }
   return FALSE;
@@ -279,7 +278,7 @@ ToolAttribute parse_attribute(GScanner *scanner, GromitPaintContext *style)
     {
         gfloat v = parse_float(scanner, "Missing arrowsize");
         if (isnan(v)) return SYM_ERROR;
-        style->arrowsize = v + 0.5;
+        style->arrowsize = v;
     }
   else if (id == SYM_ARROWTYPE)
     {
