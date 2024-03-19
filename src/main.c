@@ -253,15 +253,13 @@ gint reshape (gpointer user_data)
 void select_tool (GromitData *data, 
 		  GdkDevice *device, 
 		  GdkDevice *slave_device,
-		  guint state)
+		  GromitState state)
 {
   guint buttons = 0, modifier = 0, slave_len = 0, len = 0, default_len = 0;
   guint req_buttons = 0, req_modifier = 0;
   guint i, j, success = 0;
   GromitPaintContext *context = NULL;
-  guchar *slave_name;
-  guchar *name;
-  guchar *default_name;
+  GromitLookupKey keySlave = {}, keyName = {}, keyDefault = {};
 
   /* get the data for this device */
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, device);
@@ -269,25 +267,16 @@ void select_tool (GromitData *data,
   if (device)
     {
       slave_len = strlen (gdk_device_get_name(slave_device));
-      slave_name = (guchar*) g_strndup (gdk_device_get_name(slave_device), slave_len + 3);
+      keySlave.name = g_strndup (gdk_device_get_name(slave_device), slave_len);
       len = strlen (gdk_device_get_name(device));
-      name = (guchar*) g_strndup (gdk_device_get_name(device), len + 3);
+      keyName.name = g_strndup (gdk_device_get_name(device), len);
       default_len = strlen(DEFAULT_DEVICE_NAME);
-      default_name = (guchar*) g_strndup (DEFAULT_DEVICE_NAME, default_len + 3);
+      keyDefault.name = g_strndup (DEFAULT_DEVICE_NAME, default_len);
       
       
       /* Extract Button/Modifiers from state (see GdkModifierType) */
-      req_buttons = (state >> 8) & 31;
-
-      req_modifier = (state >> 1) & 7;
-      if (state & GDK_SHIFT_MASK) req_modifier |= 1;
-
-      slave_name [slave_len] = 124;
-      slave_name [slave_len+3] = 0;
-      name [len] = 124;
-      name [len+3] = 0;
-      default_name [default_len] = 124;
-      default_name [default_len+3] = 0;
+      req_buttons = state.buttons;
+      req_modifier = state.modifiers;
 
       /*
 	Iterate i up until <= req_buttons.
@@ -316,36 +305,36 @@ void select_tool (GromitData *data,
             {
               j++;
               modifier = req_modifier & ((1 << j)-1);
-              slave_name [slave_len+1] = buttons + 64;
-              slave_name [slave_len+2] = modifier + 48;
-              name [len+1] = buttons + 64;
-              name [len+2] = modifier + 48;
-              default_name [default_len+1] = buttons + 64;
-              default_name [default_len+2] = modifier + 48;
+              keySlave.state.buttons = buttons;
+              keySlave.state.modifiers = modifier;
+              keyName.state.buttons = buttons;
+              keyName.state.modifiers = modifier;
+              keyDefault.state.buttons = buttons;
+              keyDefault.state.modifiers = modifier;
 
 	            if(data->debug)
-                g_printerr("DEBUG: select_tool looking up context for '%s' attached to '%s'\n", slave_name, name);
+                g_printerr("DEBUG: select_tool looking up context for '%s' attached to '%s'\n", key2string(keySlave), key2string(keyName));
 
-              context = g_hash_table_lookup (data->tool_config, slave_name);
+              context = g_hash_table_lookup (data->tool_config, key2string(keySlave));
               if(context) {
                   if(data->debug)
-                    g_printerr("DEBUG: select_tool set context for '%s'\n", slave_name);
+                    g_printerr("DEBUG: select_tool set context for '%s'\n", key2string(keySlave));
                   devdata->cur_context = context;
                   success = 1;
               }
               else /* try master name */
-              if ((context = g_hash_table_lookup (data->tool_config, name)))
+              if ((context = g_hash_table_lookup (data->tool_config, key2string(keyName))))
                 {
                   if(data->debug)
-                    g_printerr("DEBUG: select_tool set context for '%s'\n", name);
+                    g_printerr("DEBUG: select_tool set context for '%s'\n", key2string(keyName));
                   devdata->cur_context = context;
                   success = 1;
                 }
               else /* try default_name */
-                if((context = g_hash_table_lookup (data->tool_config, default_name)))
+                if((context = g_hash_table_lookup (data->tool_config, key2string(keyDefault))))
                   {
                     if(data->debug)
-                      g_printerr("DEBUG: select_tool set default context '%s' for '%s'\n", default_name, name);
+                      g_printerr("DEBUG: select_tool set default context '%s' for '%s'\n", key2string(keyDefault), key2string(keyName));
                     devdata->cur_context = context;
                     success = 1;
                   }
@@ -363,11 +352,9 @@ void select_tool (GromitData *data,
             devdata->cur_context = data->default_pen;
 
 	  if(data->debug)
-	      g_printerr("DEBUG: select_tool set fallback context for '%s'\n", name);
+	      g_printerr("DEBUG: select_tool set fallback context for '%s'\n", key2string(keyName));
         }
 
-      g_free (name);
-      g_free (default_name);
     }
   else
     g_printerr ("ERROR: select_tool attempted to select nonexistent device!\n");
@@ -1188,4 +1175,33 @@ void indicate_active(GromitData *data, gboolean YESNO)
 	app_indicator_set_icon(data->trayicon, "net.christianbeier.Gromit-MPX.active");
     else
 	app_indicator_set_icon(data->trayicon, "net.christianbeier.Gromit-MPX");
+}
+
+gboolean compare_state(GromitState lhs, GromitState rhs)
+{
+  return lhs.buttons == rhs.buttons &&
+         lhs.modifiers == rhs.modifiers;
+}
+
+gchar *key2string(GromitLookupKey key)
+{
+  guint len = 0;
+  gchar *result;
+
+  len = strlen(key.name);
+  result = g_strndup(key.name, len + 4);
+
+  result[len] = 124;
+  
+  // to identify buttons 1-10 we need two bytes (two char)
+  guint buttons = key.state.buttons;
+  gchar buttons_low = key.state.buttons & 255; // 1-8
+  gchar buttons_high = key.state.buttons >> 8 & 255; // 9-10
+
+  result[len + 1] = buttons_high + 48;
+  result[len + 2] = buttons_low + 48;
+  result[len + 3] = key.state.modifiers + 48;
+  result[len + 4] = 0;
+
+  return result;
 }
