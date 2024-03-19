@@ -1,5 +1,5 @@
 .\"                                      Hey, vim: ft=nroff
-.TH GROMIT-MPX 1 "November 3, 2018"
+.TH GROMIT-MPX 1 "March 31, 2024"
 .\" Please adjust this date whenever revising the manpage.
 .\"
 .\" Some roff macros, for reference:
@@ -95,9 +95,6 @@ running Gromit-MPX process, see above for the options available to start Gromit-
 .B \-c, \-\-clear
 will clear the screen.
 .TP
-.B \-l <x1> <y1> <x2> <y2> <color> <width>, \-\-line <x1> <y1> <x2> <y2> <color> <width>
-will draw a line from (x1,y1) to (x2,y2) with color <color> and width <width>.
-.TP
 .B \-q, \-\-quit
 will cause the main Gromit-MPX process to quit.
 .TP
@@ -107,6 +104,12 @@ will toggle the grabbing of the cursor.
 .B \-T <definition>, \-\-change-tool <definition>
 will change the definition of a tool. The syntax is as in the .cfg file
 read at startup, except for the trailing semicolon.
+(example: gromit-mpx -T '"default"=RECT(color="yellow" size=2)'
+.TP
+.B \-A <definition>, \-\-change-attribute <definition>
+will change one or several attributes of a tool, keeping the other settings.
+(example 1: change just the color: gromit-mpx -A '"default"=(color="yellow")';
+example 2: change tool type, keeping color, size etc: gromit-mpx -A '"default"=LINE')
 .TP
 .B \-v, \-\-visibility
 will toggle the visibility of the window.

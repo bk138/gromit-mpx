@@ -25,7 +25,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <math.h>
-#include "cairo.h"
 #include "main.h"
 #include "input.h"
 #include "callbacks.h"
@@ -142,18 +141,10 @@ void on_monitors_changed ( GdkScreen *screen,
 
   parse_config(data); // also calls paint_context_new() :-(
 
-
-<<<<<<< HEAD
-  data->default_pen = paint_context_new (data, GROMIT_PEN, data->red, 7, 0, GROMIT_ARROW_END,
+  data->default_pen = paint_context_new (data, GROMIT_PEN, gdk_rgba_copy(data->red), 7, 0, GROMIT_ARROW_END,
                                          5, 10, 15, 25, 1, 0, G_MAXUINT);
-  data->default_eraser = paint_context_new (data, GROMIT_ERASER, data->red, 75, 0, GROMIT_ARROW_END,
+  data->default_eraser = paint_context_new (data, GROMIT_ERASER, gdk_rgba_copy(data->red), 75, 0, GROMIT_ARROW_END,
                                             5, 10, 15, 25, 1, 0, G_MAXUINT);
-=======
-  data->default_pen = paint_context_new (data, GROMIT_PEN, gdk_rgba_copy(data->red), 7,
-                                         0, GROMIT_ARROW_END, 1, G_MAXUINT);
-  data->default_eraser = paint_context_new (data, GROMIT_ERASER, gdk_rgba_copy(data->red), 75,
-                                            0, GROMIT_ARROW_END, 1, G_MAXUINT);
->>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
 
   if(!data->composited) // set shape
     {
@@ -221,7 +212,7 @@ void on_clientapp_selection_get (GtkWidget          *widget,
 
   if (gtk_selection_data_get_target(selection_data) == GA_TOGGLEDATA ||
       gtk_selection_data_get_target(selection_data) == GA_LINEDATA ||
-      gtk_selection_data_get_target(selection_data) == GA_DEFTOOLDATA ||
+      gtk_selection_data_get_target(selection_data) == GA_CHGTOOLDATA ||
       gtk_selection_data_get_target(selection_data) == GA_CHGATTRDATA)
     {
       ans = data->clientdata;
@@ -292,11 +283,7 @@ gboolean on_buttonpress (GtkWidget *win,
   GromitPaintType type = devdata->cur_context->type;
 
   // store original state to have dynamic update of line and rect
-<<<<<<< HEAD
   if (type == GROMIT_LINE || type == GROMIT_RECT || type == GROMIT_SMOOTH || type == GROMIT_ORTHOGONAL)
-=======
-  if (type == GROMIT_LINE || type == GROMIT_RECT)
->>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
     {
       copy_surface(data->aux_backbuffer, data->backbuffer);
     }
@@ -413,12 +400,8 @@ gboolean on_motion (GtkWidget *win,
           }
           if (type == GROMIT_LINE)
             {
-<<<<<<< HEAD
-              GromitArrowType atype = devdata->cur_context->arrow_type;
-=======
->>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
 	      draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
-              if (devdata->cur_context->arrowsize > 0)
+              if (devdata->cur_context->arrowsize > 0.0)
                 {
                   GromitArrowType atype = devdata->cur_context->arrow_type;
                   gint width = devdata->cur_context->arrowsize * devdata->cur_context->width / 2;
@@ -467,14 +450,8 @@ gboolean on_buttonrelease (GtkWidget *win,
 
   gfloat direction = 0;
   gint width = 0;
-<<<<<<< HEAD
   if(ctx)
     width = ctx->arrowsize * ctx->width / 2;
-=======
-  if(devdata->cur_context)
-    width = devdata->cur_context->arrowsize * devdata->cur_context->width / 2;
-   
->>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
 
   if ((ev->x != devdata->lastx) ||
       (ev->y != devdata->lasty))
@@ -483,7 +460,6 @@ gboolean on_buttonrelease (GtkWidget *win,
   if (!devdata->is_grabbed)
     return FALSE;
 
-<<<<<<< HEAD
   GromitPaintType type = ctx->type;
 
   if (type == GROMIT_SMOOTH || type == GROMIT_ORTHOGONAL)
@@ -517,13 +493,6 @@ gboolean on_buttonrelease (GtkWidget *win,
   if (ctx->arrowsize != 0)
     {
       GromitArrowType atype = ctx->arrow_type;
-=======
-  GromitPaintType type = devdata->cur_context->type;
-
-  if (devdata->cur_context->arrowsize != 0)
-    {
-      GromitArrowType atype = devdata->cur_context->arrow_type;
->>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
       if (type == GROMIT_LINE)
         {
           direction = atan2 (ev->y - devdata->lasty, ev->x - devdata->lastx);
@@ -590,9 +559,9 @@ void on_mainapp_selection_get (GtkWidget          *widget,
     undo_drawing (data);
   else if (action == GA_REDO)
     redo_drawing (data);
-  else if (action == GA_DEFTOOL)
+  else if (action == GA_CHGTOOL)
     {
-      gtk_selection_convert(data->win, GA_DATA, GA_DEFTOOLDATA, time);
+      gtk_selection_convert(data->win, GA_DATA, GA_CHGTOOLDATA, time);
       gtk_main();
     }
   else if (action == GA_CHGATTR)
@@ -687,13 +656,8 @@ void on_mainapp_selection_received (GtkWidget *widget,
 	      "Keeping default.\n");
 	    }
 	  GromitPaintContext* line_ctx =
-<<<<<<< HEAD
             paint_context_new(data, GROMIT_PEN, fg_color, thickness, 0, GROMIT_ARROW_END,
                               5, 10, 15, 25, 0, thickness, thickness);
-=======
-            paint_context_new(data, GROMIT_PEN, fg_color, thickness,
-                              0, GROMIT_ARROW_END, thickness, thickness);
->>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
 
 	  GdkRectangle rect;
 	  rect.x = MIN (startX,endX) - thickness / 2;
@@ -719,7 +683,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
       else
         {
           GdkAtom atom = gtk_selection_data_get_target(selection_data);
-          if (atom == GA_DEFTOOLDATA || atom == GA_CHGATTRDATA)
+          if (atom == GA_CHGTOOLDATA || atom == GA_CHGATTRDATA)
             {
               gchar *a = (gchar *)gtk_selection_data_get_data(selection_data);
               if(data->debug) g_printerr("DEBUG: define tool: %s\n", a);
@@ -1100,7 +1064,6 @@ void on_intro(GtkMenuItem *menuitem,
     gtk_widget_show_all (assistant);
 }
 
-<<<<<<< HEAD
 void on_edit_config(GtkMenuItem *menuitem,
                     gpointer user_data)
 {
@@ -1155,8 +1118,6 @@ void on_edit_config(GtkMenuItem *menuitem,
 }
 
 
-=======
->>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
 void on_issues(GtkMenuItem *menuitem,
                gpointer user_data)
 {

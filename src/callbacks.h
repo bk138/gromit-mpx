@@ -128,12 +128,9 @@ void on_about(GtkMenuItem *menuitem,
 void on_intro(GtkMenuItem *menuitem,
 	      gpointer user_data);
 
-<<<<<<< HEAD
 void on_edit_config(GtkMenuItem *menuitem,
                     gpointer user_data);
 
-=======
->>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
 void on_issues(GtkMenuItem *menuitem,
                gpointer user_data);
 
