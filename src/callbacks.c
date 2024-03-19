@@ -24,12 +24,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <math.h>
 #include "cairo.h"
 #include "main.h"
 #include "input.h"
 #include "callbacks.h"
 #include "config.h"
-#include "parser.h"
 #include "drawing.h"
 #include "build-config.h"
 #include "coordlist_ops.h"
@@ -143,10 +143,17 @@ void on_monitors_changed ( GdkScreen *screen,
   parse_config(data); // also calls paint_context_new() :-(
 
 
+<<<<<<< HEAD
   data->default_pen = paint_context_new (data, GROMIT_PEN, data->red, 7, 0, GROMIT_ARROW_END,
                                          5, 10, 15, 25, 1, 0, G_MAXUINT);
   data->default_eraser = paint_context_new (data, GROMIT_ERASER, data->red, 75, 0, GROMIT_ARROW_END,
                                             5, 10, 15, 25, 1, 0, G_MAXUINT);
+=======
+  data->default_pen = paint_context_new (data, GROMIT_PEN, gdk_rgba_copy(data->red), 7,
+                                         0, GROMIT_ARROW_END, 1, G_MAXUINT);
+  data->default_eraser = paint_context_new (data, GROMIT_ERASER, gdk_rgba_copy(data->red), 75,
+                                            0, GROMIT_ARROW_END, 1, G_MAXUINT);
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
 
   if(!data->composited) // set shape
     {
@@ -160,6 +167,7 @@ void on_monitors_changed ( GdkScreen *screen,
 
   gtk_widget_show_all (data->win);
 }
+
 
 
 void on_composited_changed ( GdkScreen *screen,
@@ -196,6 +204,7 @@ void on_composited_changed ( GdkScreen *screen,
 }
 
 
+
 void on_clientapp_selection_get (GtkWidget          *widget,
 				 GtkSelectionData   *selection_data,
 				 guint               info,
@@ -212,7 +221,8 @@ void on_clientapp_selection_get (GtkWidget          *widget,
 
   if (gtk_selection_data_get_target(selection_data) == GA_TOGGLEDATA ||
       gtk_selection_data_get_target(selection_data) == GA_LINEDATA ||
-      gtk_selection_data_get_target(selection_data) == GA_CHGTOOLDATA)
+      gtk_selection_data_get_target(selection_data) == GA_DEFTOOLDATA ||
+      gtk_selection_data_get_target(selection_data) == GA_CHGATTRDATA)
     {
       ans = data->clientdata;
     }
@@ -282,7 +292,11 @@ gboolean on_buttonpress (GtkWidget *win,
   GromitPaintType type = devdata->cur_context->type;
 
   // store original state to have dynamic update of line and rect
+<<<<<<< HEAD
   if (type == GROMIT_LINE || type == GROMIT_RECT || type == GROMIT_SMOOTH || type == GROMIT_ORTHOGONAL)
+=======
+  if (type == GROMIT_LINE || type == GROMIT_RECT)
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
     {
       copy_surface(data->aux_backbuffer, data->backbuffer);
     }
@@ -399,7 +413,10 @@ gboolean on_motion (GtkWidget *win,
           }
           if (type == GROMIT_LINE)
             {
+<<<<<<< HEAD
               GromitArrowType atype = devdata->cur_context->arrow_type;
+=======
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
 	      draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
               if (devdata->cur_context->arrowsize > 0)
                 {
@@ -450,8 +467,14 @@ gboolean on_buttonrelease (GtkWidget *win,
 
   gfloat direction = 0;
   gint width = 0;
+<<<<<<< HEAD
   if(ctx)
     width = ctx->arrowsize * ctx->width / 2;
+=======
+  if(devdata->cur_context)
+    width = devdata->cur_context->arrowsize * devdata->cur_context->width / 2;
+   
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
 
   if ((ev->x != devdata->lastx) ||
       (ev->y != devdata->lasty))
@@ -460,6 +483,7 @@ gboolean on_buttonrelease (GtkWidget *win,
   if (!devdata->is_grabbed)
     return FALSE;
 
+<<<<<<< HEAD
   GromitPaintType type = ctx->type;
 
   if (type == GROMIT_SMOOTH || type == GROMIT_ORTHOGONAL)
@@ -493,6 +517,13 @@ gboolean on_buttonrelease (GtkWidget *win,
   if (ctx->arrowsize != 0)
     {
       GromitArrowType atype = ctx->arrow_type;
+=======
+  GromitPaintType type = devdata->cur_context->type;
+
+  if (devdata->cur_context->arrowsize != 0)
+    {
+      GromitArrowType atype = devdata->cur_context->arrow_type;
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
       if (type == GROMIT_LINE)
         {
           direction = atan2 (ev->y - devdata->lasty, ev->x - devdata->lastx);
@@ -529,7 +560,7 @@ void on_mainapp_selection_get (GtkWidget          *widget,
 			       gpointer            user_data)
 {
   GromitData *data = (GromitData *) user_data;
-  
+
   gchar *uri = "OK";
   GdkAtom action = gtk_selection_data_get_target(selection_data);
 
@@ -559,13 +590,19 @@ void on_mainapp_selection_get (GtkWidget          *widget,
     undo_drawing (data);
   else if (action == GA_REDO)
     redo_drawing (data);
-  else if (action == GA_CHGTOOL)
+  else if (action == GA_DEFTOOL)
     {
-      gtk_selection_convert(data->win, GA_DATA, GA_CHGTOOLDATA, time);
+      gtk_selection_convert(data->win, GA_DATA, GA_DEFTOOLDATA, time);
+      gtk_main();
+    }
+  else if (action == GA_CHGATTR)
+    {
+      gtk_selection_convert(data->win, GA_DATA, GA_CHGATTRDATA, time);
       gtk_main();
     }
   else
     uri = "NOK";
+
 
   gtk_selection_data_set (selection_data,
                           gtk_selection_data_get_target(selection_data),
@@ -579,6 +616,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
 				    gpointer user_data)
 {
   GromitData *data = (GromitData *) user_data;
+  gchar *name = NULL;
 
   if(gtk_selection_data_get_length(selection_data) < 0)
     {
@@ -590,20 +628,20 @@ void on_mainapp_selection_received (GtkWidget *widget,
       if(gtk_selection_data_get_target(selection_data) == GA_TOGGLEDATA )
         {
 	  intptr_t dev_nr = strtoull((gchar*)gtk_selection_data_get_data(selection_data), NULL, 10);
-	  
+
           if(data->debug)
 	    g_printerr("DEBUG: mainapp got toggle id '%ld' back from client.\n", (long)dev_nr);
 
 	  if(dev_nr < 0)
 	    toggle_grab(data, NULL); /* toggle all */
-	  else 
+	  else
 	    {
 	      /* find dev numbered dev_nr */
 	      GHashTableIter it;
 	      gpointer value;
-	      GromitDeviceData* devdata = NULL; 
+	      GromitDeviceData* devdata = NULL;
 	      g_hash_table_iter_init (&it, data->devdatatable);
-	      while (g_hash_table_iter_next (&it, NULL, &value)) 
+	      while (g_hash_table_iter_next (&it, NULL, &value))
 		{
 		  devdata = value;
 		  if(devdata->index == dev_nr)
@@ -611,14 +649,14 @@ void on_mainapp_selection_received (GtkWidget *widget,
 		  else
 		    devdata = NULL;
 		}
-	      
+
 	      if(devdata)
 		toggle_grab(data, devdata->device);
 	      else
 		g_printerr("ERROR: No device at index %ld.\n", (long)dev_nr);
 	    }
         }
-      else if (gtk_selection_data_get_target(selection_data) == GA_LINEDATA) 
+      else if (gtk_selection_data_get_target(selection_data) == GA_LINEDATA)
 	{
 
 	  gchar** line_args = g_strsplit((gchar*)gtk_selection_data_get_data(selection_data), " ", 6);
@@ -629,7 +667,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
 	  gchar* hex_code = line_args[4];
 	  int thickness = atoi(line_args[5]);
 
-          if(data->debug) 
+          if(data->debug)
 	    {
 	      g_printerr("DEBUG: mainapp got line data back from client:\n");
 	      g_printerr("startX startY endX endY: %d %d %d %d\n", startX, startY, endX, endY);
@@ -639,7 +677,6 @@ void on_mainapp_selection_received (GtkWidget *widget,
 
 	  GdkRGBA* color = g_malloc (sizeof (GdkRGBA));
 	  GdkRGBA *fg_color=data->red;
-
 	  if (gdk_rgba_parse (color, hex_code))
 	    {
 	      fg_color = color;
@@ -650,8 +687,13 @@ void on_mainapp_selection_received (GtkWidget *widget,
 	      "Keeping default.\n");
 	    }
 	  GromitPaintContext* line_ctx =
+<<<<<<< HEAD
             paint_context_new(data, GROMIT_PEN, fg_color, thickness, 0, GROMIT_ARROW_END,
                               5, 10, 15, 25, 0, thickness, thickness);
+=======
+            paint_context_new(data, GROMIT_PEN, fg_color, thickness,
+                              0, GROMIT_ARROW_END, thickness, thickness);
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
 
 	  GdkRectangle rect;
 	  rect.x = MIN (startX,endX) - thickness / 2;
@@ -668,76 +710,136 @@ void on_mainapp_selection_received (GtkWidget *widget,
 	  cairo_stroke(line_ctx->paint_ctx);
 
 	  data->modified = 1;
-	  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
+	  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
 	  data->painted = 1;
 
 	  g_free(line_ctx);
 	  g_free (color);
         }
-      else if (gtk_selection_data_get_target(selection_data) == GA_CHGTOOLDATA)
+      else
         {
-          gchar *a = (gchar *)gtk_selection_data_get_data(selection_data);
-          if(data->debug)
-            g_printerr("DEBUG: define tool: %s\n", a);
-
-          GScanner *scanner;
-          scanner = g_scanner_new(NULL);
-          scanner_init(scanner);
-          g_scanner_input_text(scanner, a, strlen(a));
-
-          GTokenType token;
-          token = g_scanner_get_next_token (scanner);
-
-          gchar *name;
-
-          GromitStyleDef style;
-
-          if (token != G_TOKEN_EOF)
+          GdkAtom atom = gtk_selection_data_get_target(selection_data);
+          if (atom == GA_DEFTOOLDATA || atom == GA_CHGATTRDATA)
             {
-              if (token == G_TOKEN_STRING)
+              gchar *a = (gchar *)gtk_selection_data_get_data(selection_data);
+              if(data->debug) g_printerr("DEBUG: define tool: %s\n", a);
+
+              GScanner *scanner = g_scanner_new(NULL);
+              scanner_init(scanner);
+              g_scanner_input_text(scanner, a, strlen(a));
+
+              GTokenType token = g_scanner_get_next_token (scanner);
+
+              GromitPaintContext style;
+              style.paint_color = NULL;
+
+              if (token != G_TOKEN_STRING || ! (name = parse_name (scanner)))
                 {
-                  name = parse_name (scanner);
+                  g_printerr("Could not parse tool in expression '%s'!\n", a);
+                  goto cleanup;
+                }
 
-                  if(!name)
-                    goto cleanup;
+              GromitPaintContext *context = g_hash_table_lookup(data->tool_config, name);
+              if (context == NULL)
+                {
+                  g_printerr("Cannot change tool '%s' because it does not exist...\n", name);
+                  goto cleanup;
+                }
 
-                  if (!parse_tool(data, scanner, &style))
-                    goto cleanup;
-
-                  token = g_scanner_cur_token(scanner);
-
-                  if (token == G_TOKEN_LEFT_PAREN)
+              if (atom == GA_CHGATTRDATA)
+                {
+                  if (g_scanner_cur_token(scanner) != G_TOKEN_EQUAL_SIGN)
                     {
-                      if (! parse_style(scanner, &style))
-                        goto cleanup;
-                      token = g_scanner_cur_token(scanner);
-                    }
-
-                  if (token != G_TOKEN_EOF)
-                    {
-                      g_printerr ("End of tool definition expected !\n");
+                      g_printerr("Expected equal sign after tool name...\n");
                       goto cleanup;
                     }
-
-                  GromitPaintContext *context =
-                      g_hash_table_lookup(data->tool_config, name);
-                  GromitPaintContext *new_context =
-                    paint_context_new (data, style.type, style.paint_color,
-                                       style.width, style.arrowsize,
-                                       style.minwidth, style.maxwidth);
-
-                  cairo_destroy(context->paint_ctx);
-                  g_free(context->paint_color);
-                  *context = *new_context;
-                  g_free(new_context);
+                  token = g_scanner_get_next_token(scanner);
+                  if (token == G_TOKEN_SYMBOL)
+                    {
+                      context->type = (GromitPaintType) scanner->value.v_symbol;
+                      token = g_scanner_get_next_token (scanner);
+                    }
+                  if (token == G_TOKEN_LEFT_PAREN)
+                    {
+                      style.paint_color = g_malloc(sizeof(GdkRGBA));
+                      *style.paint_color = *data->red;
+                      scanner->scope_id = 2;
+                      while (token != G_TOKEN_RIGHT_PAREN)
+                        {
+                          token = g_scanner_get_next_token(scanner);
+                          if (token == G_TOKEN_SYMBOL)
+                            {
+                              switch (parse_attribute(scanner, &style))
+                                {
+                                  case SYM_SIZE:
+                                    context->width = style.width;
+                                    cairo_set_line_width(context->paint_ctx, style.width);
+                                    break;
+                                  case SYM_COLOR:
+                                    *context->paint_color = *style.paint_color;
+                                    cairo_set_source_rgba(context->paint_ctx,
+                                                          style.paint_color->red,
+                                                          style.paint_color->green,
+                                                          style.paint_color->blue,
+                                                          style.paint_color->alpha);
+                                    break;
+                                  case SYM_ARROWSIZE:
+                                    context->arrowsize = style.arrowsize;
+                                    break;
+                                  case SYM_ARROWTYPE:
+                                    context->arrow_type = style.arrow_type;
+                                    break;
+                                  case SYM_MINSIZE:
+                                    context->minwidth = style.minwidth;
+                                    break;
+                                  case SYM_MAXSIZE:
+                                    context->maxwidth = style.maxwidth;
+                                    break;
+                                  case SYM_ERROR:
+                                    break;
+                                }
+                            }
+                        }
+                      if (g_scanner_get_next_token(scanner) != G_TOKEN_EOF)
+                        g_printerr("WARNING: skipping extra content after ')' !\n");
+                    }
                 }
-              token = g_scanner_get_next_token (scanner);
-            }
+              else
+                {
+                  if (!parse_tool(data, scanner, &style)) goto cleanup;
+                  if (g_scanner_cur_token(scanner) != G_TOKEN_LEFT_PAREN) goto cleanup;
+                  if (! parse_style(scanner, &style)) goto cleanup;
+                  if (g_scanner_cur_token(scanner) != G_TOKEN_EOF) goto cleanup;
 
-        cleanup:
-          g_scanner_destroy (scanner);
+                  context->type = style.type;
+                  *context->paint_color = *style.paint_color;
+                  context->width = style.width;
+                  context->arrowsize = style.arrowsize;
+                  context->arrow_type = style.arrow_type;
+                  context->minwidth = style.minwidth;
+                  context->maxwidth = style.maxwidth;
+
+                  cairo_set_source_rgba(context->paint_ctx,
+                                        style.paint_color->red,
+                                        style.paint_color->green,
+                                        style.paint_color->blue,
+                                        style.paint_color->alpha);
+                  cairo_set_line_width(context->paint_ctx, style.width);
+                }
+              if (g_scanner_get_next_token (scanner) != G_TOKEN_EOF)
+                {
+                  g_printerr("WARNING: skipping extra content tool definition!\n");
+              }
+
+            cleanup:
+              if (style.paint_color) g_free(style.paint_color);
+              g_scanner_destroy (scanner);
+            } // if (tool change) ...
         }
     }
+
+  if (name) g_free(name);
+
   gtk_main_quit ();
 }
 
@@ -773,6 +875,7 @@ void on_device_added (GdkDeviceManager *device_manager,
 
   setup_input_devices(data);
 }
+
 
 
 gboolean on_toggle_paint(GtkWidget *widget,
@@ -997,6 +1100,7 @@ void on_intro(GtkMenuItem *menuitem,
     gtk_widget_show_all (assistant);
 }
 
+<<<<<<< HEAD
 void on_edit_config(GtkMenuItem *menuitem,
                     gpointer user_data)
 {
@@ -1051,6 +1155,8 @@ void on_edit_config(GtkMenuItem *menuitem,
 }
 
 
+=======
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
 void on_issues(GtkMenuItem *menuitem,
                gpointer user_data)
 {

@@ -29,7 +29,7 @@
 #include <errno.h>
 
 #include "config.h"
-#include "parser.h"
+#include "math.h"
 #include "main.h"
 #include "math.h"
 #include "build-config.h"
@@ -50,6 +50,10 @@ static gpointer UNDOKEY_SYMBOL_VALUE = (gpointer) 4;
 /*
  * initialize GScanner for the parsing of tool definitions
  */
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
 void scanner_init(GScanner *scanner)
 {
   scanner->config->case_sensitive = 0;
@@ -59,6 +63,7 @@ void scanner_init(GScanner *scanner)
   scanner->config->numbers_2_int = 1;
   scanner->config->int_2_float = 1;
 
+<<<<<<< HEAD
   g_scanner_scope_add_symbol (scanner, 0, "PEN",       (gpointer) GROMIT_PEN);
   g_scanner_scope_add_symbol (scanner, 0, "LINE",      (gpointer) GROMIT_LINE);
   g_scanner_scope_add_symbol (scanner, 0, "RECT",      (gpointer) GROMIT_RECT);
@@ -68,6 +73,15 @@ void scanner_init(GScanner *scanner)
   g_scanner_scope_add_symbol (scanner, 0, "RECOLOR",   (gpointer) GROMIT_RECOLOR);
   g_scanner_scope_add_symbol (scanner, 0, "HOTKEY",               HOTKEY_SYMBOL_VALUE);
   g_scanner_scope_add_symbol (scanner, 0, "UNDOKEY",              UNDOKEY_SYMBOL_VALUE);
+=======
+  g_scanner_scope_add_symbol (scanner, 0, "PEN",    (gpointer) GROMIT_PEN);
+  g_scanner_scope_add_symbol (scanner, 0, "LINE",   (gpointer) GROMIT_LINE);
+  g_scanner_scope_add_symbol (scanner, 0, "RECT",   (gpointer) GROMIT_RECT);
+  g_scanner_scope_add_symbol (scanner, 0, "ERASER", (gpointer) GROMIT_ERASER);
+  g_scanner_scope_add_symbol (scanner, 0, "RECOLOR",(gpointer) GROMIT_RECOLOR);
+  g_scanner_scope_add_symbol (scanner, 0, "HOTKEY",            HOTKEY_SYMBOL_VALUE);
+  g_scanner_scope_add_symbol (scanner, 0, "UNDOKEY",           UNDOKEY_SYMBOL_VALUE);
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
 
   g_scanner_scope_add_symbol (scanner, 1, "BUTTON1", (gpointer) 1);
   g_scanner_scope_add_symbol (scanner, 1, "BUTTON2", (gpointer) 2);
@@ -85,11 +99,14 @@ void scanner_init(GScanner *scanner)
   g_scanner_scope_add_symbol (scanner, 2, "arrowtype", (gpointer) SYM_ARROWTYPE);
   g_scanner_scope_add_symbol (scanner, 2, "minsize",   (gpointer) SYM_MINSIZE);
   g_scanner_scope_add_symbol (scanner, 2, "maxsize",   (gpointer) SYM_MAXSIZE);
+<<<<<<< HEAD
   g_scanner_scope_add_symbol (scanner, 2, "radius",    (gpointer) SYM_RADIUS);
   g_scanner_scope_add_symbol (scanner, 2, "maxangle",  (gpointer) SYM_MAXANGLE);
   g_scanner_scope_add_symbol (scanner, 2, "minlen",    (gpointer) SYM_MINLEN);
   g_scanner_scope_add_symbol (scanner, 2, "simplify",  (gpointer) SYM_SIMPLIFY);
   g_scanner_scope_add_symbol (scanner, 2, "snap",      (gpointer) SYM_SNAP);
+=======
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
 
   g_scanner_set_scope (scanner, 0);
   scanner->config->scope_0_fallback = 0;
@@ -121,10 +138,13 @@ gchar* parse_name (GScanner *scanner)
   name = g_strndup (scanner->value.v_string, len + 3);
   token = g_scanner_get_next_token (scanner);
 
+<<<<<<< HEAD
   /*
    * Are there any options to limit the scope of the definition?
    */
 
+=======
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
   if (token == G_TOKEN_LEFT_BRACE)
     {
       g_scanner_set_scope (scanner, 1);
@@ -193,11 +213,14 @@ gboolean parse_tool(GromitData *data, GScanner *scanner, GromitPaintContext *sty
   style->width = 7;
   style->arrowsize = 0;
   style->arrow_type = GROMIT_ARROW_END;
+<<<<<<< HEAD
   style->radius = 10;
   style->minlen = style->radius * 5 / 2;
   style->maxangle = 15;
   style->simplify = 10;
   style->snapdist = 0;
+=======
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
   style->minwidth = 1;
   style->maxwidth = G_MAXUINT;
 
@@ -226,11 +249,14 @@ gboolean parse_tool(GromitData *data, GScanner *scanner, GromitPaintContext *sty
           style->width = context->width;
           style->arrowsize = context->arrowsize;
           style->arrow_type = context->arrow_type;
+<<<<<<< HEAD
           style->radius = context->radius;
           style->minlen = context->minlen;
           style->maxangle = context->maxangle;
           style->simplify = context->simplify;
           style->snapdist = context->snapdist;
+=======
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
           style->minwidth = context->minwidth;
           style->maxwidth = context->maxwidth;
           *style->paint_color = *context->paint_color;
@@ -247,7 +273,11 @@ gboolean parse_tool(GromitData *data, GScanner *scanner, GromitPaintContext *sty
     }
   else
     {
+<<<<<<< HEAD
       g_printerr ("Expected tool definition or name of template tool\n");
+=======
+      g_printerr ("Expected Tool-definition or name of template tool\n");
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
       goto cleanup;
     }
   return TRUE;
@@ -256,6 +286,10 @@ gboolean parse_tool(GromitData *data, GScanner *scanner, GromitPaintContext *sty
   if (color_allocated)
     {
       g_free(style->paint_color);
+<<<<<<< HEAD
+=======
+      g_printerr("parse_tool: free color @ %p\n", style->paint_color);
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
       style->paint_color = NULL;
     }
   return FALSE;
@@ -299,7 +333,11 @@ ToolAttribute parse_attribute(GScanner *scanner, GromitPaintContext *style)
     {
         gfloat v = parse_float(scanner, "Missing arrowsize");
         if (isnan(v)) return SYM_ERROR;
+<<<<<<< HEAD
         style->arrowsize = v;
+=======
+        style->arrowsize = v + 0.5;
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
     }
   else if (id == SYM_ARROWTYPE)
     {
@@ -334,6 +372,7 @@ ToolAttribute parse_attribute(GScanner *scanner, GromitPaintContext *style)
           return SYM_ERROR;
         }
     }
+<<<<<<< HEAD
   else if ((intptr_t) scanner->value.v_symbol == SYM_RADIUS)
     {
       gfloat v = parse_get_float(scanner, "Missing radius (float)");
@@ -375,6 +414,19 @@ ToolAttribute parse_attribute(GScanner *scanner, GromitPaintContext *style)
       gfloat v = parse_float(scanner, "Missing maxsize");
       if (isnan(v)) return SYM_ERROR;
       style->maxwidth = v + 0.5;
+=======
+  else if (id == SYM_MINSIZE)
+    {
+        gfloat v = parse_float(scanner, "Missing minsize");
+        if (isnan(v)) return SYM_ERROR;
+        style->minwidth = v + 0.5;
+    }
+  else if (id == SYM_MAXSIZE)
+    {
+        gfloat v = parse_float(scanner, "Missing maxsize");
+        if (isnan(v)) return SYM_ERROR;
+        style->maxwidth = v + 0.5;
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
     }
   else
     {
@@ -385,6 +437,7 @@ ToolAttribute parse_attribute(GScanner *scanner, GromitPaintContext *style)
 }
 
 /*
+<<<<<<< HEAD
  * get "=VALUE", where VALUE is a float
  * returns NAN is an error occurs
  */
@@ -404,6 +457,24 @@ gfloat parse_get_float(GScanner *scanner, const gchar *msg)
       return NAN;
     }
   return scanner->value.v_float;
+=======
+ * parse "=<VALUE>", with value being a float
+ * return <VALUE> as gfloat, or NAN on error
+ */
+gfloat parse_float(GScanner *scanner, const gchar *msg) {
+    GTokenType token = g_scanner_get_next_token(scanner);
+    if (token != G_TOKEN_EQUAL_SIGN) {
+        g_printerr("Missing \"=\"... aborting\n");
+        return NAN;
+    }
+    token = g_scanner_get_next_token(scanner);
+    if (token != G_TOKEN_FLOAT) {
+        g_printerr("%s", msg);
+        g_printerr("... aborting\n");
+        return NAN;
+    }
+    return scanner->value.v_float;
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
 }
 
 /*
@@ -438,14 +509,14 @@ gboolean parse_style(GScanner *scanner, GromitPaintContext *style)
 gboolean parse_config (GromitData *data)
 {
   gboolean status = FALSE;
-  GromitPaintContext *context=NULL;
+  GromitPaintContext *context = NULL;
   GScanner *scanner;
   GTokenType token;
   gchar *filename;
   int file;
   gchar *name;
 
-  /* try user config location */
+  // try user config location
   filename = g_strjoin (G_DIR_SEPARATOR_S,
                         g_get_user_config_dir(), "gromit-mpx.cfg", NULL);
   if ((file = open(filename, O_RDONLY)) < 0)
@@ -454,7 +525,7 @@ gboolean parse_config (GromitData *data)
       g_print("Using user config %s\n", filename);
 
 
-  /* try global config file */
+  // try global config file
   if (file < 0) {
       g_free(filename);
       filename = g_strdup (SYSCONFDIR "/gromit-mpx/gromit-mpx.cfg");
@@ -464,20 +535,21 @@ gboolean parse_config (GromitData *data)
 	  g_print("Using system config %s\n", filename);
   }
 
-  /* was the last possibility, no use to go on */
+  // was the last possibility, no use to go on
   if (file < 0) {
       g_free(filename);
-      GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(data->win),
-						 GTK_DIALOG_DESTROY_WITH_PARENT,
-						 GTK_MESSAGE_WARNING,
-						 GTK_BUTTONS_CLOSE,
-						 _("No usable config file found, falling back to default tools."));
+      GtkWidget *dialog = gtk_message_dialog_new(
+          GTK_WINDOW(data->win),
+          GTK_DIALOG_DESTROY_WITH_PARENT,
+          GTK_MESSAGE_WARNING,
+          GTK_BUTTONS_CLOSE,
+          _("No usable config file found, falling back to default tools."));
       gtk_dialog_run (GTK_DIALOG (dialog));
       gtk_widget_destroy (dialog);
       return FALSE;
   }
 
-  scanner = g_scanner_new(NULL);
+  scanner = g_scanner_new (NULL);
   scanner_init(scanner);
   scanner->input_name = filename;
   g_scanner_input_file (scanner, file);
@@ -495,13 +567,14 @@ gboolean parse_config (GromitData *data)
 	      goto cleanup;
 
           if (!parse_tool(data, scanner, &style))
-            goto cleanup;
+            {
+              g_printerr("parse tool failed\n");
+              goto cleanup;
+            }
 
+
+          //  are there any tool-options?
           token = g_scanner_cur_token(scanner);
-          //
-          /* Are there any tool-options?
-           */
-
           if (token == G_TOKEN_LEFT_PAREN)
             {
               if (! parse_style(scanner, &style))
@@ -516,20 +589,29 @@ gboolean parse_config (GromitData *data)
               goto cleanup;
             }
 
+<<<<<<< HEAD
           context = paint_context_new(data, style.type, style.paint_color, style.width,
                                       style.arrowsize, style.arrow_type,
                                       style.simplify, style.radius, style.maxangle, style.minlen, style.snapdist,
                                       style.minwidth, style.maxwidth);
           g_hash_table_insert (data->tool_config, name, context);
+=======
+            context = paint_context_new(data,
+                                        style.type,
+                                        style.paint_color,
+                                        style.width,
+                                        style.arrowsize,
+                                        style.arrow_type,
+                                        style.minwidth,
+                                        style.maxwidth);
+            g_hash_table_insert(data->tool_config, name, context);
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
         }
       else if (token == G_TOKEN_SYMBOL &&
                (scanner->value.v_symbol == HOTKEY_SYMBOL_VALUE ||
                 scanner->value.v_symbol == UNDOKEY_SYMBOL_VALUE))
         {
-          /*
-           * Hot key definition
-           */
-
+          // hot key definition
           gpointer key_type = scanner->value.v_symbol;
           token = g_scanner_get_next_token(scanner);
 
@@ -568,7 +650,7 @@ gboolean parse_config (GromitData *data)
         }
       else
         {
-          g_printerr ("Expected name of Tool to define or Hot key definition\n");
+          g_printerr ("Expected name of tool to define or hot key definition\n");
           goto cleanup;
         }
 
@@ -589,12 +671,13 @@ gboolean parse_config (GromitData *data)
       g_hash_table_remove_all(data->tool_config);
 
       /* alert user */
-      GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(data->win),
-						 GTK_DIALOG_DESTROY_WITH_PARENT,
-						 GTK_MESSAGE_WARNING,
-						 GTK_BUTTONS_CLOSE,
-						 _("Failed parsing config file %s, falling back to default tools."),
-						 filename);
+      GtkWidget *dialog = gtk_message_dialog_new(
+          GTK_WINDOW(data->win),
+          GTK_DIALOG_DESTROY_WITH_PARENT,
+          GTK_MESSAGE_WARNING,
+          GTK_BUTTONS_CLOSE,
+          _("Failed parsing config file %s, falling back to default tools."),
+          filename);
       gtk_dialog_run (GTK_DIALOG (dialog));
       gtk_widget_destroy (dialog);
   }
@@ -730,6 +813,7 @@ void read_keyfile(GromitData *data)
 {
     gchar *filename = g_strjoin (G_DIR_SEPARATOR_S,
 				 g_get_user_config_dir(), "gromit-mpx.ini", NULL);
+
     /*
       set defaults
     */
@@ -755,7 +839,7 @@ void read_keyfile(GromitData *data)
     if(data->opacity == 0)
 	data->opacity = DEFAULT_OPACITY;
 
-  cleanup:
+ cleanup:
     g_free(filename);
     g_key_file_free(key_file);
 }

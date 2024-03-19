@@ -42,25 +42,26 @@
 #define GROMIT_WINDOW_EVENTS ( GROMIT_MOUSE_EVENTS | GDK_EXPOSURE_MASK)
 
 /* Atoms used to control Gromit */
-#define GA_CONTROL     gdk_atom_intern ("Gromit/control", FALSE)
-#define GA_STATUS      gdk_atom_intern ("Gromit/status", FALSE)
-#define GA_QUIT        gdk_atom_intern ("Gromit/quit", FALSE)
-#define GA_ACTIVATE    gdk_atom_intern ("Gromit/activate", FALSE)
-#define GA_DEACTIVATE  gdk_atom_intern ("Gromit/deactivate", FALSE)
-#define GA_TOGGLE      gdk_atom_intern ("Gromit/toggle", FALSE)
-#define GA_LINE        gdk_atom_intern ("Gromit/line", FALSE)
-#define GA_VISIBILITY  gdk_atom_intern ("Gromit/visibility", FALSE)
-#define GA_CLEAR       gdk_atom_intern ("Gromit/clear", FALSE)
-#define GA_RELOAD      gdk_atom_intern ("Gromit/reload", FALSE)
-#define GA_UNDO        gdk_atom_intern ("Gromit/undo", FALSE)
-#define GA_REDO        gdk_atom_intern ("Gromit/redo", FALSE)
-#define GA_CHGTOOL     gdk_atom_intern ("Gromit/chgtool", FALSE)
+#define GA_CONTROL    gdk_atom_intern ("Gromit/control", FALSE)
+#define GA_STATUS     gdk_atom_intern ("Gromit/status", FALSE)
+#define GA_QUIT       gdk_atom_intern ("Gromit/quit", FALSE)
+#define GA_ACTIVATE   gdk_atom_intern ("Gromit/activate", FALSE)
+#define GA_DEACTIVATE gdk_atom_intern ("Gromit/deactivate", FALSE)
+#define GA_TOGGLE     gdk_atom_intern ("Gromit/toggle", FALSE)
+#define GA_LINE       gdk_atom_intern ("Gromit/line", FALSE)
+#define GA_VISIBILITY gdk_atom_intern ("Gromit/visibility", FALSE)
+#define GA_CLEAR      gdk_atom_intern ("Gromit/clear", FALSE)
+#define GA_RELOAD     gdk_atom_intern ("Gromit/reload", FALSE)
+#define GA_UNDO       gdk_atom_intern ("Gromit/undo", FALSE)
+#define GA_REDO       gdk_atom_intern ("Gromit/redo", FALSE)
+#define GA_DEFTOOL    gdk_atom_intern ("Gromit/deftool", FALSE)
+#define GA_CHGATTR    gdk_atom_intern ("Gromit/chgattr", FALSE)
 
-#define GA_DATA        gdk_atom_intern ("Gromit/data", FALSE)
-#define GA_TOGGLEDATA  gdk_atom_intern ("Gromit/toggledata", FALSE)
-#define GA_LINEDATA    gdk_atom_intern ("Gromit/linedata", FALSE)
-#define GA_CHGTOOLDATA gdk_atom_intern ("Gromit/chgtooldata", FALSE)
-
+#define GA_DATA       gdk_atom_intern ("Gromit/data", FALSE)
+#define GA_TOGGLEDATA gdk_atom_intern ("Gromit/toggledata", FALSE)
+#define GA_LINEDATA   gdk_atom_intern ("Gromit/linedata", FALSE)
+#define GA_DEFTOOLDATA  gdk_atom_intern ("Gromit/deftooldata", FALSE)
+#define GA_CHGATTRDATA  gdk_atom_intern ("Gromit/chgattrdata", FALSE)
 
 #define GROMIT_MAX_UNDO 100
 
@@ -69,8 +70,11 @@ typedef enum
   GROMIT_PEN,
   GROMIT_LINE,
   GROMIT_RECT,
+<<<<<<< HEAD
   GROMIT_SMOOTH,
   GROMIT_ORTHOGONAL,
+=======
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
   GROMIT_ERASER,
   GROMIT_RECOLOR
 } GromitPaintType;
@@ -172,6 +176,7 @@ typedef struct
   size_t undo_temp_used;
   gint   undo_head, undo_depth, redo_depth;
 
+
   gboolean show_intro_on_startup;
 
 } GromitData;
@@ -198,7 +203,10 @@ void clear_screen (GromitData *data);
 GromitPaintContext *paint_context_new (GromitData *data, GromitPaintType type,
 				       GdkRGBA *fg_color, guint width,
                                        guint arrowsize, GromitArrowType arrowtype,
+<<<<<<< HEAD
                                        guint simpilfy, guint radius, guint maxangle, guint minlen, guint snapdist,
+=======
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
                                        guint minwidth, guint maxwidth);
 void paint_context_free (GromitPaintContext *context);
 

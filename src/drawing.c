@@ -2,6 +2,17 @@
 #include <math.h>
 #include "drawing.h"
 #include "main.h"
+<<<<<<< HEAD
+=======
+
+typedef struct
+{
+  gint x;
+  gint y;
+  gint width;
+} GromitStrokeCoordinate;
+
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
 
 void draw_line (GromitData *data,
 		GdkDevice *dev,
@@ -105,3 +116,110 @@ void draw_arrow (GromitData *data,
   data->painted = 1;
 }
 
+<<<<<<< HEAD
+=======
+
+void coord_list_prepend (GromitData *data, 
+			 GdkDevice* dev, 
+			 gint x, 
+			 gint y, 
+			 gint width)
+{
+  /* get the data for this device */
+  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
+
+  GromitStrokeCoordinate *point;
+
+  point = g_malloc (sizeof (GromitStrokeCoordinate));
+  point->x = x;
+  point->y = y;
+  point->width = width;
+
+  devdata->coordlist = g_list_prepend (devdata->coordlist, point);
+}
+
+
+void coord_list_free (GromitData *data, 
+		      GdkDevice* dev)
+{
+  /* get the data for this device */
+  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
+
+  GList *ptr;
+  ptr = devdata->coordlist;
+
+  while (ptr)
+    {
+      g_free (ptr->data);
+      ptr = ptr->next;
+    }
+
+  g_list_free (devdata->coordlist);
+
+  devdata->coordlist = NULL;
+}
+
+/*
+ * for double-ended arrows, two separate calls are required
+ */
+
+gboolean coord_list_get_arrow_param (GromitData      *data,
+				     GdkDevice       *dev,
+				     gint            search_radius,
+                                     GromitArrowType arrow_end,
+                                     gint            *x0,
+                                     gint            *y0,
+				     gint            *ret_width,
+				     gfloat          *ret_direction)
+{
+  gint r2, dist;
+  gboolean success = FALSE;
+  GromitStrokeCoordinate  *cur_point, *valid_point;
+  /* get the data for this device */
+  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
+  GList *ptr = devdata->coordlist;
+  gfloat width;
+
+  valid_point = NULL;
+
+  if (ptr)
+    {
+      if (arrow_end == GROMIT_ARROW_START)
+          ptr = g_list_last(ptr);
+      cur_point = ptr->data;
+      *x0 = cur_point->x;
+      *y0 = cur_point->y;
+      r2 = search_radius * search_radius;
+      dist = 0;
+
+      while (ptr && dist < r2)
+        {
+          if (arrow_end == GROMIT_ARROW_END)
+            ptr = ptr->next;
+          else
+            ptr = ptr->prev;
+          if (ptr)
+            {
+              cur_point = ptr->data;
+              dist = (cur_point->x - *x0) * (cur_point->x - *x0) +
+                     (cur_point->y - *y0) * (cur_point->y - *y0);
+              width = cur_point->width * devdata->cur_context->arrowsize;
+              if (width * 2 <= dist &&
+                  (!valid_point || valid_point->width < cur_point->width))
+                valid_point = cur_point;
+            }
+        }
+
+      if (valid_point)
+        {
+          *ret_width = MAX (valid_point->width * devdata->cur_context->arrowsize,
+                            2);
+          *ret_direction = atan2 (*y0 - valid_point->y, *x0 - valid_point->x);
+          success = TRUE;
+        }
+    }
+
+  return success;
+}
+
+>>>>>>> 5385d7b (config, callbacks: add option to change tool definitions and individual tool attributes)
