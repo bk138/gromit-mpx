@@ -34,7 +34,25 @@
    Returns TRUE if something got parsed successfully, FALSE otherwise.
 */
 gboolean parse_config (GromitData *data);
-int parse_args (int argc, char **argv, GromitData *data);
+int parse_args(int argc, char **argv, GromitData *data);
+gchar* parse_name (GScanner *scanner);
+
+typedef enum {
+  SYM_ERROR=0,
+  SYM_SIZE=1,
+  SYM_COLOR,
+  SYM_ARROWSIZE,
+  SYM_ARROWTYPE,
+  SYM_MINSIZE,
+  SYM_MAXSIZE
+} ToolAttribute;
+
+void scanner_init(GScanner *scanner);
+gboolean parse_tool(GromitData *data, GScanner *scanner, GromitPaintContext *style);
+gboolean parse_style(GScanner *scanner, GromitPaintContext *style);
+gfloat parse_float(GScanner *scanner, const gchar *msg);
+ToolAttribute parse_attribute(GScanner *scanner, GromitPaintContext *style);
+
 
 /* fallback hot key, if not specified on command line or in config file */
 #ifndef DEFAULT_HOTKEY

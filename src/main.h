@@ -54,10 +54,14 @@
 #define GA_RELOAD     gdk_atom_intern ("Gromit/reload", FALSE)
 #define GA_UNDO       gdk_atom_intern ("Gromit/undo", FALSE)
 #define GA_REDO       gdk_atom_intern ("Gromit/redo", FALSE)
+#define GA_DEFTOOL    gdk_atom_intern ("Gromit/deftool", FALSE)
+#define GA_CHGATTR    gdk_atom_intern ("Gromit/chgattr", FALSE)
 
 #define GA_DATA       gdk_atom_intern ("Gromit/data", FALSE)
 #define GA_TOGGLEDATA gdk_atom_intern ("Gromit/toggledata", FALSE)
 #define GA_LINEDATA   gdk_atom_intern ("Gromit/linedata", FALSE)
+#define GA_DEFTOOLDATA  gdk_atom_intern ("Gromit/deftooldata", FALSE)
+#define GA_CHGATTRDATA  gdk_atom_intern ("Gromit/chgattrdata", FALSE)
 
 #define GROMIT_MAX_UNDO 4
 
