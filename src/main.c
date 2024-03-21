@@ -24,11 +24,8 @@
 #include <stddef.h>
 #include <string.h>
 #include <stdlib.h>
-
-#include <lz4.h>
 #include <unistd.h>
-
-
+#include <lz4.h>
 
 #include "cairo.h"
 #include "callbacks.h"
@@ -487,7 +484,6 @@ void redo_drawing (GromitData *data)
     g_printerr("DEBUG: Redo drawing.\n");
 }
 
-
 /*
  * compress image data and store it in undo_temp_buffer
  *
@@ -501,16 +497,20 @@ void undo_compress(GromitData *data, cairo_surface_t *surface)
   size_t src_bytes = rows * bytes_per_row;
 
   size_t dest_bytes;
-  for (;;) {
+  for (;;)
+    {
       dest_bytes = LZ4_compress_default(raw_data, data->undo_temp, src_bytes, data->undo_temp_size);
-      if (dest_bytes == 0) {
-        data->undo_temp_size *= 2;
-        data->undo_temp = g_realloc(data->undo_temp, data->undo_temp_size);
-      } else {
-        data->undo_temp_used = dest_bytes;
-        break;
-      }
-  }
+      if (dest_bytes == 0)
+        {
+          data->undo_temp_size *= 2;
+          data->undo_temp = g_realloc(data->undo_temp, data->undo_temp_size);
+        }
+      else
+        {
+          data->undo_temp_used = dest_bytes;
+          break;
+        }
+    }
 }
 
 
@@ -519,17 +519,15 @@ void undo_compress(GromitData *data, cairo_surface_t *surface)
  */
 void undo_temp_buffer_to_slot(GromitData *data, gint undo_slot)
 {
-    size_t required = data->undo_temp_used;
-    if (data->undo_buffer_size[undo_slot] < required) {
-        data->undo_buffer[undo_slot] =
-            g_realloc(data->undo_buffer[undo_slot], required);
+    const size_t required = data->undo_temp_used;
+    if (data->undo_buffer_size[undo_slot] < required)
+      {
+        data->undo_buffer[undo_slot] = g_realloc(data->undo_buffer[undo_slot], required);
         data->undo_buffer_size[undo_slot] = required;
-  }
-  data->undo_buffer_used[undo_slot] = required;
-
-  memcpy(data->undo_buffer[undo_slot], data->undo_temp, required);
+      }
+    data->undo_buffer_used[undo_slot] = required;
+    memcpy(data->undo_buffer[undo_slot], data->undo_temp, required);
 }
-
 
 /*
  * decompress undo slot data and store it in cairo surface
