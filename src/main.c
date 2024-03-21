@@ -1171,7 +1171,6 @@ gchar *key2string(GromitLookupKey key)
   result[len] = 124;
   
   // to identify buttons 1-10 we need two bytes (two char)
-  guint buttons = key.state.buttons;
   gchar buttons_low = key.state.buttons & 0xFF; // 1-8
   gchar buttons_high = (key.state.buttons >> 8) & 0xFF; // 9-10
 
