@@ -270,13 +270,15 @@ gboolean on_buttonpress (GtkWidget *win,
       gdk_window_set_event_compression(gtk_widget_get_window(data->win), TRUE);
   }
 
-  /* See GdkModifierType. Am I fixing a Gtk misbehaviour???  */
-  ev->state |= 1 << (ev->button + 7);
+  // add new buttons to GromitState
+  GromitState newState = data->state;
+  newState.buttons |= (ev->button <= 10) ? 1 << (ev->button - 1) : 0;
+  newState.modifiers = ev->state & 0xF;
 
 
-  if (ev->state != devdata->state ||
+  if (!compare_state(data->state, newState) ||
       devdata->lastslave != gdk_event_get_source_device ((GdkEvent *) ev))
-    select_tool (data, ev->device, gdk_event_get_source_device ((GdkEvent *) ev), ev->state);
+    select_tool (data, ev->device, gdk_event_get_source_device ((GdkEvent *) ev), newState);
 
   GromitPaintType type = devdata->cur_context->type;
 
@@ -301,7 +303,7 @@ gboolean on_buttonpress (GtkWidget *win,
   if(data->maxwidth > devdata->cur_context->maxwidth)
     data->maxwidth = devdata->cur_context->maxwidth;
 
-  if (ev->button <= 5)
+  if (ev->button <= 10)
     draw_line (data, ev->device, ev->x, ev->y, ev->x, ev->y);
 
   coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
@@ -325,12 +327,22 @@ gboolean on_motion (GtkWidget *win,
   if (!devdata->is_grabbed)
     return FALSE;
 
+  // GdkEventMotion->state has only buttons 1-5, keep 6-10
+  GromitState newState = data->state;
+  newState.buttons &= 0x3E0; // remove old 1-5, keep 6-10
+  newState.buttons |= (ev->state >> 8) & 0x1F; // update new 1-5
+  newState.modifiers = ev->state & 0xF;
+
+  // return if there is no button pressed
+  if(!newState.buttons)
+    return TRUE;
+
   if(data->debug)
       g_printerr("DEBUG: Device '%s': motion to (x,y)=(%.2f : %.2f)\n", gdk_device_get_name(ev->device), ev->x, ev->y);
 
-  if (ev->state != devdata->state ||
+  if(!compare_state(data->state, newState) ||
       devdata->lastslave != gdk_event_get_source_device ((GdkEvent *) ev))
-    select_tool (data, ev->device, gdk_event_get_source_device ((GdkEvent *) ev), ev->state);
+    select_tool (data, ev->device, gdk_event_get_source_device ((GdkEvent *) ev), newState);
 
   GromitPaintType type = devdata->cur_context->type;
 
@@ -455,6 +467,11 @@ gboolean on_buttonrelease (GtkWidget *win,
       (ev->y != devdata->lasty))
     on_motion(win, (GdkEventMotion *) ev, user_data);
 
+  // remove released button bit from GromitState
+  guint button = 1 << (ev->button - 1);
+  data->state.buttons &= ~button;
+  data->state.modifiers = ev->state & 0xF;
+
   if (!devdata->is_grabbed)
     return FALSE;
 
@@ -489,6 +506,53 @@ gboolean on_buttonrelease (GtkWidget *win,
   coord_list_free (data, ev->device);
 
   return TRUE;
+}
+
+gboolean on_keypress(GtkWidget *win, GdkEventKey *ev, gpointer user_data)
+{
+  GromitData *data = (GromitData *)user_data;
+
+  guint32 keyunicode = gdk_keyval_to_unicode(ev->keyval);
+  gchar *keyname = gdk_keyval_name(ev->keyval);
+  GdkDevice *dev = gdk_event_get_device((GdkEvent *)ev);
+
+  if (data->debug)
+    g_printerr("DEBUG: Received key %s %d press from device '%s'\n", keyname, keyunicode, gdk_device_get_name(dev));
+
+  // add key to GromitState
+  if (keyunicode >= GDK_KEY_a && keyunicode <= GDK_KEY_z)
+  {
+    data->state.keys |= 1 << (keyunicode - GDK_KEY_a);
+    return TRUE;
+  }
+  if (keyunicode >= GDK_KEY_A && keyunicode <= GDK_KEY_Z)
+  {
+    data->state.keys |= 1 << (keyunicode - GDK_KEY_A);
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+gboolean on_keyrelease(GtkWidget *win, GdkEventKey *ev, gpointer user_data)
+{
+  GromitData *data = (GromitData *)user_data;
+
+  guint32 keyunicode = gdk_keyval_to_unicode(ev->keyval);
+
+  // remove key from GromitState
+  if (keyunicode >= GDK_KEY_a && keyunicode <= GDK_KEY_z)
+  {
+    data->state.keys &= ~(1 << (keyunicode - GDK_KEY_a));
+    return TRUE;
+  }
+  if (keyunicode >= GDK_KEY_A && keyunicode <= GDK_KEY_Z)
+  {
+    data->state.keys &= ~(1 << (keyunicode - GDK_KEY_A));
+    return TRUE;
+  }
+
+  return FALSE;
 }
 
 /* Remote control */

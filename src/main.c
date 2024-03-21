@@ -253,15 +253,14 @@ gint reshape (gpointer user_data)
 void select_tool (GromitData *data, 
 		  GdkDevice *device, 
 		  GdkDevice *slave_device,
-		  guint state)
+		  GromitState state)
 {
   guint buttons = 0, modifier = 0, slave_len = 0, len = 0, default_len = 0;
-  guint req_buttons = 0, req_modifier = 0;
+  gulong keys = 0;
+  guint req_buttons = 0, req_modifier = 0, req_keys = 0;
   guint i, j, success = 0;
   GromitPaintContext *context = NULL;
-  guchar *slave_name;
-  guchar *name;
-  guchar *default_name;
+  GromitLookupKey keySlave = {}, keyName = {}, keyDefault = {};
 
   /* get the data for this device */
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, device);
@@ -269,25 +268,17 @@ void select_tool (GromitData *data,
   if (device)
     {
       slave_len = strlen (gdk_device_get_name(slave_device));
-      slave_name = (guchar*) g_strndup (gdk_device_get_name(slave_device), slave_len + 3);
+      keySlave.name = g_strndup (gdk_device_get_name(slave_device), slave_len);
       len = strlen (gdk_device_get_name(device));
-      name = (guchar*) g_strndup (gdk_device_get_name(device), len + 3);
+      keyName.name = g_strndup (gdk_device_get_name(device), len);
       default_len = strlen(DEFAULT_DEVICE_NAME);
-      default_name = (guchar*) g_strndup (DEFAULT_DEVICE_NAME, default_len + 3);
+      keyDefault.name = g_strndup (DEFAULT_DEVICE_NAME, default_len);
       
       
       /* Extract Button/Modifiers from state (see GdkModifierType) */
-      req_buttons = (state >> 8) & 31;
-
-      req_modifier = (state >> 1) & 7;
-      if (state & GDK_SHIFT_MASK) req_modifier |= 1;
-
-      slave_name [slave_len] = 124;
-      slave_name [slave_len+3] = 0;
-      name [len] = 124;
-      name [len+3] = 0;
-      default_name [default_len] = 124;
-      default_name [default_len+3] = 0;
+      req_buttons = state.buttons;
+      req_modifier = state.modifiers;
+      req_keys = state.keys;
 
       /*
 	Iterate i up until <= req_buttons.
@@ -311,41 +302,46 @@ void select_tool (GromitData *data,
 	  if(i > 0 && (buttons == 0 || buttons != i))
 	      continue;
 
+    keys = req_keys;
+
           j=-1;
           do
             {
               j++;
               modifier = req_modifier & ((1 << j)-1);
-              slave_name [slave_len+1] = buttons + 64;
-              slave_name [slave_len+2] = modifier + 48;
-              name [len+1] = buttons + 64;
-              name [len+2] = modifier + 48;
-              default_name [default_len+1] = buttons + 64;
-              default_name [default_len+2] = modifier + 48;
+              
+              GromitState newState = {};
+              newState.buttons = buttons;
+              newState.modifiers = modifier;
+              newState.keys = keys;
+
+              keySlave.state = newState;
+              keyName.state = newState;
+              keyDefault.state = newState;
 
 	            if(data->debug)
-                g_printerr("DEBUG: select_tool looking up context for '%s' attached to '%s'\n", slave_name, name);
+                g_printerr("DEBUG: select_tool looking up context for '%s' attached to '%s'\n", key2string(keySlave), key2string(keyName));
 
-              context = g_hash_table_lookup (data->tool_config, slave_name);
+              context = g_hash_table_lookup (data->tool_config, key2string(keySlave));
               if(context) {
                   if(data->debug)
-                    g_printerr("DEBUG: select_tool set context for '%s'\n", slave_name);
+                    g_printerr("DEBUG: select_tool set context for '%s'\n", key2string(keySlave));
                   devdata->cur_context = context;
                   success = 1;
               }
               else /* try master name */
-              if ((context = g_hash_table_lookup (data->tool_config, name)))
+              if ((context = g_hash_table_lookup (data->tool_config, key2string(keyName))))
                 {
                   if(data->debug)
-                    g_printerr("DEBUG: select_tool set context for '%s'\n", name);
+                    g_printerr("DEBUG: select_tool set context for '%s'\n", key2string(keyName));
                   devdata->cur_context = context;
                   success = 1;
                 }
               else /* try default_name */
-                if((context = g_hash_table_lookup (data->tool_config, default_name)))
+                if((context = g_hash_table_lookup (data->tool_config, key2string(keyDefault))))
                   {
                     if(data->debug)
-                      g_printerr("DEBUG: select_tool set default context '%s' for '%s'\n", default_name, name);
+                      g_printerr("DEBUG: select_tool set default context '%s' for '%s'\n", key2string(keyDefault), key2string(keyName));
                     devdata->cur_context = context;
                     success = 1;
                   }
@@ -363,11 +359,9 @@ void select_tool (GromitData *data,
             devdata->cur_context = data->default_pen;
 
 	  if(data->debug)
-	      g_printerr("DEBUG: select_tool set fallback context for '%s'\n", name);
+	      g_printerr("DEBUG: select_tool set fallback context for '%s'\n", key2string(keyName));
         }
 
-      g_free (name);
-      g_free (default_name);
     }
   else
     g_printerr ("ERROR: select_tool attempted to select nonexistent device!\n");
@@ -394,7 +388,7 @@ void select_tool (GromitData *data,
   		  cursor,
   		  GDK_CURRENT_TIME);
 
-  devdata->state = state;
+  data->state = state;
   devdata->lastslave = slave_device;
 }
 
@@ -507,10 +501,13 @@ void main_do_event (GdkEventAny *event,
 		    GromitData  *data)
 {
   guint keycode = ((GdkEventKey *) event)->hardware_keycode;
+  guint32 keyunicode = gdk_keyval_to_unicode(((GdkEventKey *)event)->keyval);
   if ((event->type == GDK_KEY_PRESS ||
        event->type == GDK_KEY_RELEASE) &&
       event->window == data->root &&
-      (keycode == data->hot_keycode || keycode == data->undo_keycode))
+      (keycode == data->hot_keycode || keycode == data->undo_keycode ||
+      (keyunicode >= GDK_KEY_a && keyunicode <= GDK_KEY_z) ||
+       (keyunicode >= GDK_KEY_A && keyunicode <= GDK_KEY_Z)))
     {
       /* redirect the event to our main window, so that GTK+ doesn't
        * throw it away (there is no GtkWidget for the root window...)
@@ -639,6 +636,10 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
 		    G_CALLBACK (on_buttonpress), data);
   g_signal_connect (data->win, "button_release_event",
 		    G_CALLBACK (on_buttonrelease), data);
+  g_signal_connect(data->win, "key-press-event",
+        G_CALLBACK(on_keypress), data);
+  g_signal_connect(data->win, "key-release-event",
+        G_CALLBACK(on_keyrelease), data);
   /* disconnect previously defined selection handlers */
   g_signal_handlers_disconnect_by_func (data->win, 
 					G_CALLBACK (on_clientapp_selection_get),
@@ -705,26 +706,11 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   */
   if (data->hot_keyval)
     {
-      GdkKeymap    *keymap;
-      GdkKeymapKey *keys;
-      gint          n_keys;
-      guint         keyval;
-
-      if (strlen (data->hot_keyval) > 0 &&
-          strcasecmp (data->hot_keyval, "none") != 0)
+      data->hot_keycode = find_keycode(data->display, data->hot_keyval);
+      if(!data->hot_keycode)
         {
-          keymap = gdk_keymap_get_for_display (data->display);
-          keyval = gdk_keyval_from_name (data->hot_keyval);
-
-          if (!keyval || !gdk_keymap_get_entries_for_keyval (keymap, keyval,
-                                                             &keys, &n_keys))
-            {
-              g_printerr ("cannot find the key \"%s\"\n", data->hot_keyval);
-              exit (1);
-            }
-
-          data->hot_keycode = keys[0].keycode;
-          g_free (keys);
+          g_printerr ("cannot find the key \"%s\"\n", data->hot_keyval);
+          exit (1);
         }
     }
 
@@ -733,27 +719,12 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   */
   if (data->undo_keyval)
     {
-      GdkKeymap    *keymap;
-      GdkKeymapKey *keys;
-      gint          n_keys;
-      guint         keyval;
-
-      if (strlen (data->undo_keyval) > 0 &&
-          strcasecmp (data->undo_keyval, "none") != 0)
+      data->undo_keycode = find_keycode(data->display, data->undo_keyval);
+      if(!data->undo_keycode)
         {
-          keymap = gdk_keymap_get_for_display (data->display);
-          keyval = gdk_keyval_from_name (data->undo_keyval);
-
-          if (!keyval || !gdk_keymap_get_entries_for_keyval (keymap, keyval,
-                                                             &keys, &n_keys))
-            {
-              g_printerr ("cannot find the key \"%s\"\n", data->undo_keyval);
-              exit (1);
-            }
-
-          data->undo_keycode = keys[0].keycode;
-          g_free (keys);
-        }
+          g_printerr ("cannot find the key \"%s\"\n", data->undo_keyval);
+          exit (1);
+        }        
     }
 
 
@@ -1188,4 +1159,75 @@ void indicate_active(GromitData *data, gboolean YESNO)
 	app_indicator_set_icon(data->trayicon, "net.christianbeier.Gromit-MPX.active");
     else
 	app_indicator_set_icon(data->trayicon, "net.christianbeier.Gromit-MPX");
+}
+
+gboolean compare_state(GromitState lhs, GromitState rhs)
+{
+  return lhs.buttons == rhs.buttons &&
+         lhs.modifiers == rhs.modifiers &&
+         lhs.keys == rhs.keys;
+}
+
+gchar *key2string(GromitLookupKey key)
+{
+  guint len = 0;
+  gchar *result;
+
+  len = strlen(key.name);
+  result = g_strndup(key.name, len + 8);
+
+  result[len] = 124;
+  
+  // to identify buttons 1-10 we need two bytes (two char)
+  gchar buttons_low = key.state.buttons & 0xFF; // 1-8
+  gchar buttons_high = (key.state.buttons >> 8) & 0xFF; // 9-10
+
+  // there are 26 keys, we need four bytes (four char) if we 
+  // want to allow all 26 keys pressed at the same time
+  // although the OS doesn't allow all keys pressed
+  gulong keys = key.state.keys & 0x7FFFFFF; // limit to 26 bits
+  gchar keys1 = keys & 0xFF;
+  keys = keys >> 8;
+  gchar keys2 = keys & 0xFF;
+  keys = keys >> 8;
+  gchar keys3 = keys & 0xFF;
+  keys = keys >> 8;
+  gchar keys4 = keys & 0xFF;
+
+  result[len + 1] = buttons_high + 48;
+  result[len + 2] = buttons_low + 48;
+  result[len + 3] = key.state.modifiers + 48;
+  result[len + 4] = keys1 + 48;
+  result[len + 5] = keys2 + 48;
+  result[len + 6] = keys3 + 48;
+  result[len + 7] = keys4 + 48;
+  result[len + 8] = 0;
+
+  return result;
+}
+
+guint find_keycode(GdkDisplay *display, const gchar *keyval)
+{
+  GdkKeymap *keymap;
+  GdkKeymapKey *keys;
+  gint n_keys;
+  guint gdk_keyval, result = 0;
+
+  if (strlen(keyval) > 0 &&
+      strcasecmp(keyval, "none") != 0)
+  {
+    keymap = gdk_keymap_get_for_display(display);
+    gdk_keyval = gdk_keyval_from_name(keyval);
+
+    if (!gdk_keyval || !gdk_keymap_get_entries_for_keyval(keymap, gdk_keyval,
+                                                          &keys, &n_keys))
+    {
+      g_printerr("cannot find the key \"%s\"\n", keyval);
+      return 0;
+    }
+
+    result = keys[0].keycode;
+    g_free(keys);
+  }
+  return result;
 }

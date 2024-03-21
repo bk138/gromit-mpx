@@ -251,87 +251,30 @@ void setup_input_devices (GromitData *data)
 
 	  /* get attached keyboard and grab the hotkey */
 	  if (GDK_IS_X11_DISPLAY(data->display)) {
-	      gint dev_id = gdk_x11_device_get_id(device);
-
-	      gint kbd_dev_id = -1;
-	      XIDeviceInfo* devinfo;
-	      int devicecount = 0;
-	      
-	      devinfo = XIQueryDevice(GDK_DISPLAY_XDISPLAY(data->display),
-				      dev_id,
-				      &devicecount);
-	      if(devicecount)
-		  kbd_dev_id = devinfo->attachment;
-	      XIFreeDeviceInfo(devinfo);
+	      gint kbd_dev_id = get_keyboard_id(data->display, device);
  
 	      if(kbd_dev_id != -1)
 		  {
-		      XIEventMask mask;
 		      unsigned char bits[4] = {0,0,0,0};
-		      mask.mask = bits;
-		      mask.mask_len = sizeof(bits);
-	      
 		      XISetMask(bits, XI_KeyPress);
 		      XISetMask(bits, XI_KeyRelease);
 	      
+		      XIEventMask mask;
+		      mask.mask = bits;
+		      mask.mask_len = sizeof(bits);
+	      
 		      XIGrabModifiers modifiers[] = {{XIAnyModifier, 0}};
-		      int nmods = 1;
 	      
 		      gdk_x11_display_error_trap_push(data->display);
 	      
 		      if (data->hot_keycode) {
-			  if(data->debug)
-			      g_printerr("DEBUG: Grabbing hot key '%s' from keyboard '%d' .\n", data->hot_keyval, kbd_dev_id);
-
-			  if(XIGrabKeycode(GDK_DISPLAY_XDISPLAY(data->display),
-					   kbd_dev_id,
-					   data->hot_keycode,
-					   GDK_WINDOW_XID(data->root),
-					   GrabModeAsync,
-					   GrabModeAsync,
-					   True,
-					   &mask,
-					   nmods,
-					   modifiers) != 0) {
-			      g_printerr("ERROR: Grabbing hotkey from keyboard device %d failed.\n", kbd_dev_id);
-			      GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(data->win),
-									 GTK_DIALOG_DESTROY_WITH_PARENT,
-									 GTK_MESSAGE_ERROR,
-									  GTK_BUTTONS_CLOSE,
-									 "Grabbing hotkey %s from keyboard %d failed. The drawing hotkey function will not work unless configured to use another key.",
-									 data->hot_keyval,
-									 kbd_dev_id);
-			      gtk_dialog_run (GTK_DIALOG (dialog));
-			      gtk_widget_destroy (dialog);
-
-			  }
+            grab_key(data, kbd_dev_id, data->hot_keyval,
+                        sizeof(modifiers) / sizeof(modifiers[0]), modifiers, &mask);
 		      }
 
 		      if (data->undo_keycode) {
-			  if(data->debug)
-			      g_printerr("DEBUG: Grabbing undo key '%s' from keyboard '%d' .\n", data->undo_keyval, kbd_dev_id);
-
-			  if(XIGrabKeycode(GDK_DISPLAY_XDISPLAY(data->display),
-					   kbd_dev_id,
-					   data->undo_keycode,
-					   GDK_WINDOW_XID(data->root),
-					   GrabModeAsync,
-					   GrabModeAsync,
-					   True,
-					   &mask,
-					   nmods,
-					   modifiers) != 0) {
-			      g_printerr("ERROR: Grabbing undo key from keyboard device %d failed.\n", kbd_dev_id);
-			      GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(data->win),
-									 GTK_DIALOG_DESTROY_WITH_PARENT,
-									 GTK_MESSAGE_ERROR,
-									  GTK_BUTTONS_CLOSE,
-									 "Grabbing undo key %s from keyboard %d failed. The undo hotkey function will not work unless configured to use another key.",
-									 data->undo_keyval,
-									 kbd_dev_id);
-			      gtk_dialog_run (GTK_DIALOG (dialog));
-			      gtk_widget_destroy (dialog);
-			  }
+            grab_key(data, kbd_dev_id, data->undo_keyval,
+                         sizeof(modifiers) / sizeof(modifiers[0]), modifiers, &mask);
 		      }
 
 		      XSync(GDK_DISPLAY_XDISPLAY(data->display), False);
@@ -431,6 +374,20 @@ void release_grab (GromitData *data,
 
   if (devdata->is_grabbed)
     {
+      // ungrab keys
+      gint kbd_dev_id = get_keyboard_id(data->display, dev);
+
+      if (kbd_dev_id != -1)
+      {
+        XIGrabModifiers key_modifiers[] = {{0, 0}, {ShiftMask, 0}};
+        for (guchar k = 'a'; k <= 'z'; ++k)
+        {
+          gchar key[] = {k, '\0'};
+          ungrab_key(data, kbd_dev_id, key,
+                    sizeof(key_modifiers) / sizeof(key_modifiers[0]), key_modifiers);
+        }
+      }
+
       gdk_device_ungrab(devdata->device, GDK_CURRENT_TIME);
       devdata->is_grabbed = 0;
       /* workaround buggy GTK3 ? */
@@ -522,6 +479,28 @@ void acquire_grab (GromitData *data,
 
   if (!devdata->is_grabbed)
     {
+      // grab keys
+      gint kbd_dev_id = get_keyboard_id(data->display, dev);
+
+      if (kbd_dev_id != -1)
+      {
+        unsigned char bits[4] = {0, 0, 0, 0};
+        XISetMask(bits, XI_KeyPress);
+        XISetMask(bits, XI_KeyRelease);
+
+        XIEventMask mask;
+        mask.mask = bits;
+        mask.mask_len = sizeof(bits);
+
+        XIGrabModifiers key_modifiers[] = {{0, 0}, {ShiftMask, 0}};
+        for (guchar k = 'a'; k <= 'z'; ++k)
+        {
+          gchar key[] = {k, '\0'};
+          grab_key(data, kbd_dev_id, key,
+                  sizeof(key_modifiers) / sizeof(key_modifiers[0]), key_modifiers, &mask);
+        }
+      }
+
       GdkCursor *cursor;
       if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
 	cursor = data->erase_cursor; 
@@ -625,4 +604,84 @@ gint snoop_key_press(GtkWidget   *grab_widget,
       return TRUE;
     }
   return FALSE;
+}
+
+guint grab_key(GromitData *data, gint device_id, const char *key, int num_modifiers, gpointer key_modifiers, gpointer mask)
+{
+  if (data->debug)
+    g_printerr("DEBUG: Grabbing key '%s' from keyboard '%d' .\n", key, device_id);
+
+  int result = XIGrabKeycode(GDK_DISPLAY_XDISPLAY(data->display),
+                             device_id,
+                             find_keycode(data->display, key),
+                             GDK_WINDOW_XID(data->root),
+                             GrabModeAsync,
+                             GrabModeAsync,
+                             True,
+                             (XIEventMask *)mask,
+                             num_modifiers,
+                             (XIGrabModifiers *)key_modifiers);
+
+  if (result != 0)
+  {
+    g_printerr("ERROR: Grabbing key %s from keyboard device %d failed.\n", key, device_id);
+    GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(data->win),
+                                               GTK_DIALOG_DESTROY_WITH_PARENT,
+                                               GTK_MESSAGE_ERROR,
+                                               GTK_BUTTONS_CLOSE,
+                                               "Grabbing key %s from keyboard %d failed. The key function will not work unless configured to use another key.",
+                                               key,
+                                               device_id);
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
+  }
+
+  return result;
+}
+
+guint ungrab_key(GromitData *data, gint device_id, const char *key, int num_modifiers, gpointer key_modifiers)
+{
+  if (data->debug)
+    g_printerr("DEBUG: Ungrabbing key '%s' from keyboard '%d' .\n", key, device_id);
+
+  int result = XIUngrabKeycode(GDK_DISPLAY_XDISPLAY(data->display),
+                               device_id,
+                               find_keycode(data->display, key),
+                               GDK_WINDOW_XID(data->root),
+                               num_modifiers,
+                               (XIGrabModifiers *)key_modifiers);
+
+  if (result != 0)
+  {
+    g_printerr("ERROR: Unrabbing key %s from keyboard device %d failed.\n", key, device_id);
+    GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(data->win),
+                                               GTK_DIALOG_DESTROY_WITH_PARENT,
+                                               GTK_MESSAGE_ERROR,
+                                               GTK_BUTTONS_CLOSE,
+                                               "Unrabbing key %s from keyboard %d failed. The key function will not work unless configured to use another key.",
+                                               key,
+                                               device_id);
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
+  }
+
+  return result;
+}
+
+gint get_keyboard_id(GdkDisplay *diplay, GdkDevice *device)
+{
+  gint dev_id = gdk_x11_device_get_id(device);
+
+  gint result = -1;
+  XIDeviceInfo *devinfo;
+  int devicecount = 0;
+
+  devinfo = XIQueryDevice(GDK_DISPLAY_XDISPLAY(diplay),
+                          dev_id,
+                          &devicecount);
+  if (devicecount)
+    result = devinfo->attachment;
+  XIFreeDeviceInfo(devinfo);
+
+  return result;
 }

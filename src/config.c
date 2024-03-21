@@ -36,21 +36,21 @@
 
 #define KEYFILE_FLAGS G_KEY_FILE_KEEP_COMMENTS|G_KEY_FILE_KEEP_TRANSLATIONS
 
-static gpointer HOTKEY_SYMBOL_VALUE  = (gpointer) 3;
-static gpointer UNDOKEY_SYMBOL_VALUE = (gpointer) 4;
+static gpointer HOTKEY_SYMBOL_VALUE  = (gpointer) 5;
+static gpointer UNDOKEY_SYMBOL_VALUE = (gpointer) 6;
 
 /*
  * Functions for parsing the Configuration-file
  */
 
-static gchar* parse_name (GScanner *scanner)
+static gboolean parse_name (GScanner *scanner, GromitLookupKey *key)
 {
   GTokenType token;
 
   guint buttons = 0;
   guint modifier = 0;
+  gulong keys = 0;
   guint len = 0;
-  gchar *name;
 
   token = g_scanner_cur_token(scanner);
 
@@ -58,11 +58,11 @@ static gchar* parse_name (GScanner *scanner)
     {
       g_scanner_unexp_token (scanner, G_TOKEN_STRING, NULL,
                              NULL, NULL, "aborting", TRUE);
-      return NULL;
+      return 0;
     }
 
   len = strlen (scanner->value.v_string);
-  name = g_strndup (scanner->value.v_string, len + 3);
+  key->name = g_strndup (scanner->value.v_string, len);
 
   token = g_scanner_get_next_token (scanner);
 
@@ -74,24 +74,29 @@ static gchar* parse_name (GScanner *scanner)
     {
       g_scanner_set_scope (scanner, 1);
       scanner->config->int_2_float = 0;
-      modifier = buttons = 0;
+      modifier = buttons = keys = 0;
       while ((token = g_scanner_get_next_token (scanner))
              != G_TOKEN_RIGHT_BRACE)
         {
           if (token == G_TOKEN_SYMBOL)
             {
-              if ((intptr_t) scanner->value.v_symbol < 11)
+              if ((intptr_t) scanner->value.v_symbol <= 10)
                  buttons |= 1 << ((intptr_t) scanner->value.v_symbol - 1);
               else
                  modifier |= 1 << ((intptr_t) scanner->value.v_symbol - 11);
             }
           else if (token == G_TOKEN_INT)
             {
-              if (scanner->value.v_int <= 5 && scanner->value.v_int > 0)
+              if (scanner->value.v_int <= 10 && scanner->value.v_int > 0)
                 buttons |= 1 << (scanner->value.v_int - 1);
               else
-                g_printerr ("Only Buttons 1-5 are supported!\n");
+                g_printerr ("Only Buttons 1-10 are supported!\n");
             }
+          // lower case and upper case write the same bit
+          else if (token >= GDK_KEY_a && token <= GDK_KEY_z)
+            keys |= 1 << (token - GDK_KEY_a);
+          else if (token >= GDK_KEY_A && token <= GDK_KEY_Z)
+            keys |= 1 << (token - GDK_KEY_A);
           else
             {
               g_printerr ("skipped token\n");
@@ -102,12 +107,11 @@ static gchar* parse_name (GScanner *scanner)
       token = g_scanner_get_next_token (scanner);
     }
 
-  name [len] = 124;
-  name [len+1] = buttons + 64;
-  name [len+2] = modifier + 48;
-  name [len+3] = 0;
+  key->state.buttons = buttons;
+  key->state.modifiers = modifier;
+  key->state.keys = keys;
 
-  return name;
+  return 1;
 }
 
 gboolean parse_config (GromitData *data)
@@ -120,7 +124,7 @@ gboolean parse_config (GromitData *data)
   gchar *filename;
   int file;
 
-  gchar *name, *copy;
+  gboolean parsed;
 
   GromitPaintType type;
   GdkRGBA *fg_color=NULL;
@@ -181,10 +185,15 @@ gboolean parse_config (GromitData *data)
   g_scanner_scope_add_symbol (scanner, 1, "BUTTON3", (gpointer) 3);
   g_scanner_scope_add_symbol (scanner, 1, "BUTTON4", (gpointer) 4);
   g_scanner_scope_add_symbol (scanner, 1, "BUTTON5", (gpointer) 5);
+  g_scanner_scope_add_symbol (scanner, 1, "BUTTON6", (gpointer) 6);
+  g_scanner_scope_add_symbol (scanner, 1, "BUTTON7", (gpointer) 7);
+  g_scanner_scope_add_symbol (scanner, 1, "BUTTON8", (gpointer) 8);
+  g_scanner_scope_add_symbol (scanner, 1, "BUTTON9", (gpointer) 9);
+  g_scanner_scope_add_symbol (scanner, 1, "BUTTON10", (gpointer) 10);
   g_scanner_scope_add_symbol (scanner, 1, "SHIFT",   (gpointer) 11);
-  g_scanner_scope_add_symbol (scanner, 1, "CONTROL", (gpointer) 12);
-  g_scanner_scope_add_symbol (scanner, 1, "META",    (gpointer) 13);
-  g_scanner_scope_add_symbol (scanner, 1, "ALT",     (gpointer) 13);
+  g_scanner_scope_add_symbol (scanner, 1, "CONTROL", (gpointer) 13);
+  g_scanner_scope_add_symbol (scanner, 1, "META",    (gpointer) 14);
+  g_scanner_scope_add_symbol (scanner, 1, "ALT",     (gpointer) 14);
 
   g_scanner_scope_add_symbol (scanner, 2, "size",      (gpointer) 1);
   g_scanner_scope_add_symbol (scanner, 2, "color",     (gpointer) 2);
@@ -206,10 +215,11 @@ gboolean parse_config (GromitData *data)
           /*
            * New tool definition
            */
+          GromitLookupKey keyName = {};
 
-          name = parse_name (scanner);
+          parsed = parse_name (scanner, &keyName);
 
-	  if(!name)
+	  if(!parsed)
 	      goto cleanup;
 
           token = g_scanner_cur_token(scanner);
@@ -239,11 +249,12 @@ gboolean parse_config (GromitData *data)
             }
           else if (token == G_TOKEN_STRING)
             {
-              copy = parse_name (scanner);
-	      if(!copy)
+              GromitLookupKey keyCopy = {};
+              parsed = parse_name (scanner, &keyCopy);
+	      if(!parsed)
 		  goto cleanup;
               token = g_scanner_cur_token(scanner);
-              context_template = g_hash_table_lookup (data->tool_config, copy);
+              context_template = g_hash_table_lookup (data->tool_config, key2string(keyCopy));
               if (context_template)
                 {
                   type = context_template->type;
@@ -257,7 +268,7 @@ gboolean parse_config (GromitData *data)
               else
                 {
                   g_printerr ("WARNING: Unable to copy \"%s\": "
-                              "not yet defined!\n", copy);
+                              "not yet defined!\n", key2string(keyCopy));
                 }
             }
           else
@@ -430,7 +441,7 @@ gboolean parse_config (GromitData *data)
 
           context = paint_context_new (data, type, fg_color, width,
                                        arrowsize, arrowtype, minwidth, maxwidth);
-          g_hash_table_insert (data->tool_config, name, context);
+          g_hash_table_insert (data->tool_config, key2string(keyName), context);
         }
       else if (token == G_TOKEN_SYMBOL &&
                (scanner->value.v_symbol == HOTKEY_SYMBOL_VALUE ||

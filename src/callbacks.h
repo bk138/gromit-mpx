@@ -65,6 +65,9 @@ gboolean on_motion (GtkWidget *win, GdkEventMotion *ev, gpointer user_data);
 
 gboolean on_buttonrelease (GtkWidget *win, GdkEventButton *ev, gpointer user_data);
 
+gboolean on_keypress(GtkWidget *win, GdkEventKey *ev, gpointer user_data);
+gboolean on_keyrelease(GtkWidget *win, GdkEventKey *ev, gpointer user_data);
+
 void on_mainapp_selection_get (GtkWidget          *widget,
 			       GtkSelectionData   *selection_data,
 			       guint               info,

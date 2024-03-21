@@ -37,9 +37,12 @@
 
 #define GROMIT_MOUSE_EVENTS ( GDK_BUTTON_MOTION_MASK | \
                               GDK_BUTTON_PRESS_MASK | \
-                              GDK_BUTTON_RELEASE_MASK )
+                              GDK_BUTTON_RELEASE_MASK | \
+                              GDK_POINTER_MOTION_MASK )
 
-#define GROMIT_WINDOW_EVENTS ( GROMIT_MOUSE_EVENTS | GDK_EXPOSURE_MASK)
+#define GROMIT_KEYBOARD_EVENTS (GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK)
+
+#define GROMIT_WINDOW_EVENTS ( GROMIT_MOUSE_EVENTS | GROMIT_KEYBOARD_EVENTS | GDK_EXPOSURE_MASK)
 
 /* Atoms used to control Gromit */
 #define GA_CONTROL    gdk_atom_intern ("Gromit/control", FALSE)
@@ -90,6 +93,20 @@ typedef struct
   gdouble         pressure;
 } GromitPaintContext;
 
+
+typedef struct {
+  guint buttons;
+  guint modifiers;
+  gulong keys;
+} GromitState;
+
+
+typedef struct {
+  GromitState state;
+  gchar *name;
+} GromitLookupKey;
+
+
 typedef struct
 {
   gdouble      lastx;
@@ -98,7 +115,6 @@ typedef struct
   GList*       coordlist;
   GdkDevice*   device;
   guint        index;
-  guint        state;
   GromitPaintContext *cur_context;
   gboolean     is_grabbed;
   gboolean     was_grabbed;
@@ -134,6 +150,8 @@ typedef struct
  
   GHashTable  *tool_config;
 
+  GromitState state;
+
   cairo_surface_t *backbuffer;
   /* Auxiliary backbuffer for tools like LINE or RECT */
   cairo_surface_t *aux_backbuffer;
@@ -168,7 +186,7 @@ void show_window (GromitData *data);
 
 void parse_print_help (gpointer key, gpointer value, gpointer user_data);
 
-void select_tool (GromitData *data, GdkDevice *device, GdkDevice *slave_device, guint state);
+void select_tool (GromitData *data, GdkDevice *device, GdkDevice *slave_device, GromitState state);
 
 void copy_surface (cairo_surface_t *dst, cairo_surface_t *src);
 void swap_surfaces (cairo_surface_t *a, cairo_surface_t *b);
@@ -185,5 +203,10 @@ GromitPaintContext *paint_context_new (GromitData *data, GromitPaintType type,
 void paint_context_free (GromitPaintContext *context);
 
 void indicate_active(GromitData *data, gboolean YESNO);
+
+gboolean compare_state(GromitState lhs, GromitState rhs);
+gchar *key2string(GromitLookupKey key);
+
+guint find_keycode(GdkDisplay *display, const gchar *keyval);
 
 #endif
