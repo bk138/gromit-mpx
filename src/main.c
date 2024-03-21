@@ -32,7 +32,7 @@
 
 #include "paint_cursor.xpm"
 #include "erase_cursor.xpm"
-#include "smooth.h"
+#include "coordlist_ops.h"
 
 
 

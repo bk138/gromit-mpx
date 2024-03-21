@@ -112,7 +112,7 @@ static gchar* parse_name (GScanner *scanner)
 }
 
 
-enum scanner_symbol {
+enum tool_arguments {
   SYM_SIZE = 1,
   SYM_COLOR,
   SYM_ARROWSIZE,

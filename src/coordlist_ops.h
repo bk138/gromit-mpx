@@ -4,6 +4,7 @@
  * Gromit Copyright (C) 2000 Simon Budig <Simon.Budig@unix-ag.org>
  *
  * Gromit-MPX Copyright (C) 2009,2010 Christian Beier <dontmind@freeshell.org>
+ * Copytight (C) 2024 Pascal Niklaus
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

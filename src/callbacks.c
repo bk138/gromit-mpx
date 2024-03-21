@@ -31,7 +31,7 @@
 #include "config.h"
 #include "drawing.h"
 #include "build-config.h"
-#include "smooth.h"
+#include "coordlist_ops.h"
 
 gboolean on_expose (GtkWidget *widget,
 		    cairo_t* cr,
