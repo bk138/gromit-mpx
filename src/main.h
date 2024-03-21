@@ -207,4 +207,6 @@ void indicate_active(GromitData *data, gboolean YESNO);
 gboolean compare_state(GromitState lhs, GromitState rhs);
 gchar *key2string(GromitLookupKey key);
 
+guint find_keycode(GdkDisplay *display, const gchar *keyval);
+
 #endif

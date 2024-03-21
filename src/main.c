@@ -699,26 +699,11 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   */
   if (data->hot_keyval)
     {
-      GdkKeymap    *keymap;
-      GdkKeymapKey *keys;
-      gint          n_keys;
-      guint         keyval;
-
-      if (strlen (data->hot_keyval) > 0 &&
-          strcasecmp (data->hot_keyval, "none") != 0)
+      data->hot_keycode = find_keycode(data->display, data->hot_keyval);
+      if(!data->hot_keycode)
         {
-          keymap = gdk_keymap_get_for_display (data->display);
-          keyval = gdk_keyval_from_name (data->hot_keyval);
-
-          if (!keyval || !gdk_keymap_get_entries_for_keyval (keymap, keyval,
-                                                             &keys, &n_keys))
-            {
-              g_printerr ("cannot find the key \"%s\"\n", data->hot_keyval);
-              exit (1);
-            }
-
-          data->hot_keycode = keys[0].keycode;
-          g_free (keys);
+          g_printerr ("cannot find the key \"%s\"\n", data->hot_keyval);
+          exit (1);
         }
     }
 
@@ -727,27 +712,12 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   */
   if (data->undo_keyval)
     {
-      GdkKeymap    *keymap;
-      GdkKeymapKey *keys;
-      gint          n_keys;
-      guint         keyval;
-
-      if (strlen (data->undo_keyval) > 0 &&
-          strcasecmp (data->undo_keyval, "none") != 0)
+      data->undo_keycode = find_keycode(data->display, data->undo_keyval);
+      if(!data->undo_keycode)
         {
-          keymap = gdk_keymap_get_for_display (data->display);
-          keyval = gdk_keyval_from_name (data->undo_keyval);
-
-          if (!keyval || !gdk_keymap_get_entries_for_keyval (keymap, keyval,
-                                                             &keys, &n_keys))
-            {
-              g_printerr ("cannot find the key \"%s\"\n", data->undo_keyval);
-              exit (1);
-            }
-
-          data->undo_keycode = keys[0].keycode;
-          g_free (keys);
-        }
+          g_printerr ("cannot find the key \"%s\"\n", data->undo_keyval);
+          exit (1);
+        }        
     }
 
 
@@ -1226,5 +1196,31 @@ gchar *key2string(GromitLookupKey key)
   result[len + 7] = keys4 + 48;
   result[len + 8] = 0;
 
+  return result;
+}
+
+guint find_keycode(GdkDisplay *display, const gchar *keyval)
+{
+  GdkKeymap *keymap;
+  GdkKeymapKey *keys;
+  gint n_keys;
+  guint gdk_keyval, result = 0;
+
+  if (strlen(keyval) > 0 &&
+      strcasecmp(keyval, "none") != 0)
+  {
+    keymap = gdk_keymap_get_for_display(display);
+    gdk_keyval = gdk_keyval_from_name(keyval);
+
+    if (!gdk_keyval || !gdk_keymap_get_entries_for_keyval(keymap, gdk_keyval,
+                                                          &keys, &n_keys))
+    {
+      g_printerr("cannot find the key \"%s\"\n", keyval);
+      return 0;
+    }
+
+    result = keys[0].keycode;
+    g_free(keys);
+  }
   return result;
 }
