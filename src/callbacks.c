@@ -464,16 +464,13 @@ gboolean on_buttonrelease (GtkWidget *win,
   if (type == GROMIT_SMOOTH || type == GROMIT_ORTHOGONAL)
     {
       gboolean joined = FALSE;
+      douglas_peucker(devdata->coordlist, ctx->simplify);
+      if (ctx->snapdist > 0)
+        joined = snap_ends(devdata->coordlist, ctx->snapdist);
       if (type == GROMIT_SMOOTH) {
-          douglas_peucker(devdata->coordlist, ctx->simplify);
-          if (ctx->snapdist > 0)
-            joined = snap_ends(devdata->coordlist, ctx->snapdist);
           add_points(devdata->coordlist, 200);
           devdata->coordlist = catmull_rom(devdata->coordlist, 5, joined);
       } else {
-          douglas_peucker(devdata->coordlist, ctx->simplify);
-          if (ctx->snapdist > 0)
-            joined = snap_ends(devdata->coordlist, ctx->snapdist);
           orthogonalize(devdata->coordlist, ctx->maxangle, ctx->minlen);
           round_corners(devdata->coordlist, ctx->radius, 6, joined);
       }

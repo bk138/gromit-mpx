@@ -279,9 +279,9 @@ gboolean parse_config (GromitData *data)
           maxwidth = G_MAXUINT;
           radius = 10;
           minlen = 2 * radius + radius / 2;
-          simplify = 10;
           maxangle = 15;
-
+          simplify = 10;
+          snapdist = 0;
           fg_color = data->red;
 
           if (token == G_TOKEN_SYMBOL)
