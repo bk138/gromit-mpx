@@ -270,13 +270,15 @@ gboolean on_buttonpress (GtkWidget *win,
       gdk_window_set_event_compression(gtk_widget_get_window(data->win), TRUE);
   }
 
-  /* See GdkModifierType. Am I fixing a Gtk misbehaviour???  */
-  ev->state |= 1 << (ev->button + 7);
+  // add new buttons to GromitState
+  GromitState newState = devdata->state;
+  newState.buttons |= (ev->button <= 10) ? 1 << (ev->button - 1) : 0;
+  newState.modifiers = ev->state & 255;
 
 
-  if (ev->state != devdata->state ||
+  if (!compare_state(devdata->state, newState) ||
       devdata->lastslave != gdk_event_get_source_device ((GdkEvent *) ev))
-    select_tool (data, ev->device, gdk_event_get_source_device ((GdkEvent *) ev), ev->state);
+    select_tool (data, ev->device, gdk_event_get_source_device ((GdkEvent *) ev), newState);
 
   GromitPaintType type = devdata->cur_context->type;
 
@@ -301,7 +303,7 @@ gboolean on_buttonpress (GtkWidget *win,
   if(data->maxwidth > devdata->cur_context->maxwidth)
     data->maxwidth = devdata->cur_context->maxwidth;
 
-  if (ev->button <= 5)
+  if (ev->button <= 10)
     draw_line (data, ev->device, ev->x, ev->y, ev->x, ev->y);
 
   coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
@@ -325,12 +327,22 @@ gboolean on_motion (GtkWidget *win,
   if (!devdata->is_grabbed)
     return FALSE;
 
+  // GdkEventMotion->state has only buttons 1-5, keep 6-10
+  GromitState newState = devdata->state;
+  newState.buttons &= 992; // remove old 1-5, keep 6-10
+  newState.buttons |= (ev->state >> 8) & 1023; // update new 1-5
+  newState.modifiers = ev->state & 255;
+
+  // return if there is no button pressed
+  if(!newState.buttons)
+    return TRUE;
+
   if(data->debug)
       g_printerr("DEBUG: Device '%s': motion to (x,y)=(%.2f : %.2f)\n", gdk_device_get_name(ev->device), ev->x, ev->y);
 
-  if (ev->state != devdata->state ||
+  if(!compare_state(devdata->state, newState) ||
       devdata->lastslave != gdk_event_get_source_device ((GdkEvent *) ev))
-    select_tool (data, ev->device, gdk_event_get_source_device ((GdkEvent *) ev), ev->state);
+    select_tool (data, ev->device, gdk_event_get_source_device ((GdkEvent *) ev), newState);
 
   GromitPaintType type = devdata->cur_context->type;
 
@@ -454,6 +466,11 @@ gboolean on_buttonrelease (GtkWidget *win,
   if ((ev->x != devdata->lastx) ||
       (ev->y != devdata->lasty))
     on_motion(win, (GdkEventMotion *) ev, user_data);
+
+  // remove released button bit from GromitState
+  guint button = 1 << (ev->button - 1);
+  devdata->state.buttons &= ~button;
+  devdata->state.modifiers = ev->state & 255;
 
   if (!devdata->is_grabbed)
     return FALSE;
