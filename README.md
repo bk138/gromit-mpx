@@ -203,6 +203,24 @@ A `RECT`-tool draws rectangles.
 
     "red Rectangle" = RECT (color = "red");
 
+A `SMOOTH`-tool that behaves like `PEN` except that it produces smoothed curves.
+The degree of smoothing can be specified using `simplify=N`. `N` can
+be imagined as approximate pixel range around the resulting line 
+within which intermediate points are "simplified away". Closed paths
+can be drawn using the `snap=N` option where `N` indicates the maximum 
+distance between start and end point within which these "snap" together. 
+
+    "smoothed line" = SMOOTH (color = "red" simplify=10 snap=30);
+
+A `ORTHOGONAL`-tool that behaves like `SMOOTH` except that it produces
+straight line segments that automatically snap to perfectly horizontal
+and vertical direction when their direction deviated by a maximum of
+`maxangle` degrees. Transitions between straight segments are drawn as
+arcs with a certain `radius`, if these segments exceed a length of
+`minlen`.
+
+    "ortho line" = ORTHOGONAL (color="red" size=5 simplify=15 radius=20 minlen=50 snap=40);
+
 If you define a tool with the same name as an input-device
 (see the output of `xinput --list`) this input-device uses this tool:
 
