@@ -501,10 +501,13 @@ void main_do_event (GdkEventAny *event,
 		    GromitData  *data)
 {
   guint keycode = ((GdkEventKey *) event)->hardware_keycode;
+  guint32 keyunicode = gdk_keyval_to_unicode(((GdkEventKey *)event)->keyval);
   if ((event->type == GDK_KEY_PRESS ||
        event->type == GDK_KEY_RELEASE) &&
       event->window == data->root &&
-      (keycode == data->hot_keycode || keycode == data->undo_keycode))
+      (keycode == data->hot_keycode || keycode == data->undo_keycode ||
+      (keyunicode >= GDK_KEY_a && keyunicode <= GDK_KEY_z) ||
+       (keyunicode >= GDK_KEY_A && keyunicode <= GDK_KEY_Z)))
     {
       /* redirect the event to our main window, so that GTK+ doesn't
        * throw it away (there is no GtkWidget for the root window...)
@@ -633,6 +636,10 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
 		    G_CALLBACK (on_buttonpress), data);
   g_signal_connect (data->win, "button_release_event",
 		    G_CALLBACK (on_buttonrelease), data);
+  g_signal_connect(data->win, "key-press-event",
+        G_CALLBACK(on_keypress), data);
+  g_signal_connect(data->win, "key-release-event",
+        G_CALLBACK(on_keyrelease), data);
   /* disconnect previously defined selection handlers */
   g_signal_handlers_disconnect_by_func (data->win, 
 					G_CALLBACK (on_clientapp_selection_get),
