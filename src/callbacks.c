@@ -480,7 +480,7 @@ gboolean on_buttonrelease (GtkWidget *win,
       gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
 
       GList *ptr = devdata->coordlist;
-      while (ptr->next)
+      while (ptr && ptr->next)
         {
           GromitStrokeCoordinate *c1 = ptr->data;
           GromitStrokeCoordinate *c2 = ptr->next->data;
