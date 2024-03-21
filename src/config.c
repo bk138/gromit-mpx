@@ -36,8 +36,8 @@
 
 #define KEYFILE_FLAGS G_KEY_FILE_KEEP_COMMENTS|G_KEY_FILE_KEEP_TRANSLATIONS
 
-static gpointer HOTKEY_SYMBOL_VALUE  = (gpointer) 3;
-static gpointer UNDOKEY_SYMBOL_VALUE = (gpointer) 4;
+static gpointer HOTKEY_SYMBOL_VALUE  = (gpointer) 5;
+static gpointer UNDOKEY_SYMBOL_VALUE = (gpointer) 6;
 
 /*
  * Functions for parsing the Configuration-file
@@ -49,6 +49,7 @@ static gboolean parse_name (GScanner *scanner, GromitLookupKey *key)
 
   guint buttons = 0;
   guint modifier = 0;
+  gulong keys = 0;
   guint len = 0;
 
   token = g_scanner_cur_token(scanner);
@@ -73,7 +74,7 @@ static gboolean parse_name (GScanner *scanner, GromitLookupKey *key)
     {
       g_scanner_set_scope (scanner, 1);
       scanner->config->int_2_float = 0;
-      modifier = buttons = 0;
+      modifier = buttons = keys = 0;
       while ((token = g_scanner_get_next_token (scanner))
              != G_TOKEN_RIGHT_BRACE)
         {
@@ -91,6 +92,11 @@ static gboolean parse_name (GScanner *scanner, GromitLookupKey *key)
               else
                 g_printerr ("Only Buttons 1-10 are supported!\n");
             }
+          // lower case and upper case write the same bit
+          else if (token >= GDK_KEY_a && token <= GDK_KEY_z)
+            keys |= 1 << (token - GDK_KEY_a);
+          else if (token >= GDK_KEY_A && token <= GDK_KEY_Z)
+            keys |= 1 << (token - GDK_KEY_A);
           else
             {
               g_printerr ("skipped token\n");
@@ -103,6 +109,7 @@ static gboolean parse_name (GScanner *scanner, GromitLookupKey *key)
 
   key->state.buttons = buttons;
   key->state.modifiers = modifier;
+  key->state.keys = keys;
 
   return 1;
 }

@@ -40,7 +40,9 @@
                               GDK_BUTTON_RELEASE_MASK | \
                               GDK_POINTER_MOTION_MASK )
 
-#define GROMIT_WINDOW_EVENTS ( GROMIT_MOUSE_EVENTS | GDK_EXPOSURE_MASK)
+#define GROMIT_KEYBOARD_EVENTS (GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK)
+
+#define GROMIT_WINDOW_EVENTS ( GROMIT_MOUSE_EVENTS | GROMIT_KEYBOARD_EVENTS | GDK_EXPOSURE_MASK)
 
 /* Atoms used to control Gromit */
 #define GA_CONTROL    gdk_atom_intern ("Gromit/control", FALSE)
@@ -93,14 +95,15 @@ typedef struct
 
 
 typedef struct {
-    guint buttons;
-    guint modifiers;
+  guint buttons;
+  guint modifiers;
+  gulong keys;
 } GromitState;
 
 
 typedef struct {
-    GromitState state;
-    gchar *name;
+  GromitState state;
+  gchar *name;
 } GromitLookupKey;
 
 
