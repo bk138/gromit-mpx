@@ -1164,7 +1164,8 @@ void indicate_active(GromitData *data, gboolean YESNO)
 gboolean compare_state(GromitState lhs, GromitState rhs)
 {
   return lhs.buttons == rhs.buttons &&
-         lhs.modifiers == rhs.modifiers;
+         lhs.modifiers == rhs.modifiers &&
+         lhs.keys == rhs.keys;
 }
 
 gchar *key2string(GromitLookupKey key)
