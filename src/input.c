@@ -251,18 +251,7 @@ void setup_input_devices (GromitData *data)
 
 	  /* get attached keyboard and grab the hotkey */
 	  if (GDK_IS_X11_DISPLAY(data->display)) {
-	      gint dev_id = gdk_x11_device_get_id(device);
-
-	      gint kbd_dev_id = -1;
-	      XIDeviceInfo* devinfo;
-	      int devicecount = 0;
-	      
-	      devinfo = XIQueryDevice(GDK_DISPLAY_XDISPLAY(data->display),
-				      dev_id,
-				      &devicecount);
-	      if(devicecount)
-		  kbd_dev_id = devinfo->attachment;
-	      XIFreeDeviceInfo(devinfo);
+	      gint kbd_dev_id = get_keyboard_id(data->display, device);
  
 	      if(kbd_dev_id != -1)
 		  {
@@ -385,6 +374,20 @@ void release_grab (GromitData *data,
 
   if (devdata->is_grabbed)
     {
+      // ungrab keys
+      gint kbd_dev_id = get_keyboard_id(data->display, dev);
+
+      if (kbd_dev_id != -1)
+      {
+        XIGrabModifiers key_modifiers[] = {{0, 0}, {ShiftMask, 0}};
+        for (guchar k = 'a'; k <= 'z'; ++k)
+        {
+          gchar key[] = {k, '\0'};
+          ungrab_key(data, kbd_dev_id, key,
+                    sizeof(key_modifiers) / sizeof(key_modifiers[0]), key_modifiers);
+        }
+      }
+
       gdk_device_ungrab(devdata->device, GDK_CURRENT_TIME);
       devdata->is_grabbed = 0;
       /* workaround buggy GTK3 ? */
@@ -476,6 +479,28 @@ void acquire_grab (GromitData *data,
 
   if (!devdata->is_grabbed)
     {
+      // grab keys
+      gint kbd_dev_id = get_keyboard_id(data->display, dev);
+
+      if (kbd_dev_id != -1)
+      {
+        unsigned char bits[4] = {0, 0, 0, 0};
+        XISetMask(bits, XI_KeyPress);
+        XISetMask(bits, XI_KeyRelease);
+
+        XIEventMask mask;
+        mask.mask = bits;
+        mask.mask_len = sizeof(bits);
+
+        XIGrabModifiers key_modifiers[] = {{0, 0}, {ShiftMask, 0}};
+        for (guchar k = 'a'; k <= 'z'; ++k)
+        {
+          gchar key[] = {k, '\0'};
+          grab_key(data, kbd_dev_id, key,
+                  sizeof(key_modifiers) / sizeof(key_modifiers[0]), key_modifiers, &mask);
+        }
+      }
+
       GdkCursor *cursor;
       if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
 	cursor = data->erase_cursor; 
@@ -639,6 +664,24 @@ guint ungrab_key(GromitData *data, gint device_id, const char *key, int num_modi
     gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);
   }
+
+  return result;
+}
+
+gint get_keyboard_id(GdkDisplay *diplay, GdkDevice *device)
+{
+  gint dev_id = gdk_x11_device_get_id(device);
+
+  gint result = -1;
+  XIDeviceInfo *devinfo;
+  int devicecount = 0;
+
+  devinfo = XIQueryDevice(GDK_DISPLAY_XDISPLAY(diplay),
+                          dev_id,
+                          &devicecount);
+  if (devicecount)
+    result = devinfo->attachment;
+  XIFreeDeviceInfo(devinfo);
 
   return result;
 }

@@ -14,5 +14,6 @@ gint snoop_key_press (GtkWidget *grab_widget, GdkEventKey *event, gpointer func_
 
 guint grab_key(GromitData *data, gint device_id, const char *key, int num_modifiers, gpointer key_modifiers, gpointer mask);
 guint ungrab_key(GromitData *data, gint device_id, const char *key, int num_modifiers, gpointer key_modifiers);
+gint get_keyboard_id(GdkDisplay *diplay, GdkDevice *device);
 
 #endif
