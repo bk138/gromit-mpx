@@ -273,7 +273,7 @@ gboolean on_buttonpress (GtkWidget *win,
   // add new buttons to GromitState
   GromitState newState = data->state;
   newState.buttons |= (ev->button <= 10) ? 1 << (ev->button - 1) : 0;
-  newState.modifiers = ev->state & 255;
+  newState.modifiers = ev->state & 0xF;
 
 
   if (!compare_state(data->state, newState) ||
@@ -329,9 +329,9 @@ gboolean on_motion (GtkWidget *win,
 
   // GdkEventMotion->state has only buttons 1-5, keep 6-10
   GromitState newState = data->state;
-  newState.buttons &= 992; // remove old 1-5, keep 6-10
-  newState.buttons |= (ev->state >> 8) & 1023; // update new 1-5
-  newState.modifiers = ev->state & 255;
+  newState.buttons &= 0x3E0; // remove old 1-5, keep 6-10
+  newState.buttons |= (ev->state >> 8) & 0x1F; // update new 1-5
+  newState.modifiers = ev->state & 0xF;
 
   // return if there is no button pressed
   if(!newState.buttons)
@@ -470,7 +470,7 @@ gboolean on_buttonrelease (GtkWidget *win,
   // remove released button bit from GromitState
   guint button = 1 << (ev->button - 1);
   data->state.buttons &= ~button;
-  data->state.modifiers = ev->state & 255;
+  data->state.modifiers = ev->state & 0xF;
 
   if (!devdata->is_grabbed)
     return FALSE;
