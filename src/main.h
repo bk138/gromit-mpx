@@ -112,7 +112,6 @@ typedef struct
   GList*       coordlist;
   GdkDevice*   device;
   guint        index;
-  GromitState  state;
   GromitPaintContext *cur_context;
   gboolean     is_grabbed;
   gboolean     was_grabbed;
@@ -147,6 +146,8 @@ typedef struct
   GromitPaintContext *default_eraser;
  
   GHashTable  *tool_config;
+
+  GromitState state;
 
   cairo_surface_t *backbuffer;
   /* Auxiliary backbuffer for tools like LINE or RECT */
