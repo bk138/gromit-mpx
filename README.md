@@ -21,7 +21,8 @@ can draw everywhere onto the screen, highlighting some button or area.
 Key features include:
 
   * **Desktop-independent**. Gromit-MPX works with GNOME, KDE, XFCE, ...
-	under X11 as well as with a Wayland session using XWayland.
+	under X11 (every desktop environment) as well as with a Wayland session
+    using XWayland (most desktop environments).
   * **Hotkey-based**. The fundamental philosophy is that Gromit-MPX does not
     get into your way of doing things by sticking some UI widget on your
 	desktop, potentially obscuring more important contents. It *does*
