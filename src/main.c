@@ -575,6 +575,8 @@ void undo_decompress(GromitData *data, gint undo_slot, cairo_surface_t *surface)
 /*
  * Functions for handling various (GTK+)-Events
  */
+
+
 void main_do_event (GdkEventAny *event,
 		    GromitData  *data)
 {
@@ -664,8 +666,9 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
 
 
   /*
-   * DRAWING AREA
-   */
+    DRAWING AREA
+  */
+  /* SHAPE SURFACE*/
   cairo_surface_destroy(data->backbuffer);
   data->backbuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
 
@@ -674,8 +677,8 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   data->aux_backbuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
 
   /*
-   * UNDO STATE
-   */
+    UNDO STATE
+  */
   data->undo_head = 0;
   data->undo_depth = 0;
   data->redo_depth = 0;
@@ -833,6 +836,8 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   */
   data->devdatatable = g_hash_table_new(NULL, NULL);
   setup_input_devices (data);
+
+
 
   gtk_widget_show_all (data->win);
 
@@ -1040,30 +1045,12 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
       on_intro(NULL, data);
 }
 
-/*
- * free (at least some) of the allocated data
- */
-void teardown_main_app(GromitData *data) {
-
-  g_free(data->white);
-  g_free(data->red);
-  g_free(data->black);
-
-  cairo_surface_destroy(data->backbuffer);
-  cairo_surface_destroy(data->aux_backbuffer);
-  g_free(data->undo_temp);
-  for (int i=0; i<GROMIT_MAX_UNDO; i++)
-    g_free(data->undo_buffer[i]);
-
-  paint_context_free(data->default_eraser);
-  paint_context_free(data->default_pen);
-}
-
 
 void parse_print_help (gpointer key, gpointer value, gpointer user_data)
 {
   paint_context_print ((gchar *) key, (GromitPaintContext *) value);
 }
+
 
 
 /*
@@ -1265,9 +1252,6 @@ int main (int argc, char **argv)
   gtk_main ();
   shutdown_input_devices(data);
   write_keyfile(data); // save keyfile config
-
-  teardown_main_app(data);
-
   g_free (data);
   return 0;
 }
