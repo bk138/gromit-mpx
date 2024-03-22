@@ -47,7 +47,7 @@ link_directories(
     ${appindicator3_LIBRARY_DIRS}
     ${xinput_LIBRARY_DIRS}
     ${x11_LIBRARY_DIRS}
-    ${lz4_INCLUDE_DIRS}
+    ${lz4_LIBRARY_DIRS}
 )
 
 set(sources

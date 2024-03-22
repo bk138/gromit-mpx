@@ -79,10 +79,11 @@ GromitPaintContext *paint_context_new (GromitData *data,
 
   if (type == GROMIT_ERASER)
     cairo_set_operator(context->paint_ctx, CAIRO_OPERATOR_CLEAR);
-  else if (type == GROMIT_RECOLOR)
-    cairo_set_operator(context->paint_ctx, CAIRO_OPERATOR_ATOP);
-  else /* GROMIT_PEN */
-    cairo_set_operator(context->paint_ctx, CAIRO_OPERATOR_OVER);
+  else
+    if (type == GROMIT_RECOLOR)
+      cairo_set_operator(context->paint_ctx, CAIRO_OPERATOR_ATOP);
+    else /* GROMIT_PEN */
+      cairo_set_operator(context->paint_ctx, CAIRO_OPERATOR_OVER);
 
   return context;
 }
