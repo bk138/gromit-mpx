@@ -48,7 +48,6 @@ link_directories(
     ${xinput_LIBRARY_DIRS}
     ${x11_LIBRARY_DIRS}
     ${lz4_INCLUDE_DIRS}
-
 )
 
 set(sources
@@ -78,6 +77,7 @@ target_link_libraries(${target_name}
     ${lz4_LIBRARIES}
     -lm
 )
+
 
 GETTEXT_PROCESS_PO_FILES(de ALL PO_FILES po/de.po)
 GETTEXT_PROCESS_PO_FILES(es ALL PO_FILES po/es.po)

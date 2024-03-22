@@ -21,16 +21,12 @@
  *
  */
 
-#include <stddef.h>
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <lz4.h>
 
-#include "cairo.h"
 #include "callbacks.h"
 #include "config.h"
-#include "glibconfig.h"
 #include "input.h"
 #include "main.h"
 #include "build-config.h"
@@ -428,6 +424,7 @@ void select_tool (GromitData *data,
 }
 
 
+
 void snap_undo_state (GromitData *data)
 {
   if(data->debug)
@@ -436,6 +433,7 @@ void snap_undo_state (GromitData *data)
   undo_compress(data, data->backbuffer);
   undo_temp_buffer_to_slot(data, data->undo_head);
 
+  // Increment head position
   data->undo_head++;
   if(data->undo_head >= GROMIT_MAX_UNDO)
     data->undo_head -= GROMIT_MAX_UNDO;
@@ -446,6 +444,7 @@ void snap_undo_state (GromitData *data)
   // Invalidate any redo from this position
   data->redo_depth = 0;
 }
+
 
 
 void copy_surface (cairo_surface_t *dst, cairo_surface_t *src)
@@ -460,7 +459,7 @@ void copy_surface (cairo_surface_t *dst, cairo_surface_t *src)
 
 void undo_drawing (GromitData *data)
 {
-  if (data->undo_depth <= 0)
+  if(data->undo_depth <= 0)
     return;
   data->undo_depth--;
   data->redo_depth++;
@@ -482,6 +481,7 @@ void undo_drawing (GromitData *data)
   if(data->debug)
     g_printerr ("DEBUG: Undo drawing %d.\n", data->undo_head);
 }
+
 
 
 void redo_drawing (GromitData *data)
@@ -595,6 +595,8 @@ void main_do_event (GdkEventAny *event,
 
   gtk_main_do_event ((GdkEvent *) event);
 }
+
+
 
 
 

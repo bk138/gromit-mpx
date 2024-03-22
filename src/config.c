@@ -316,7 +316,6 @@ gboolean parse_config (GromitData *data)
                   g_printerr ("WARNING: Unable to copy \"%s\": "
                               "not yet defined!\n", copy);
                 }
-              g_free(copy);
             }
           else
             {
