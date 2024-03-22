@@ -37,15 +37,21 @@
 
 #include "paint_cursor.xpm"
 #include "erase_cursor.xpm"
+#include "coordlist_ops.h"
 
 
 
-GromitPaintContext *paint_context_new (GromitData *data, 
+GromitPaintContext *paint_context_new (GromitData *data,
 				       GromitPaintType type,
-				       GdkRGBA *paint_color, 
+				       GdkRGBA *paint_color,
 				       guint width,
 				       guint arrowsize,
                                        GromitArrowType arrowtype,
+                                       guint simpilfy,
+                                       guint radius,
+                                       guint maxangle,
+                                       guint minlen,
+                                       guint snapdist,
 				       guint minwidth,
 				       guint maxwidth)
 {
@@ -60,6 +66,11 @@ GromitPaintContext *paint_context_new (GromitData *data,
   context->minwidth = minwidth;
   context->maxwidth = maxwidth;
   context->paint_color = paint_color;
+  context->radius = radius;
+  context->maxangle = maxangle;
+  context->simplify = simpilfy;
+  context->minlen = minlen;
+  context->snapdist = snapdist;
 
   context->paint_ctx = cairo_create (data->backbuffer);
 
@@ -69,7 +80,7 @@ GromitPaintContext *paint_context_new (GromitData *data,
   cairo_set_line_width(context->paint_ctx, width);
   cairo_set_line_cap(context->paint_ctx, CAIRO_LINE_CAP_ROUND);
   cairo_set_line_join(context->paint_ctx, CAIRO_LINE_JOIN_ROUND);
-  
+
   if (type == GROMIT_ERASER)
     cairo_set_operator(context->paint_ctx, CAIRO_OPERATOR_CLEAR);
   else if (type == GROMIT_RECOLOR)
@@ -81,24 +92,28 @@ GromitPaintContext *paint_context_new (GromitData *data,
 }
 
 
-void paint_context_print (gchar *name, 
+void paint_context_print (gchar *name,
 			  GromitPaintContext *context)
 {
   g_printerr ("Tool name: \"%-20s\": ", name);
   switch (context->type)
   {
     case GROMIT_PEN:
-      g_printerr ("Pen,     "); break;
+      g_printerr ("Pen,        "); break;
     case GROMIT_LINE:
-      g_printerr ("Line,    "); break;
+      g_printerr ("Line,       "); break;
     case GROMIT_RECT:
-      g_printerr ("Rect,    "); break;
+      g_printerr ("Rect,       "); break;
+    case GROMIT_SMOOTH:
+      g_printerr ("Smooth,     "); break;
+    case GROMIT_ORTHOGONAL:
+      g_printerr ("Orthogonal, "); break;
     case GROMIT_ERASER:
-      g_printerr ("Eraser,  "); break;
+      g_printerr ("Eraser,     "); break;
     case GROMIT_RECOLOR:
-      g_printerr ("Recolor, "); break;
+      g_printerr ("Recolor,    "); break;
     default:
-      g_printerr ("UNKNOWN, "); break;
+      g_printerr ("UNKNOWN,    "); break;
   }
 
   g_printerr ("width: %u, ", context->width);
@@ -119,9 +134,18 @@ void paint_context_print (gchar *name,
         break;
       }
     }
-  gchar *col_name = gdk_rgba_to_string(context->paint_color);
-  g_printerr ("color: %s\n", col_name);
-  g_free(col_name);
+  if (context->type == GROMIT_SMOOTH || context->type == GROMIT_ORTHOGONAL)
+    {
+      g_printerr(" simplify: %u, ", context->simplify);
+      if (context->snapdist > 0)
+        g_printerr(" snap: %u, ", context->snapdist);
+    }
+  if (context->type == GROMIT_ORTHOGONAL)
+    {
+      g_printerr(" radius: %u, minlen: %u, maxangle: %u ",
+                 context->radius, context->minlen, context->maxangle);
+    }
+  g_printerr ("color: %s\n", gdk_rgba_to_string(context->paint_color));
 }
 
 
@@ -139,9 +163,9 @@ void hide_window (GromitData *data)
       /* save grab state of each device */
       GHashTableIter it;
       gpointer value;
-      GromitDeviceData* devdata; 
+      GromitDeviceData* devdata;
       g_hash_table_iter_init (&it, data->devdatatable);
-      while (g_hash_table_iter_next (&it, NULL, &value)) 
+      while (g_hash_table_iter_next (&it, NULL, &value))
         {
           devdata = value;
           devdata->was_grabbed = devdata->is_grabbed;
@@ -149,7 +173,7 @@ void hide_window (GromitData *data)
       data->hidden = 1;
       release_grab (data, NULL); /* release all */
       gtk_widget_hide (data->win);
-      
+
       if(data->debug)
         g_printerr ("DEBUG: Hiding window.\n");
     }
@@ -166,9 +190,9 @@ void show_window (GromitData *data)
       /* restore grab state of each device */
       GHashTableIter it;
       gpointer value;
-      GromitDeviceData* devdata; 
+      GromitDeviceData* devdata;
       g_hash_table_iter_init (&it, data->devdatatable);
-      while (g_hash_table_iter_next (&it, NULL, &value)) 
+      while (g_hash_table_iter_next (&it, NULL, &value))
         {
           devdata = value;
           if(devdata->was_grabbed)
@@ -201,8 +225,8 @@ void clear_screen (GromitData *data)
   cairo_destroy(cr);
 
   GdkRectangle rect = {0, 0, data->width, data->height};
-  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
-  
+  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
+
   if(!data->composited)
     {
       cairo_region_t* r = gdk_cairo_region_create_from_surface(data->backbuffer);
@@ -255,8 +279,8 @@ gint reshape (gpointer user_data)
 }
 
 
-void select_tool (GromitData *data, 
-		  GdkDevice *device, 
+void select_tool (GromitData *data,
+		  GdkDevice *device,
 		  GdkDevice *slave_device,
 		  guint state)
 {
@@ -270,7 +294,7 @@ void select_tool (GromitData *data,
 
   /* get the data for this device */
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, device);
- 
+
   if (device)
     {
       slave_len = strlen (gdk_device_get_name(slave_device));
@@ -279,8 +303,8 @@ void select_tool (GromitData *data,
       name = (guchar*) g_strndup (gdk_device_get_name(device), len + 3);
       default_len = strlen(DEFAULT_DEVICE_NAME);
       default_name = (guchar*) g_strndup (DEFAULT_DEVICE_NAME, default_len + 3);
-      
-      
+
+
       /* Extract Button/Modifiers from state (see GdkModifierType) */
       req_buttons = (state >> 8) & 31;
 
@@ -354,7 +378,7 @@ void select_tool (GromitData *data,
                     devdata->cur_context = context;
                     success = 1;
                   }
-                
+
             }
           while (j<=3 && req_modifier >= (1u << j));
         }
@@ -379,7 +403,7 @@ void select_tool (GromitData *data,
 
   GdkCursor *cursor;
   if(devdata->cur_context && devdata->cur_context->type == GROMIT_ERASER)
-    cursor = data->erase_cursor; 
+    cursor = data->erase_cursor;
   else
     cursor = data->paint_cursor;
 
@@ -621,7 +645,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   gdk_rgba_parse(data->red, "#FF0000");
 
 
-  /* 
+  /*
      CURSORS
   */
   GdkPixbuf* paint_cursor_pixbuf = gdk_pixbuf_new_from_xpm_data(paint_cursor_xpm);
@@ -644,7 +668,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
    */
   cairo_surface_destroy(data->backbuffer);
   data->backbuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
-  
+
   // original state for LINE and RECT tool
   cairo_surface_destroy(data->aux_backbuffer);
   data->aux_backbuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
@@ -682,15 +706,15 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
                     G_CALLBACK (on_device_removed), data);
   g_signal_connect (data->win, "motion_notify_event",
 		    G_CALLBACK (on_motion), data);
-  g_signal_connect (data->win, "button_press_event", 
+  g_signal_connect (data->win, "button_press_event",
 		    G_CALLBACK (on_buttonpress), data);
   g_signal_connect (data->win, "button_release_event",
 		    G_CALLBACK (on_buttonrelease), data);
   /* disconnect previously defined selection handlers */
-  g_signal_handlers_disconnect_by_func (data->win, 
+  g_signal_handlers_disconnect_by_func (data->win,
 					G_CALLBACK (on_clientapp_selection_get),
 					data);
-  g_signal_handlers_disconnect_by_func (data->win, 
+  g_signal_handlers_disconnect_by_func (data->win,
 					G_CALLBACK (on_clientapp_selection_received),
 					data);
   /* and re-connect them to mainapp functions */
@@ -706,7 +730,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
       gtk_widget_shape_combine_region(data->win, r);
       cairo_region_destroy(r);
     }
-  
+
 
   /* reset settings from client setup */
   gtk_selection_remove_all (data->win);
@@ -723,6 +747,9 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   gtk_selection_add_target (data->win, GA_CONTROL, GA_UNDO, 8);
   gtk_selection_add_target (data->win, GA_CONTROL, GA_REDO, 9);
   gtk_selection_add_target (data->win, GA_CONTROL, GA_LINE, 10);
+
+
+
 
   /*
    * Parse Config file
@@ -744,8 +771,8 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   // might have been in key file
   gtk_widget_set_opacity(data->win, data->opacity);
 
-  /* 
-     FIND HOTKEY KEYCODE 
+  /*
+     FIND HOTKEY KEYCODE
   */
   if (data->hot_keyval)
     {
@@ -773,7 +800,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
     }
 
   /*
-     FIND UNDOKEY KEYCODE 
+     FIND UNDOKEY KEYCODE
   */
   if (data->undo_keyval)
     {
@@ -801,7 +828,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
     }
 
 
-  /* 
+  /*
      INPUT DEVICES
   */
   data->devdatatable = g_hash_table_new(NULL, NULL);
@@ -813,15 +840,15 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   hide_window (data);
 
   data->timeout_id = g_timeout_add (20, reshape, data);
- 
+
   data->modified = 0;
 
   data->default_pen =
-    paint_context_new (data, GROMIT_PEN, data->red, 7,
-                       0, GROMIT_ARROW_END, 1, G_MAXUINT);
+    paint_context_new (data, GROMIT_PEN, data->red, 7, 0, GROMIT_ARROW_END,
+                       5, 10, 15, 25, 0, 1, G_MAXUINT);
   data->default_eraser =
-    paint_context_new (data, GROMIT_ERASER, data->red, 75,
-                       0, GROMIT_ARROW_END, 1, G_MAXUINT);
+    paint_context_new (data, GROMIT_ERASER, data->red, 75, 0, GROMIT_ARROW_END,
+                       5, 10, 15, 25, 0, 1, G_MAXUINT);
 
   gdk_event_handler_set ((GdkEventFunc) main_do_event, data, NULL);
   gtk_key_snooper_install (snoop_key_press, data);
@@ -829,7 +856,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   if (activate)
     acquire_grab (data, NULL); /* grab all */
 
-  /* 
+  /*
      TRAY ICON
   */
   data->trayicon = app_indicator_new (PACKAGE_NAME,
@@ -1076,9 +1103,9 @@ int main_client (int argc, char **argv, GromitData *data)
          {
            if (argc - (i+1) == 6) /* this command must have exactly 6 params */
              {
-              
+
                 // check if provided values are valid coords on the screen
-               if (atoi(argv[i+1]) < 0 || atoi(argv[i+1]) > (int)data->width || 
+               if (atoi(argv[i+1]) < 0 || atoi(argv[i+1]) > (int)data->width ||
                    atoi(argv[i+2]) < 0 || atoi(argv[i+2]) > (int)data->height ||
                    atoi(argv[i+3]) < 0 || atoi(argv[i+3]) > (int)data->width ||
                    atoi(argv[i+4]) < 0 || atoi(argv[i+4]) > (int)data->height)
@@ -1091,15 +1118,15 @@ int main_client (int argc, char **argv, GromitData *data)
                       g_printerr ("Thickness must be atleast 1\n");
                       wrong_arg = TRUE;
                     }
-               else 
+               else
                     {
                       data->clientdata = g_strjoin(" ", argv[i+1], argv[i+2], argv[i+3], argv[i+4], argv[i+5], argv[i+6], NULL);
                     }
-              
+
                action = GA_LINE;
                i += 6;
              }
-           else 
+           else
              {
                g_printerr ("-l requires 6 parameters: startX, startY, endX, endY, color, thickness\n");
                wrong_arg = TRUE;
