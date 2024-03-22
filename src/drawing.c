@@ -3,14 +3,6 @@
 #include "drawing.h"
 #include "main.h"
 
-typedef struct
-{
-  gint x;
-  gint y;
-  gint width;
-} GromitStrokeCoordinate;
-
-
 void draw_line (GromitData *data,
 		GdkDevice *dev,
 		gint x1, gint y1,

@@ -30,6 +30,7 @@
 
 #include "config.h"
 #include "main.h"
+#include "math.h"
 #include "build-config.h"
 
 #define KEY_DFLT_SHOW_INTRO_ON_STARTUP TRUE
@@ -110,6 +111,44 @@ static gchar* parse_name (GScanner *scanner)
   return name;
 }
 
+
+enum tool_arguments {
+  SYM_SIZE = 1,
+  SYM_COLOR,
+  SYM_ARROWSIZE,
+  SYM_ARROWTYPE,
+  SYM_MINSIZE,
+  SYM_MAXSIZE,
+  SYM_MINLEN,
+  SYM_MAXANGLE,
+  SYM_RADIUS,
+  SYM_SIMPLIFY,
+  SYM_SNAP,
+};
+
+/*
+ * get "=VALUE", where VALUE is a float
+ * returns NAN is an error occurs
+ */
+gfloat parse_get_float(GScanner *scanner, const gchar *msg)
+{
+  GTokenType token = g_scanner_get_next_token (scanner);
+  if (token != G_TOKEN_EQUAL_SIGN)
+    {
+      g_printerr ("Missing \"=\"... aborting\n");
+      return NAN;
+    }
+  token = g_scanner_get_next_token (scanner);
+  if (token != G_TOKEN_FLOAT)
+    {
+      g_printerr ("%s", msg);
+      g_printerr ("... aborting\n");
+      return NAN;
+    }
+  return scanner->value.v_float;
+}
+
+
 gboolean parse_config (GromitData *data)
 {
   gboolean status = FALSE;
@@ -125,6 +164,7 @@ gboolean parse_config (GromitData *data)
   GromitPaintType type;
   GdkRGBA *fg_color=NULL;
   guint width, arrowsize, minwidth, maxwidth;
+  guint minlen, maxangle, radius, simplify, snapdist;
   GromitArrowType arrowtype;
 
   /* try user config location */
@@ -168,13 +208,15 @@ gboolean parse_config (GromitData *data)
   scanner->config->numbers_2_int = 1;
   scanner->config->int_2_float = 1;
 
-  g_scanner_scope_add_symbol (scanner, 0, "PEN",    (gpointer) GROMIT_PEN);
-  g_scanner_scope_add_symbol (scanner, 0, "LINE",   (gpointer) GROMIT_LINE);
-  g_scanner_scope_add_symbol (scanner, 0, "RECT",   (gpointer) GROMIT_RECT);
-  g_scanner_scope_add_symbol (scanner, 0, "ERASER", (gpointer) GROMIT_ERASER);
-  g_scanner_scope_add_symbol (scanner, 0, "RECOLOR",(gpointer) GROMIT_RECOLOR);
-  g_scanner_scope_add_symbol (scanner, 0, "HOTKEY",            HOTKEY_SYMBOL_VALUE);
-  g_scanner_scope_add_symbol (scanner, 0, "UNDOKEY",           UNDOKEY_SYMBOL_VALUE);
+  g_scanner_scope_add_symbol (scanner, 0, "PEN",       (gpointer) GROMIT_PEN);
+  g_scanner_scope_add_symbol (scanner, 0, "LINE",      (gpointer) GROMIT_LINE);
+  g_scanner_scope_add_symbol (scanner, 0, "RECT",      (gpointer) GROMIT_RECT);
+  g_scanner_scope_add_symbol (scanner, 0, "SMOOTH",    (gpointer) GROMIT_SMOOTH);
+  g_scanner_scope_add_symbol (scanner, 0, "ORTHOGONAL",(gpointer) GROMIT_ORTHOGONAL);
+  g_scanner_scope_add_symbol (scanner, 0, "ERASER",    (gpointer) GROMIT_ERASER);
+  g_scanner_scope_add_symbol (scanner, 0, "RECOLOR",   (gpointer) GROMIT_RECOLOR);
+  g_scanner_scope_add_symbol (scanner, 0, "HOTKEY",               HOTKEY_SYMBOL_VALUE);
+  g_scanner_scope_add_symbol (scanner, 0, "UNDOKEY",              UNDOKEY_SYMBOL_VALUE);
 
   g_scanner_scope_add_symbol (scanner, 1, "BUTTON1", (gpointer) 1);
   g_scanner_scope_add_symbol (scanner, 1, "BUTTON2", (gpointer) 2);
@@ -186,12 +228,17 @@ gboolean parse_config (GromitData *data)
   g_scanner_scope_add_symbol (scanner, 1, "META",    (gpointer) 13);
   g_scanner_scope_add_symbol (scanner, 1, "ALT",     (gpointer) 13);
 
-  g_scanner_scope_add_symbol (scanner, 2, "size",      (gpointer) 1);
-  g_scanner_scope_add_symbol (scanner, 2, "color",     (gpointer) 2);
-  g_scanner_scope_add_symbol (scanner, 2, "arrowsize", (gpointer) 3);
-  g_scanner_scope_add_symbol (scanner, 2, "arrowtype", (gpointer) 4);
-  g_scanner_scope_add_symbol (scanner, 2, "minsize",   (gpointer) 5);
-  g_scanner_scope_add_symbol (scanner, 2, "maxsize",   (gpointer) 6);
+  g_scanner_scope_add_symbol (scanner, 2, "size",      (gpointer) SYM_SIZE);
+  g_scanner_scope_add_symbol (scanner, 2, "color",     (gpointer) SYM_COLOR);
+  g_scanner_scope_add_symbol (scanner, 2, "arrowsize", (gpointer) SYM_ARROWSIZE);
+  g_scanner_scope_add_symbol (scanner, 2, "arrowtype", (gpointer) SYM_ARROWTYPE);
+  g_scanner_scope_add_symbol (scanner, 2, "minsize",   (gpointer) SYM_MINSIZE);
+  g_scanner_scope_add_symbol (scanner, 2, "maxsize",   (gpointer) SYM_MAXSIZE);
+  g_scanner_scope_add_symbol (scanner, 2, "radius",    (gpointer) SYM_RADIUS);
+  g_scanner_scope_add_symbol (scanner, 2, "maxangle",  (gpointer) SYM_MAXANGLE);
+  g_scanner_scope_add_symbol (scanner, 2, "minlen",    (gpointer) SYM_MINLEN);
+  g_scanner_scope_add_symbol (scanner, 2, "simplify",  (gpointer) SYM_SIMPLIFY);
+  g_scanner_scope_add_symbol (scanner, 2, "snap",      (gpointer) SYM_SNAP);
 
   g_scanner_set_scope (scanner, 0);
   scanner->config->scope_0_fallback = 0;
@@ -230,6 +277,11 @@ gboolean parse_config (GromitData *data)
           arrowtype = GROMIT_ARROW_END;
           minwidth = 1;
           maxwidth = G_MAXUINT;
+          radius = 10;
+          minlen = 2 * radius + radius / 2;
+          maxangle = 15;
+          simplify = 10;
+          snapdist = 0;
           fg_color = data->red;
 
           if (token == G_TOKEN_SYMBOL)
@@ -250,6 +302,11 @@ gboolean parse_config (GromitData *data)
                   width = context_template->width;
                   arrowsize = context_template->arrowsize;
                   arrowtype = context_template->arrow_type;
+                  radius = context_template->radius;
+                  simplify = context_template->simplify;
+                  minlen = context_template->minlen;
+                  maxangle = context_template->maxangle;
+                  snapdist = context_template->snapdist;
                   minwidth = context_template->minwidth;
 		  maxwidth = context_template->maxwidth;
                   fg_color = context_template->paint_color;
@@ -280,23 +337,13 @@ gboolean parse_config (GromitData *data)
                 {
                   if (token == G_TOKEN_SYMBOL)
                     {
-                      if ((intptr_t) scanner->value.v_symbol == 1)
+                      if ((intptr_t) scanner->value.v_symbol == SYM_SIZE)
                         {
-                          token = g_scanner_get_next_token (scanner);
-                          if (token != G_TOKEN_EQUAL_SIGN)
-                            {
-                              g_printerr ("Missing \"=\"... aborting\n");
-                              goto cleanup;
-                            }
-                          token = g_scanner_get_next_token (scanner);
-                          if (token != G_TOKEN_FLOAT)
-                            {
-                              g_printerr ("Missing Size (float)... aborting\n");
-                              goto cleanup;
-                            }
-                          width = (guint) (scanner->value.v_float + 0.5);
+                          gfloat v = parse_get_float(scanner, "Missing Size (float)");
+                          if (isnan(v)) goto cleanup;
+                          width = (guint) (v + 0.5);
                         }
-                      else if ((intptr_t) scanner->value.v_symbol == 2)
+                      else if ((intptr_t) scanner->value.v_symbol == SYM_COLOR)
                         {
                           token = g_scanner_get_next_token (scanner);
                           if (token != G_TOKEN_EQUAL_SIGN)
@@ -324,24 +371,14 @@ gboolean parse_config (GromitData *data)
                             }
                           color = NULL;
                         }
-                      else if ((intptr_t) scanner->value.v_symbol == 3)
+                      else if ((intptr_t) scanner->value.v_symbol == SYM_ARROWSIZE)
                         {
-                          token = g_scanner_get_next_token (scanner);
-                          if (token != G_TOKEN_EQUAL_SIGN)
-                            {
-                              g_printerr ("Missing \"=\"... aborting\n");
-                              goto cleanup;
-                            }
-                          token = g_scanner_get_next_token (scanner);
-                          if (token != G_TOKEN_FLOAT)
-                            {
-                              g_printerr ("Missing Arrowsize (float)... "
-                                          "aborting\n");
-                              goto cleanup;
-                            }
-                          arrowsize = scanner->value.v_float;
+                          gfloat v = parse_get_float(scanner, "Missing arrowsize (float)");
+                          if (isnan(v)) goto cleanup;
+                          arrowsize = (guint)(v + 0.5);
+                          arrowtype = GROMIT_ARROW_END;
                         }
-                      else if ((intptr_t) scanner->value.v_symbol == 4)
+                      else if ((intptr_t) scanner->value.v_symbol == SYM_ARROWTYPE)
                         {
                           token = g_scanner_get_next_token (scanner);
                           if (token != G_TOKEN_EQUAL_SIGN)
@@ -369,39 +406,47 @@ gboolean parse_config (GromitData *data)
                               goto cleanup;
                             }
                         }
-                      else if ((intptr_t) scanner->value.v_symbol == 5)
+                      else if ((intptr_t) scanner->value.v_symbol == SYM_MINSIZE)
                         {
-                          token = g_scanner_get_next_token (scanner);
-                          if (token != G_TOKEN_EQUAL_SIGN)
-                            {
-                              g_printerr ("Missing \"=\"... aborting\n");
-                              goto cleanup;
-                            }
-                          token = g_scanner_get_next_token (scanner);
-                          if (token != G_TOKEN_FLOAT)
-                            {
-                              g_printerr ("Missing Minsize (float)... "
-                                          "aborting\n");
-                              goto cleanup;
-                            }
-                          minwidth = scanner->value.v_float;
+                          gfloat v = parse_get_float(scanner, "Missing minsize (float)");
+                          if (isnan(v)) goto cleanup;
+                          minwidth = v;
                         }
-                      else if ((intptr_t) scanner->value.v_symbol == 6)
+                      else if ((intptr_t) scanner->value.v_symbol == SYM_MAXSIZE)
                         {
-                          token = g_scanner_get_next_token (scanner);
-                          if (token != G_TOKEN_EQUAL_SIGN)
-                            {
-                              g_printerr ("Missing \"=\"... aborting\n");
-                              goto cleanup;
-                            }
-                          token = g_scanner_get_next_token (scanner);
-                          if (token != G_TOKEN_FLOAT)
-                            {
-                              g_printerr ("Missing Maxsize (float)... "
-                                          "aborting\n");
-                              goto cleanup;
-                            }
-                          maxwidth = scanner->value.v_float;
+                          gfloat v = parse_get_float(scanner, "Missing maxsize (float)");
+                          if (isnan(v)) goto cleanup;
+                          maxwidth = v;
+                        }
+                      else if ((intptr_t) scanner->value.v_symbol == SYM_RADIUS)
+                        {
+                          gfloat v = parse_get_float(scanner, "Missing radius (float)");
+                          if (isnan(v)) goto cleanup;
+                          radius = v;
+                        }
+                      else if ((intptr_t) scanner->value.v_symbol == SYM_MAXANGLE)
+                        {
+                          gfloat v = parse_get_float(scanner, "Missing angle (float)");
+                          if (isnan(v)) goto cleanup;
+                          maxangle = v;
+                        }
+                      else if ((intptr_t) scanner->value.v_symbol == SYM_SIMPLIFY)
+                        {
+                          gfloat v = parse_get_float(scanner, "Missing simplify value (float)");
+                          if (isnan(v)) goto cleanup;
+                          simplify = v;
+                        }
+                      else if ((intptr_t) scanner->value.v_symbol == SYM_MINLEN)
+                        {
+                          gfloat v = parse_get_float(scanner, "Missing minlen value (float)");
+                          if (isnan(v)) goto cleanup;
+                          minlen = v;
+                        }
+                      else if ((intptr_t) scanner->value.v_symbol == SYM_SNAP)
+                        {
+                          gfloat v = parse_get_float(scanner, "Missing snap distance (float)");
+                          if (isnan(v)) goto cleanup;
+                          snapdist = v;
                         }
 		      else
                         {
@@ -429,7 +474,9 @@ gboolean parse_config (GromitData *data)
             }
 
           context = paint_context_new (data, type, fg_color, width,
-                                       arrowsize, arrowtype, minwidth, maxwidth);
+                                       arrowsize, arrowtype,
+                                       simplify, radius, maxangle, minlen, snapdist,
+                                       minwidth, maxwidth);
           g_hash_table_insert (data->tool_config, name, context);
         }
       else if (token == G_TOKEN_SYMBOL &&
@@ -567,7 +614,7 @@ int parse_args (int argc, char **argv, GromitData *data)
                wrong_arg = TRUE;
              }
          }
-      else if (strcmp (arg, "-o") == 0 ||
+       else if (strcmp (arg, "-o") == 0 ||
                 strcmp (arg, "--opacity") == 0)
          {
            if (i+1 < argc && strtod (argv[i+1], NULL) >= 0.0 && strtod (argv[i+1], NULL) <= 1.0)

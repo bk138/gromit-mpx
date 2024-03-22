@@ -8,6 +8,14 @@
 
 #include "main.h"
 
+typedef struct
+{
+  gint x;
+  gint y;
+  gint width;
+} GromitStrokeCoordinate;
+
+
 void draw_line (GromitData *data, GdkDevice *dev, gint x1, gint y1, gint x2, gint y2);
 void draw_arrow (GromitData *data, GdkDevice *dev, gint x1, gint y1, gint width, gfloat direction);
 

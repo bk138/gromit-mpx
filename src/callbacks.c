@@ -31,7 +31,7 @@
 #include "config.h"
 #include "drawing.h"
 #include "build-config.h"
-
+#include "coordlist_ops.h"
 
 gboolean on_expose (GtkWidget *widget,
 		    cairo_t* cr,
@@ -142,10 +142,10 @@ void on_monitors_changed ( GdkScreen *screen,
   parse_config(data); // also calls paint_context_new() :-(
 
 
-  data->default_pen = paint_context_new (data, GROMIT_PEN, data->red, 7,
-                                         0, GROMIT_ARROW_END, 1, G_MAXUINT);
-  data->default_eraser = paint_context_new (data, GROMIT_ERASER, data->red, 75,
-                                            0, GROMIT_ARROW_END, 1, G_MAXUINT);
+  data->default_pen = paint_context_new (data, GROMIT_PEN, data->red, 7, 0, GROMIT_ARROW_END,
+                                         5, 10, 15, 25, 1, 0, G_MAXUINT);
+  data->default_eraser = paint_context_new (data, GROMIT_ERASER, data->red, 75, 0, GROMIT_ARROW_END,
+                                            5, 10, 15, 25, 1, 0, G_MAXUINT);
 
   if(!data->composited) // set shape
     {
@@ -281,7 +281,7 @@ gboolean on_buttonpress (GtkWidget *win,
   GromitPaintType type = devdata->cur_context->type;
 
   // store original state to have dynamic update of line and rect
-  if (type == GROMIT_LINE || type == GROMIT_RECT)
+  if (type == GROMIT_LINE || type == GROMIT_RECT || type == GROMIT_SMOOTH || type == GROMIT_ORTHOGONAL)
     {
       copy_surface(data->aux_backbuffer, data->backbuffer);
     }
@@ -398,6 +398,7 @@ gboolean on_motion (GtkWidget *win,
           }
           if (type == GROMIT_LINE)
             {
+              GromitArrowType atype = devdata->cur_context->arrow_type;
 	      draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
               if (devdata->cur_context->arrowsize > 0)
                 {
@@ -444,12 +445,12 @@ gboolean on_buttonrelease (GtkWidget *win,
   GromitData *data = (GromitData *) user_data;
   /* get the device data for this event */
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, ev->device);
+  GromitPaintContext *ctx = devdata->cur_context;
 
   gfloat direction = 0;
   gint width = 0;
-  if(devdata->cur_context)
-    width = devdata->cur_context->arrowsize * devdata->cur_context->width / 2;
-   
+  if(ctx)
+    width = ctx->arrowsize * ctx->width / 2;
 
   if ((ev->x != devdata->lastx) ||
       (ev->y != devdata->lasty))
@@ -458,11 +459,39 @@ gboolean on_buttonrelease (GtkWidget *win,
   if (!devdata->is_grabbed)
     return FALSE;
 
-  GromitPaintType type = devdata->cur_context->type;
+  GromitPaintType type = ctx->type;
 
-  if (devdata->cur_context->arrowsize != 0)
+  if (type == GROMIT_SMOOTH || type == GROMIT_ORTHOGONAL)
     {
-      GromitArrowType atype = devdata->cur_context->arrow_type;
+      gboolean joined = FALSE;
+      douglas_peucker(devdata->coordlist, ctx->simplify);
+      if (ctx->snapdist > 0)
+        joined = snap_ends(devdata->coordlist, ctx->snapdist);
+      if (type == GROMIT_SMOOTH) {
+          add_points(devdata->coordlist, 200);
+          devdata->coordlist = catmull_rom(devdata->coordlist, 5, joined);
+      } else {
+          orthogonalize(devdata->coordlist, ctx->maxangle, ctx->minlen);
+          round_corners(devdata->coordlist, ctx->radius, 6, joined);
+      }
+
+      copy_surface(data->backbuffer, data->aux_backbuffer);
+      GdkRectangle rect = {0, 0, data->width, data->height};
+      gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
+
+      GList *ptr = devdata->coordlist;
+      while (ptr && ptr->next)
+        {
+          GromitStrokeCoordinate *c1 = ptr->data;
+          GromitStrokeCoordinate *c2 = ptr->next->data;
+          ptr = ptr->next;
+          draw_line (data, ev->device, c1->x, c1->y, c2->x, c2->y);
+        }
+    }
+
+  if (ctx->arrowsize != 0)
+    {
+      GromitArrowType atype = ctx->arrow_type;
       if (type == GROMIT_LINE)
         {
           direction = atan2 (ev->y - devdata->lasty, ev->x - devdata->lastx);
@@ -615,8 +644,8 @@ void on_mainapp_selection_received (GtkWidget *widget,
 	      "Keeping default.\n");
 	    }
 	  GromitPaintContext* line_ctx =
-            paint_context_new(data, GROMIT_PEN, fg_color, thickness,
-                              0, GROMIT_ARROW_END, thickness, thickness);
+            paint_context_new(data, GROMIT_PEN, fg_color, thickness, 0, GROMIT_ARROW_END,
+                              5, 10, 15, 25, 0, thickness, thickness);
 
 	  GdkRectangle rect;
 	  rect.x = MIN (startX,endX) - thickness / 2;
