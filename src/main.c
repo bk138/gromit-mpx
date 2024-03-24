@@ -1,4 +1,4 @@
-/* 
+/*
  * Gromit-MPX -- a program for painting on the screen
  *
  * Gromit Copyright (C) 2000 Simon Budig <Simon.Budig@unix-ag.org>
@@ -23,6 +23,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <lz4.h>
 
 #include "callbacks.h"
 #include "config.h"
@@ -430,7 +431,8 @@ void snap_undo_state (GromitData *data)
   if(data->debug)
     g_printerr ("DEBUG: Snapping undo buffer %d.\n", data->undo_head);
 
-  copy_surface(data->undobuffer[data->undo_head], data->backbuffer);
+  undo_compress(data, data->backbuffer);
+  undo_temp_buffer_to_slot(data, data->undo_head);
 
   // Increment head position
   data->undo_head++;
@@ -456,23 +458,8 @@ void copy_surface (cairo_surface_t *dst, cairo_surface_t *src)
 }
 
 
-
-void swap_surfaces (cairo_surface_t *a, cairo_surface_t *b)
-{
-  int width = cairo_image_surface_get_width(a);
-  int height = cairo_image_surface_get_height(a);
-  cairo_surface_t *temp = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-  copy_surface(temp, a);
-  copy_surface(a, b);
-  copy_surface(b, temp);
-  cairo_surface_destroy(temp);
-}
-
-
-
 void undo_drawing (GromitData *data)
 {
-  /* Swap undobuffer[head-1]->backbuffer */
   if(data->undo_depth <= 0)
     return;
   data->undo_depth--;
@@ -483,7 +470,9 @@ void undo_drawing (GromitData *data)
   if(data->undo_head < 0)
     data->undo_head += GROMIT_MAX_UNDO;
 
-  swap_surfaces(data->backbuffer, data->undobuffer[data->undo_head]);
+  undo_compress(data, data->backbuffer);
+  undo_decompress(data, data->undo_head, data->backbuffer);
+  undo_temp_buffer_to_slot(data, data->undo_head);
 
   GdkRectangle rect = {0, 0, data->width, data->height};
   gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
@@ -501,7 +490,9 @@ void redo_drawing (GromitData *data)
   if(data->redo_depth <= 0)
     return;
 
-  swap_surfaces(data->backbuffer, data->undobuffer[data->undo_head]);
+  undo_compress(data, data->backbuffer);
+  undo_decompress(data, data->undo_head, data->backbuffer);
+  undo_temp_buffer_to_slot(data, data->undo_head);
 
   data->redo_depth--;
   data->undo_depth++;
@@ -513,15 +504,74 @@ void redo_drawing (GromitData *data)
   gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
 
   data->modified = 1;
-
+  
   if(data->debug)
     g_printerr("DEBUG: Redo drawing.\n");
 }
 
+/*
+ * compress image data and store it in undo_temp_buffer
+ *
+ * the undo_temp_buffer is successively grown in case it is too small
+ */
+void undo_compress(GromitData *data, cairo_surface_t *surface)
+{
+  char *raw_data = (char *)cairo_image_surface_get_data(surface);
+  guint bytes_per_row = cairo_image_surface_get_stride(surface);
+  guint rows = cairo_image_surface_get_height(surface);
+  size_t src_bytes = rows * bytes_per_row;
+
+  size_t dest_bytes;
+  for (;;)
+    {
+      dest_bytes = LZ4_compress_default(raw_data, data->undo_temp, src_bytes, data->undo_temp_size);
+      if (dest_bytes == 0)
+        {
+          data->undo_temp_size *= 2;
+          data->undo_temp = g_realloc(data->undo_temp, data->undo_temp_size);
+        }
+      else
+        {
+          data->undo_temp_used = dest_bytes;
+          break;
+        }
+    }
+}
 
 
+/*
+ * copy undo_temp to undo slot, growing undo buffer if required
+ */
+void undo_temp_buffer_to_slot(GromitData *data, gint undo_slot)
+{
+    const size_t required = data->undo_temp_used;
+    if (data->undo_buffer_size[undo_slot] < required)
+      {
+        data->undo_buffer[undo_slot] = g_realloc(data->undo_buffer[undo_slot], required);
+        data->undo_buffer_size[undo_slot] = required;
+      }
+    data->undo_buffer_used[undo_slot] = required;
+    memcpy(data->undo_buffer[undo_slot], data->undo_temp, required);
+}
 
+/*
+ * decompress undo slot data and store it in cairo surface
+ */
+void undo_decompress(GromitData *data, gint undo_slot, cairo_surface_t *surface)
+{
+  char *dest_data = (char *)cairo_image_surface_get_data(surface);
+  guint bytes_per_row = cairo_image_surface_get_stride(surface);
+  guint rows = cairo_image_surface_get_height(surface);
+  size_t dest_bytes = rows * bytes_per_row;
 
+  char *src_data = data->undo_buffer[undo_slot];
+  size_t src_bytes = data->undo_buffer_used[undo_slot];
+
+  if (LZ4_decompress_safe(src_data, dest_data, src_bytes, dest_bytes) < 0) {
+    g_printerr("Fatal error occurred decompressing image data\n");
+    exit(1);
+  }
+}
 
 /*
  * Functions for handling various (GTK+)-Events
@@ -625,22 +675,24 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   cairo_surface_destroy(data->backbuffer);
   data->backbuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
 
+  // original state for LINE and RECT tool
+  cairo_surface_destroy(data->aux_backbuffer);
+  data->aux_backbuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
+
   /*
     UNDO STATE
   */
   data->undo_head = 0;
   data->undo_depth = 0;
   data->redo_depth = 0;
-  int i;
-  for (i = 0; i < GROMIT_MAX_UNDO; i++)
+  data->undo_temp_size = 0x10000;
+  data->undo_temp = g_malloc(data->undo_temp_size);
+  data->undo_temp_used = 0;
+  for (int i = 0; i < GROMIT_MAX_UNDO; i++)
     {
-      cairo_surface_destroy(data->undobuffer[i]);
-      data->undobuffer[i] = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
+      data->undo_buffer_size[i] = 0;
+      data->undo_buffer[i] = NULL;
     }
-
-  // original state for LINE and RECT tool
-  cairo_surface_destroy(data->aux_backbuffer);
-  data->aux_backbuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
 
   /* EVENTS */
   gtk_widget_add_events (data->win, GROMIT_WINDOW_EVENTS);
