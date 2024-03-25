@@ -150,7 +150,11 @@ distributed with this program for an example. An overview on the syntax:
     # Comments can be either # Shell-Style or
     /* C-Style. */
 
-This entry defines the tool `red Pen`, a pen with size 7 and color red.
+The `PEN`-tool is for freehand drawing.
+
+![PEN tool](data/tool-pen.webp)
+
+The following entry defines the tool `red Pen`, a pen with size 7 and color red.
 You can specify an RGB color in X-Style: e.g. `#FF0033`, specify an
 RGBA color like so: `rgba(0, 0, 255, 0.6)` or use color names from
 [`rgb.txt`](https://en.wikipedia.org/wiki/X11_color_names).
@@ -198,9 +202,13 @@ the shape. Try it out to see the effect.
 
 A `LINE`-tool draws straight lines.
 
+![LINE tool](data/tool-line.webp)
+
     "green Line" = LINE (color = "green");
 
 A `RECT`-tool draws rectangles.
+
+![RECT tool](data/tool-rect.webp)
 
     "red Rectangle" = RECT (color = "red");
 
@@ -211,6 +219,8 @@ within which intermediate points are "simplified away". Closed paths
 can be drawn using the `snap=N` option where `N` indicates the maximum 
 distance between start and end point within which these "snap" together. 
 
+![SMOOTH tool](data/tool-smooth.webp)
+
     "smoothed line" = SMOOTH (color = "red" simplify=10 snap=30);
 
 A `ORTHOGONAL`-tool that behaves like `SMOOTH` except that it produces
@@ -219,6 +229,8 @@ and vertical direction when their direction deviated by a maximum of
 `maxangle` degrees. Transitions between straight segments are drawn as
 arcs with a certain `radius`, if these segments exceed a length of
 `minlen`.
+
+![ORTHOGONAL tool](data/tool-orthogonal.webp)
 
     "ortho line" = ORTHOGONAL (color="red" size=5 simplify=15 radius=20 minlen=50 snap=40);
 
