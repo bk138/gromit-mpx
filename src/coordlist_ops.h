@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef SMOOTH_H
-#define SMOOTH_H
+#ifndef COORDLIST_OPS_H
+#define COORDLIST_OPS_H
 
 #include "main.h"
 
