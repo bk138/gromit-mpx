@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gromit-MPX\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-26 10:32+0100\n"
-"PO-Revision-Date: 2024-02-26 10:38+0100\n"
+"POT-Creation-Date: 2024-03-30 00:32+0100\n"
+"PO-Revision-Date: 2024-03-30 00:36+0100\n"
 "Last-Translator: Christian Beier <info@christianbeier.net>\n"
 "Language-Team: it\n"
 "Language: it\n"
@@ -18,20 +18,20 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.2.2\n"
 
-#: ../src/callbacks.c:739
+#: ../src/callbacks.c:845
 msgid "About Gromit-MPX"
 msgstr "Informazioni su Gromit-MPX"
 
-#: ../src/main.c:792
+#: ../src/main.c:891
 msgid "Bigger Opacity"
 msgstr "Aumenta Opacità"
 
-#: ../src/main.c:786
+#: ../src/main.c:885
 #, c-format
 msgid "Clear Screen (SHIFT-%s)"
 msgstr "Pulisci Schermo (SHIFT-%s)"
 
-#: ../src/callbacks.c:805
+#: ../src/callbacks.c:911
 msgid ""
 "Do you want to show this introduction again on the next start of Gromit-"
 "MPX?\n"
@@ -41,14 +41,14 @@ msgstr ""
 "Puoi sempre accedervi di nuovo tramite il menu della barra delle "
 "applicazioni.\n"
 
-#: ../src/config.c:471
+#: ../src/config.c:553
 #, c-format
 msgid "Failed parsing config file %s, falling back to default tools."
 msgstr ""
 "Analisi del file di configurazione %s non riuscita, ritorno agli strumenti "
 "predefiniti."
 
-#: ../src/callbacks.c:740
+#: ../src/callbacks.c:846
 msgid ""
 "Gromit-MPX (GRaphics Over MIscellaneous Things - Multi-Pointer-EXtension) is "
 "an on-screen annotation tool that works with any Unix desktop environment "
@@ -58,7 +58,7 @@ msgstr ""
 "uno strumento di annotazione su schermo che funziona con qualsiasi ambiente "
 "desktop Unix sotto X11 così come Wayland."
 
-#: ../src/callbacks.c:765
+#: ../src/callbacks.c:871
 msgid ""
 "Gromit-MPX (GRaphics Over MIscellaneous Things) is a small tool to make\n"
 "annotations on the screen.\n"
@@ -88,69 +88,69 @@ msgstr ""
 "o direttamente tramite le opzioni di supporto disponibili dal menu della "
 "barra delle applicazioni.\n"
 
-#: ../src/callbacks.c:799
+#: ../src/callbacks.c:905
 msgid "Gromit-MPX - How to use it"
 msgstr "Gromit-MPX - Come usarlo"
 
-#: ../src/callbacks.c:775
+#: ../src/callbacks.c:881
 msgid "Gromit-MPX - What is it?"
 msgstr "Gromit-MPX - Che cos'è"
 
-#: ../src/main.c:793
+#: ../src/main.c:892
 msgid "Lesser Opacity"
 msgstr "Diminuisci Opacità"
 
-#: ../src/config.c:155
+#: ../src/config.c:196
 msgid "No usable config file found, falling back to default tools."
 msgstr ""
 "Nessun file di configurazione utilizzabile trovato, ritorno agli strumenti "
 "predefiniti."
 
-#: ../src/main.c:796
+#: ../src/main.c:895
 #, c-format
 msgid "Redo (SHIFT-%s)"
 msgstr "Rifai (SHIFT-%s)"
 
-#: ../src/callbacks.c:807
+#: ../src/callbacks.c:913
 msgid "Show again on startup"
 msgstr "Mostra di nuovo all'avvio"
 
-#: ../src/main.c:790
+#: ../src/main.c:889
 msgid "Thicker Lines"
 msgstr "Linee più spesse"
 
-#: ../src/main.c:791
+#: ../src/main.c:890
 msgid "Thinner Lines"
 msgstr "Linee più sottili"
 
-#: ../src/main.c:784
+#: ../src/main.c:883
 #, c-format
 msgid "Toggle Painting (%s)"
 msgstr "Attiva/disattiva pittura (%s)"
 
-#: ../src/main.c:788
+#: ../src/main.c:887
 #, c-format
 msgid "Toggle Visibility (CTRL-%s)"
 msgstr "Attiva/disattiva visibilità (CTRL-%s)"
 
-#: ../src/main.c:794
+#: ../src/main.c:893
 #, c-format
 msgid "Undo (%s)"
 msgstr "Annulla (%s)"
 
-#: ../src/main.c:925
+#: ../src/main.c:1030
 msgid "Via LiberaPay"
 msgstr "Tramite LiberaPay"
 
-#: ../src/main.c:926
+#: ../src/main.c:1031
 msgid "Via Patreon"
 msgstr "Tramite Patreon"
 
-#: ../src/main.c:927
+#: ../src/main.c:1032
 msgid "Via PayPal"
 msgstr "Tramite PayPal"
 
-#: ../src/callbacks.c:783
+#: ../src/callbacks.c:889
 #, c-format
 msgid ""
 "You can operate Gromit-MPX using its tray icon (if your desktop environment\n"
@@ -188,23 +188,27 @@ msgstr ""
 "    annulla ultima azione:         %s\n"
 "    ripeti l'ultima azione annullata: SHIFT-%s </b></tt>"
 
-#: ../src/main.c:803
+#: ../src/main.c:903
 msgid "_About"
 msgstr "Informazioni"
 
-#: ../src/main.c:800
+#: ../src/main.c:900
+msgid "_Edit Config"
+msgstr "_Modifica configurazione"
+
+#: ../src/main.c:899
 msgid "_Introduction"
 msgstr "_Introduzione"
 
-#: ../src/main.c:806
+#: ../src/main.c:906
 #, c-format
 msgid "_Quit (ALT-%s)"
 msgstr "_Esci (ALT-%s)"
 
-#: ../src/main.c:801
+#: ../src/main.c:901
 msgid "_Report Bug / Request Feature"
 msgstr "_Segnala Bug / Richiedi Funzionalità"
 
-#: ../src/main.c:802
+#: ../src/main.c:902
 msgid "_Support Gromit-MPX"
 msgstr "_Supporto a Gromit-MPX"
