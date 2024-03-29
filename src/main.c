@@ -897,6 +897,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
 
   GtkWidget* sep1_item = gtk_separator_menu_item_new();
   GtkWidget* intro_item = gtk_menu_item_new_with_mnemonic(_("_Introduction"));
+  GtkWidget* edit_config_item = gtk_menu_item_new_with_mnemonic(_("_Edit Config"));
   GtkWidget* issues_item = gtk_menu_item_new_with_mnemonic(_("_Report Bug / Request Feature"));
   GtkWidget* support_item = gtk_menu_item_new_with_mnemonic(_("_Support Gromit-MPX"));
   GtkWidget* about_item = gtk_menu_item_new_with_mnemonic(_("_About"));
@@ -919,6 +920,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
 
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), sep1_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), intro_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), edit_config_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), issues_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), support_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), about_item);
@@ -981,6 +983,9 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   g_signal_connect(G_OBJECT (intro_item), "activate",
 		   G_CALLBACK (on_intro),
 		   data);
+  g_signal_connect(G_OBJECT (edit_config_item), "activate",
+		   G_CALLBACK (on_edit_config),
+		   data);
   g_signal_connect(G_OBJECT (issues_item), "activate",
 		   G_CALLBACK (on_issues),
 		   data);
@@ -1005,6 +1010,7 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
 
   gtk_widget_show (sep1_item);
   gtk_widget_show (intro_item);
+  gtk_widget_show (edit_config_item);
   gtk_widget_show (issues_item);
   gtk_widget_show (support_item);
   gtk_widget_show (about_item);

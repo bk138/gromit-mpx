@@ -930,6 +930,60 @@ void on_intro(GtkMenuItem *menuitem,
     gtk_widget_show_all (assistant);
 }
 
+void on_edit_config(GtkMenuItem *menuitem,
+                    gpointer user_data)
+{
+    /*
+      Check if user config does not exist or is empty.
+      If so, copy system config to user config.
+    */
+    gchar *user_config_path = g_strjoin (G_DIR_SEPARATOR_S, g_get_user_config_dir(), "gromit-mpx.cfg", NULL);
+    GFile *user_config_file = g_file_new_for_path(user_config_path);
+
+    guint64 user_config_size = 0;
+    GFileInfo *user_config_info = g_file_query_info(user_config_file, G_FILE_ATTRIBUTE_STANDARD_SIZE, 0, NULL, NULL);
+    if (user_config_info != NULL) {
+        user_config_size = g_file_info_get_size(user_config_info);
+        g_object_unref(user_config_info);
+    }
+
+    if (!g_file_query_exists(user_config_file, NULL) || user_config_size == 0) {
+        g_print("User config does not exist or is empty, copying system config\n");
+
+        gchar *system_config_path = g_strjoin (G_DIR_SEPARATOR_S, SYSCONFDIR, "gromit-mpx", "gromit-mpx.cfg", NULL);
+        GFile *system_config_file = g_file_new_for_path(system_config_path);
+
+        GError *error = NULL;
+        gboolean result = g_file_copy(system_config_file, user_config_file, G_FILE_COPY_OVERWRITE, NULL, NULL, NULL, &error);
+        if (!result) {
+            g_printerr("Error copying system config to user config: %s\n", error->message);
+            g_error_free(error);
+        }
+
+        g_object_unref(system_config_file);
+        g_free(system_config_path);
+    }
+
+
+    /*
+      Open user config for editing.
+     */
+    gchar *user_config_uri = g_strjoin (G_DIR_SEPARATOR_S, "file://", user_config_path, NULL);
+
+    gtk_show_uri_on_window (NULL,
+			    user_config_uri,
+			    GDK_CURRENT_TIME,
+			    NULL);
+
+    /*
+      Clean up
+     */
+    g_object_unref(user_config_file);
+    g_free(user_config_path);
+    g_free(user_config_uri);
+}
+
+
 void on_issues(GtkMenuItem *menuitem,
                gpointer user_data)
 {
