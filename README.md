@@ -97,9 +97,17 @@ Usage:
         will undo the last drawing stroke (or "-z")
     gromit-mpx --redo
         will redo the last undone drawing stroke (or "-y")
+    gromit-mpx --change-tool <definition>
+        will redefine a tool, using the same syntax as in the .cfg file (or "-T")
+        e.g. gromit-mpx --change-tool '"default"=RECT(color="yellow" size=2)'
+    gromit-mpx --change-attribute <definition>
+        will change one or several attributes of a tool, keeping the others
+        as they were. This can be used to change e.g. to color or type of a tool (or "-A")
+        e.g. gromit-mpx --change-attribute '"default"=(color="cyan")'
+             gromit-mpx --change-attribute '"default"=LINE'        
     gromit-mpx --line <startX> <startY> <endX> <endY> <color> <thickness>
         will draw a straight line with characteristics specified by the arguments (or "-l")
-        eg: gromit-mpx -l 200 200 400 400 '#C4A7E7' 6	
+        e.g.: gromit-mpx -l 200 200 400 400 '#C4A7E7' 6	
 
 If activated Gromit-MPX prevents you from using other programs with the
 mouse. You can press the button and paint on the screen. Key presses
