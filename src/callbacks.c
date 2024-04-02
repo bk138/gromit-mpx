@@ -759,6 +759,21 @@ void on_mainapp_selection_received (GtkWidget *widget,
                                   case SYM_MAXSIZE:
                                     context->maxwidth = style.maxwidth;
                                     break;
+                                  case SYM_MINLEN:
+                                    context->minlen = style.minlen;
+                                    break;
+                                  case SYM_MAXANGLE:
+                                    context->maxangle = style.maxangle;
+                                    break;
+                                  case SYM_RADIUS:
+                                    context->radius = style.radius;
+                                    break;
+                                  case SYM_SIMPLIFY:
+                                    context->simplify = style.simplify;
+                                    break;
+                                  case SYM_SNAP:
+                                    context->snapdist = style.snapdist;
+                                    break;
                                   case SYM_ERROR:
                                     break;
                                 }
@@ -776,12 +791,17 @@ void on_mainapp_selection_received (GtkWidget *widget,
                   if (g_scanner_cur_token(scanner) != G_TOKEN_EOF) goto cleanup;
 
                   context->type = style.type;
-                  *context->paint_color = *style.paint_color;
                   context->width = style.width;
                   context->arrowsize = style.arrowsize;
                   context->arrow_type = style.arrow_type;
                   context->minwidth = style.minwidth;
                   context->maxwidth = style.maxwidth;
+                  context->radius = style.radius;
+                  context->minlen = style.minlen;
+                  context->maxangle = style.maxangle;
+                  context->simplify = style.simplify;
+                  context->snapdist = style.snapdist;
+                  *context->paint_color = *style.paint_color;
 
                   cairo_set_source_rgba(context->paint_ctx,
                                         style.paint_color->red,

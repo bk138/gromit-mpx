@@ -173,7 +173,6 @@ typedef struct
   size_t undo_temp_used;
   gint   undo_head, undo_depth, redo_depth;
 
-
   gboolean show_intro_on_startup;
 
 } GromitData;

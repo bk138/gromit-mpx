@@ -1293,6 +1293,9 @@ int main (int argc, char **argv)
   gtk_main ();
   shutdown_input_devices(data);
   write_keyfile(data); // save keyfile config
+  g_free(data->red);
+  g_free(data->white);
+  g_free(data->black);
   g_free (data);
   return 0;
 }

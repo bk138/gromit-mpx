@@ -33,6 +33,7 @@
    Select and parse system or user .cfg file.
    Returns TRUE if something got parsed successfully, FALSE otherwise.
 */
+gboolean parse_config (GromitData *data);
 
 typedef enum {
   SYM_ERROR = 0,
@@ -51,7 +52,6 @@ typedef enum {
 
 void scanner_init(GScanner *scanner);
 gboolean parse_tool(GromitData *data, GScanner *scanner, GromitPaintContext *style);
-gboolean parse_config (GromitData *data);
 gchar* parse_name (GScanner *scanner);
 gfloat parse_get_float(GScanner *scanner, const gchar *msg);
 gboolean parse_style(GScanner *scanner, GromitPaintContext *style);

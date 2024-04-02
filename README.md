@@ -98,11 +98,11 @@ Usage:
     gromit-mpx --redo
         will redo the last undone drawing stroke (or "-y")
     gromit-mpx --change-tool <definition>
-        will redefine a tool, using the same syntax as in the .cfg file
+        will redefine a tool, using the same syntax as in the .cfg file (or "-T")
         e.g. gromit-mpx --change-tool '"default"=RECT(color="yellow" size=2)'
     gromit-mpx --change-attribute <definition>
         will change one or several attributes of a tool, keeping the others
-        as they were. This can be used to change e.g. to color or type of a tool
+        as they were. This can be used to change e.g. to color or type of a tool (or "-A")
         e.g. gromit-mpx --change-attribute '"default"=(color="cyan")'
              gromit-mpx --change-attribute '"default"=LINE'        
     gromit-mpx --line <startX> <startY> <endX> <endY> <color> <thickness>
