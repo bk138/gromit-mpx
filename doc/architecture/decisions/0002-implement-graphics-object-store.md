@@ -43,7 +43,8 @@ the following fields:
         GromitDeviceData *selected;                           // NULL, or which user selected the item
         guint32           capabilities;                       // bit mask with capabilities (see below)
         BoundingBox       extent;                             // the objects rectangular extent
-        void            (*exec)(GfxObject *, action, void *); // object-specific methods
+        void            (*exec)(GromitData *, GfxObjectBase *, 
+                                GfxAction, void *);           // object-specific methods
     } GfxObjectBase;
 
 This basic set of fields is extended by object-specific fields, which
@@ -104,10 +105,10 @@ implemented in the `do_action` function.
    <td> move              </td> <td> object can be <b>moved</b> </td>
 </tr>
 <tr>
-   <td> isotropic_scale   </td> <td> object can be <b>scaled isotropically</b> </td>
+   <td> scale_isotropic   </td> <td> object can be <b>scaled isotropically</b> </td>
 </tr>
 <tr>
-   <td> anisotropic_scale </td> <td> object can be <b>scaled anisotropically</b>,<BR>
+   <td> scale_anisotropic </td> <td> object can be <b>scaled anisotropically</b>,<BR>
                                      i.e. differently in X and Y direction isotropic_scale also must be set </td>
 </tr>
 <tr>
@@ -162,7 +163,7 @@ When calling `exec`, the `action` argument selects the task to be performed.
 </tr>
 <tr>
 <tr>
-<td> update_bbox      </td><td> update the bounding box of the base object; <br>
+<td> update_bounding_box  </td><td> update the bounding box of the base object; <br>
                                 trigger recalculation of the bounding box </td>
 </tr>
 <tr>
@@ -197,12 +198,17 @@ Each object that is added or transformed receives a new unique
 Maintaining a per-user (i.e. per device) undo system is complicated by
 the fact that an object can be "taken over" by another user by
 manipulating it. This is necessary to enable a truly collaborative
-workflow. At the same time, a user should only undo his/her own
+workflow. At the same time, users should only undo their own
 operations.
 
 To solve this conflict, I propose the following system:
 
-- each device (i.e. user) contains an `GList` with `undo` and `redo` records.
+- for each device, the `GdkSeat` is determined, since it links pointer
+  and keyboard devices that belong together.
+
+- for each `GdkSeat`, a `GromitSeat` which contains a `GList` of
+  `undo` and `redo` records. The `GromitSeat`s are stored in a hash
+  table in `GromitData` that associates the device with the seat.
 
 - `GromitData` is extended with an undo object store (`undo_objects`).
 
