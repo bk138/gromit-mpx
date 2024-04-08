@@ -8,7 +8,7 @@ Proposed
 
 ## Context
 
-`gromit` currently follows a "draw-and-forget" strategy, i.e. each
+`gromit-mpx` currently follows a "draw-and-forget" strategy, i.e. each
 drawing operation, once completed, is drawn on a `cairo_surface_t`
 (`GromitData.backbuffer`).
 
@@ -37,13 +37,13 @@ object store simply is a `GList` of `GfxObject`. Each `GfxObject` has
 the following fields:
 
     typedef struct {
-        guint            id;                                 // unique id
-        GfxType          type;                               // type of object, e.g. Stroke, or Text
-        gboolean         dynamic;                            // content is dynamically updated
-        GromitDeviceData selected;                           // NULL, or which user selected the item
-        guint32          capabilities;                       // bit mask with capabilities (see below)
-        BoundingBox      extent;                             // the objects rectangular extent
-        void           (*exec)(GfxObject *, action, void *); // object-specific methods
+        guint             id;                                 // unique id
+        GfxType           type;                               // type of object, e.g. Stroke, or Text
+        gboolean          is_dynamic;                         // content is dynamically updated
+        GromitDeviceData *selected;                           // NULL, or which user selected the item
+        guint32           capabilities;                       // bit mask with capabilities (see below)
+        BoundingBox       extent;                             // the objects rectangular extent
+        void            (*exec)(GfxObject *, action, void *); // object-specific methods
     } GfxObjectBase;
 
 This basic set of fields is extended by object-specific fields, which
