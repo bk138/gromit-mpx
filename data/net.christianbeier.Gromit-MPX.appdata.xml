@@ -57,6 +57,16 @@
   </screenshots>
 
   <releases>
+    <release version="1.7.0" date="2024-09-09">
+      <description>
+	<p>
+          Added new tools SMOOTH and ORTHOGONAL as well as a new undo functionality with compression,
+          reducing memory usage and increasing undo steps from 4 to 100. This version also comes with
+          a menu entry for easier user config file editing.
+	</p>
+      </description>
+    </release>
+
     <release version="1.6.0" date="2024-03-12">
       <description>
 	<p>
