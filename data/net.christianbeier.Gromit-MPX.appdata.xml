@@ -5,6 +5,11 @@
   
   <name>Gromit-MPX</name>
   <summary>Make annotations on the screen</summary>
+
+  <branding>
+    <color type="primary" scheme_preference="light">#f66151</color>
+    <color type="primary" scheme_preference="dark">#a51d2d</color>
+  </branding>
   
   <metadata_license>CC-BY-4.0</metadata_license>
   <project_license>GPL-2.0-only</project_license>
