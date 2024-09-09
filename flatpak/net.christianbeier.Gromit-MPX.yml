@@ -44,7 +44,7 @@ modules:
       - type: patch
         path: dconf-override.patch
   - name: gromit-mpx
-    buildsystem: cmake
+    buildsystem: cmake-ninja
     sources:
       - type: dir
         path: ..
