@@ -1,3 +1,165 @@
+commit 0355bf35d89248edd48b468fa5b16a1a561408ad
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Sep 9 20:38:10 2024 +0200
+
+    AppStream: add 1.7.0 release notes
+
+commit 64a29e6678f431e98b75f912780e748ef50b6f41
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Sep 9 20:34:20 2024 +0200
+
+    CMake: bump minor version
+
+commit ef20a8ecd978438535fa2556cdb21054ae8ad92b
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Sep 9 20:33:22 2024 +0200
+
+    NEWS: update
+
+commit 21a6d248020d5c9dcb6bb97e11e62c6a1b4655e9
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Mar 30 08:10:54 2024 +0100
+
+    AppStream: augment description
+
+commit 65444415c90dc00896086f973630657ea47eeccf
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Mar 30 00:38:44 2024 +0100
+
+    po: translate "Edit Config" menu item in all languages
+    
+    re #110
+
+commit df8114a6e85ce041678e4153b8b5b730c123f9df
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sat Mar 30 00:31:19 2024 +0100
+
+    main,callbacks: add menu entry for easy user config file editing
+    
+    re #110
+
+commit c7ff625b2372a1aaf550357df22b7bb299f280ed
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Mar 29 23:44:54 2024 +0100
+
+    data: include all tools and link to README in default config
+    
+    re #110
+
+commit 14b1953c6c0aa03dfc86bdec0dd081b05a57898f
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Mar 29 23:02:08 2024 +0100
+
+    test: add tool multi-user integration test
+    
+    Rather hacked up quickly but does the job for now...
+    
+    Closes #204
+
+commit 2ff2061d3d2f86059f14e8992c1dd200de4d1016
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Mar 25 20:28:00 2024 +0100
+
+    coordlist_ops: fix header guard naming
+
+commit 91a8dffd9868ea1716f19421cc39f8e7df9e355e
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Mar 25 20:26:30 2024 +0100
+
+    drawing: move coord_list* functions to coordlist_ops
+
+commit 70e8f697513288f57166365d490144a00ebebc40
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Mar 25 20:01:24 2024 +0100
+
+    README: link tool screencasts
+
+commit 4a90787531aa5b616c1177f6162bf567f38fb0f3
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Mar 25 18:10:17 2024 +0100
+
+    Add animated tool screencasts
+    
+    ...made by Pascal Niklaus.
+
+commit 4a19157ff85714553145578f5d05b99705cacb90
+Author: pascal-niklaus <pascal.niklaus@ieu.uzh.ch>
+Date:   Sun Mar 24 11:04:22 2024 +0100
+
+    main: add unlimited (100x) undo buffer with compression
+    
+    * main: compression
+    
+    * main: undo buffer lz4 compression
+    
+    * main: undo buffer lz4 compression
+    
+    * undo-unrelated code removed
+    
+    * undo-unrelated code removed, 2nd attempt
+    
+    * CMakelist fixed
+    
+    * --amend
+    
+    ---------
+    
+    Co-authored-by: Christian Beier <info@christianbeier.net>
+
+commit ecd22fe4cb1cbdcd4673b60fe24748634b1ea418
+Author: Christian Beier <info@christianbeier.net>
+Date:   Sun Mar 24 10:16:30 2024 +0100
+
+    .clang-format: add
+    
+    re #196
+
+commit 19a55699e23ff63106c12f34f30aa8f093a44c65
+Author: pascal-niklaus <pascal.niklaus@ieu.uzh.ch>
+Date:   Fri Mar 22 09:51:22 2024 +0100
+
+    src: add new tools SMOOTH and ORTHOGONAL
+    
+    * new tools
+    
+    * ortho and smooth rebased on current master
+    
+    * closed-curve now also for orthogonal pen
+    
+    * closed-curve now also for orthogonal pen
+    
+    * coordlist fixed again for smooth
+    
+    * orthogonal and smooth now configurable
+    
+    * smooth renamed to coordlist_ops, smooth_priv.h removed
+    
+    * config, callbacks: snapdist was uninitialized in config; redundant lines removed in callbacks
+    
+    * callback: prevent crash upon empty coordlist
+    
+    * README: smooth and orthogonal tool descriptions
+
+commit f9f1090e8f4a8a613488ce1feba7b16ca52d338a
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Mar 21 20:02:29 2024 +0100
+
+    README: make it clearer what to expect under Wayland
+    
+    re #197, #127, #121, #106, #103
+
+commit 040ca1eabd4f136d87cfa9e2c2667b1fbfb6f6a3
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Mar 12 14:22:36 2024 +0100
+
+    AppStream: shorten summary
+
+commit 744e81b23f462808770399ad1f078d01bba27442
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Mar 12 08:52:36 2024 +0100
+
+    ChangeLog: update
+
 commit 7db82a00a236f9b5f2dcfa2f660ce1c9b336d0c2
 Author: Christian Beier <info@christianbeier.net>
 Date:   Tue Mar 12 08:51:33 2024 +0100
