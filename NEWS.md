@@ -1,3 +1,12 @@
+# Gromit-MPX 1.7.0 - 2024-09-09
+
+## 🌅 New Features
+
+* Added new tools SMOOTH and ORTHOGONAL.
+* Added a new undo functionality with compression, reducing memory usage and increasing
+  undo steps from 4 to 100.
+* Added a menu entry for easier user config file editing.
+
 # Gromit-MPX 1.6.0 - 2024-03-12
 
 ## 🌅 New Features
