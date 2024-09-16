@@ -79,10 +79,9 @@ GromitPaintContext *paint_context_new (GromitData *data,
 
   if (type == GROMIT_ERASER)
     cairo_set_operator(context->paint_ctx, CAIRO_OPERATOR_CLEAR);
-  else
-    if (type == GROMIT_RECOLOR)
+  else if (type == GROMIT_RECOLOR)
       cairo_set_operator(context->paint_ctx, CAIRO_OPERATOR_ATOP);
-    else /* GROMIT_PEN */
+  else /* GROMIT_PEN */
       cairo_set_operator(context->paint_ctx, CAIRO_OPERATOR_OVER);
 
   return context;
@@ -142,13 +141,16 @@ void paint_context_print (gchar *name,
       g_printerr(" radius: %u, minlen: %u, maxangle: %u ",
                  context->radius, context->minlen, context->maxangle);
     }
-  g_printerr ("color: %s\n", gdk_rgba_to_string(context->paint_color));
+  gchar *color_string = gdk_rgba_to_string(context->paint_color);
+  g_printerr ("color: %s\n", color_string);
+  g_free(color_string);
 }
 
 
 void paint_context_free (GromitPaintContext *context)
 {
   cairo_destroy(context->paint_ctx);
+  gdk_rgba_free(context->paint_color);
   g_free (context);
 }
 
@@ -285,9 +287,9 @@ void select_tool (GromitData *data,
   guint req_buttons = 0, req_modifier = 0;
   guint i, j, success = 0;
   GromitPaintContext *context = NULL;
-  guchar *slave_name;
-  guchar *name;
-  guchar *default_name;
+  guchar *slave_name = NULL;
+  guchar *name = NULL;
+  guchar *default_name = NULL;
 
   /* get the data for this device */
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, device);
@@ -394,6 +396,7 @@ void select_tool (GromitData *data,
 
       g_free (name);
       g_free (default_name);
+      g_free (slave_name);
     }
   else
     g_printerr ("ERROR: select_tool attempted to select nonexistent device!\n");
@@ -753,9 +756,8 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   gtk_selection_add_target (data->win, GA_CONTROL, GA_UNDO, 8);
   gtk_selection_add_target (data->win, GA_CONTROL, GA_REDO, 9);
   gtk_selection_add_target (data->win, GA_CONTROL, GA_LINE, 10);
-
-
-
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_CHGTOOL, 11);
+  gtk_selection_add_target (data->win, GA_CONTROL, GA_CHGATTR, 12);
 
   /*
    * Parse Config file
@@ -1158,6 +1160,36 @@ int main_client (int argc, char **argv, GromitData *data)
          {
            action = GA_REDO;
          }
+       else if (strcmp (arg, "--change-tool") == 0 ||
+                strcmp(arg, "-T") == 0)
+         {
+           if (argc <= i+1)
+             {
+               wrong_arg = TRUE;
+               g_printerr("--change-tool requires an argument\n");
+             }
+           else
+             {
+               i++;
+               action = GA_CHGTOOL;
+               data->clientdata = argv[i];
+             }
+         }
+       else if (strcmp (arg, "--change-attribute") == 0 ||
+                strcmp(arg, "-A") == 0)
+         {
+           if (argc <= i+1)
+             {
+               wrong_arg = TRUE;
+               g_printerr("--change-attribute requires an argument\n");
+             }
+           else
+             {
+               i++;
+               action = GA_CHGATTR;
+               data->clientdata = argv[i];
+             }
+         }
        else
          {
            g_printerr ("Unknown Option to control a running Gromit-MPX process: \"%s\"\n", arg);
@@ -1240,8 +1272,8 @@ int main (int argc, char **argv)
   gtk_selection_owner_set (data->win, GA_DATA, GDK_CURRENT_TIME);
   gtk_selection_add_target (data->win, GA_DATA, GA_TOGGLEDATA, 1007);
   gtk_selection_add_target (data->win, GA_DATA, GA_LINEDATA, 1008);
-
-
+  gtk_selection_add_target (data->win, GA_DATA, GA_CHGTOOLDATA, 1009);
+  gtk_selection_add_target (data->win, GA_DATA, GA_CHGATTRDATA, 1010);
 
   /* Try to get a status message. If there is a response gromit
    * is already active.
@@ -1261,6 +1293,9 @@ int main (int argc, char **argv)
   gtk_main ();
   shutdown_input_devices(data);
   write_keyfile(data); // save keyfile config
+  g_free(data->red);
+  g_free(data->white);
+  g_free(data->black);
   g_free (data);
   return 0;
 }
