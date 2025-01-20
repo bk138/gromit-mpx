@@ -17,6 +17,6 @@ typedef struct
 
 
 void draw_line (GromitData *data, GdkDevice *dev, gint x1, gint y1, gint x2, gint y2);
-void draw_arrow (GromitData *data, GdkDevice *dev, gint x1, gint y1, gint width, gfloat direction);
+void draw_arrow (GromitData *data, GdkDevice *dev, gint x1, gint y1, gfloat width, gfloat direction);
 
 #endif

@@ -41,7 +41,7 @@ void draw_line (GromitData *data,
 void draw_arrow (GromitData *data, 
 		 GdkDevice *dev,
 		 gint x1, gint y1,
-		 gint width,
+		 gfloat width,
 		 gfloat direction)
 {
   GdkRectangle rect;

@@ -403,13 +403,13 @@ gboolean on_motion (GtkWidget *win,
               if (devdata->cur_context->arrowsize > 0)
                 {
                   GromitArrowType atype = devdata->cur_context->arrow_type;
-                  gint width = devdata->cur_context->arrowsize * devdata->cur_context->width / 2;
+                  gfloat width = devdata->cur_context->arrowsize * devdata->cur_context->width;
                   gfloat direction =
                       atan2(ev->y - devdata->lasty, ev->x - devdata->lastx);
                   if (atype & GROMIT_ARROW_END)
-                    draw_arrow(data, ev->device, ev->x, ev->y, width * 2, direction);
+                    draw_arrow(data, ev->device, ev->x, ev->y, width, direction);
                   if (atype & GROMIT_ARROW_START)
-                    draw_arrow(data, ev->device, devdata->lastx, devdata->lasty, width * 2, M_PI + direction);
+                    draw_arrow(data, ev->device, devdata->lastx, devdata->lasty, width, M_PI + direction);
                 }
             }
           else if (type == GROMIT_RECT)
