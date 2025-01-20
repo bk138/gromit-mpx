@@ -163,7 +163,8 @@ gboolean parse_config (GromitData *data)
 
   GromitPaintType type;
   GdkRGBA *fg_color=NULL;
-  guint width, arrowsize, minwidth, maxwidth;
+  guint width, minwidth, maxwidth;
+  gfloat arrowsize;
   guint minlen, maxangle, radius, simplify, snapdist;
   GromitArrowType arrowtype;
 
@@ -373,9 +374,9 @@ gboolean parse_config (GromitData *data)
                         }
                       else if ((intptr_t) scanner->value.v_symbol == SYM_ARROWSIZE)
                         {
-                          gfloat v = parse_get_float(scanner, "Missing arrowsize (float)");
-                          if (isnan(v)) goto cleanup;
-                          arrowsize = (guint)(v + 0.5);
+                          arrowsize = parse_get_float(scanner, "Missing arrowsize (float)");
+                          if (isnan(arrowsize)) goto cleanup;
+                          if (arrowsize < 1) arrowsize = 1;
                           arrowtype = GROMIT_ARROW_END;
                         }
                       else if ((intptr_t) scanner->value.v_symbol == SYM_ARROWTYPE)
