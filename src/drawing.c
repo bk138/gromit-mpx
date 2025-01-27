@@ -105,3 +105,43 @@ void draw_arrow (GromitData *data,
   data->painted = 1;
 }
 
+void draw_rectangle (GromitData *data,
+    GdkDevice *dev,
+    gint x, gint y,
+    gint xlength, gint ylength,
+    gint radius, gint strokewidth)
+{
+  GdkRectangle rect;
+  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
+
+  rect.x = x - strokewidth;
+  rect.y = y - strokewidth;
+  rect.width = xlength + strokewidth*2;
+  rect.height = ylength + strokewidth*2;
+  x = x + 1;
+  y = y + 1;
+
+  if(data->debug)
+    g_printerr("DEBUG: draw frame with center %d, %d, width %d, height %d, corner radius %d and fill color %s\n", x, y, xlength, ylength, radius, gdk_rgba_to_string(fill_color));
+
+  if (devdata->cur_context->paint_ctx)
+    {
+      double degrees = M_PI / 180.0;
+      cairo_new_sub_path(devdata->cur_context->paint_ctx);
+      cairo_arc(devdata->cur_context->paint_ctx, x + xlength - radius, y + radius, radius, -90 * degrees, 0 * degrees);
+      cairo_arc(devdata->cur_context->paint_ctx, x + xlength - radius, y + ylength - radius, radius, 0 * degrees, 90 * degrees);
+      cairo_arc(devdata->cur_context->paint_ctx, x + radius, y + ylength - radius, radius, 90 * degrees, 180 * degrees);
+      cairo_arc(devdata->cur_context->paint_ctx, x + radius, y + radius, radius, 180 * degrees, 270 * degrees);
+      cairo_close_path(devdata->cur_context->paint_ctx);
+      cairo_stroke(devdata->cur_context->paint_ctx);
+
+      // fill?
+      // gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->paint_color);
+
+      data->modified = 1;
+
+      gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
+    }
+
+  data->painted = 1;
+}

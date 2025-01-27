@@ -143,9 +143,9 @@ void on_monitors_changed ( GdkScreen *screen,
 
 
   data->default_pen = paint_context_new (data, GROMIT_PEN, data->red, 7, 0, GROMIT_ARROW_END,
-                                         5, 10, 15, 25, 1, 0, G_MAXUINT);
+                                         5, 10, 15, 25, 1, 0, 0, 0, G_MAXUINT);
   data->default_eraser = paint_context_new (data, GROMIT_ERASER, data->red, 75, 0, GROMIT_ARROW_END,
-                                            5, 10, 15, 25, 1, 0, G_MAXUINT);
+                                            5, 10, 15, 25, 1, 0, 0, 0, G_MAXUINT);
 
   if(!data->composited) // set shape
     {
@@ -301,7 +301,7 @@ gboolean on_buttonpress (GtkWidget *win,
   if(data->maxwidth > devdata->cur_context->maxwidth)
     data->maxwidth = devdata->cur_context->maxwidth;
 
-  if (ev->button <= 5)
+  if (ev->button <= 5 && type != GROMIT_FRAME)
     draw_line (data, ev->device, ev->x, ev->y, ev->x, ev->y);
 
   coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
@@ -389,7 +389,7 @@ gboolean on_motion (GtkWidget *win,
       if(data->maxwidth > devdata->cur_context->maxwidth)
 	data->maxwidth = devdata->cur_context->maxwidth;
 
-      if(devdata->motion_time > 0)
+      if(devdata->motion_time > 0 && type != GROMIT_FRAME)
 	{
           if (type == GROMIT_LINE || type == GROMIT_RECT) {
             copy_surface(data->backbuffer, data->aux_backbuffer);
@@ -460,6 +460,11 @@ gboolean on_buttonrelease (GtkWidget *win,
     return FALSE;
 
   GromitPaintType type = ctx->type;
+
+  if (type == GROMIT_FRAME)
+    {
+      draw_rectangle(data, ev->device, ev->x - ctx->xlength/2, ev->y - ctx->ylength/2, ctx->xlength, ctx->ylength, ctx->radius, ctx->width);
+    }
 
   if (type == GROMIT_SMOOTH || type == GROMIT_ORTHOGONAL)
     {
@@ -645,7 +650,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
 	    }
 	  GromitPaintContext* line_ctx =
             paint_context_new(data, GROMIT_PEN, fg_color, thickness, 0, GROMIT_ARROW_END,
-                              5, 10, 15, 25, 0, thickness, thickness);
+                              5, 10, 15, 25, 0, 0, 0, thickness, thickness);
 
 	  GdkRectangle rect;
 	  rect.x = MIN (startX,endX) - thickness / 2;

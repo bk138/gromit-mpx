@@ -48,6 +48,8 @@ GromitPaintContext *paint_context_new (GromitData *data,
                                        guint maxangle,
                                        guint minlen,
                                        guint snapdist,
+				       guint xlength,
+				       guint ylength,
 				       guint minwidth,
 				       guint maxwidth)
 {
@@ -67,6 +69,8 @@ GromitPaintContext *paint_context_new (GromitData *data,
   context->simplify = simpilfy;
   context->minlen = minlen;
   context->snapdist = snapdist;
+  context->xlength = xlength;
+  context->ylength = ylength;
 
   context->paint_ctx = cairo_create (data->backbuffer);
 
@@ -101,6 +105,8 @@ void paint_context_print (gchar *name,
       g_printerr ("Line,       "); break;
     case GROMIT_RECT:
       g_printerr ("Rect,       "); break;
+    case GROMIT_FRAME:
+      g_printerr ("Frame, "); break;
     case GROMIT_SMOOTH:
       g_printerr ("Smooth,     "); break;
     case GROMIT_ORTHOGONAL:
@@ -131,7 +137,7 @@ void paint_context_print (gchar *name,
         break;
       }
     }
-  if (context->type == GROMIT_SMOOTH || context->type == GROMIT_ORTHOGONAL)
+  if (context->type == GROMIT_SMOOTH || context->type == GROMIT_ORTHOGONAL || context->type == GROMIT_FRAME)
     {
       g_printerr(" simplify: %u, ", context->simplify);
       if (context->snapdist > 0)
@@ -853,10 +859,10 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
 
   data->default_pen =
     paint_context_new (data, GROMIT_PEN, data->red, 7, 0, GROMIT_ARROW_END,
-                       5, 10, 15, 25, 0, 1, G_MAXUINT);
+                       5, 10, 15, 25, 0, 0, 0, 1, G_MAXUINT);
   data->default_eraser =
     paint_context_new (data, GROMIT_ERASER, data->red, 75, 0, GROMIT_ARROW_END,
-                       5, 10, 15, 25, 0, 1, G_MAXUINT);
+                       5, 10, 15, 25, 0, 0, 0, 1, G_MAXUINT);
 
   gdk_event_handler_set ((GdkEventFunc) main_do_event, data, NULL);
   gtk_key_snooper_install (snoop_key_press, data);

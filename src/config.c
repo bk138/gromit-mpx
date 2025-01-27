@@ -124,6 +124,8 @@ enum tool_arguments {
   SYM_RADIUS,
   SYM_SIMPLIFY,
   SYM_SNAP,
+  SYM_XLENGTH,
+  SYM_YLENGTH,
 };
 
 /*
@@ -166,6 +168,7 @@ gboolean parse_config (GromitData *data)
   guint width, minwidth, maxwidth;
   gfloat arrowsize;
   guint minlen, maxangle, radius, simplify, snapdist;
+  guint xlength, ylength;
   GromitArrowType arrowtype;
 
   /* try user config location */
@@ -212,6 +215,7 @@ gboolean parse_config (GromitData *data)
   g_scanner_scope_add_symbol (scanner, 0, "PEN",       (gpointer) GROMIT_PEN);
   g_scanner_scope_add_symbol (scanner, 0, "LINE",      (gpointer) GROMIT_LINE);
   g_scanner_scope_add_symbol (scanner, 0, "RECT",      (gpointer) GROMIT_RECT);
+  g_scanner_scope_add_symbol (scanner, 0, "FRAME",     (gpointer) GROMIT_FRAME);
   g_scanner_scope_add_symbol (scanner, 0, "SMOOTH",    (gpointer) GROMIT_SMOOTH);
   g_scanner_scope_add_symbol (scanner, 0, "ORTHOGONAL",(gpointer) GROMIT_ORTHOGONAL);
   g_scanner_scope_add_symbol (scanner, 0, "ERASER",    (gpointer) GROMIT_ERASER);
@@ -240,6 +244,8 @@ gboolean parse_config (GromitData *data)
   g_scanner_scope_add_symbol (scanner, 2, "minlen",    (gpointer) SYM_MINLEN);
   g_scanner_scope_add_symbol (scanner, 2, "simplify",  (gpointer) SYM_SIMPLIFY);
   g_scanner_scope_add_symbol (scanner, 2, "snap",      (gpointer) SYM_SNAP);
+  g_scanner_scope_add_symbol (scanner, 2, "xlength",   (gpointer) SYM_XLENGTH);
+  g_scanner_scope_add_symbol (scanner, 2, "ylength",   (gpointer) SYM_YLENGTH);
 
   g_scanner_set_scope (scanner, 0);
   scanner->config->scope_0_fallback = 0;
@@ -283,6 +289,8 @@ gboolean parse_config (GromitData *data)
           maxangle = 15;
           simplify = 10;
           snapdist = 0;
+          xlength = 0;
+          ylength = 0;
           fg_color = data->red;
 
           if (token == G_TOKEN_SYMBOL)
@@ -310,6 +318,8 @@ gboolean parse_config (GromitData *data)
                   snapdist = context_template->snapdist;
                   minwidth = context_template->minwidth;
 		  maxwidth = context_template->maxwidth;
+                  xlength = context_template->xlength;
+                  ylength = context_template->ylength;
                   fg_color = context_template->paint_color;
                 }
               else
@@ -449,6 +459,18 @@ gboolean parse_config (GromitData *data)
                           if (isnan(v)) goto cleanup;
                           snapdist = v;
                         }
+                      else if ((intptr_t) scanner->value.v_symbol == SYM_XLENGTH)
+                        {
+                          gfloat v = parse_get_float(scanner, "Missing xlength (float)");
+                          if (isnan(v)) goto cleanup;
+                          xlength = v;
+                        }
+                      else if ((intptr_t) scanner->value.v_symbol == SYM_YLENGTH)
+                        {
+                          gfloat v = parse_get_float(scanner, "Missing ylength (float)");
+                          if (isnan(v)) goto cleanup;
+                          ylength = v;
+                        }
 		      else
                         {
                           g_printerr ("Unknown tool type?????\n");
@@ -477,6 +499,7 @@ gboolean parse_config (GromitData *data)
           context = paint_context_new (data, type, fg_color, width,
                                        arrowsize, arrowtype,
                                        simplify, radius, maxangle, minlen, snapdist,
+                                       xlength, ylength,
                                        minwidth, maxwidth);
           g_hash_table_insert (data->tool_config, name, context);
         }
