@@ -96,6 +96,7 @@ typedef struct
   guint           xlength;
   guint           ylength;
   GdkRGBA         *paint_color;
+  GdkRGBA         *fill_color;
   cairo_t         *paint_ctx;
   gdouble         pressure;
 } GromitPaintContext;
@@ -196,7 +197,7 @@ void undo_decompress(GromitData *data, gint undo_slot, cairo_surface_t *surface)
 void clear_screen (GromitData *data);
 
 GromitPaintContext *paint_context_new (GromitData *data, GromitPaintType type,
-				       GdkRGBA *fg_color, guint width,
+				       GdkRGBA *fg_color, GdkRGBA *fill_color, guint width,
                                        gfloat arrowsize, GromitArrowType arrowtype,
                                        guint simpilfy, guint radius, guint maxangle, guint minlen, guint snapdist,
                                        guint xlength, guint ylength,

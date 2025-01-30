@@ -105,11 +105,12 @@ void draw_arrow (GromitData *data,
   data->painted = 1;
 }
 
-void draw_rectangle (GromitData *data,
+void draw_frame (GromitData *data,
     GdkDevice *dev,
     gint x, gint y,
     gint xlength, gint ylength,
-    gint radius, gint strokewidth)
+    gint radius, gint strokewidth,
+    GdkRGBA *fill_color)
 {
   GdkRectangle rect;
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
@@ -133,10 +134,13 @@ void draw_rectangle (GromitData *data,
       cairo_arc(devdata->cur_context->paint_ctx, x + radius, y + ylength - radius, radius, 90 * degrees, 180 * degrees);
       cairo_arc(devdata->cur_context->paint_ctx, x + radius, y + radius, radius, 180 * degrees, 270 * degrees);
       cairo_close_path(devdata->cur_context->paint_ctx);
+      if (fill_color)
+        {
+          gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->fill_color);
+          cairo_fill_preserve(devdata->cur_context->paint_ctx);
+          gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->paint_color);
+        }
       cairo_stroke(devdata->cur_context->paint_ctx);
-
-      // fill?
-      // gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->paint_color);
 
       data->modified = 1;
 

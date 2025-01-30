@@ -40,6 +40,7 @@
 GromitPaintContext *paint_context_new (GromitData *data,
 				       GromitPaintType type,
 				       GdkRGBA *paint_color,
+				       GdkRGBA *fill_color,
 				       guint width,
 				       gfloat arrowsize,
                                        GromitArrowType arrowtype,
@@ -64,6 +65,7 @@ GromitPaintContext *paint_context_new (GromitData *data,
   context->minwidth = minwidth;
   context->maxwidth = maxwidth;
   context->paint_color = paint_color;
+  context->fill_color = fill_color;
   context->radius = radius;
   context->maxangle = maxangle;
   context->simplify = simpilfy;
@@ -858,10 +860,10 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   data->modified = 0;
 
   data->default_pen =
-    paint_context_new (data, GROMIT_PEN, data->red, 7, 0, GROMIT_ARROW_END,
+    paint_context_new (data, GROMIT_PEN, data->red, NULL, 7, 0, GROMIT_ARROW_END,
                        5, 10, 15, 25, 0, 0, 0, 1, G_MAXUINT);
   data->default_eraser =
-    paint_context_new (data, GROMIT_ERASER, data->red, 75, 0, GROMIT_ARROW_END,
+    paint_context_new (data, GROMIT_ERASER, data->red, NULL, 75, 0, GROMIT_ARROW_END,
                        5, 10, 15, 25, 0, 0, 0, 1, G_MAXUINT);
 
   gdk_event_handler_set ((GdkEventFunc) main_do_event, data, NULL);

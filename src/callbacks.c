@@ -142,9 +142,9 @@ void on_monitors_changed ( GdkScreen *screen,
   parse_config(data); // also calls paint_context_new() :-(
 
 
-  data->default_pen = paint_context_new (data, GROMIT_PEN, data->red, 7, 0, GROMIT_ARROW_END,
+  data->default_pen = paint_context_new (data, GROMIT_PEN, data->red, NULL, 7, 0, GROMIT_ARROW_END,
                                          5, 10, 15, 25, 1, 0, 0, 0, G_MAXUINT);
-  data->default_eraser = paint_context_new (data, GROMIT_ERASER, data->red, 75, 0, GROMIT_ARROW_END,
+  data->default_eraser = paint_context_new (data, GROMIT_ERASER, data->red, NULL, 75, 0, GROMIT_ARROW_END,
                                             5, 10, 15, 25, 1, 0, 0, 0, G_MAXUINT);
 
   if(!data->composited) // set shape
@@ -463,7 +463,7 @@ gboolean on_buttonrelease (GtkWidget *win,
 
   if (type == GROMIT_FRAME)
     {
-      draw_rectangle(data, ev->device, ev->x - ctx->xlength/2, ev->y - ctx->ylength/2, ctx->xlength, ctx->ylength, ctx->radius, ctx->width);
+      draw_frame(data, ev->device, ev->x - ctx->xlength/2, ev->y - ctx->ylength/2, ctx->xlength, ctx->ylength, ctx->radius, ctx->width, ctx->fill_color);
     }
 
   if (type == GROMIT_SMOOTH || type == GROMIT_ORTHOGONAL)
@@ -649,7 +649,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
 	      "Keeping default.\n");
 	    }
 	  GromitPaintContext* line_ctx =
-            paint_context_new(data, GROMIT_PEN, fg_color, thickness, 0, GROMIT_ARROW_END,
+            paint_context_new(data, GROMIT_PEN, fg_color, NULL, thickness, 0, GROMIT_ARROW_END,
                               5, 10, 15, 25, 0, 0, 0, thickness, thickness);
 
 	  GdkRectangle rect;
