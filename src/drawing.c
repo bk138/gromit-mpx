@@ -3,6 +3,11 @@
 #include "drawing.h"
 #include "main.h"
 
+int min (int x, int y)
+{
+  return (x > y) ? y : x;
+}
+
 void draw_line (GromitData *data,
 		GdkDevice *dev,
 		gint x1, gint y1,
@@ -121,6 +126,9 @@ void draw_frame (GromitData *data,
   rect.height = ylength + strokewidth*2;
   x = x + 1;
   y = y + 1;
+
+  if (radius > min(xlength, ylength) / 2)
+    radius = min(xlength, ylength) / 2;
 
   if(data->debug)
     g_printerr("DEBUG: draw frame with center %d, %d, width %d, height %d, corner radius %d and fill color %s\n", x, y, xlength, ylength, radius, gdk_rgba_to_string(fill_color));
