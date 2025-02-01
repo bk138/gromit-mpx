@@ -305,7 +305,7 @@ gboolean on_buttonpress (GtkWidget *win,
   if (type == GROMIT_FRAME)
     {
       GromitPaintContext *ctx = devdata->cur_context;
-      draw_frame(data, ev->device, ev->x - ctx->xlength/2, ev->y - ctx->ylength/2, ctx->xlength, ctx->ylength, ctx->radius, ctx->width, ctx->fill_color);
+      draw_frame(data, ev->device, ev->x, ev->y, ctx->xlength, ctx->ylength, ctx->radius, ctx->width, ctx->fill_color);
       return TRUE;
     }
 

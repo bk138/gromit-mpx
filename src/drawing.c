@@ -120,12 +120,13 @@ void draw_frame (GromitData *data,
   GdkRectangle rect;
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
 
+  x = x - xlength/2 + 1;
+  y = y - ylength/2 + 1;
+
   rect.x = x - strokewidth;
   rect.y = y - strokewidth;
   rect.width = xlength + strokewidth*2;
   rect.height = ylength + strokewidth*2;
-  x = x + 1;
-  y = y + 1;
 
   if (radius > min(xlength, ylength) / 2)
     radius = min(xlength, ylength) / 2;
