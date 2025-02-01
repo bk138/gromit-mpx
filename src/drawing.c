@@ -3,6 +3,11 @@
 #include "drawing.h"
 #include "main.h"
 
+int min (int x, int y)
+{
+  return (x > y) ? y : x;
+}
+
 void draw_line (GromitData *data,
 		GdkDevice *dev,
 		gint x1, gint y1,
@@ -105,3 +110,51 @@ void draw_arrow (GromitData *data,
   data->painted = 1;
 }
 
+void draw_frame (GromitData *data,
+    GdkDevice *dev,
+    gint x, gint y,
+    gint xlength, gint ylength,
+    gint radius, gint strokewidth,
+    GdkRGBA *fill_color)
+{
+  GdkRectangle rect;
+  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
+
+  x = x - xlength/2 + 1;
+  y = y - ylength/2 + 1;
+
+  rect.x = x - strokewidth;
+  rect.y = y - strokewidth;
+  rect.width = xlength + strokewidth*2;
+  rect.height = ylength + strokewidth*2;
+
+  if (radius > min(xlength, ylength) / 2)
+    radius = min(xlength, ylength) / 2;
+
+  if(data->debug)
+    g_printerr("DEBUG: draw frame with center %d, %d, width %d, height %d, corner radius %d and fill color %s\n", x, y, xlength, ylength, radius, gdk_rgba_to_string(fill_color));
+
+  if (devdata->cur_context->paint_ctx)
+    {
+      double degrees = M_PI / 180.0;
+      cairo_new_sub_path(devdata->cur_context->paint_ctx);
+      cairo_arc(devdata->cur_context->paint_ctx, x + xlength - radius, y + radius, radius, -90 * degrees, 0 * degrees);
+      cairo_arc(devdata->cur_context->paint_ctx, x + xlength - radius, y + ylength - radius, radius, 0 * degrees, 90 * degrees);
+      cairo_arc(devdata->cur_context->paint_ctx, x + radius, y + ylength - radius, radius, 90 * degrees, 180 * degrees);
+      cairo_arc(devdata->cur_context->paint_ctx, x + radius, y + radius, radius, 180 * degrees, 270 * degrees);
+      cairo_close_path(devdata->cur_context->paint_ctx);
+      if (fill_color)
+        {
+          gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->fill_color);
+          cairo_fill_preserve(devdata->cur_context->paint_ctx);
+          gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->paint_color);
+        }
+      cairo_stroke(devdata->cur_context->paint_ctx);
+
+      data->modified = 1;
+
+      gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
+    }
+
+  data->painted = 1;
+}
