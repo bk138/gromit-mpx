@@ -301,7 +301,15 @@ gboolean on_buttonpress (GtkWidget *win,
   if(data->maxwidth > devdata->cur_context->maxwidth)
     data->maxwidth = devdata->cur_context->maxwidth;
 
-  if (ev->button <= 5 && type != GROMIT_FRAME)
+
+  if (type == GROMIT_FRAME)
+    {
+      GromitPaintContext *ctx = devdata->cur_context;
+      draw_frame(data, ev->device, ev->x - ctx->xlength/2, ev->y - ctx->ylength/2, ctx->xlength, ctx->ylength, ctx->radius, ctx->width, ctx->fill_color);
+      return TRUE;
+    }
+
+  if (ev->button <= 5)
     draw_line (data, ev->device, ev->x, ev->y, ev->x, ev->y);
 
   coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
@@ -333,6 +341,9 @@ gboolean on_motion (GtkWidget *win,
     select_tool (data, ev->device, gdk_event_get_source_device ((GdkEvent *) ev), ev->state);
 
   GromitPaintType type = devdata->cur_context->type;
+
+  if(type == GROMIT_FRAME)
+    return FALSE;
 
   gdk_device_get_history (ev->device, ev->window,
 			  devdata->motion_time, ev->time,
@@ -389,7 +400,7 @@ gboolean on_motion (GtkWidget *win,
       if(data->maxwidth > devdata->cur_context->maxwidth)
 	data->maxwidth = devdata->cur_context->maxwidth;
 
-      if(devdata->motion_time > 0 && type != GROMIT_FRAME)
+      if(devdata->motion_time > 0)
 	{
           if (type == GROMIT_LINE || type == GROMIT_RECT) {
             copy_surface(data->backbuffer, data->aux_backbuffer);
@@ -461,10 +472,8 @@ gboolean on_buttonrelease (GtkWidget *win,
 
   GromitPaintType type = ctx->type;
 
-  if (type == GROMIT_FRAME)
-    {
-      draw_frame(data, ev->device, ev->x - ctx->xlength/2, ev->y - ctx->ylength/2, ctx->xlength, ctx->ylength, ctx->radius, ctx->width, ctx->fill_color);
-    }
+  if(type == GROMIT_FRAME)
+    return FALSE;
 
   if (type == GROMIT_SMOOTH || type == GROMIT_ORTHOGONAL)
     {
