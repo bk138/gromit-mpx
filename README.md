@@ -234,6 +234,14 @@ arcs with a certain `radius`, if these segments exceed a length of
 
     "ortho line" = ORTHOGONAL (color="red" size=5 simplify=15 radius=20 minlen=50 snap=40);
 
+A `FRAME`-tool that draws predefined frames centered around the clicked location. Border width is taken from `size`. `color` is defined as usual. `xlength` (width) and `ylength` (height) are mandatory, `fill` color and corner `radius` are optional.
+It allows for drawing rectangles (with slightly rounded corners) as well as circles/dots:
+
+![FRAME tool](data/tool-frame.gif)
+
+    "magenta square empty" = FRAME (size=10 color="magenta" xlength=100 ylength=100 radius=0);
+    "yellow circle filled" = FRAME (size=5 color="yellow" fillcolor="rgba(255, 255, 0, 0.5)" xlength=50 ylength=50 radius=25);
+
 If you define a tool with the same name as an input-device
 (see the output of `xinput --list`) this input-device uses this tool:
 
