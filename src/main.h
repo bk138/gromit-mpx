@@ -139,6 +139,7 @@ typedef struct
   GdkRGBA     *white;
   GdkRGBA     *black;
   GdkRGBA     *red;
+  GdkRGBA     *transparent;
 
   GromitPaintContext *default_pen;
   GromitPaintContext *default_eraser;

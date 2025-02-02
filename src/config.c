@@ -294,7 +294,7 @@ gboolean parse_config (GromitData *data)
           xlength = 0;
           ylength = 0;
           fg_color = data->red;
-          fill_color = NULL;
+          fill_color = data->transparent;
 
           if (token == G_TOKEN_SYMBOL)
             {
@@ -345,7 +345,6 @@ gboolean parse_config (GromitData *data)
           if (token == G_TOKEN_LEFT_PAREN)
             {
               GdkRGBA *color = NULL;
-              GdkRGBA *fillcolor = NULL;
               g_scanner_set_scope (scanner, 2);
               scanner->config->int_2_float = 1;
               token = g_scanner_get_next_token (scanner);
@@ -487,22 +486,22 @@ gboolean parse_config (GromitData *data)
                           token = g_scanner_get_next_token (scanner);
                           if (token != G_TOKEN_STRING)
                             {
-                              g_printerr ("Missing Fillcolor (string)... "
+                              g_printerr ("Missing fillcolor (string)... "
                                           "aborting\n");
                               goto cleanup;
                             }
-                          fillcolor = g_malloc (sizeof (GdkRGBA));
-                          if (gdk_rgba_parse (fillcolor, scanner->value.v_string))
+                          color = g_malloc (sizeof (GdkRGBA));
+                          if (gdk_rgba_parse (color, scanner->value.v_string))
                             {
-                              fill_color = fillcolor;
+                              fill_color = color;
                             }
                           else
                             {
                               g_printerr ("Unable to parse fillcolor. "
                                           "Keeping default.\n");
-                              g_free (fillcolor);
+                              g_free (color);
                             }
-                          fillcolor = NULL;
+                          color = NULL;
                         }
                       else
                         {

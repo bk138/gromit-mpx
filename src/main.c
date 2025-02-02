@@ -108,7 +108,7 @@ void paint_context_print (gchar *name,
     case GROMIT_RECT:
       g_printerr ("Rect,       "); break;
     case GROMIT_FRAME:
-      g_printerr ("Frame, "); break;
+      g_printerr ("Frame,      "); break;
     case GROMIT_SMOOTH:
       g_printerr ("Smooth,     "); break;
     case GROMIT_ORTHOGONAL:
@@ -139,7 +139,7 @@ void paint_context_print (gchar *name,
         break;
       }
     }
-  if (context->type == GROMIT_SMOOTH || context->type == GROMIT_ORTHOGONAL || context->type == GROMIT_FRAME)
+  if (context->type == GROMIT_SMOOTH || context->type == GROMIT_ORTHOGONAL)
     {
       g_printerr(" simplify: %u, ", context->simplify);
       if (context->snapdist > 0)
@@ -149,6 +149,11 @@ void paint_context_print (gchar *name,
     {
       g_printerr(" radius: %u, minlen: %u, maxangle: %u ",
                  context->radius, context->minlen, context->maxangle);
+    }
+  if (context->type == GROMIT_FRAME)
+    {
+      g_printerr("xlength: %u, ylength: %u, radius: %u, ", context->xlength, context->ylength, context->radius);
+      g_printerr("fillcolor: %s, ", gdk_rgba_to_string(context->fill_color));
     }
   g_printerr ("color: %s\n", gdk_rgba_to_string(context->paint_color));
 }
@@ -650,13 +655,15 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   g_free(data->white);
   g_free(data->black);
   g_free(data->red);
+  g_free(data->transparent);
   data->white = g_malloc (sizeof (GdkRGBA));
   data->black = g_malloc (sizeof (GdkRGBA));
   data->red   = g_malloc (sizeof (GdkRGBA));
+  data->transparent = g_malloc (sizeof (GdkRGBA));
   gdk_rgba_parse(data->white, "#FFFFFF");
   gdk_rgba_parse(data->black, "#000000");
   gdk_rgba_parse(data->red, "#FF0000");
-
+  gdk_rgba_parse(data->transparent, "rgba(0, 0, 0, 0.0)");
 
   /*
      CURSORS
@@ -860,10 +867,10 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   data->modified = 0;
 
   data->default_pen =
-    paint_context_new (data, GROMIT_PEN, data->red, NULL, 7, 0, GROMIT_ARROW_END,
+    paint_context_new (data, GROMIT_PEN, data->red, data->transparent, 7, 0, GROMIT_ARROW_END,
                        5, 10, 15, 25, 0, 0, 0, 1, G_MAXUINT);
   data->default_eraser =
-    paint_context_new (data, GROMIT_ERASER, data->red, NULL, 75, 0, GROMIT_ARROW_END,
+    paint_context_new (data, GROMIT_ERASER, data->red, data->transparent, 75, 0, GROMIT_ARROW_END,
                        5, 10, 15, 25, 0, 0, 0, 1, G_MAXUINT);
 
   gdk_event_handler_set ((GdkEventFunc) main_do_event, data, NULL);
