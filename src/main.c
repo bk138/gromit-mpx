@@ -44,7 +44,7 @@ GromitPaintContext *paint_context_new (GromitData *data,
 				       guint width,
 				       gfloat arrowsize,
                                        GromitArrowType arrowtype,
-                                       guint simpilfy,
+                                       guint simplify,
                                        guint radius,
                                        guint maxangle,
                                        guint minlen,
@@ -68,7 +68,7 @@ GromitPaintContext *paint_context_new (GromitData *data,
   context->fill_color = fill_color;
   context->radius = radius;
   context->maxangle = maxangle;
-  context->simplify = simpilfy;
+  context->simplify = simplify;
   context->minlen = minlen;
   context->snapdist = snapdist;
   context->xlength = xlength;
