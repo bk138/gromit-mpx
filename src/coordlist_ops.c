@@ -270,7 +270,7 @@ static gfloat angle_deg_snap(gfloat angle,
 // -------------------- 2D affine transformations --------------------
 
 static void unity2D(trans2D *m) {
-    memcpy(m->m, (gfloat[6]){1.0, 0.0, 0.0, 0.0, 1.0, 0.0}, sizeof(gfloat[6]));
+    memcpy(m->m, ((gfloat[6]){1.0, 0.0, 0.0, 0.0, 1.0, 0.0}), sizeof(gfloat[6]));
 }
 
 static void rotate2D(gfloat angle, trans2D *m) {
