@@ -109,6 +109,8 @@ void paint_context_print (gchar *name,
       g_printerr ("Eraser,     "); break;
     case GROMIT_RECOLOR:
       g_printerr ("Recolor,    "); break;
+    case GROMIT_CIRCLE:
+      g_printerr ("Circle,     "); break;
     default:
       g_printerr ("UNKNOWN,    "); break;
   }
@@ -142,6 +144,11 @@ void paint_context_print (gchar *name,
       g_printerr(" radius: %u, minlen: %u, maxangle: %u ",
                  context->radius, context->minlen, context->maxangle);
     }
+  if (context->type == GROMIT_CIRCLE)
+    {
+      if (context->fill_color)
+        g_printerr(" fillcolor: %s, ", gdk_rgba_to_string(context->fill_color));
+    }
   g_printerr ("color: %s\n", gdk_rgba_to_string(context->paint_color));
 }
 
@@ -149,6 +156,8 @@ void paint_context_print (gchar *name,
 void paint_context_free (GromitPaintContext *context)
 {
   cairo_destroy(context->paint_ctx);
+  if (context->fill_color)
+    g_free(context->fill_color);
   g_free (context);
 }
 
