@@ -94,6 +94,7 @@ typedef struct
   guint           simplify;
   guint           snapdist;
   GdkRGBA         *paint_color;
+  GdkRGBA         *fill_color;
   cairo_t         *paint_ctx;
   gdouble         pressure;
 } GromitPaintContext;
