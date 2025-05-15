@@ -113,7 +113,7 @@ void draw_circle (GromitData *data,
   GdkRectangle rect;
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
 
-  /* Define the invalidation rectangle */
+  /* Iinvalidation rectangle */
   rect.x = x - radius - data->maxwidth / 2;
   rect.y = y - radius - data->maxwidth / 2;
   rect.width = 2 * radius + data->maxwidth;
@@ -125,21 +125,16 @@ void draw_circle (GromitData *data,
       cairo_set_line_cap(devdata->cur_context->paint_ctx, CAIRO_LINE_CAP_ROUND);
       cairo_set_line_join(devdata->cur_context->paint_ctx, CAIRO_LINE_JOIN_ROUND);
 
-      /* First draw filled circle if fill color is set */
       if (devdata->cur_context->fill_color)
         {
-          /* Save current color */
           gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->fill_color);
-          
-          /* Draw filled circle */
+
           cairo_arc(devdata->cur_context->paint_ctx, x, y, radius, 0, 2 * M_PI);
           cairo_fill(devdata->cur_context->paint_ctx);
-          
-          /* Restore original color for the stroke */
+
           gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->paint_color);
         }
-      
-      /* Draw the outline */
+
       cairo_arc(devdata->cur_context->paint_ctx, x, y, radius, 0, 2 * M_PI);
       cairo_stroke(devdata->cur_context->paint_ctx);
 
