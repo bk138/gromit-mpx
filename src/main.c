@@ -109,6 +109,8 @@ void paint_context_print (gchar *name,
       g_printerr ("Eraser,     "); break;
     case GROMIT_RECOLOR:
       g_printerr ("Recolor,    "); break;
+    case GROMIT_CIRCLE:
+      g_printerr ("Circle,     "); break;
     default:
       g_printerr ("UNKNOWN,    "); break;
   }

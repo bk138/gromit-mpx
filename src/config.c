@@ -216,6 +216,7 @@ gboolean parse_config (GromitData *data)
   g_scanner_scope_add_symbol (scanner, 0, "ORTHOGONAL",(gpointer) GROMIT_ORTHOGONAL);
   g_scanner_scope_add_symbol (scanner, 0, "ERASER",    (gpointer) GROMIT_ERASER);
   g_scanner_scope_add_symbol (scanner, 0, "RECOLOR",   (gpointer) GROMIT_RECOLOR);
+  g_scanner_scope_add_symbol (scanner, 0, "CIRCLE",    (gpointer) GROMIT_CIRCLE);
   g_scanner_scope_add_symbol (scanner, 0, "HOTKEY",               HOTKEY_SYMBOL_VALUE);
   g_scanner_scope_add_symbol (scanner, 0, "UNDOKEY",              UNDOKEY_SYMBOL_VALUE);
 

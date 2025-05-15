@@ -69,7 +69,8 @@ typedef enum
   GROMIT_SMOOTH,
   GROMIT_ORTHOGONAL,
   GROMIT_ERASER,
-  GROMIT_RECOLOR
+  GROMIT_RECOLOR,
+  GROMIT_CIRCLE
 } GromitPaintType;
 
 typedef enum
