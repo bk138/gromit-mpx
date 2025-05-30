@@ -149,6 +149,20 @@ gfloat parse_get_float(GScanner *scanner, const gchar *msg)
 }
 
 
+gchar *get_config_filename(const gchar *file)
+{
+  const gchar *config = g_get_user_config_dir();
+  gchar *path = g_build_filename(config, "gromit-mpx", NULL);
+  if (!g_file_test(path, G_FILE_TEST_IS_DIR)) {
+    g_free(path);
+    path = g_strdup(config);
+  }
+  gchar *full = g_build_filename(path, file, NULL);
+  g_free(path);
+  return full;
+}
+
+
 gboolean parse_config (GromitData *data)
 {
   gboolean status = FALSE;
@@ -169,8 +183,7 @@ gboolean parse_config (GromitData *data)
   GromitArrowType arrowtype;
 
   /* try user config location */
-  filename = g_strjoin (G_DIR_SEPARATOR_S,
-                        g_get_user_config_dir(), "gromit-mpx.cfg", NULL);
+  filename = get_config_filename("gromit-mpx.cfg");
   if ((file = open(filename, O_RDONLY)) < 0)
       g_print("Could not open user config %s: %s\n", filename, g_strerror (errno));
   else
@@ -686,8 +699,7 @@ int parse_args (int argc, char **argv, GromitData *data)
 
 void read_keyfile(GromitData *data)
 {
-    gchar *filename = g_strjoin (G_DIR_SEPARATOR_S,
-				 g_get_user_config_dir(), "gromit-mpx.ini", NULL);
+    gchar *filename = get_config_filename("gromit-mpx.ini");
 
     /*
       set defaults
@@ -722,8 +734,7 @@ void read_keyfile(GromitData *data)
 
 void write_keyfile(GromitData *data)
 {
-    gchar *filename = g_strjoin (G_DIR_SEPARATOR_S,
-				 g_get_user_config_dir(), "gromit-mpx.ini", NULL);
+    gchar *filename = get_config_filename("gromit-mpx.ini");
 
     GError *error = NULL;
     GKeyFile *key_file = g_key_file_new ();

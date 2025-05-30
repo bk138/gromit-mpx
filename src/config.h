@@ -53,4 +53,6 @@ void read_keyfile(GromitData *data);
 
 void write_keyfile(GromitData *data);
 
+gchar *get_config_filename(const gchar *filename);
+
 #endif
