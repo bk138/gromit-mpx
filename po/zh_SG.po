@@ -1,0 +1,205 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Gromit-MPX package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Gromit-MPX\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-25 00:00+0800\n"
+"PO-Revision-Date: 2025-06-29 16:09+0800\n"
+"Last-Translator: dongfangweiming <dongfangweiming@foxmail.com>\n"
+"Language-Team: \n"
+"Language: zh_SG\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.6\n"
+
+#: ../src/callbacks.c:845
+msgid "About Gromit-MPX"
+msgstr "关于 Gromit-MPX"
+
+#: ../src/main.c:891
+msgid "Bigger Opacity"
+msgstr "增加不透明度"
+
+#: ../src/main.c:885
+#, c-format
+msgid "Clear Screen (SHIFT-%s)"
+msgstr "清除屏幕（SHIFT-%s）"
+
+#: ../src/callbacks.c:911
+msgid ""
+"Do you want to show this introduction again on the next start of Gromit-"
+"MPX?\n"
+"You can always access it again via the sys tray menu.\n"
+msgstr ""
+"下次启动 Gromit-MPX 时是否还要显示这个介绍？\n"
+"你可以随时通过系统托盘菜单再次打开。\n"
+
+#: ../src/config.c:554
+#, c-format
+msgid "Failed parsing config file %s, falling back to default tools."
+msgstr "解析配置文件 %s 失败，恢复到默认工具设置。"
+
+#: ../src/callbacks.c:846
+msgid ""
+"Gromit-MPX (GRaphics Over MIscellaneous Things - Multi-Pointer-EXtension) "
+"is an on-screen annotation tool that works with any Unix desktop "
+"environment under X11 as well as Wayland."
+msgstr ""
+"Gromit-MPX（GRaphics Over MIscellaneous Things - Multi-Pointer-EXtension）"
+"是一款屏幕标注工具，适用于任何基于 X11 或 Wayland 的 Unix 桌面环境。"
+
+#: ../src/callbacks.c:871
+msgid ""
+"Gromit-MPX (GRaphics Over MIscellaneous Things) is a small tool to make\n"
+"annotations on the screen.\n"
+"\n"
+"Its main use is for making presentations of some application. Normally,\n"
+"you would have to move the mouse pointer around the point of interest\n"
+"until hopefully everybody noticed it.  With Gromit-MPX, you can draw\n"
+"everywhere onto the screen, highlighting some button or area.\n"
+"\n"
+"If you happen to enjoy using Gromit-MPX, please consider supporting\n"
+"its development by using one of the donation options on the project's\n"
+"website or directly via the support options available from the tray "
+"menu.\n"
+msgstr ""
+"Gromit-MPX（GRaphics Over MIscellaneous Things）是一款在屏幕上做标注的小工"
+"具。\n"
+"主要用途是用于演示某些应用程序。\n"
+"\n"
+"通常情况下，演示者需要将鼠标指针移动到感兴趣的地方，希望所有人都能注意到"
+"它。\n"
+"而使用 Gromit-MPX，你可以在屏幕上任意位置进行绘制，突出显示某个按钮或区"
+"域。\n"
+"\n"
+"如果你喜欢使用 Gromit-MPX，欢迎通过项目网站上的捐赠选项，或者直接使用系"
+"统\n"
+"托盘菜单中的支持选项，来支持其开发。\n"
+
+#: ../src/callbacks.c:905
+msgid "Gromit-MPX - How to use it"
+msgstr "Gromit-MPX - 使用方法"
+
+#: ../src/callbacks.c:881
+msgid "Gromit-MPX - What is it?"
+msgstr "Gromit-MPX - 是什么？"
+
+#: ../src/main.c:892
+msgid "Lesser Opacity"
+msgstr "降低不透明度"
+
+#: ../src/config.c:197
+msgid "No usable config file found, falling back to default tools."
+msgstr "没有找到可用的配置文件，恢复到默认工具设置。"
+
+#: ../src/main.c:895
+#, c-format
+msgid "Redo (SHIFT-%s)"
+msgstr "重做（SHIFT-%s）"
+
+#: ../src/callbacks.c:913
+msgid "Show again on startup"
+msgstr "启动时再次显示"
+
+#: ../src/main.c:889
+msgid "Thicker Lines"
+msgstr "线条加粗"
+
+#: ../src/main.c:890
+msgid "Thinner Lines"
+msgstr "线条变细"
+
+#: ../src/main.c:883
+#, c-format
+msgid "Toggle Painting (%s)"
+msgstr "切换绘图（%s）"
+
+#: ../src/main.c:887
+#, c-format
+msgid "Toggle Visibility (CTRL-%s)"
+msgstr "切换可见性（CTRL-%s）"
+
+#: ../src/main.c:893
+#, c-format
+msgid "Undo (%s)"
+msgstr "撤销（%s）"
+
+#: ../src/main.c:1030
+msgid "Via LiberaPay"
+msgstr "通过 LiberaPay"
+
+#: ../src/main.c:1031
+msgid "Via Patreon"
+msgstr "通过 Patreon"
+
+#: ../src/main.c:1032
+msgid "Via PayPal"
+msgstr "通过 PayPal"
+
+#: ../src/callbacks.c:889
+#, c-format
+msgid ""
+"You can operate Gromit-MPX using its tray icon (if your desktop "
+"environment\n"
+"provides a sys tray), but since you typically want to use the program you "
+"are\n"
+"demonstrating and highlighting something is a short interruption of your\n"
+"workflow, Gromit-MPX can be toggled on and off on the fly via a hotkey:\n"
+"\n"
+"It grabs the `%s` and `%s` keys, so that no other application can use "
+"them\n"
+"and they are available to Gromit-MPX only.  The available commands are:\n"
+"\n"
+"<tt><b>   toggle painting:         %s\n"
+"   clear screen:            SHIFT-%s\n"
+"   toggle visibility:       CTRL-%s\n"
+"   quit:                    ALT-%s\n"
+"   undo last stroke:        %s\n"
+"   redo last undone stroke: SHIFT-%s</b></tt>"
+msgstr ""
+"你可以通过系统托盘图标（如果桌面环境提供系统托盘）来操作 Gromit-MPX，但因"
+"为\n"
+"你通常想用你正在演示的程序，而标注只是短暂打断你的工作流程，所以 Gromit-"
+"MPX\n"
+"可以通过快捷键即时开启和关闭：\n"
+"\n"
+"它会占用 `%s` 和 `%s` 键，其他应用程序无法使用这两个键，\n"
+"只供 Gromit-MPX 使用。可用的命令有：\n"
+"\n"
+"<tt><b>   切换绘图：         %s\n"
+"   清除屏幕：         SHIFT-%s\n"
+"   切换可见性：       CTRL-%s\n"
+"   退出：             ALT-%s\n"
+"   撤销上一笔：       %s\n"
+"   重做上一笔：      SHIFT-%s</b></tt>"
+
+#: ../src/main.c:903
+msgid "_About"
+msgstr "关于(_A)"
+
+#: ../src/main.c:900
+msgid "_Edit Config"
+msgstr "编辑设置"
+
+#: ../src/main.c:899
+msgid "_Introduction"
+msgstr "介绍"
+
+#: ../src/main.c:906
+#, c-format
+msgid "_Quit (ALT-%s)"
+msgstr "退出（ALT-%s）"
+
+#: ../src/main.c:901
+msgid "_Report Bug / Request Feature"
+msgstr "报告错误/请求功能"
+
+#: ../src/main.c:902
+msgid "_Support Gromit-MPX"
+msgstr "支持 Gromit-MPX"
