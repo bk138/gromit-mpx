@@ -30,9 +30,6 @@
 #include "input.h"
 #include "main.h"
 #include "build-config.h"
-
-#include "paint_cursor.xpm"
-#include "erase_cursor.xpm"
 #include "coordlist_ops.h"
 
 
@@ -653,18 +650,37 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
   /*
      CURSORS
   */
-  GdkPixbuf* paint_cursor_pixbuf = gdk_pixbuf_new_from_xpm_data(paint_cursor_xpm);
+  GError *error = NULL;
+  GdkPixbuf *paint_cursor_pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+                                                            "net.christianbeier.Gromit-MPX.paint_cursor",
+                                                            31,
+                                                            0,
+                                                            &error);
+  if (error) {
+      g_printerr("Could not load icon '%s': %s\n", "net.christianbeier.Gromit-MPX.paint_cursor", error->message);
+      g_error_free(error);
+      error = NULL;
+  }
   data->paint_cursor = gdk_cursor_new_from_pixbuf(data->display,
 						  paint_cursor_pixbuf,
-						  paint_cursor_x_hot,
-						  paint_cursor_y_hot);
+						  14,
+						  14);
   g_object_unref (paint_cursor_pixbuf);
 
-  GdkPixbuf* erase_cursor_pixbuf = gdk_pixbuf_new_from_xpm_data(erase_cursor_xpm);
+  GdkPixbuf *erase_cursor_pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+                                                            "net.christianbeier.Gromit-MPX.erase_cursor",
+                                                            31,
+                                                            0,
+                                                            &error);
+  if (error) {
+      g_printerr("Could not load icon '%s': %s\n", "net.christianbeier.Gromit-MPX.erase_cursor", error->message);
+      g_error_free(error);
+      error = NULL;
+  }
   data->erase_cursor = gdk_cursor_new_from_pixbuf(data->display,
 						  erase_cursor_pixbuf,
-						  erase_cursor_x_hot,
-						  erase_cursor_y_hot);
+						  14,
+						  14);
   g_object_unref (erase_cursor_pixbuf);
 
 

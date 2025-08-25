@@ -63,8 +63,6 @@ set(sources
     src/main.h
     src/input.c
     src/input.h
-    src/paint_cursor.xpm
-    src/erase_cursor.xpm
 )
 
 add_executable(${target_name} ${sources})
@@ -97,6 +95,7 @@ install(FILES README.md AUTHORS ChangeLog NEWS.md DESTINATION ${CMAKE_INSTALL_DO
 install(FILES gromit-mpx.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
 install(FILES data/net.christianbeier.Gromit-MPX.png data/net.christianbeier.Gromit-MPX.active.png DESTINATION ${CMAKE_INSTALL_DATADIR}/pixmaps)
 install(FILES data/net.christianbeier.Gromit-MPX.svg data/net.christianbeier.Gromit-MPX.active.svg DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
+install(FILES data/net.christianbeier.Gromit-MPX.paint_cursor.png data/net.christianbeier.Gromit-MPX.erase_cursor.png DESTINATION ${CMAKE_INSTALL_DATADIR}/pixmaps)
 install(FILES data/net.christianbeier.Gromit-MPX.appdata.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/de.gmo DESTINATION ${CMAKE_INSTALL_DATADIR}/locale/de/LC_MESSAGES/ RENAME ${LOCALE_DOMAIN}.mo)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/es.gmo DESTINATION ${CMAKE_INSTALL_DATADIR}/locale/es/LC_MESSAGES/ RENAME ${LOCALE_DOMAIN}.mo)
