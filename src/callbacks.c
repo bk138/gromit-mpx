@@ -937,7 +937,7 @@ void on_edit_config(GtkMenuItem *menuitem,
       Check if user config does not exist or is empty.
       If so, copy system config to user config.
     */
-    gchar *user_config_path = g_strjoin (G_DIR_SEPARATOR_S, g_get_user_config_dir(), "gromit-mpx.cfg", NULL);
+    gchar *user_config_path = get_config_filename("gromit-mpx.cfg");
     GFile *user_config_file = g_file_new_for_path(user_config_path);
 
     guint64 user_config_size = 0;
