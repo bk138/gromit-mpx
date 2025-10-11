@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.0...3.10)
 project(gromit-mpx LANGUAGES C)
 include(GNUInstallDirs)
 
