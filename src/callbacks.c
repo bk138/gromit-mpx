@@ -97,7 +97,7 @@ void on_screen_changed(GtkWidget *widget,
 
 
 void on_monitors_changed ( GdkScreen *screen,
-			   gpointer   user_data)
+			   gpointer   user_data) 
 {
   GromitData *data = (GromitData *) user_data;
 
@@ -134,7 +134,7 @@ void on_monitors_changed ( GdkScreen *screen,
   GHashTableIter it;
   gpointer value;
   g_hash_table_iter_init (&it, data->tool_config);
-  while (g_hash_table_iter_next (&it, NULL, &value))
+  while (g_hash_table_iter_next (&it, NULL, &value)) 
     paint_context_free(value);
   g_hash_table_remove_all(data->tool_config);
 
@@ -184,15 +184,15 @@ void on_composited_changed ( GdkScreen *screen,
   GHashTableIter it;
   gpointer value;
   g_hash_table_iter_init (&it, data->tool_config);
-  while (g_hash_table_iter_next (&it, NULL, &value))
+  while (g_hash_table_iter_next (&it, NULL, &value)) 
     {
       GromitPaintContext *context = value;
       cairo_set_antialias(context->paint_ctx, data->composited ? CAIRO_ANTIALIAS_DEFAULT : CAIRO_ANTIALIAS_NONE);
     }
-
+      
 
   GdkRectangle rect = {0, 0, data->width, data->height};
-  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
+  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
 }
 
 
@@ -204,7 +204,7 @@ void on_clientapp_selection_get (GtkWidget          *widget,
 				 gpointer            user_data)
 {
   GromitData *data = (GromitData *) user_data;
-
+  
   gchar *ans = "";
 
   if(data->debug)
