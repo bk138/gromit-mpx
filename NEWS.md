@@ -1,3 +1,16 @@
+# Gromit-MPX 1.8.0 - 2025-11-11
+
+## 🌅 New Features
+
+* Added Chinese translations.
+* Draw and erase cursors are now customisable by replacing PNGs.
+* Added a CIRCLE tool.
+
+## 🛠  Fixes
+
+* Fixed building for NetBSD.
+* Fixed usage with RandR virtual monitors.
+
 # Gromit-MPX 1.7.0 - 2024-09-09
 
 ## 🌅 New Features
