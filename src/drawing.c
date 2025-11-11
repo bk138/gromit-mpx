@@ -105,3 +105,44 @@ void draw_arrow (GromitData *data,
   data->painted = 1;
 }
 
+
+void draw_circle (GromitData *data,
+                 GdkDevice *dev,
+                 gint x, gint y,
+                 gfloat radius)
+{
+  GdkRectangle rect;
+  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
+
+  /* Iinvalidation rectangle */
+  rect.x = x - radius - data->maxwidth / 2;
+  rect.y = y - radius - data->maxwidth / 2;
+  rect.width = 2 * radius + data->maxwidth;
+  rect.height = 2 * radius + data->maxwidth;
+
+  if (devdata->cur_context->paint_ctx)
+    {
+      cairo_set_line_width(devdata->cur_context->paint_ctx, data->maxwidth);
+      cairo_set_line_cap(devdata->cur_context->paint_ctx, CAIRO_LINE_CAP_ROUND);
+      cairo_set_line_join(devdata->cur_context->paint_ctx, CAIRO_LINE_JOIN_ROUND);
+
+      if (devdata->cur_context->fill_color)
+        {
+          gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->fill_color);
+
+          cairo_arc(devdata->cur_context->paint_ctx, x, y, radius, 0, 2 * M_PI);
+          cairo_fill(devdata->cur_context->paint_ctx);
+
+          gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->paint_color);
+        }
+
+      cairo_arc(devdata->cur_context->paint_ctx, x, y, radius, 0, 2 * M_PI);
+      cairo_stroke(devdata->cur_context->paint_ctx);
+
+      data->modified = 1;
+
+      gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
+    }
+
+  data->painted = 1;
+}

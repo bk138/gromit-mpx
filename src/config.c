@@ -124,6 +124,7 @@ enum tool_arguments {
   SYM_RADIUS,
   SYM_SIMPLIFY,
   SYM_SNAP,
+  SYM_FILLCOLOR,
 };
 
 /*
@@ -163,6 +164,7 @@ gboolean parse_config (GromitData *data)
 
   GromitPaintType type;
   GdkRGBA *fg_color=NULL;
+  GdkRGBA *fill_color=NULL;
   guint width, minwidth, maxwidth;
   gfloat arrowsize;
   guint minlen, maxangle, radius, simplify, snapdist;
@@ -216,6 +218,7 @@ gboolean parse_config (GromitData *data)
   g_scanner_scope_add_symbol (scanner, 0, "ORTHOGONAL",(gpointer) GROMIT_ORTHOGONAL);
   g_scanner_scope_add_symbol (scanner, 0, "ERASER",    (gpointer) GROMIT_ERASER);
   g_scanner_scope_add_symbol (scanner, 0, "RECOLOR",   (gpointer) GROMIT_RECOLOR);
+  g_scanner_scope_add_symbol (scanner, 0, "CIRCLE",    (gpointer) GROMIT_CIRCLE);
   g_scanner_scope_add_symbol (scanner, 0, "HOTKEY",               HOTKEY_SYMBOL_VALUE);
   g_scanner_scope_add_symbol (scanner, 0, "UNDOKEY",              UNDOKEY_SYMBOL_VALUE);
 
@@ -240,6 +243,7 @@ gboolean parse_config (GromitData *data)
   g_scanner_scope_add_symbol (scanner, 2, "minlen",    (gpointer) SYM_MINLEN);
   g_scanner_scope_add_symbol (scanner, 2, "simplify",  (gpointer) SYM_SIMPLIFY);
   g_scanner_scope_add_symbol (scanner, 2, "snap",      (gpointer) SYM_SNAP);
+  g_scanner_scope_add_symbol (scanner, 2, "fillcolor", (gpointer) SYM_FILLCOLOR);
 
   g_scanner_set_scope (scanner, 0);
   scanner->config->scope_0_fallback = 0;
@@ -283,6 +287,7 @@ gboolean parse_config (GromitData *data)
           maxangle = 15;
           simplify = 10;
           snapdist = 0;
+          fill_color = NULL;
           fg_color = data->red;
 
           if (token == G_TOKEN_SYMBOL)
@@ -310,6 +315,7 @@ gboolean parse_config (GromitData *data)
                   snapdist = context_template->snapdist;
                   minwidth = context_template->minwidth;
 		  maxwidth = context_template->maxwidth;
+                  fill_color = context_template->fill_color;
                   fg_color = context_template->paint_color;
                 }
               else
@@ -449,6 +455,30 @@ gboolean parse_config (GromitData *data)
                           if (isnan(v)) goto cleanup;
                           snapdist = v;
                         }
+                      else if ((intptr_t) scanner->value.v_symbol == SYM_FILLCOLOR)
+                        {
+                          token = g_scanner_get_next_token (scanner);
+                          if (token != G_TOKEN_EQUAL_SIGN)
+                            {
+                              g_printerr ("Missing \"=\"... aborting\n");
+                              goto cleanup;
+                            }
+                          token = g_scanner_get_next_token (scanner);
+                          if (token != G_TOKEN_STRING)
+                            {
+                              g_printerr ("Missing Fill Color (string)... "
+                                          "aborting\n");
+                              goto cleanup;
+                            }
+                          fill_color = g_malloc (sizeof (GdkRGBA));
+                          if (!gdk_rgba_parse (fill_color, scanner->value.v_string))
+                            {
+                              g_printerr ("Unable to parse fill color. "
+                                          "Fill will not be applied.\n");
+                              g_free (fill_color);
+                              fill_color = NULL;
+                            }
+                        }
 		      else
                         {
                           g_printerr ("Unknown tool type?????\n");
@@ -478,6 +508,7 @@ gboolean parse_config (GromitData *data)
                                        arrowsize, arrowtype,
                                        simplify, radius, maxangle, minlen, snapdist,
                                        minwidth, maxwidth);
+          context->fill_color = fill_color;
           g_hash_table_insert (data->tool_config, name, context);
         }
       else if (token == G_TOKEN_SYMBOL &&
