@@ -208,14 +208,14 @@ void on_clientapp_selection_get (GtkWidget          *widget,
   gchar *ans = "";
 
   if(data->debug)
-    g_printerr("DEBUG: clientapp received request.\n");
+    g_printerr("DEBUG: clientapp received request.\n");  
 
 
   if (gtk_selection_data_get_target(selection_data) == GA_TOGGLEDATA || gtk_selection_data_get_target(selection_data) == GA_LINEDATA)
     {
       ans = data->clientdata;
     }
-
+    
   gtk_selection_data_set (selection_data,
                           gtk_selection_data_get_target(selection_data),
                           8, (guchar*)ans, strlen (ans));
@@ -244,7 +244,7 @@ void on_clientapp_selection_received (GtkWidget *widget,
 static float line_thickener = 0;
 
 
-gboolean on_buttonpress (GtkWidget *win,
+gboolean on_buttonpress (GtkWidget *win, 
 			 GdkEventButton *ev,
 			 gpointer user_data)
 {
@@ -443,8 +443,8 @@ gboolean on_motion (GtkWidget *win,
 }
 
 
-gboolean on_buttonrelease (GtkWidget *win,
-			   GdkEventButton *ev,
+gboolean on_buttonrelease (GtkWidget *win, 
+			   GdkEventButton *ev, 
 			   gpointer user_data)
 {
   GromitData *data = (GromitData *) user_data;
@@ -543,7 +543,7 @@ void on_mainapp_selection_get (GtkWidget          *widget,
 			       gpointer            user_data)
 {
   GromitData *data = (GromitData *) user_data;
-
+  
   gchar *uri = "OK";
   GdkAtom action = gtk_selection_data_get_target(selection_data);
 
@@ -576,7 +576,7 @@ void on_mainapp_selection_get (GtkWidget          *widget,
   else
     uri = "NOK";
 
-
+   
   gtk_selection_data_set (selection_data,
                           gtk_selection_data_get_target(selection_data),
                           8, (guchar*)uri, strlen (uri));
@@ -600,20 +600,20 @@ void on_mainapp_selection_received (GtkWidget *widget,
       if(gtk_selection_data_get_target(selection_data) == GA_TOGGLEDATA )
         {
 	  intptr_t dev_nr = strtoull((gchar*)gtk_selection_data_get_data(selection_data), NULL, 10);
-
+	  
           if(data->debug)
 	    g_printerr("DEBUG: mainapp got toggle id '%ld' back from client.\n", (long)dev_nr);
 
 	  if(dev_nr < 0)
 	    toggle_grab(data, NULL); /* toggle all */
-	  else
+	  else 
 	    {
 	      /* find dev numbered dev_nr */
 	      GHashTableIter it;
 	      gpointer value;
-	      GromitDeviceData* devdata = NULL;
+	      GromitDeviceData* devdata = NULL; 
 	      g_hash_table_iter_init (&it, data->devdatatable);
-	      while (g_hash_table_iter_next (&it, NULL, &value))
+	      while (g_hash_table_iter_next (&it, NULL, &value)) 
 		{
 		  devdata = value;
 		  if(devdata->index == dev_nr)
@@ -621,14 +621,14 @@ void on_mainapp_selection_received (GtkWidget *widget,
 		  else
 		    devdata = NULL;
 		}
-
+	      
 	      if(devdata)
 		toggle_grab(data, devdata->device);
 	      else
 		g_printerr("ERROR: No device at index %ld.\n", (long)dev_nr);
 	    }
         }
-      else if (gtk_selection_data_get_target(selection_data) == GA_LINEDATA)
+      else if (gtk_selection_data_get_target(selection_data) == GA_LINEDATA) 
 	{
 
 	  gchar** line_args = g_strsplit((gchar*)gtk_selection_data_get_data(selection_data), " ", 6);
@@ -639,7 +639,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
 	  gchar* hex_code = line_args[4];
 	  int thickness = atoi(line_args[5]);
 
-          if(data->debug)
+          if(data->debug) 
 	    {
 	      g_printerr("DEBUG: mainapp got line data back from client:\n");
 	      g_printerr("startX startY endX endY: %d %d %d %d\n", startX, startY, endX, endY);
@@ -677,14 +677,14 @@ void on_mainapp_selection_received (GtkWidget *widget,
 	  cairo_stroke(line_ctx->paint_ctx);
 
 	  data->modified = 1;
-	  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
+	  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
 	  data->painted = 1;
 
 	  g_free(line_ctx);
 	  g_free (color);
 	}
     }
-
+ 
   gtk_main_quit ();
 }
 
@@ -694,11 +694,11 @@ void on_device_removed (GdkDeviceManager *device_manager,
 			gpointer          user_data)
 {
   GromitData *data = (GromitData *) user_data;
-
+    
   if(gdk_device_get_device_type(device) != GDK_DEVICE_TYPE_MASTER
      || gdk_device_get_n_axes(device) < 2)
     return;
-
+  
   if(data->debug)
     g_printerr("DEBUG: device '%s' removed\n", gdk_device_get_name(device));
 
@@ -1040,3 +1040,4 @@ void on_signal(int signum) {
     // for now only SIGINT and SIGTERM
     gtk_main_quit();
 }
+
