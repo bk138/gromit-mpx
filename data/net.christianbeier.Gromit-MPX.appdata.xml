@@ -62,6 +62,16 @@
   </screenshots>
 
   <releases>
+    <release version="1.8.0" date="2025-11-11">
+      <description>
+	<p>
+          Added Chinese translations, Draw and erase cursors are now customisable by replacing PNGs,
+          also added a CIRCLE tool.
+          Fixed usage with RandR virtual monitors.
+	</p>
+      </description>
+    </release>
+
     <release version="1.7.0" date="2024-09-09">
       <description>
 	<p>
