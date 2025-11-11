@@ -1,3 +1,4 @@
+
 #include <math.h>
 #include "drawing.h"
 #include "main.h"
@@ -23,21 +24,21 @@ void draw_line (GromitData *data,
       cairo_set_line_width(devdata->cur_context->paint_ctx, data->maxwidth);
       cairo_set_line_cap(devdata->cur_context->paint_ctx, CAIRO_LINE_CAP_ROUND);
       cairo_set_line_join(devdata->cur_context->paint_ctx, CAIRO_LINE_JOIN_ROUND);
-
+ 
       cairo_move_to(devdata->cur_context->paint_ctx, x1, y1);
       cairo_line_to(devdata->cur_context->paint_ctx, x2, y2);
       cairo_stroke(devdata->cur_context->paint_ctx);
 
       data->modified = 1;
 
-      gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
+      gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
     }
 
   data->painted = 1;
 }
 
 
-void draw_arrow (GromitData *data,
+void draw_arrow (GromitData *data, 
 		 GdkDevice *dev,
 		 gint x1, gint y1,
 		 gfloat width,
@@ -78,7 +79,7 @@ void draw_arrow (GromitData *data,
       cairo_set_line_width(devdata->cur_context->paint_ctx, 1);
       cairo_set_line_cap(devdata->cur_context->paint_ctx, CAIRO_LINE_CAP_ROUND);
       cairo_set_line_join(devdata->cur_context->paint_ctx, CAIRO_LINE_JOIN_ROUND);
-
+ 
       cairo_move_to(devdata->cur_context->paint_ctx, arrowhead[0].x, arrowhead[0].y);
       cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[1].x, arrowhead[1].y);
       cairo_line_to(devdata->cur_context->paint_ctx, arrowhead[2].x, arrowhead[2].y);
@@ -95,10 +96,10 @@ void draw_arrow (GromitData *data,
       cairo_stroke(devdata->cur_context->paint_ctx);
 
       gdk_cairo_set_source_rgba(devdata->cur_context->paint_ctx, devdata->cur_context->paint_color);
-
+    
       data->modified = 1;
 
-      gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
+      gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
     }
 
   data->painted = 1;
