@@ -1,3 +1,186 @@
+commit 5d4939221746867915928db26599f0781d39bc30
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Nov 11 22:18:04 2025 +0100
+
+    README: fix flathub badge link
+
+commit 56e0338530674d2d7086bfc5dba3cf54719d23c1
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Nov 11 22:09:45 2025 +0100
+
+    AppStream: add 1.8.0 release notes
+
+commit 398a0eee5a0d34a088c6d1aeb3046c3dc11fbca7
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Nov 11 22:05:49 2025 +0100
+
+    callbacks: update Authors
+
+commit 1ecc7448214b5bfd9ae4c8e5533451af4f075bc1
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Nov 11 22:01:08 2025 +0100
+
+    AUTHORS: update
+
+commit 9477d62a4c4b8b6e975f0aa2e96087d5a81d216b
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Nov 11 21:56:18 2025 +0100
+
+    callbacks: update Copyright year
+
+commit b03b094bc212af0503f08f1da8baf95c5eb730cb
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Nov 11 21:54:48 2025 +0100
+
+    CMake: bump minor version
+
+commit b05684c0826e27b6109b532998abfb869004e589
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Nov 11 21:53:50 2025 +0100
+
+    NEWS: update for v1.8.0
+
+commit 9514f275ab6c9e81708d0e0a3d7e95f7fd29b14b
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Nov 11 21:46:06 2025 +0100
+
+    README,data: add animation for CIRCLE tool
+
+commit 4271019388735107faedf24d092935a18846248c
+Author: Marcin Orlowski <MarcinOrlowski@users.noreply.github.com>
+Date:   Tue Nov 11 21:28:01 2025 +0100
+
+    Add CIRCLE tool
+    
+    Adds support for CIRCLE as outline or filled variant. All colours (and alpha) configurable separately.
+    
+    Co-authored-by: Christian Beier <info@christianbeier.net>
+
+commit b84571a36dc457d6fc9e74988b50b3039bcb18c8
+Author: gavine99 <63904295+gavine99@users.noreply.github.com>
+Date:   Wed Nov 5 07:35:33 2025 +1100
+
+    main: use root window width/height
+    
+    ... instead of screen width/height to determine overlay window width/height.
+    
+    Fixes Gromit-MPX for usage with RandR virtual monitors while still working with other setups.
+    
+    See https://github.com/bk138/gromit-mpx/pull/236 for details.
+
+commit e3b501d497374da083b97d0b3bbd40c5c766d2d1
+Author: Andrew Marshall <andrew@johnandrewmarshall.com>
+Date:   Sun Oct 12 09:59:16 2025 -0400
+
+    CMake: fix compatibility with newer CMake
+    
+    CMake 4.0 removed compatibility for CMake < 3.5. This increases to
+    explicitly declare support for up to 3.10 (the oldest non-deprecated
+    version), thereby fixing the build on CMake 4.0.
+
+commit b834353fd1114724bdd57e76c30dc5aad8304f36
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Aug 25 22:01:27 2025 +0200
+
+    flatpak: update GNOME runtime to v48
+
+commit f882032a557cd1e4b586c55708b0ccb2af2a6732
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Aug 25 21:57:25 2025 +0200
+
+    main,build: change cursor sources from XPM to PNG
+    
+    Newer gdk-pixbuf versions have the XPM loader disabled, so change our
+    cursor sources to be PNG. This has the side effect that cursors can
+    nwo be changed after build time by exchanging the PNG file contents.
+    
+    Closes #219
+    Closes #22
+
+commit 4f774596ad47d2a70bdc220cd92b7dd87c059704
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Aug 25 20:45:46 2025 +0200
+
+    flatpak: update shared-modules
+
+commit 396b167df94f927e00e459bf0a39fba03491921e
+Author: woodhead2019 <52210283+woodhead2019@users.noreply.github.com>
+Date:   Sun Jun 29 16:59:02 2025 +0800
+
+    Update CMakeLists.txt (Add zh_CN, zh_TW, zh_HK, zh_SG translations)
+
+commit 4d2e7d5e30ddcbf2efdc83f8f8528b1fcf68e473
+Author: woodhead2019 <52210283+woodhead2019@users.noreply.github.com>
+Date:   Sun Jun 29 16:54:13 2025 +0800
+
+    Add zh_CN, zh_TW, zh_HK, zh_SG translations for Gromit-MPX
+
+commit 6f9c7a08580e410600dcdbcac23c0a3db25c4810
+Author: Leonardo Taccari <leot@NetBSD.org>
+Date:   Sun May 4 22:09:11 2025 +0200
+
+    coordlist_ops: adjust memcpy call for macro
+    
+    In some SSP implementations - like NetBSD ssp(3) - memcpy(3) can be a
+    macro and the build will fail because the macro will see 8 arguments
+    instead of 3.
+
+commit a9826854c223bd0c27660c68045117e3cf802c7d
+Author: yzemaze <dev@yzemaze.de>
+Date:   Mon Jan 27 14:15:44 2025 +0100
+
+    main: change typos of simpilfy to simplify
+
+commit e8473cf0e0a397fc43913247f48cf9cfc64f12f2
+Author: yzemaze <dev@yzemaze.de>
+Date:   Mon Jan 20 20:17:29 2025 +0100
+
+    config, main, callbacks, drawing: enable smaller increments of arrows
+    
+    * change arrowsize & -width to float to enable smaller increments (instead of up to 150 % increase from one size to the next)
+    * use default value if configured one is too small
+    * arrowsize = 1 + width = 1 still lead to no arrow at all
+
+commit 4131e05239e79d37eaaddf40376a091d50b11cc7
+Author: Christian Beier <info@christianbeier.net>
+Date:   Fri Jun 7 08:51:55 2024 +0200
+
+    flatpak: update GNOME runtime to v46
+    
+    re #210
+
+commit 1805896e595c5c99a7165e9256804aefaba214e2
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Sep 9 22:19:32 2024 +0200
+
+    AppStream: add branding colours
+
+commit 7ae3b8cf4b9c644b003057915786b21aea02df0d
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Sep 9 21:09:30 2024 +0200
+
+    flatpak: use cmake-ninja instead of cmake
+
+commit ee4a15023443786031698e89c5fca37fd48062c2
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Sep 9 21:08:41 2024 +0200
+
+    flatpak: add --share=ipc to manifest
+    
+    As required by manifest checker.
+
+commit c2a669c581675155146e3df7377a134a75dfbec2
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Sep 9 21:06:57 2024 +0200
+
+    flatpak: update README w/ manifest check instructions
+
+commit 305da6eb8e5a58c0f8af374467d34bcd10ec3073
+Author: Christian Beier <info@christianbeier.net>
+Date:   Mon Sep 9 20:39:05 2024 +0200
+
+    ChangeLog: update
+
 commit 0355bf35d89248edd48b468fa5b16a1a561408ad
 Author: Christian Beier <info@christianbeier.net>
 Date:   Mon Sep 9 20:38:10 2024 +0200
