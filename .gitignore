@@ -30,6 +30,3 @@ Makefile.in
 /flatpak/.flatpak-builder/
 /flatpak/build-dir/
 /.cache/
-*~
-*.swp
-*.bak
