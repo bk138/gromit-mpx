@@ -214,7 +214,7 @@ A `RECT`-tool draws rectangles.
 
 A `CIRCLE`-tool draws circles. You can create both outlined and filled circles.
 
-CIRCLE tool
+![CIRCLE tool](data/tool-circle.webp)
 
 For a simple outlined circle, just specify the color and size:
 
