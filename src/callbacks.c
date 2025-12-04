@@ -187,7 +187,7 @@ void on_composited_changed ( GdkScreen *screen,
   while (g_hash_table_iter_next (&it, NULL, &value)) 
     {
       GromitPaintContext *context = value;
-      cairo_set_antialias(context->paint_ctx, data->composited ? CAIRO_ANTIALIAS_DEFAULT : CAIRO_ANTIALIAS_NONE);
+      cairo_set_antialias(context->paint_ctx, data->composited ? CAIRO_ANTIALIAS_SUBPIXEL : CAIRO_ANTIALIAS_NONE);
     }
       
 

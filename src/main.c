@@ -70,6 +70,8 @@ GromitPaintContext *paint_context_new (GromitData *data,
   gdk_cairo_set_source_rgba(context->paint_ctx, paint_color);
   if(!data->composited)
     cairo_set_antialias(context->paint_ctx, CAIRO_ANTIALIAS_NONE);
+  else
+    cairo_set_antialias(context->paint_ctx, CAIRO_ANTIALIAS_SUBPIXEL);
   cairo_set_line_width(context->paint_ctx, width);
   cairo_set_line_cap(context->paint_ctx, CAIRO_LINE_CAP_ROUND);
   cairo_set_line_join(context->paint_ctx, CAIRO_LINE_JOIN_ROUND);
