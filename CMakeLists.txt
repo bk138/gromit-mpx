@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.0...3.10)
 project(gromit-mpx VERSION 1.8.0 LANGUAGES C)
 include(GNUInstallDirs)
+include(CPack)
 
 set(target_name gromit-mpx)
 set(LOCALE_DOMAIN ${CMAKE_PROJECT_NAME})
