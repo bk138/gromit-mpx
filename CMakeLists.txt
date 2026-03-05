@@ -1,9 +1,8 @@
 cmake_minimum_required(VERSION 3.0...3.10)
-project(gromit-mpx LANGUAGES C)
+project(gromit-mpx VERSION 1.8.0 LANGUAGES C)
 include(GNUInstallDirs)
 
 set(target_name gromit-mpx)
-set(version 1.8.0)
 set(LOCALE_DOMAIN ${CMAKE_PROJECT_NAME})
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 if(CMAKE_GENERATOR MATCHES "Unix Makefiles|Ninja")

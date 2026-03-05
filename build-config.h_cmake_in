@@ -8,7 +8,7 @@
 #define PACKAGE_URL "https://github.com/bk138/gromit-mpx"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "${version}"
+#define PACKAGE_VERSION "${PROJECT_VERSION}"
 
 /* The package's locale domain. */
 #define PACKAGE_LOCALE_DOMAIN "${LOCALE_DOMAIN}"
