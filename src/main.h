@@ -83,6 +83,8 @@ typedef enum
 typedef enum {
   GROMIT_DIST_NONE = 0,
   GROMIT_DIST_EUCLIDEAN = 1,
+  GROMIT_DIST_AXIS = 2,
+  GROMIT_DIST_BOTH = (GROMIT_DIST_EUCLIDEAN | GROMIT_DIST_AXIS)
 } GromitDistanceType;
 
 typedef struct

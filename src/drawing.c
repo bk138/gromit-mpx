@@ -169,6 +169,23 @@ void draw_length_label (GromitData *data,
 
     draw_string_label(data, dev, mx, my, label);
   }
+
+  if (devdata->cur_context->distance & GROMIT_DIST_AXIS) {
+    gdouble dx = x2 - x1;
+    gdouble dy = y2 - y1;
+
+    char label_x[64], label_y[64];
+    snprintf(label_x, sizeof(label_x), "%.0f px", ABS (dx));
+    snprintf(label_y, sizeof(label_y), "%.0f px", ABS (dy));
+
+    gdouble mx = (x1 + x2) / 2;
+    gdouble my = (y1 + y2) / 2;
+
+    if (dx != 0) draw_string_label(data, dev, mx, y1, label_x);
+    if (dy != 0) draw_string_label(data, dev, x2, my, label_y);
+  }
+
+  data->painted = 1;
 }
 
 void draw_string_label (GromitData *data, GdkDevice *dev, gint x, gint y, char *label)

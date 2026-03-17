@@ -513,6 +513,10 @@ gboolean parse_config (GromitData *data)
                         }
                         if (! strcasecmp(scanner->value.v_string, "euclidean"))
                           distance = GROMIT_DIST_EUCLIDEAN;
+                        else if (! strcasecmp(scanner->value.v_string, "axis"))
+                          distance = GROMIT_DIST_AXIS;
+                        else if (! strcasecmp(scanner->value.v_string, "both"))
+                          distance = GROMIT_DIST_BOTH;
                         else
                         {
                           g_printerr ("Distance type must be \"euclidean\", \"axis\", or \"both\"... "
