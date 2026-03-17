@@ -175,7 +175,7 @@ void draw_length_label (GromitData *data,
   cairo_save(cr);
 
   cairo_select_font_face(cr, "Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
-  cairo_set_font_size(cr, 14.0);
+  cairo_set_font_size(cr, devdata->cur_context->text_size);
   cairo_text_extents_t extents;
   cairo_text_extents(cr, label, &extents);
 
