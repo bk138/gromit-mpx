@@ -126,6 +126,7 @@ enum tool_arguments {
   SYM_SNAP,
   SYM_FILLCOLOR,
   SYM_TEXTSIZE,
+  SYM_DISTANCE,
 };
 
 /*
@@ -247,6 +248,7 @@ gboolean parse_config (GromitData *data)
   g_scanner_scope_add_symbol (scanner, 2, "fillcolor", (gpointer) SYM_FILLCOLOR);
 
   g_scanner_scope_add_symbol (scanner, 2, "textsize", (gpointer) SYM_TEXTSIZE);
+  g_scanner_scope_add_symbol (scanner, 2, "distance", (gpointer) SYM_DISTANCE);
 
   g_scanner_set_scope (scanner, 0);
   scanner->config->scope_0_fallback = 0;
@@ -293,6 +295,7 @@ gboolean parse_config (GromitData *data)
           fill_color = NULL;
           fg_color = data->red;
           gfloat text_size = 14.0;
+          GromitDistanceType distance = GROMIT_DIST_NONE;
 
           if (token == G_TOKEN_SYMBOL)
             {
@@ -322,6 +325,7 @@ gboolean parse_config (GromitData *data)
                   fill_color = context_template->fill_color;
                   fg_color = context_template->paint_color;
                   text_size = context_template->text_size;
+                  distance = context_template->distance;
                 }
               else
                 {
@@ -492,6 +496,30 @@ gboolean parse_config (GromitData *data)
                           if (v < 1) v = 1;
                           text_size = v;
                         }
+                      else if ((intptr_t) scanner->value.v_symbol == SYM_DISTANCE)
+                      {
+                        token = g_scanner_get_next_token (scanner);
+                        if (token != G_TOKEN_EQUAL_SIGN)
+                        {
+                          g_printerr ("Missing \"=\"... aborting\n");
+                          goto cleanup;
+                        }
+                        token = g_scanner_get_next_token (scanner);
+                        if (token != G_TOKEN_STRING)
+                        {
+                          g_printerr ("Missing Distance (string)... "
+                                      "aborting\n");
+                          goto cleanup;
+                        }
+                        if (! strcasecmp(scanner->value.v_string, "euclidean"))
+                          distance = GROMIT_DIST_EUCLIDEAN;
+                        else
+                        {
+                          g_printerr ("Distance type must be \"euclidean\", \"axis\", or \"both\"... "
+                                      "aborting\n");
+                          goto cleanup;
+                        }
+                      }
 		      else
                         {
                           g_printerr ("Unknown tool type?????\n");
@@ -523,6 +551,7 @@ gboolean parse_config (GromitData *data)
                                        minwidth, maxwidth);
           context->fill_color = fill_color;
           context->text_size = text_size;
+          context->distance = distance;
           g_hash_table_insert (data->tool_config, name, context);
         }
       else if (token == G_TOKEN_SYMBOL &&

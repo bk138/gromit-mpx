@@ -114,7 +114,7 @@ void draw_circle (GromitData *data,
   GdkRectangle rect;
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
 
-  /* Iinvalidation rectangle */
+  /* Invalidation rectangle */
   rect.x = x - radius - data->maxwidth / 2;
   rect.y = y - radius - data->maxwidth / 2;
   rect.width = 2 * radius + data->maxwidth;
@@ -154,23 +154,27 @@ void draw_length_label (GromitData *data,
 {
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
 
+  if (devdata->cur_context->distance & GROMIT_DIST_EUCLIDEAN) {
+    gdouble dx = x2 - x1;
+    gdouble dy = y2 - y1;
+    gdouble length = sqrt(dx * dx + dy * dy);
+
+    if (length == 0) return;
+
+    char label[64];
+    snprintf(label, sizeof(label), "%.0f px", length);
+
+    gdouble mx = (x1 + x2) / 2;
+    gdouble my = (y1 + y2) / 2;
+
+    draw_string_label(data, dev, mx, my, label);
+  }
+}
+
+void draw_string_label (GromitData *data, GdkDevice *dev, gint x, gint y, char *label)
+{
+  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
   cairo_t *cr = devdata->cur_context->paint_ctx;
-
-  gdouble dx = x2 - x1;
-  gdouble dy = y2 - y1;
-  gdouble length = sqrt(dx * dx + dy * dy);
-
-  if (length == 0) return;
-
-  char label[64];
-  snprintf(label, sizeof(label), "%.0f px", length); // TODO: add decimals as parameter
-
-  gdouble mx = (x1 + x2) / 2;
-  gdouble my = (y1 + y2) / 2;
-  //gdouble offset = 20.0;
-
-  //mx += (-dy / length) * offset;
-  //my += (abs(dx) / length) * offset;
 
   cairo_save(cr);
 
@@ -180,10 +184,9 @@ void draw_length_label (GromitData *data,
   cairo_text_extents(cr, label, &extents);
 
   gdouble padding = 4.0;
-  gdouble tx = mx - extents.width / 2.0;
-  gdouble ty = my - extents.height / 2.0;
+  gdouble tx = x - extents.width / 2.0;
+  gdouble ty = y - extents.height / 2.0;
 
-  /* background */
   cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
   cairo_set_source_rgba(cr, 0, 0, 0, 0.5);
   cairo_rectangle(cr,
@@ -200,10 +203,14 @@ void draw_length_label (GromitData *data,
   cairo_restore(cr);
   gdk_cairo_set_source_rgba(cr, devdata->cur_context->paint_color);
 
+  /* Invalidation rectangle */
   GdkRectangle rect;
   rect.x = (int)(tx + extents.x_bearing - padding - 1);
   rect.y = (int)(ty + extents.y_bearing - padding - 1);
   rect.width = (int)(extents.width + 2 * padding + 3);
   rect.height = (int)(extents.height + 2 * padding + 3);
+
+  data->modified = 1;
+
   gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
 }

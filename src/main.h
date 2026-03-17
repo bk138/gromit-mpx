@@ -80,6 +80,11 @@ typedef enum
   GROMIT_ARROW_DOUBLE = (GROMIT_ARROW_START | GROMIT_ARROW_END )
 } GromitArrowType;
 
+typedef enum {
+  GROMIT_DIST_NONE = 0,
+  GROMIT_DIST_EUCLIDEAN = 1,
+} GromitDistanceType;
+
 typedef struct
 {
   GromitPaintType type;
@@ -98,6 +103,7 @@ typedef struct
   cairo_t         *paint_ctx;
   gdouble         pressure;
   gfloat          text_size;
+  GromitDistanceType distance;
 } GromitPaintContext;
 
 typedef struct

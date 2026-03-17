@@ -65,6 +65,7 @@ GromitPaintContext *paint_context_new (GromitData *data,
   context->minlen = minlen;
   context->snapdist = snapdist;
   context->text_size = 14.0;
+  context->distance = GROMIT_DIST_NONE;
 
   context->paint_ctx = cairo_create (data->backbuffer);
 
