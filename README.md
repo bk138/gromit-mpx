@@ -206,6 +206,13 @@ A `LINE`-tool draws straight lines.
 
     "green Line" = LINE (color = "green");
 
+
+Add `showlength` to the `LINE` to display its length (px) at the middle-point.
+
+![showlength tool](data/tool-length.webp)
+
+    "length Line" = LINE (color = "red" showlength);
+
 A `RECT`-tool draws rectangles.
 
 ![RECT tool](data/tool-rect.webp)
