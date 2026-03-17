@@ -152,40 +152,19 @@ void draw_length_label (GromitData *data,
                         gint x1, gint y1,
                         gint x2, gint y2)
 {
-  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
+  gdouble dx = x2 - x1;
+  gdouble dy = y2 - y1;
+  gdouble length = sqrt(dx * dx + dy * dy);
 
-  if (devdata->cur_context->distance & GROMIT_DIST_EUCLIDEAN) {
-    gdouble dx = x2 - x1;
-    gdouble dy = y2 - y1;
-    gdouble length = sqrt(dx * dx + dy * dy);
+  if (length == 0) return;
 
-    if (length == 0) return;
+  char label[64];
+  snprintf(label, sizeof(label), "%.0f px", length);
 
-    char label[64];
-    snprintf(label, sizeof(label), "%.0f px", length);
+  gdouble mx = (x1 + x2) / 2;
+  gdouble my = (y1 + y2) / 2;
 
-    gdouble mx = (x1 + x2) / 2;
-    gdouble my = (y1 + y2) / 2;
-
-    draw_string_label(data, dev, mx, my, label);
-  }
-
-  if (devdata->cur_context->distance & GROMIT_DIST_AXIS) {
-    gdouble dx = x2 - x1;
-    gdouble dy = y2 - y1;
-
-    char label_x[64], label_y[64];
-    snprintf(label_x, sizeof(label_x), "%.0f px", ABS (dx));
-    snprintf(label_y, sizeof(label_y), "%.0f px", ABS (dy));
-
-    gdouble mx = (x1 + x2) / 2;
-    gdouble my = (y1 + y2) / 2;
-
-    if (dx != 0) draw_string_label(data, dev, mx, y1, label_x);
-    if (dy != 0) draw_string_label(data, dev, x2, my, label_y);
-  }
-
-  data->painted = 1;
+  draw_string_label(data, dev, mx, my, label);
 }
 
 void draw_string_label (GromitData *data, GdkDevice *dev, gint x, gint y, char *label)
@@ -196,7 +175,7 @@ void draw_string_label (GromitData *data, GdkDevice *dev, gint x, gint y, char *
   cairo_save(cr);
 
   cairo_select_font_face(cr, "Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
-  cairo_set_font_size(cr, devdata->cur_context->text_size);
+  cairo_set_font_size(cr, devdata->cur_context->textsize);
   cairo_text_extents_t extents;
   cairo_text_extents(cr, label, &extents);
 
