@@ -400,6 +400,7 @@ gboolean on_motion (GtkWidget *win,
             {
               GromitArrowType atype = devdata->cur_context->arrow_type;
 	      draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
+              draw_length_label (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
               if (devdata->cur_context->arrowsize > 0)
                 {
                   GromitArrowType atype = devdata->cur_context->arrow_type;
