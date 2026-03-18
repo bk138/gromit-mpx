@@ -1,3 +1,14 @@
+# Gromit-MPX 1.9.0 - 2026-03-18
+
+## 🌅 New Features
+
+* Added Georgian translation 🇬🇪.
+* Added functionality to show a length label when drawing lines.
+
+## 🛠  Fixes
+
+* Fixed a minimal memleak in the client program.
+
 # Gromit-MPX 1.8.0 - 2025-11-11
 
 ## 🌅 New Features
