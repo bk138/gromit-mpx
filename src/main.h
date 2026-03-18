@@ -97,6 +97,8 @@ typedef struct
   GdkRGBA         *fill_color;
   cairo_t         *paint_ctx;
   gdouble         pressure;
+  gfloat          textsize;
+  gboolean        showlength;
 } GromitPaintContext;
 
 typedef struct

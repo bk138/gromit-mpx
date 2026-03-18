@@ -31,7 +31,7 @@ void draw_line (GromitData *data,
 
       data->modified = 1;
 
-      gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
+      gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
     }
 
   data->painted = 1;
@@ -114,7 +114,7 @@ void draw_circle (GromitData *data,
   GdkRectangle rect;
   GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
 
-  /* Iinvalidation rectangle */
+  /* Invalidation rectangle */
   rect.x = x - radius - data->maxwidth / 2;
   rect.y = y - radius - data->maxwidth / 2;
   rect.width = 2 * radius + data->maxwidth;
@@ -145,4 +145,68 @@ void draw_circle (GromitData *data,
     }
 
   data->painted = 1;
+}
+
+void draw_length_label (GromitData *data,
+                        GdkDevice *dev,
+                        gint x1, gint y1,
+                        gint x2, gint y2)
+{
+  gdouble dx = x2 - x1;
+  gdouble dy = y2 - y1;
+  gdouble length = sqrt(dx * dx + dy * dy);
+
+  if (length == 0) return;
+
+  char label[64];
+  snprintf(label, sizeof(label), "%.0f px", length);
+
+  gdouble mx = (x1 + x2) / 2;
+  gdouble my = (y1 + y2) / 2;
+
+  draw_string_label(data, dev, mx, my, label);
+}
+
+void draw_string_label (GromitData *data, GdkDevice *dev, gint x, gint y, char *label)
+{
+  GromitDeviceData *devdata = g_hash_table_lookup(data->devdatatable, dev);
+  cairo_t *cr = devdata->cur_context->paint_ctx;
+
+  cairo_save(cr);
+
+  cairo_select_font_face(cr, "Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
+  cairo_set_font_size(cr, devdata->cur_context->textsize);
+  cairo_text_extents_t extents;
+  cairo_text_extents(cr, label, &extents);
+
+  gdouble padding = 4.0;
+  gdouble tx = x - extents.width / 2.0;
+  gdouble ty = y - extents.height / 2.0;
+
+  cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+  cairo_set_source_rgba(cr, 0, 0, 0, 0.5);
+  cairo_rectangle(cr,
+                  tx + extents.x_bearing - padding,
+                  ty + extents.y_bearing - padding,
+                  extents.width + 2 * padding,
+                  extents.height + 2 * padding);
+  cairo_fill(cr);
+
+  cairo_set_source_rgba(cr, 1, 1, 1, 1.0);
+  cairo_move_to(cr, tx, ty);
+  cairo_show_text(cr, label);
+
+  cairo_restore(cr);
+  gdk_cairo_set_source_rgba(cr, devdata->cur_context->paint_color);
+
+  /* Invalidation rectangle */
+  GdkRectangle rect;
+  rect.x = (int)(tx + extents.x_bearing - padding - 1);
+  rect.y = (int)(ty + extents.y_bearing - padding - 1);
+  rect.width = (int)(extents.width + 2 * padding + 3);
+  rect.height = (int)(extents.height + 2 * padding + 3);
+
+  data->modified = 1;
+
+  gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0);
 }
