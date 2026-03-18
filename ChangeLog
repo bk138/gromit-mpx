@@ -1,3 +1,117 @@
+commit 9992e30b2c184375dae4688f3f9b9a37ee45279f
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Mar 18 19:59:55 2026 +0100
+
+    AppStream: add v1.9.0 release notes
+
+commit 934fd9a2f4407f5429ae8391539cb7ab108ab1ed
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Mar 18 19:59:14 2026 +0100
+
+    NEWS: update for v1.9.0
+
+commit a35c250a20ee73a2dd3e149a79165b1f265e8102
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Mar 18 19:55:08 2026 +0100
+
+    CMake: bump minor version
+
+commit f58e99b01e0f034a84c9ca12017431541f97c8a0
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Mar 18 19:53:43 2026 +0100
+
+    AUTHORS: update
+
+commit 193d91568c82dcf8f6549687d7e2d00db5e6372f
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Mar 18 19:52:51 2026 +0100
+
+    callbacks: update Authors
+
+commit 9a4c98a57afa45b428424bfade94ef34826d2d21
+Author: Christian Beier <info@christianbeier.net>
+Date:   Wed Mar 18 19:52:02 2026 +0100
+
+    callbacks: update Copyright year
+
+commit 26b88f91d03df32b3587b050ddefa7ff1e4e4802
+Author: markovka <59536783+mark00vka@users.noreply.github.com>
+Date:   Wed Mar 18 18:04:21 2026 +0100
+
+    Add functionality to show length label for LINE tool
+    
+    * drawing: add text label showing line length in pixels
+    
+    When applied, this commit will add a text label displaying the line length in pixels at the midpoint of lines.
+    
+    * config: add text size parameter
+    
+    Adds textsize tool config options for line length label. Can be set in gromit-mpx.cfg, e.g. LINE (color="red" textsize=16). Default is textsize=14.
+    
+    * config: add euclidean distance calculation parameter
+    
+    Add distance tool config options for line length calculation. Can be set in gromit-mpx.cfg, e.g. LINE (color="red" distance="euclidean").
+    
+    * config: add separate axis distance calculation option
+    
+    e.g. LINE (color="red" distance="axis").
+    Also adds an option for calculating both euclidean and axis distance (distance="both").
+    
+    * config: change distance param to showlength and remove axis option
+    
+    e.g. LINE (color="red" showlength).
+    
+    * README: add showlength documentation
+    
+    * README: update showlength documentation
+    
+    Closes #251
+
+commit 4b439f8e195441a3f53a50221af73e79d0a142e5
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Mar 5 08:01:41 2026 +0100
+
+    CMake: include CPack
+
+commit e3a227ff99d9e03d7a63ea01334b1e954ca3022d
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Mar 5 07:59:02 2026 +0100
+
+    CMake: use CMake's 'PROJECT_VERSION' instead of custom 'version'
+
+commit b54838c0b15a840aa3131b9ea8f8148c82480c85
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Feb 24 16:34:26 2026 +0100
+
+    main: plug minimal memleak in client program
+    
+    This would be reclaimed by the OS anyway since as a client we're super
+    short-lived, but do it for code quality anyway.
+    
+    Closes #206
+
+commit 23c6c685a29e84b3cc8c45a6fc490dd7b3a9c119
+Author: Ekaterine Papava <papava.e@gtu.ge>
+Date:   Tue Feb 24 19:20:07 2026 +0400
+
+    po: Add Georgian translation
+
+commit 8e4d666f9f01a6068809f1290cbdeda4f61b96ac
+Author: Christian Beier <info@christianbeier.net>
+Date:   Thu Dec 4 20:36:35 2025 +0100
+
+    callbacks,main: set subpixel antialiasing
+    
+    ...instead of the default one. Might yield some quality improvements.
+    
+    Closes #245
+
+commit 2ebc0cb435eaa4fb7995e36e7cf4b84c35c64b3d
+Author: Christian Beier <info@christianbeier.net>
+Date:   Tue Nov 11 22:19:23 2025 +0100
+
+    ChangeLog: update
+
 commit 5d4939221746867915928db26599f0781d39bc30
 Author: Christian Beier <info@christianbeier.net>
 Date:   Tue Nov 11 22:18:04 2025 +0100
