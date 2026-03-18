@@ -862,6 +862,7 @@ void on_about(GtkMenuItem *menuitem,
                                 "Andrew Marshall <andrew@johnandrewmarshall.com>",
                                 "gavine99 <63904295+gavine99@users.noreply.github.com>",
                                 "Marcin Orlowski <mail@marcinOrlowski.com>",
+                                "markovka <59536783+mark00vka@users.noreply.github.com>",
 				NULL };
     gtk_show_about_dialog (NULL,
 			   "program-name", "Gromit-MPX",
