@@ -62,6 +62,16 @@
   </screenshots>
 
   <releases>
+   <release version="1.9.0" date="2026-03-18">
+      <description>
+	<ul>
+          <li>Added Georgian translation 🇬🇪.</li>
+          <li>Added functionality to show a length label when drawing lines.</li>
+          <li>Fixed a minimal memleak in the client program.</li>
+	</ul>
+      </description>
+    </release>
+
     <release version="1.8.0" date="2025-11-11">
       <description>
 	<p>
