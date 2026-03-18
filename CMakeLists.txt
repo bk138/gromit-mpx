@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0...3.10)
-project(gromit-mpx VERSION 1.8.0 LANGUAGES C)
+project(gromit-mpx VERSION 1.9.0 LANGUAGES C)
 include(GNUInstallDirs)
 include(CPack)
 
