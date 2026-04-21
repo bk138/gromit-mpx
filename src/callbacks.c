@@ -176,18 +176,23 @@ void on_composited_changed ( GdkScreen *screen,
     {
       // undo shape
       gtk_widget_shape_combine_region(data->win, NULL);
-      // re-apply transparency
-      gtk_widget_set_opacity(data->win, 0.75);
+      // PATCH: honor data->opacity (from .ini / --opacity) instead of
+      // hardcoding 0.75 — preserves user's canvas opacity on compositor
+      // state changes (e.g., under Hyprland/Xwayland).
+      gtk_widget_set_opacity(data->win, data->opacity);
     }
 
   // set anti-aliasing
+  // PATCH: use CAIRO_ANTIALIAS_GOOD instead of SUBPIXEL for composited mode.
+  // SUBPIXEL produces color fringing that reads as "blurry" on Wayland/
+  // Xwayland compositors where subpixel geometry is unpredictable.
   GHashTableIter it;
   gpointer value;
   g_hash_table_iter_init (&it, data->tool_config);
-  while (g_hash_table_iter_next (&it, NULL, &value)) 
+  while (g_hash_table_iter_next (&it, NULL, &value))
     {
       GromitPaintContext *context = value;
-      cairo_set_antialias(context->paint_ctx, data->composited ? CAIRO_ANTIALIAS_SUBPIXEL : CAIRO_ANTIALIAS_NONE);
+      cairo_set_antialias(context->paint_ctx, data->composited ? CAIRO_ANTIALIAS_GOOD : CAIRO_ANTIALIAS_NONE);
     }
       
 
@@ -568,7 +573,22 @@ void on_mainapp_selection_get (GtkWidget          *widget,
   else if (action == GA_CLEAR)
     clear_screen (data);
   else if (action == GA_RELOAD)
-    setup_input_devices(data);
+    {
+      /* PATCH: full config reload — upstream only calls setup_input_devices,
+       * which re-enumerates pointer devices but does NOT re-read the .cfg.
+       * That makes "edit cfg + --reload" a no-op for tool-mapping changes.
+       * Here we free all tool contexts, re-parse the config (rebuilding
+       * tool_config hash), and re-apply device defaults. Drawings in the
+       * backbuffer are untouched — only the tool state gets refreshed. */
+      GHashTableIter it;
+      gpointer value;
+      g_hash_table_iter_init(&it, data->tool_config);
+      while (g_hash_table_iter_next(&it, NULL, &value))
+        paint_context_free(value);
+      g_hash_table_remove_all(data->tool_config);
+      parse_config(data);
+      setup_input_devices(data);
+    }
   else if (action == GA_QUIT)
     gtk_main_quit ();
   else if (action == GA_UNDO)

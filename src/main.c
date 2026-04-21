@@ -73,7 +73,12 @@ GromitPaintContext *paint_context_new (GromitData *data,
   if(!data->composited)
     cairo_set_antialias(context->paint_ctx, CAIRO_ANTIALIAS_NONE);
   else
-    cairo_set_antialias(context->paint_ctx, CAIRO_ANTIALIAS_SUBPIXEL);
+    /* PATCH: CAIRO_ANTIALIAS_GOOD instead of SUBPIXEL.
+     * SUBPIXEL does LCD-geometry AA that assumes a known RGB stripe layout;
+     * under Wayland/Xwayland compositors this geometry is unreliable, so the
+     * color fringes at stroke edges read as "blur". GOOD does grayscale AA —
+     * crisp edges, no color fringing. */
+    cairo_set_antialias(context->paint_ctx, CAIRO_ANTIALIAS_GOOD);
   cairo_set_line_width(context->paint_ctx, width);
   cairo_set_line_cap(context->paint_ctx, CAIRO_LINE_CAP_ROUND);
   cairo_set_line_join(context->paint_ctx, CAIRO_LINE_JOIN_ROUND);
@@ -157,8 +162,14 @@ void paint_context_print (gchar *name,
 void paint_context_free (GromitPaintContext *context)
 {
   cairo_destroy(context->paint_ctx);
-  if (context->fill_color)
-    g_free(context->fill_color);
+  /* PATCH: do NOT g_free(context->fill_color) here. Upstream bug —
+   * config.c COPY syntax (`"foo" = "bar" (...)`) performs a shallow
+   * pointer copy of fill_color at config.c:324, so two entries in
+   * data->tool_config can share the same heap pointer. Freeing it
+   * per-context causes a double-free when iterating the hash table
+   * (GA_RELOAD, on_monitors_changed). The leak is bounded to one
+   * GdkRGBA per unique `fillcolor=` in the cfg (handful of bytes)
+   * and only accumulates on reloads — acceptable trade for safety. */
   g_free (context);
 }
 
