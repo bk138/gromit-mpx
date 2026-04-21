@@ -46,7 +46,7 @@ int parse_args (int argc, char **argv, GromitData *data);
 #define DEFAULT_UNDOKEY_XFCE "End"
 #endif
 #ifndef DEFAULT_OPACITY
-#define DEFAULT_OPACITY 0.75
+#define DEFAULT_OPACITY 1.0
 #endif
 
 void read_keyfile(GromitData *data);
