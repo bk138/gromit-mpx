@@ -419,9 +419,8 @@ void select_tool (GromitData *data,
     g_printerr("DEBUG: select_tool setting cursor %p\n",cursor);
 
 
-  //FIXME!  Should be:
-  //gdk_window_set_cursor(gtk_widget_get_window(data->win), cursor);
-  // doesn't work during a grab?
+  gdk_window_set_cursor(gtk_widget_get_window(data->win), cursor);
+  
   gdk_device_grab(device,
   		  gtk_widget_get_window(data->win),
   		  GDK_OWNERSHIP_NONE,
@@ -670,15 +669,24 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
                                                             0,
                                                             &error);
   if (error) {
-      g_printerr("Could not load icon '%s': %s\n", "net.christianbeier.Gromit-MPX.paint_cursor", error->message);
+      g_printerr("Could not load icon '%s' from theme: %s. Trying local file...\n", "net.christianbeier.Gromit-MPX.paint_cursor", error->message);
       g_error_free(error);
       error = NULL;
+      paint_cursor_pixbuf = gdk_pixbuf_new_from_file("data/net.christianbeier.Gromit-MPX.paint_cursor.png", NULL);
   }
-  data->paint_cursor = gdk_cursor_new_from_pixbuf(data->display,
-						  paint_cursor_pixbuf,
-						  14,
-						  14);
-  g_object_unref (paint_cursor_pixbuf);
+  
+  if (paint_cursor_pixbuf) {
+      data->paint_cursor = gdk_cursor_new_from_pixbuf(data->display,
+                                                      paint_cursor_pixbuf,
+                                                      14,
+                                                      14);
+      g_object_unref(paint_cursor_pixbuf);
+  } else {
+      data->paint_cursor = gdk_cursor_new_from_name(data->display, "pencil");
+      if (!data->paint_cursor) {
+          data->paint_cursor = gdk_cursor_new_from_name(data->display, "crosshair");
+      }
+  }
 
   GdkPixbuf *erase_cursor_pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
                                                             "net.christianbeier.Gromit-MPX.erase_cursor",
@@ -686,15 +694,21 @@ void setup_main_app (GromitData *data, int argc, char ** argv)
                                                             0,
                                                             &error);
   if (error) {
-      g_printerr("Could not load icon '%s': %s\n", "net.christianbeier.Gromit-MPX.erase_cursor", error->message);
+      g_printerr("Could not load icon '%s' from theme: %s. Trying local file...\n", "net.christianbeier.Gromit-MPX.erase_cursor", error->message);
       g_error_free(error);
       error = NULL;
+      erase_cursor_pixbuf = gdk_pixbuf_new_from_file("data/net.christianbeier.Gromit-MPX.erase_cursor.png", NULL);
   }
-  data->erase_cursor = gdk_cursor_new_from_pixbuf(data->display,
-						  erase_cursor_pixbuf,
-						  14,
-						  14);
-  g_object_unref (erase_cursor_pixbuf);
+  
+  if (erase_cursor_pixbuf) {
+      data->erase_cursor = gdk_cursor_new_from_pixbuf(data->display,
+                                                      erase_cursor_pixbuf,
+                                                      14,
+                                                      14);
+      g_object_unref(erase_cursor_pixbuf);
+  } else {
+      data->erase_cursor = gdk_cursor_new_from_name(data->display, "cell");
+  }
 
 
   /*
