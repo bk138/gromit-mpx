@@ -417,6 +417,7 @@ void release_grab (GromitData *data,
       if(data->debug)
         g_printerr ("DEBUG: Ungrabbed all Devices.\n");
 
+      gdk_window_set_cursor(gtk_widget_get_window(data->win), NULL);
       indicate_active(data, FALSE);
 
       if (!data->painted)
@@ -441,7 +442,10 @@ void release_grab (GromitData *data,
         g_printerr ("DEBUG: Ungrabbed Device '%s'.\n", gdk_device_get_name(devdata->device));
 
       if(!get_are_some_grabbed(data))
-	  indicate_active(data, FALSE);
+        {
+          gdk_window_set_cursor(gtk_widget_get_window(data->win), NULL);
+          indicate_active(data, FALSE);
+        }
     }
 
   if (!data->painted)
@@ -488,6 +492,7 @@ void acquire_grab (GromitData *data,
 	  else
 	    cursor = data->paint_cursor; 
 
+	  gdk_window_set_cursor(gtk_widget_get_window(data->win), cursor);
 	
 	  if(gdk_device_grab(devdata->device,
 			     gtk_widget_get_window(data->win),
@@ -528,6 +533,8 @@ void acquire_grab (GromitData *data,
       else
 	cursor = data->paint_cursor; 
       
+      gdk_window_set_cursor(gtk_widget_get_window(data->win), cursor);
+
       if(gdk_device_grab(devdata->device,
 			 gtk_widget_get_window(data->win),
 			 GDK_OWNERSHIP_NONE,
